@@ -154,7 +154,7 @@ require __DIR__ . '/partials/social-rail.php';
                     <div class="device device-laptop">
                         <div class="device-lid">
                             <div class="device-screen">
-                                <?= photo('assets/mockups/laptop-screen.png', '', ['loading' => 'eager', 'fetchpriority' => 'high']) ?>
+                                <?= photo('assets/mockups/laptop-screen.jpg', 'The Rafly pricing page open on a laptop', ['loading' => 'eager', 'fetchpriority' => 'high']) ?>
                             </div>
                         </div>
                         <div class="device-base"></div>
@@ -162,7 +162,7 @@ require __DIR__ . '/partials/social-rail.php';
                     <div class="device device-phone float-slow">
                         <div class="device-body">
                             <div class="device-screen">
-                                <?= photo('assets/mockups/phone-screen.png', '', ['loading' => 'eager']) ?>
+                                <?= photo('assets/mockups/phone-screen.jpg', 'The Rafly blog open on a phone', ['loading' => 'eager']) ?>
                             </div>
                         </div>
                     </div>

@@ -36,7 +36,7 @@
  *   The other way to build this is to fix the body and translate a wrapper.
  *   That version breaks position:sticky, position:fixed, scroll-driven
  *   animation timelines and IntersectionObserver root maths — which is to say,
- *   it would break the pinned flow section, the header, css/10-scroll.css and
+ *   it would break the pinned flow section, the header, css/06-motion.css and
  *   js/scroll.js respectively. Writing the real scroll position each frame
  *   keeps every one of those correct, because as far as the rest of the page
  *   is concerned nothing unusual is happening.
@@ -74,7 +74,7 @@
     var raf     = null;
 
     /* THE ONE LINE THAT MAKES THIS WORK.
-       01-reset.css sets `html { scroll-behavior: smooth }` for anchor links.
+       01-base.css sets `html { scroll-behavior: smooth }` for anchor links.
        window.scrollTo() honours that: every call starts the browser's OWN
        smooth animation toward the new position. Called sixty times a second
        from the loop below, that is sixty animations a second, each cancelled

@@ -30,7 +30,8 @@
  *   card      one-line summary for the homepage bento — deliberately shorter
  *             than `intro`, which is the detail page's opening paragraph
  *   wide      whether the homepage bento gives this card the double-width cell
- *   scene     which 3D object set partials/scene.php builds for this service
+ *   scene     LEGACY. Named a 3D object set for a partial that no longer
+ *             exists; nothing reads it. Kept so the array shape is unchanged
  */
 
 return [

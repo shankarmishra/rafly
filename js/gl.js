@@ -539,7 +539,7 @@
      * dissolve explodes the picture rather than sliding it.
      *
      * The picture is expected to be a small greyscale mask with alpha
-     * (assets/paper/*-mask.png). Same origin only: getImageData taints on
+     * (a same-origin greyscale mask PNG). Same origin only: getImageData taints on
      * anything else, and CSP img-src is 'self' anyway.
      */
     Instance.prototype.loadImageForm = function (slot, url) {

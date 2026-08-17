@@ -756,7 +756,7 @@ body.login {
     .feed-when { flex-basis: auto; }
 }
 
-/* Honeypot (admin/login.php) — duplicated from css/07-utilities.css rather
+/* Honeypot (admin/login.php) — duplicated from css/03-components.css rather
    than pulled in from the public bundle, for the same reason this file is
    self-contained: importing the whole public stack for one rule is more code,
    not less. Same technique as the public-site version: absolutely positioned
