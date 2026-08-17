@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Homepage.
+
+   Only the sections that exist nowhere else live here. Anything reused by a
+   second template belongs in 03-components.css instead — the previous build's
+   home stylesheet reached 82 KB precisely because that rule was not kept.
+   ========================================================================== */
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero {
+    padding-top: calc(var(--header-h) + clamp(2.5rem, 1rem + 5vw, 5rem));
+    padding-bottom: clamp(2rem, 1rem + 4vw, 4.5rem);
+    overflow: clip;
+}
+.hero-head {
+    text-align: center;
+    max-width: 60rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2rem, 1rem + 4vw, 4rem);
+}
+.hero-head .eyebrow { justify-content: center; }
+.hero .display > span { display: block; }
+.hero-lead {
+    margin: var(--sp-5) auto 0;
+    max-width: 54ch;
+    color: var(--ink-3);
+}
+.hero-actions { justify-content: center; margin-top: var(--sp-7); }
+
+/* ==========================================================================
+   Marquee strip
+   ========================================================================== */
+.hero-strip { padding-block: var(--sp-6); }
+.hero-strip-label { text-align: center; margin-bottom: var(--sp-5); }
+.marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.625rem);
+    font-weight: var(--fw-semi);
+    letter-spacing: var(--tr-heading);
+    color: var(--ink);
+    white-space: nowrap;
+}
+.marquee-item .icon { color: var(--blue); width: 1.1em; height: 1.1em; }
+/* A painted dot rather than a bullet character. Decorative separators carry no
+   information, and #ff6b35 as a glyph on white is 2.84:1. */
+.marquee-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+}
+
+/* ==========================================================================
+   Trust bar
+   ========================================================================== */
+.trust-bar {
+    border-block: 1px solid var(--line);
+    padding-block: clamp(2rem, 1.4rem + 2vw, 3rem);
+}
+.trust-grid { gap: var(--sp-6); }
+.trust-grid .stat { align-items: flex-start; }
+@media (max-width: 620px) {
+    .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ==========================================================================
+   Challenges
+   ========================================================================== */
+.challenge-card .card-media { aspect-ratio: 16 / 9; }
+/* Without a photograph the media band would be a flat grey slab; a soft brand
+   wash keeps the card looking finished either way. */
+.challenge-card .card-media:empty {
+    background:
+        radial-gradient(90% 120% at 20% 0%, var(--blue-tint-2) 0%, var(--paper-3) 70%);
+}
+.challenge-num {
+    font-size: var(--fs-h3);
+    line-height: 1;
+    display: block;
+}
+
+/* ==========================================================================
+   Who we are
+   ========================================================================== */
+.mini-stats {
+    margin-top: var(--sp-7);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line);
+    gap: var(--sp-4);
+}
+.mini-stats .stat-value { font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.25rem); }
+
+/* ==========================================================================
+   Services
+   ========================================================================== */
+/* A cell with no photograph in it falls back to its brand tint, so the
+   carousel is complete on day one.
+
+   All five are DARK and saturated. The label is white, and there is a scrim
+   under it, but the scrim is a gradient — its effect cannot be verified by
+   computed style, so the cell colour alone has to carry white at 4.5:1. The
+   lightest of these is 5.4:1 before the scrim is counted. */
+.carousel-cell.t-blue   { background: #1652e0; }   /* 6.3:1 */
+.carousel-cell.t-deep   { background: #0d47a1; }   /* 8.6:1 */
+.carousel-cell.t-ink    { background: #0a0e1a; }   /* 19.3:1 */
+.carousel-cell.t-orange { background: #0e7490; }   /* 5.4:1 */
+.carousel-cell.t-tint   { background: #123f8f; }   /* 9.8:1 */
+
+.carousel-cell-link { color: #fff; margin-top: var(--sp-3); }
+.carousel-cell-link:hover { color: #fff; }
+
+.svc-index { margin-top: clamp(2rem, 1.2rem + 3vw, 3.5rem); }
+.svc-index-item {
+    color: inherit;
+    padding: var(--sp-2) 0;
+    border-radius: var(--r);
+    transition: transform var(--dur-2) var(--ease);
+}
+.svc-index-item:hover { transform: translateY(-3px); color: inherit; }
+.svc-index-item:hover .step-title { color: var(--blue); }
+
+.services-note {
+    margin: var(--sp-7) auto 0;
+    max-width: 62ch;
+    text-align: center;
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+}
+
+/* ==========================================================================
+   P.E.A.C.E.
+   ========================================================================== */
+.peace-letter {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-right: var(--sp-2);
+    border-radius: var(--r-xs);
+    background: var(--blue-tint);
+    color: var(--blue);
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    vertical-align: -4px;
+}
+.st-step.is-active .peace-letter { background: var(--blue); color: #fff; }
+
+/* ==========================================================================
+   Delivery flow (the dark band)
+   ========================================================================== */
+.flow-row { margin-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); }
+.band-ink .gl-host {
+    background: radial-gradient(70% 70% at 50% 40%, rgba(255, 255, 255, .09) 0%, rgba(255, 255, 255, .02) 62%, transparent 100%);
+    box-shadow: none;
+    border: 1px solid var(--on-dark-line);
+}
+.band-ink .gl-still::after { background: var(--ink); box-shadow: none; }
+
+/* ==========================================================================
+   Why choose
+   ========================================================================== */
+.why-list { margin-top: var(--sp-6); }
+.why-list li { font-size: var(--fs-base); }
+
+.delivery-panel { display: flex; flex-direction: column; gap: var(--sp-4); }
+.delivery-panel-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-semi);
+    color: var(--ink);
+    letter-spacing: var(--tr-heading);
+    margin: 0;
+}
+.delivery-list { display: grid; gap: var(--sp-2); }
+.delivery-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+    background: var(--paper);
+    border-radius: var(--r);
+    box-shadow: var(--sh-1);
+}
+.delivery-list strong { display: block; font-size: var(--fs-sm); }
+.delivery-list-sub { font-size: var(--fs-2xs); color: var(--ink-3); }
+.delivery-list li > span:nth-child(2) { flex: 1; min-width: 0; }
+.delivery-tick { color: var(--success); }
+.delivery-foot {
+    margin: 0;
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--line-strong);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    text-align: center;
+}
+
+.stack-strip {
+    margin-top: clamp(2.5rem, 1.5rem + 4vw, 4rem);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: var(--sp-4);
+}
+
+/* ==========================================================================
+   Selected work
+   ========================================================================== */
+.work-card .card-body { gap: var(--sp-2); }
+.work-metric {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+    font-weight: var(--fw-bold);
+    line-height: 1.15;
+    letter-spacing: var(--tr-heading);
+    color: var(--ink);
+    margin: var(--sp-3) 0 0;
+}
+.work-metric-label { font-size: var(--fs-xs); color: var(--blue); font-weight: var(--fw-semi); margin: 0 0 var(--sp-2); }
+.work-card .card-foot .icon { color: var(--ink-3); transition: transform var(--dur-2) var(--ease); }
+.work-card:hover .card-foot .icon { transform: translate(3px, -3px); color: var(--blue); }
+
+/* ==========================================================================
+   Pricing
+   ========================================================================== */
+.price-grid { gap: var(--sp-6); align-items: stretch; }
+.price-note {
+    margin: var(--sp-7) auto 0;
+    max-width: 58ch;
+    text-align: center;
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+}
+
+/* ==========================================================================
+   FAQ — the split card from reference 1
+   ========================================================================== */
+.faq-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+    background: var(--paper);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--sh-3);
+}
+.faq-aside h2 { margin-bottom: var(--sp-4); }
+.faq-aside-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-5);
+    margin-top: var(--sp-6);
+}
+.faq-list .accordion { border-top: 0; }
+.faq-list .accordion-item:first-child .accordion-trigger { padding-top: 0; }
+
+@media (max-width: 900px) {
+    .faq-card { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Contact — on the blue band
+   ========================================================================== */
+.contact-assurances { margin-top: var(--sp-6); }
+.contact-assurances li { color: #fff; }
+
+.contact-details {
+    margin-top: var(--sp-7);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--on-dark-line);
+}
+.band-blue .deflist-row .icon { color: rgba(255, 255, 255, .7); margin-top: 0.35em; }
+.band-blue .deflist-label { color: rgba(255, 255, 255, .62); }
+.band-blue .deflist-value { color: #fff; }
+.band-blue a.deflist-value:hover { text-decoration: underline; }
+
+.contact-card {
+    background: var(--paper);
+    border-radius: var(--r-xl);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    box-shadow: var(--sh-4);
+    color: var(--ink-2);
+}
+.contact-card-title { font-size: var(--fs-h3); margin-bottom: var(--sp-5); }
+/* The card is a light island inside a blue band, so every inherited on-dark
+   rule has to be put back to its light-ground value inside it. */
+.band-blue .contact-card h3,
+.band-blue .contact-card label,
+.band-blue .contact-card strong { color: var(--ink); }
+.band-blue .contact-card .check { color: var(--ink-3); }
+.band-blue .contact-card .field-hint { color: var(--ink-3); }
+.band-blue .contact-card :focus-visible { outline-color: var(--blue); }

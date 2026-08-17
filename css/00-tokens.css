@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Design tokens — the single source of truth.
+
+   The palette is derived from the three reference screenshots and reconciled
+   with Rafly's existing brand blue (#0d47a1), which stays as the deep/brand
+   colour and as <meta name="theme-color">. The brighter #1652E0 is the new
+   interactive colour and the colour of the full-bleed band.
+
+   Contrast note, because this is where light designs usually fail. Every
+   value below was MEASURED against its real ground, not chosen by eye:
+
+     --orange      2.84:1 on white. Decorative only — a scribble, a dot, a
+                   glow. It must never carry text or an icon.
+     --orange-mid  3.76:1. Fills that hold a white icon or a large numeral.
+     --orange-ink  4.93:1. Orange as small text.
+
+   Swapping them is the exact mistake that put 2.15:1 white-on-amber on the
+   previous build.
+   ========================================================================== */
+
+:root {
+    /* --- Ground --------------------------------------------------------- */
+    --paper:        #ffffff;
+    --paper-2:      #f4f6fa;   /* section ground */
+    --paper-3:      #eaeef6;   /* wells, nav pill fill, inputs */
+    --paper-4:      #dfe5f0;   /* pressed / active well */
+
+    /* --- Ink ------------------------------------------------------------ */
+    --ink:          #0a0e1a;   /* display, headings          19.4:1 on white */
+    --ink-2:        #3f4a5f;   /* body                        9.3:1          */
+    --ink-3:        #656f81;   /* captions, muted             5.1:1 / 4.7 on soft */
+    --ink-4:        #79839a;   /* the grey half of a two-tone display line   */
+                               /* 3.8:1 — LARGE text only, never body copy   */
+    --line:         #e3e8f0;
+    --line-strong:  #cdd6e4;
+
+    /* --- Blue ----------------------------------------------------------- */
+    --blue:         #1652e0;   /* primary, links, the band    6.4:1 on white */
+    --blue-hover:   #1141bb;
+    --blue-deep:    #0d47a1;   /* brand, gradients, dark bands               */
+    --blue-tint:    #eef3ff;
+    --blue-tint-2:  #dde8ff;
+
+    /* --- Accents -------------------------------------------------------- */
+    --orange:       #ff6b35;   /* decorative fills only — 2.84:1             */
+    --orange-mid:   #e8500f;   /* fills holding a white icon — 3.76:1        */
+    --orange-ink:   #c7440e;   /* orange as text — 4.93:1                    */
+    --orange-tint:  #fff1ea;
+    --gold:         #ffb800;   /* star ratings only                          */
+
+    /* --- Semantic ------------------------------------------------------- */
+    --pill:         #0f1115;   /* the black pill CTA */
+    --pill-hover:   #23262e;
+    --success:      #15803d;
+    --danger:       #c62828;
+    --warning:      #b45309;
+    --whatsapp:     #128c4a;
+
+    /* --- On dark -------------------------------------------------------- */
+    --on-dark-1:    #ffffff;
+    --on-dark-2:    #d3dffb;   /* 4.7:1 on --blue, 14.4:1 on --ink          */
+    --on-dark-3:    #94a9d4;
+    --on-dark-line: rgba(255, 255, 255, .16);
+
+    /* --- Type ----------------------------------------------------------- */
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-body:    'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono:    ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
+
+    --fs-display: clamp(2.75rem, 1.05rem + 7.1vw, 5.75rem);
+    --fs-h1:      clamp(2.125rem, 1.30rem + 3.45vw, 3.75rem);
+    --fs-h2:      clamp(1.75rem,  1.20rem + 2.30vw, 3rem);
+    --fs-h3:      clamp(1.375rem, 1.15rem + 0.94vw, 1.875rem);
+    --fs-h4:      clamp(1.125rem, 1.05rem + 0.31vw, 1.3125rem);
+    --fs-lead:    clamp(1.0625rem, 1.00rem + 0.31vw, 1.25rem);
+    --fs-base:    clamp(1rem, 0.98rem + 0.10vw, 1.0625rem);
+    --fs-sm:      0.9375rem;
+    --fs-xs:      0.8125rem;
+    --fs-2xs:     0.75rem;
+
+    --lh-display: 0.95;
+    --lh-tight:   1.08;
+    --lh-heading: 1.18;
+    --lh-body:    1.65;
+
+    --tr-display: -0.035em;
+    --tr-heading: -0.022em;
+    --tr-eyebrow:  0.14em;
+
+    --fw-body:    400;
+    --fw-medium:  500;
+    --fw-semi:    600;
+    --fw-bold:    700;
+
+    /* --- Space ---------------------------------------------------------- */
+    --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
+    --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 2.5rem;   --sp-8: 3rem;
+    --sp-9: 4rem;     --sp-10: 5rem;    --sp-11: 6.5rem;  --sp-12: 8rem;
+
+    --section-y:   clamp(4rem, 2.2rem + 7.4vw, 8rem);
+    --section-y-s: clamp(2.75rem, 1.8rem + 4vw, 5rem);
+
+    /* --- Measure -------------------------------------------------------- */
+    --container:   1240px;
+    --container-w: 1400px;   /* wide — carousels, full bleeds */
+    --container-n: 900px;    /* narrow — reading */
+    --gutter:      clamp(1.125rem, 0.6rem + 2.2vw, 2.5rem);
+    --measure:     68ch;
+
+    /* --- Radius --------------------------------------------------------- */
+    --r-xs:   6px;
+    --r-sm:   10px;
+    --r:      14px;
+    --r-lg:   22px;
+    --r-xl:   30px;
+    --r-2xl:  40px;
+    --r-pill: 999px;
+
+    /* --- Elevation — soft and wide, the reference card material --------- */
+    --sh-1: 0 1px 2px rgba(10, 14, 26, .04),
+            0 2px 6px rgba(10, 14, 26, .04);
+    --sh-2: 0 1px 2px rgba(10, 14, 26, .04),
+            0 6px 18px rgba(10, 14, 26, .06);
+    --sh-3: 0 2px 4px rgba(10, 14, 26, .04),
+            0 14px 36px rgba(10, 14, 26, .09);
+    --sh-4: 0 4px 8px rgba(10, 14, 26, .05),
+            0 30px 70px rgba(10, 14, 26, .13);
+    --sh-pill: 0 1px 2px rgba(10, 14, 26, .16),
+               0 8px 20px rgba(10, 14, 26, .18);
+    --sh-blue: 0 8px 24px rgba(22, 82, 224, .28);
+
+    /* --- Motion --------------------------------------------------------- */
+    --ease:      cubic-bezier(.22, .61, .36, 1);
+    --ease-out:  cubic-bezier(.16, 1, .3, 1);
+    --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+    --dur-1: 140ms;
+    --dur-2: 240ms;
+    --dur-3: 420ms;
+    --dur-4: 700ms;
+    --stagger: 70ms;
+
+    /* --- Chrome --------------------------------------------------------- */
+    --header-h:  74px;
+    --nav-pill-h: 56px;
+
+    /* --- Focus ---------------------------------------------------------- */
+    --focus:       var(--blue);
+    --focus-ring:  0 0 0 3px var(--paper), 0 0 0 6px var(--blue);
+
+    /* --- Layers --------------------------------------------------------- */
+    --z-base: 1;
+    --z-raised: 10;
+    --z-sticky: 100;
+    --z-header: 500;
+    --z-drawer: 700;
+    --z-modal: 900;
+    --z-toast: 1000;
+
+    /* --- Service accents (svc-* body class) ----------------------------- */
+    --svc-web:       #1652e0;
+    --svc-security:  #0e7490;
+    --svc-marketing: #c7440e;
+    --svc-content:   #7c3aed;
+    --svc-ecom:      #15803d;
+
+    --accent: var(--blue);
+}
+
+/* One accent variable, remapped per service page, so a service template
+   never has to hardcode a colour. */
+body.svc-web       { --accent: var(--svc-web); }
+body.svc-security  { --accent: var(--svc-security); }
+body.svc-marketing { --accent: var(--svc-marketing); }
+body.svc-content   { --accent: var(--svc-content); }
+body.svc-ecom      { --accent: var(--svc-ecom); }
+
+@media (max-width: 700px) {
+    :root { --header-h: 66px; --nav-pill-h: 52px; }
+}

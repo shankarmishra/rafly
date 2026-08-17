@@ -1,0 +1,225 @@
+# Rafly — Apache / LiteSpeed configuration (Hostinger)
+
+# Directory listings. Without this, /css/, /js/, /vendor/ and /assets/ are
+# browsable on any host with Indexes enabled, which hands an attacker a free
+# inventory of the application.
+Options -Indexes
+
+# ---------------------------------------------------------------------------
+# Canonical host and scheme
+#
+# Without these, http://, https://, www. and bare-domain all serve the same
+# pages and each self-canonicalises — four copies of every URL competing in
+# the index. HSTS (sent from inc/security.php) only applies once you are
+# already on TLS, so the redirect is what protects the first plaintext request.
+#
+# These rules are domain-agnostic — they work from %{HTTP_HOST}, so rafly.in
+# needs no literal here. What DOES need a decision is which of the two www
+# rules below is active: the bare-domain rule is currently on, so www.rafly.in
+# 301s to rafly.in. Swap to the commented block only if DNS/hosting is set up
+# the other way round, and keep it consistent with SITE_DOMAIN in inc/config.php
+# (its host allow-list accepts both, but only one should be canonical).
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS. HTTP_X_FORWARDED_PROTO covers hosts that terminate TLS at a
+    # proxy or CDN, where HTTPS is never set on the origin request.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # Strip www. (use the commented block instead if you prefer www.)
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+    # RewriteCond %{HTTP_HOST} !^www\. [NC]
+    # RewriteCond %{HTTP_HOST} !^localhost [NC]
+    # RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # -----------------------------------------------------------------------
+    # Clean URLs
+    #
+    # Two halves. First, 301 the OLD .php URLs — still real, directly
+    # reachable entry points — to their clean equivalent, so existing
+    # bookmarks, backlinks and search rankings transfer instead of breaking.
+    # Second, silently rewrite the clean URL back to the .php file that
+    # actually serves it. Every internal link, the canonical tag
+    # (partials/head.php) and sitemap.php now emit the clean form, so a
+    # visitor clicking anything on the site never touches the first half at
+    # all — it exists purely for whoever still has an old URL.
+    #
+    # The 301s MUST come before the internal rewrites below: a clean URL that
+    # got rewritten to its .php file first would never reach the redirect
+    # rule, since [L] stops processing on the first match.
+    # -----------------------------------------------------------------------
+    RewriteRule ^index\.php$ / [R=301,L]
+    RewriteRule ^about\.php$ /about [R=301,L]
+    RewriteRule ^team\.php$ /team [R=301,L]
+    RewriteRule ^blog\.php$ /blog [R=301,L]
+    RewriteRule ^privacy\.php$ /privacy [R=301,L]
+    RewriteRule ^thank-you\.php$ /thank-you [R=301,L]
+    RewriteRule ^submit\.php$ /submit [R=301,L]
+    RewriteRule ^pricing\.php$ /pricing [R=301,L]
+    RewriteRule ^case-studies\.php$ /case-studies [R=301,L]
+    RewriteRule ^contact\.php$ /contact [R=301,L]
+
+    # service.php and blog-post.php take a query string rather than a bare
+    # filename, so their old URLs need the query matched too, not just the
+    # path — and only for a recognised value, so a garbage ?service= falls
+    # through to service.php itself, which now 404s it directly.
+    RewriteCond %{QUERY_STRING} ^service=(web-development|web-security|marketing-advertisement|content-creation|ecommerce-support)$
+    RewriteRule ^service\.php$ /%1? [R=301,L]
+
+    RewriteCond %{QUERY_STRING} ^post=([a-z0-9-]+)$
+    RewriteRule ^blog-post\.php$ /blog/%1? [R=301,L]
+
+    # --- Insights -> Blog ---------------------------------------------------
+    # The section was renamed. These four rules are the only thing keeping the
+    # ranking the old URLs earned, so they are 301 (permanent) rather than 302,
+    # and they sit here with the other redirects because the reverse rewrites
+    # below would otherwise swallow /insights before it ever reached them.
+    #
+    # The article rule must precede the index rule: ^insights/?$ would not match
+    # /insights/a-slug, but keeping the specific case first makes the intent
+    # obvious and survives someone loosening the index pattern later.
+    RewriteRule ^insights/([a-z0-9-]+)/?$ /blog/$1 [R=301,L]
+    RewriteRule ^insights/?$ /blog [R=301,L]
+
+    RewriteCond %{QUERY_STRING} ^post=([a-z0-9-]+)$
+    RewriteRule ^insight\.php$ /blog/%1? [R=301,L]
+    RewriteRule ^insights\.php$ /blog [R=301,L]
+
+    # Now the reverse: serve the clean path from its real .php file,
+    # invisibly — no redirect, no change to the address bar.
+    RewriteRule ^pricing/?$ pricing.php [L]
+    RewriteRule ^case-studies/?$ case-studies.php [L]
+    RewriteRule ^contact/?$ contact.php [L]
+    RewriteRule ^about/?$ about.php [L]
+    RewriteRule ^team/?$ team.php [L]
+    RewriteRule ^blog/?$ blog.php [L]
+    RewriteRule ^privacy/?$ privacy.php [L]
+    RewriteRule ^thank-you/?$ thank-you.php [L]
+    RewriteRule ^submit/?$ submit.php [L]
+    RewriteRule ^blog/([a-z0-9-]+)/?$ blog-post.php?post=$1 [L,QSA]
+    RewriteRule ^(web-development|web-security|marketing-advertisement|content-creation|ecommerce-support)/?$ service.php?service=$1 [L]
+
+    # Serve the generated sitemap at the conventional path.
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+    # Root-level icon probes. head.php declares assets/favicon.svg,
+    # assets/favicon-32.png and assets/apple-touch-icon.png, and a browser that
+    # reads the document uses those — but plenty of clients never get that far.
+    # Safari and iOS probe /apple-touch-icon.png and its -precomposed variant at
+    # the ROOT before parsing anything, and crawlers, feed readers and link
+    # unfurlers still ask for /favicon.ico. Each miss was a 404 in the access log
+    # and a missing icon on the client. Rewrites rather than copies, so there is
+    # one file per icon and no second copy to forget when the brand changes.
+    RewriteRule ^favicon\.ico$ assets/favicon-32.png [L]
+    RewriteRule ^apple-touch-icon(-precomposed)?\.png$ assets/apple-touch-icon.png [L]
+
+    # Optional pretty entry point for the admin login gate (admin_gate_ok() in
+    # admin/lib/bootstrap.php). This rule is generic and safe to commit — it
+    # captures ANY token into gate_key, it does not itself contain a secret.
+    # The actual secret lives only in inc/config.local.php (git-ignored). With
+    # no ADMIN_LOGIN_GATE configured there, this rule is simply never matched
+    # in a way that changes anything.
+    RewriteRule ^admin-gate/([A-Za-z0-9_-]+)/?$ admin/login.php?gate_key=$1 [L,QSA]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Block access to application internals
+# ---------------------------------------------------------------------------
+RedirectMatch 404 /\.git
+RedirectMatch 404 /(inc|partials)/
+
+# Admin internals. admin/ itself must stay reachable — it is the panel — but
+# nothing under lib/ is ever requested directly: they are includes, and a
+# direct hit on one is either a mistake or a probe.
+RedirectMatch 404 /admin/lib/
+<FilesMatch "^(\.gitignore|\.env.*|composer\.(json|lock)|.*\.md)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# MIME types
+# Missing types are the classic cause of "the model downloads but three.js
+# won't parse it", and a wrong .wasm type breaks streaming instantiation.
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+    AddType model/gltf-binary  .glb
+    AddType model/gltf+json    .gltf
+    AddType application/wasm   .wasm
+    AddType font/woff2         .woff2
+    AddType image/webp         .webp
+    AddType image/avif         .avif
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching
+# Safe to cache aggressively because every asset URL carries ?v=<filemtime>
+# via the asset() helper — a changed file means a changed URL.
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|woff2|png|jpe?g|webp|avif|svg|glb|gltf|ktx2)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.php$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # Security headers for STATIC files. inc/security.php only runs for PHP
+    # requests, so without this the CSS, JS and the SVG sprite were served with
+    # no protective headers at all.
+    <FilesMatch "\.(css|js|svg|woff2|json|webmanifest)$">
+        Header set X-Content-Type-Options "nosniff"
+        Header set Cross-Origin-Resource-Policy "same-origin"
+    </FilesMatch>
+</IfModule>
+
+# mod_expires fallback: the caching above lives entirely inside mod_headers,
+# so on a host without it there would be no caching whatsoever.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                "access plus 1 year"
+    ExpiresByType application/javascript  "access plus 1 year"
+    ExpiresByType font/woff2              "access plus 1 year"
+    ExpiresByType image/png               "access plus 1 year"
+    ExpiresByType image/jpeg              "access plus 1 year"
+    ExpiresByType image/webp              "access plus 1 year"
+    ExpiresByType image/avif              "access plus 1 year"
+    ExpiresByType image/svg+xml           "access plus 1 year"
+    ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression — .glb, .woff2 and images are already compressed; don't double up
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml model/gltf+json
+    # These were missing: the sitemap is application/xml, and older stacks still
+    # label scripts text/javascript, so neither was being compressed.
+    AddOutputFilterByType DEFLATE application/xml application/rss+xml
+    AddOutputFilterByType DEFLATE text/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/manifest+json image/x-icon
+</IfModule>
+
+# Brotli where available — roughly 15-20% smaller than deflate on text.
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/xml
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Pretty errors
+# ---------------------------------------------------------------------------
+ErrorDocument 404 /404.php

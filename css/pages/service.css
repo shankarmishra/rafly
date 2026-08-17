@@ -1,0 +1,117 @@
+/* ==========================================================================
+   Service detail pages.
+
+   One template, five accents. body.svc-* remaps --accent (css/00-tokens.css),
+   so nothing here hardcodes a colour — the page picks up its own hue from the
+   body class and everything else is shared with the rest of the site.
+   ========================================================================== */
+
+.svc-hero .svc-title { font-size: var(--fs-h1); }
+.svc-tagline { margin-top: var(--sp-4); }
+.svc-intro {
+    margin-top: var(--sp-4);
+    color: var(--ink-2);
+    max-width: 58ch;
+}
+.svc-pills { margin-top: var(--sp-6); }
+.svc-actions { margin-top: var(--sp-7); }
+.svc-note {
+    margin-top: var(--sp-5);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+}
+
+/* The eyebrow, the chips and the mark all take the service's own accent. */
+.page-service .page-head .eyebrow { color: var(--accent); }
+.page-service .page-head .eyebrow::before { background: var(--accent); }
+.svc-pills .chip { border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
+
+/* ==========================================================================
+   The service mark — a drawn object, not a stock photograph
+   ========================================================================== */
+.svc-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 400px;
+    margin-inline: auto;
+}
+.svc-mark-icon {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40%;
+    aspect-ratio: 1;
+    border-radius: var(--r-2xl);
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 20px 50px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+.svc-mark-icon .icon { width: 42%; height: 42%; stroke-width: 1.5; }
+
+.svc-mark-ring {
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 68%);
+}
+.svc-mark-ring.is-2 { inset: 0; border-style: dashed; }
+
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .svc-mark-ring {
+            animation: svc-spin 1ms linear both;
+            animation-timeline: view();
+            animation-range: cover 0% cover 100%;
+        }
+        .svc-mark-ring.is-2 { animation-direction: reverse; }
+    }
+}
+@keyframes svc-spin { from { rotate: 0deg; } to { rotate: 90deg; } }
+
+/* ==========================================================================
+   Signals and limits
+   ========================================================================== */
+.signal-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-6);
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-2);
+}
+.signal-card p { margin: 0; color: var(--ink-2); }
+
+.limit-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-6);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+}
+.limit-card h3 { font-size: var(--fs-h4); }
+.limit-card p { margin: 0; color: var(--ink-3); font-size: var(--fs-sm); }
+
+/* ==========================================================================
+   Tools strip
+   ========================================================================== */
+.svc-tools .tag { margin-bottom: var(--sp-4); }
+.svc-tools .chip .icon { color: var(--accent); }
+
+/* ==========================================================================
+   Cross-links
+   ========================================================================== */
+.svc-other .card-body { gap: var(--sp-3); }
+@media (max-width: 1080px) {
+    .page-service .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+    .page-service .grid-4 { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,49 @@
+# Uploaded files. This directory holds visitor-facing images, so unlike the lead
+# CSV it cannot live outside the web root — which makes "never execute anything
+# here" the control that matters.
+#
+# admin/media.php already generates the stored filename, picks the extension
+# from a sniffed MIME type, and requires the image decoder to agree. This file
+# is the layer that holds if all of that is somehow defeated: a PHP file landing
+# in this directory is served as bytes, not run.
+
+# Kill every handler and engine, not just .php. A host with mod_php disabled may
+# still route .phtml, .phar or .cgi somewhere that executes.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .phps .cgi .pl .py .sh
+RemoveType    .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .phps .cgi .pl .py .sh
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# Belt and braces: refuse to serve anything that is not an image extension we
+# actually write, whatever ended up on disk.
+<FilesMatch "(?i)\.(?!jpe?g$|png$|gif$|webp$|svg$)[^.]+$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# An uploaded SVG is a document that renders in the browser. media.php rejects
+# scripted SVGs on upload; this stops one that slipped through from doing
+# anything useful, and stops the browser second-guessing any file's type.
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+</IfModule>
+
+Options -Indexes -ExecCGI

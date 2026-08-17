@@ -1,0 +1,30 @@
+<?php
+/**
+ * Template for inc/config.local.php — the file that actually holds your
+ * database credentials.
+ *
+ * This example file IS committed to git (it has no real secrets in it).
+ * inc/config.local.php itself is in .gitignore and must NEVER be committed —
+ * copy this file to that name and fill in the real values, on each
+ * environment separately (local dev, staging, live).
+ *
+ *     cp inc/config.local.php.example inc/config.local.php
+ *
+ * To go live: create the production database (see DEPLOY.md section 2),
+ * then edit inc/config.local.php ON THE SERVER with that database's real
+ * host/name/user/password. Nothing else in the codebase needs to change —
+ * every page reads the connection through DB_DSN/DB_USER/DB_PASS.
+ */
+
+// Local development (XAMPP/Laragon/MAMP-style MySQL, default port):
+define('DB_DSN',  'mysql:host=127.0.0.1;port=3306;dbname=rafly;charset=utf8mb4');
+
+// Live/production (Hostinger or similar shared hosting — see DEPLOY.md):
+// define('DB_DSN', 'mysql:host=localhost;dbname=YOUR_DB_NAME;charset=utf8mb4');
+
+define('DB_USER', 'YOUR_DB_USER');
+define('DB_PASS', 'YOUR_DB_PASSWORD');
+
+// Optional — surfaces PHP errors on-page instead of the generic 500. Leave
+// off (or unset) in production.
+// define('APP_DEBUG', true);

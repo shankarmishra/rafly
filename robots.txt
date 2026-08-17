@@ -1,0 +1,30 @@
+# Rafly Digital Growth — https://rafly.in
+#
+# The Sitemap line below is the one place on the site where the domain is
+# written literally: this is a static file, so it cannot read SITE_DOMAIN from
+# inc/config.php. If the domain ever changes, change it in both places. The URL
+# must stay absolute — crawlers ignore a relative one.
+
+User-agent: *
+Allow: /
+
+# Application internals. .htaccess already 404s these; this stops well-behaved
+# crawlers wasting budget discovering that. NOT /vendor/ — that holds the
+# self-hosted webfonts and the icon sprite every page renders from, so
+# blocking it is a rendering/Lighthouse hazard, not a privacy win.
+Disallow: /inc/
+Disallow: /partials/
+Disallow: /private/
+
+# Not content: a POST handler and a one-shot session-gated confirmation page.
+Disallow: /submit
+Disallow: /thank-you
+
+# The admin panel, including its pretty gate URL. This is a request, not a
+# control — the pages also send X-Robots-Tag: noindex and require a login.
+# Listing it here keeps it out of search results without pretending
+# robots.txt is a security boundary.
+Disallow: /admin/
+Disallow: /admin-gate/
+
+Sitemap: https://rafly.in/sitemap.xml

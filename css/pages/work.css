@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Case studies.
+
+   Each engagement is one wide row: identity and the number on the left, the
+   three-part write-up on the right. Deliberately not a card grid — the whole
+   point of this page is that the reader gets the full Problem → Approach →
+   Result, and a grid would push all three behind a "read more".
+   ========================================================================== */
+
+.cs-list { display: grid; gap: var(--sp-8); }
+
+.cs-item {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
+    gap: clamp(1.5rem, 1rem + 3vw, 4rem);
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    background: var(--paper);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--sh-2);
+    scroll-margin-top: calc(var(--header-h) + var(--sp-6));
+}
+
+.cs-item-head { display: flex; flex-direction: column; gap: var(--sp-3); align-content: start; }
+.cs-item-head h2 { font-size: var(--fs-h3); }
+
+.cs-metric {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
+    font-weight: var(--fw-bold);
+    line-height: 1.05;
+    letter-spacing: var(--tr-display);
+    color: var(--blue);
+    margin: var(--sp-3) 0 0;
+}
+.cs-metric-label { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; }
+.cs-tags { margin-top: var(--sp-3); }
+
+.cs-item-body { display: grid; gap: var(--sp-6); }
+.cs-part h3 {
+    font-size: var(--fs-h4);
+    margin: var(--sp-2) 0 var(--sp-2);
+}
+.cs-part p { color: var(--ink-2); margin: 0; }
+
+@media (max-width: 860px) {
+    .cs-item { grid-template-columns: 1fr; }
+}
+
+/* --- The empty state: the editorial standard, not an apology -------------- */
+.cs-standard {
+    max-width: 62rem;
+    margin-inline: auto;
+    text-align: center;
+    padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+    background: var(--paper);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--sh-2);
+}
+.cs-standard .eyebrow { justify-content: center; }
+.cs-standard .lead { margin: var(--sp-4) auto 0; }
+.cs-standard-list { margin-top: var(--sp-8); text-align: left; }
+.cs-standard-foot {
+    margin-top: var(--sp-7);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+}
+.cs-standard-foot a { text-decoration: underline; }

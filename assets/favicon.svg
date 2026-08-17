@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rafly">
+  <!--
+    STOPGAP MONOGRAM — see assets/CREDITS.md.
+
+    This is a plain "R" monogram in the brand gradient, NOT a reproduction of
+    Rafly's actual two-part mark. It exists because the previous favicon was
+    logo.png: 1408x736 and 176 KB, shipped to every page load to be drawn at
+    16px. This file is ~700 bytes.
+
+    Replace with a proper SVG export of the real mark when one is available.
+    A traced approximation would have been worse than an honest placeholder.
+  -->
+  <defs>
+    <linearGradient id="rafly-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1565c0"/>
+      <stop offset="1" stop-color="#0d47a1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#rafly-g)"/>
+
+  <!-- R -->
+  <path fill="#ffffff"
+        d="M21 15h13.2c7.1 0 11.6 3.9 11.6 10.1 0 4.5-2.4 7.8-6.4 9.2L46.6 49h-8.3l-6-13.2h-4.1V49H21V15zm12.4 15.1c3.3 0 5.2-1.8 5.2-4.7 0-2.9-1.9-4.6-5.2-4.6h-5.2v9.3h5.2z"/>
+</svg>

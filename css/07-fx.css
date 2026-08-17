@@ -1,0 +1,563 @@
+/* ==========================================================================
+   Signature effects — the pieces the three references are actually made of.
+
+     1. Device mockups, drawn in CSS (weightless, sharp at any DPR)
+     2. The fanned card grid that sits behind them, masked radially
+     3. The 3-D perspective carousel
+     4. The +01 numbered process row
+     5. The hand-drawn scribble accent
+     6. The WebGL canvas and its fallback contract
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Devices
+   ========================================================================== */
+.device { position: relative; flex: none; }
+
+/* --- Laptop ------------------------------------------------------------- */
+.device-laptop { width: min(100%, 720px); }
+.device-laptop .device-lid {
+    position: relative;
+    border-radius: 14px 14px 4px 4px;
+    background: linear-gradient(160deg, #2b3040 0%, #14171f 60%);
+    padding: 13px 13px 16px;
+    box-shadow: var(--sh-4);
+}
+.device-laptop .device-screen {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 6px;
+    overflow: hidden;
+    /* A soft brand wash rather than flat grey, so the mockup reads as a screen
+       even before a capture is dropped into it. */
+    background:
+        radial-gradient(120% 90% at 20% 0%, #ffffff 0%, var(--paper-2) 55%, var(--paper-3) 100%);
+}
+.device-laptop .device-screen img,
+.device-laptop .device-screen video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+/* The camera dot */
+.device-laptop .device-lid::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    translate: -50% 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #3d4356;
+}
+.device-laptop .device-base {
+    height: 13px;
+    /* The base is wider than the lid, as a real laptop is. Kept small enough
+       that the bleed stays inside the hero's clip at 390px. */
+    margin-inline: -4%;
+    border-radius: 0 0 12px 12px;
+    background: linear-gradient(180deg, #d5dae5 0%, #a9b1c2 55%, #8d95a8 100%);
+    box-shadow: 0 14px 26px rgba(10, 14, 26, .22);
+    position: relative;
+}
+/* The notch on the front edge */
+.device-laptop .device-base::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    width: 14%;
+    height: 5px;
+    border-radius: 0 0 6px 6px;
+    background: rgba(10, 14, 26, .22);
+}
+
+/* --- Phone -------------------------------------------------------------- */
+.device-phone { width: min(100%, 250px); }
+.device-phone .device-body {
+    position: relative;
+    border-radius: 38px;
+    padding: 9px;
+    background: linear-gradient(160deg, #33394a 0%, #12151d 55%, #232835 100%);
+    box-shadow: var(--sh-4), 0 0 0 1px rgba(255, 255, 255, .06) inset;
+}
+.device-phone .device-screen {
+    position: relative;
+    aspect-ratio: 9 / 19.5;
+    border-radius: 30px;
+    overflow: hidden;
+    background:
+        radial-gradient(120% 60% at 50% 0%, #ffffff 0%, var(--paper-2) 60%, var(--paper-3) 100%);
+}
+.device-phone .device-screen img,
+.device-phone .device-screen video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+/* Dynamic-island style pill */
+.device-phone .device-body::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    left: 50%;
+    translate: -50% 0;
+    width: 62px;
+    height: 18px;
+    border-radius: var(--r-pill);
+    background: #0b0d12;
+}
+/* Side button */
+.device-phone .device-body::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 27%;
+    width: 2px;
+    height: 52px;
+    border-radius: 2px;
+    background: #3a4152;
+}
+
+/* ==========================================================================
+   2. Hero stage — devices over a fanned grid of cards
+   ========================================================================== */
+.hero-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    isolation: isolate;
+    min-height: clamp(320px, 20rem + 18vw, 560px);
+}
+
+.hero-fan {
+    position: absolute;
+    inset: -8% -14%;
+    z-index: 0;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(6px, 0.55vw, 11px);
+    align-content: center;
+    transform: perspective(1500px) rotateX(9deg);
+    transform-style: preserve-3d;
+    pointer-events: none;
+    /* Fades to nothing towards the edges so the grid reads as endless and the
+       device is the only thing fully resolved. */
+    -webkit-mask-image:
+        radial-gradient(ellipse 62% 66% at 50% 46%, #000 6%, rgba(0, 0, 0, .45) 42%, transparent 76%);
+    mask-image:
+        radial-gradient(ellipse 62% 66% at 50% 46%, #000 6%, rgba(0, 0, 0, .45) 42%, transparent 76%);
+}
+.hero-fan-cell {
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--paper-3);
+    box-shadow: 0 2px 8px rgba(10, 14, 26, .07);
+}
+.hero-fan-cell img { width: 100%; height: 100%; object-fit: cover; }
+/* A few cells carry a flat brand tint instead of a photo, so the field has
+   rhythm without needing two dozen licensed images. */
+.hero-fan-cell.t-blue   { background: var(--blue); }
+.hero-fan-cell.t-deep   { background: var(--blue-deep); }
+.hero-fan-cell.t-ink    { background: var(--ink); }
+.hero-fan-cell.t-orange { background: var(--orange); }
+.hero-fan-cell.t-tint   { background: var(--blue-tint-2); }
+
+.hero-devices {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: end center;
+    width: min(100%, 760px);
+}
+.hero-devices .device-laptop { grid-area: 1 / 1; }
+.hero-devices .device-phone {
+    grid-area: 1 / 1;
+    width: clamp(120px, 9rem + 6vw, 208px);
+    translate: 0 12%;
+    z-index: 2;
+}
+
+@media (max-width: 700px) {
+    .hero-fan { grid-template-columns: repeat(7, minmax(0, 1fr)); inset: -6% -22%; }
+    .hero-devices .device-phone { translate: 0 14%; }
+}
+
+/* ==========================================================================
+   3. The 3-D perspective carousel
+   ========================================================================== */
+.carousel {
+    position: relative;
+    --radius: 760px;
+    --step: 40deg;
+    --rot: 0deg;
+}
+
+.carousel-scene {
+    position: relative;
+    height: clamp(360px, 21rem + 16vw, 580px);
+    perspective: 1800px;
+    perspective-origin: 50% 46%;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.carousel-ring {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--radius) * -1)) rotateY(var(--rot));
+    transition: transform 700ms var(--ease-out);
+}
+.carousel.is-dragging .carousel-ring { transition: none; }
+
+.carousel-cell {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(210px, 12rem + 8vw, 340px);
+    aspect-ratio: 3 / 4;
+    margin: 0;
+    translate: -50% -50%;
+    transform: rotateY(calc(var(--n) * var(--step))) translateZ(var(--radius));
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--paper-3);
+    box-shadow: var(--sh-3);
+    backface-visibility: hidden;
+}
+.carousel-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* The scrim. Sized so the label always sits on ink rather than on whatever
+   photograph or brand tint the cell happens to carry — white on --orange
+   alone would be 2.84:1. */
+.carousel-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        rgba(10, 14, 26, 0) 30%,
+        rgba(10, 14, 26, .55) 62%,
+        rgba(10, 14, 26, .92) 100%);
+}
+.carousel-cell-label {
+    position: absolute;
+    z-index: 2;
+    left: var(--sp-5);
+    right: var(--sp-5);
+    bottom: var(--sp-5);
+    color: #fff;
+}
+.carousel-cell-label .tag { color: rgba(255, 255, 255, .86); }
+.carousel-cell-label h3 { color: #fff; font-size: var(--fs-h4); margin-top: 4px; }
+
+/* Only the cell facing the viewer is interactive, so hidden cells cannot be
+   clicked or tabbed to through the ring. */
+.carousel-cell[aria-hidden="true"] { pointer-events: none; }
+
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-4);
+    margin-top: var(--sp-6);
+}
+.carousel-nav {
+    display: grid;
+    /* The sprite has one chevron; prev is the same glyph turned around, so the
+       icon set does not need a mirrored twin. */
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
+                transform var(--dur-2) var(--ease);
+}
+.carousel-nav:hover { background: var(--ink); border-color: var(--ink); color: #fff; transform: translateY(-2px); }
+.carousel-nav[data-carousel="prev"] .icon { transform: rotate(180deg); }
+.carousel-dots { display: flex; gap: var(--sp-2); }
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--line-strong);
+    transition: background var(--dur-2) var(--ease), width var(--dur-2) var(--ease);
+}
+.carousel-dot.is-on { background: var(--ink); width: 26px; border-radius: var(--r-pill); }
+
+/* No 3-D on phones — it becomes an honest snap strip, which is what a thumb
+   expects anyway. */
+@media (max-width: 760px), (prefers-reduced-motion: reduce) {
+    .carousel-scene {
+        height: auto;
+        perspective: none;
+        display: flex;
+        gap: var(--sp-4);
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: var(--sp-3);
+        -webkit-mask-image: none;
+        mask-image: none;
+        scrollbar-width: none;
+    }
+    .carousel-scene::-webkit-scrollbar { display: none; }
+    .carousel-ring {
+        position: static;
+        display: flex;
+        gap: var(--sp-4);
+        transform: none;
+        transform-style: flat;
+    }
+    .carousel-cell {
+        /* relative, NOT static: .carousel-cell-label is absolute, so a static
+           cell sends every label to the .carousel ancestor and all five stack
+           on top of each other. */
+        position: relative;
+        translate: none;
+        transform: none;
+        width: min(74vw, 300px);
+        flex: none;
+        scroll-snap-align: center;
+        backface-visibility: visible;
+    }
+    .carousel-cell[aria-hidden="true"] { pointer-events: auto; }
+    /* The ring's padding copies exist to close a circle. There is no circle in
+       the flat strip, so they would just be duplicate cards to swipe past. */
+    .carousel-cell[data-clone] { display: none; }
+    .carousel-controls { display: none; }
+}
+
+/* ==========================================================================
+   4. Numbered process row (+01 … +05)
+   ========================================================================== */
+.steps-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+    gap: var(--sp-5);
+    border-top: 1px solid var(--line);
+    padding-top: var(--sp-6);
+}
+.step-item { display: flex; flex-direction: column; gap: var(--sp-2); position: relative; }
+.step-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    /* --orange-ink on light (4.9:1); the bright --orange is 2.8:1 here and is
+       restored on the dark bands below, where it measures 6.8:1. */
+    color: var(--orange-ink);
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+}
+.step-title { font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-base); }
+.step-text  { font-size: var(--fs-xs); color: var(--ink-3); margin: 0; line-height: 1.6; }
+.step-time {
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-semi);
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.band-blue .steps-row, .band-ink .steps-row { border-color: var(--on-dark-line); }
+.band-blue .step-title, .band-ink .step-title { color: #fff; }
+.band-blue .step-text, .band-ink .step-text,
+.band-blue .step-time, .band-ink .step-time { color: var(--on-dark-2); }
+.band-blue .step-num { color: #fff; }
+.band-ink  .step-num { color: var(--orange); }
+
+/* ==========================================================================
+   5. Scribble + underline accents
+   ========================================================================== */
+.scribble { position: relative; display: inline-block; }
+.scribble > svg {
+    position: absolute;
+    left: -6%;
+    right: -6%;
+    bottom: -0.28em;
+    width: 112%;
+    height: 0.42em;
+    color: var(--orange);
+    overflow: visible;
+    pointer-events: none;
+}
+.scribble > svg path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: var(--len, 400);
+    stroke-dashoffset: 0;
+}
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .scribble > svg path {
+            animation: scribble-draw 1ms linear both;
+            animation-timeline: view();
+            animation-range: entry 20% cover 42%;
+        }
+    }
+}
+@keyframes scribble-draw {
+    from { stroke-dashoffset: var(--len, 400); }
+    to   { stroke-dashoffset: 0; }
+}
+
+/* A small hand-drawn spark, the kind sitting beside the reference headline */
+.spark {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    color: var(--orange);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   6. WebGL canvas — and the fallback that the previous build promised in JS
+      but never actually styled.
+   ========================================================================== */
+.gl-host {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+    border-radius: var(--r-2xl);
+    overflow: hidden;
+    background:
+        radial-gradient(70% 70% at 50% 40%, #ffffff 0%, var(--paper-2) 62%, var(--paper-3) 100%);
+    box-shadow: var(--sh-2);
+}
+.gl-host canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 600ms var(--ease);
+}
+/* Only once a frame has actually painted does the canvas take over. */
+.gl-host.is-gl-live canvas { opacity: 1; }
+
+/* The still that sits underneath: a designed object in its own right, so a
+   device without WebGL2 gets a finished page rather than an empty box. */
+.gl-still {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: opacity 600ms var(--ease);
+}
+.gl-host.is-gl-live .gl-still { opacity: 0; }
+.gl-still::before {
+    content: '';
+    width: 58%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        conic-gradient(from 210deg, var(--blue) 0deg, var(--blue-deep) 120deg,
+                       var(--orange) 220deg, var(--blue) 360deg);
+    filter: blur(2px);
+    opacity: .9;
+    mask: radial-gradient(circle, transparent 52%, #000 54%);
+    -webkit-mask: radial-gradient(circle, transparent 52%, #000 54%);
+}
+.gl-still::after {
+    content: '';
+    position: absolute;
+    width: 30%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: var(--sh-3);
+}
+
+/* ==========================================================================
+   7. Three.js stage
+   ========================================================================== */
+.three-stage {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    border-radius: var(--r-2xl);
+    overflow: hidden;
+    background:
+        radial-gradient(80% 80% at 50% 22%, #ffffff 0%, var(--paper-2) 58%, var(--paper-3) 100%);
+    box-shadow: var(--sh-2);
+}
+.three-stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0;
+    transition: opacity 700ms var(--ease);
+}
+.three-stage.is-3d-live canvas { opacity: 1; }
+.three-stage-still {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--sp-7);
+    transition: opacity 700ms var(--ease);
+}
+.three-stage.is-3d-live .three-stage-still { opacity: 0; }
+.three-stage-still img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ==========================================================================
+   8. Media frames
+   ========================================================================== */
+.figure {
+    position: relative;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background: var(--paper-3);
+    box-shadow: var(--sh-3);
+}
+.figure img { width: 100%; height: 100%; object-fit: cover; }
+/* photo() returns an empty string when the file is missing, so a figure with
+   no picture in it has to stand on its own rather than showing a grey slab. */
+.figure:not(:has(img)) {
+    background:
+        radial-gradient(100% 90% at 20% 0%, var(--blue-tint-2) 0%, var(--paper-3) 55%, var(--paper-2) 100%);
+}
+.figure-tall { aspect-ratio: 3 / 4; }
+.figure-wide { aspect-ratio: 16 / 10; }
+.figure-square { aspect-ratio: 1; }
+
+/* Positional only. It used to set a white background too, which overrode
+   .badge-ink further up the cascade and produced white text on a white pill. */
+.figure-badge {
+    position: absolute;
+    left: var(--sp-4);
+    bottom: var(--sp-4);
+    z-index: 2;
+    box-shadow: var(--sh-2);
+}
+.badge-glass {
+    background: rgba(255, 255, 255, .94);
+    color: var(--ink);
+    backdrop-filter: blur(10px);
+}
+
+/* A soft blue glow behind a floated visual */
+.glow-blue { position: relative; }
+.glow-blue::before {
+    content: '';
+    position: absolute;
+    inset: 12% -10% -14% -10%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(22, 82, 224, .22), rgba(22, 82, 224, 0) 70%);
+    filter: blur(30px);
+}

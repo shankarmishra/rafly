@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Layout — container, section rhythm, grids, full-bleed bands.
+
+   The old site's failure was that every section was the same gesture: centred
+   eyebrow, centred title, centred standfirst, grid. So the section header here
+   comes in three variants (left / centre / split) and templates are expected
+   to alternate them.
+   ========================================================================== */
+
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+.container-wide   { max-width: var(--container-w); }
+.container-narrow { max-width: var(--container-n); }
+.container-flush  { padding-inline: 0; }
+
+/* --- Sections ----------------------------------------------------------- */
+.section {
+    position: relative;
+    padding-block: var(--section-y);
+}
+.section-sm  { padding-block: var(--section-y-s); }
+.section-top { padding-top: var(--section-y); padding-bottom: 0; }
+.section-bot { padding-top: 0; padding-bottom: var(--section-y); }
+
+/* --- Grounds ------------------------------------------------------------ */
+.band-paper { background: var(--paper); }
+.band-soft  { background: var(--paper-2); }
+.band-well  { background: var(--paper-3); }
+
+.band-blue {
+    background: var(--blue);
+    color: var(--on-dark-2);
+    --line: var(--on-dark-line);
+}
+.band-ink {
+    background: var(--ink);
+    color: var(--on-dark-2);
+    --line: var(--on-dark-line);
+}
+.band-blue h1, .band-blue h2, .band-blue h3, .band-blue h4,
+.band-ink  h1, .band-ink  h2, .band-ink  h3, .band-ink  h4,
+.band-blue .display, .band-ink .display,
+.band-blue strong, .band-ink strong { color: #fff; }
+.band-blue .lead, .band-ink .lead,
+.band-blue .muted, .band-ink .muted { color: var(--on-dark-2); }
+.band-blue :is(.display, h1, h2, h3, h4) .soft,
+.band-ink  :is(.display, h1, h2, h3, h4) .soft { color: rgba(255, 255, 255, .62); }
+
+/* Rounded top corners where a coloured band meets the paper above it —
+   the reference band sits like a card edge, not a hard cut. */
+.band-round-t { border-radius: var(--r-2xl) var(--r-2xl) 0 0; }
+.band-round   { border-radius: var(--r-2xl); }
+
+/* --- Section headers ---------------------------------------------------- */
+.sec-head { margin-bottom: var(--sp-8); max-width: 60ch; }
+.sec-head .lead { margin-top: var(--sp-4); }
+
+.sec-head-center {
+    margin-inline: auto;
+    text-align: center;
+    max-width: 62ch;
+}
+.sec-head-center .eyebrow { justify-content: center; }
+.sec-head-center .lead { margin-inline: auto; }
+
+/* Split: title left, standfirst + action right. The rhythm-breaker. */
+.sec-head-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--sp-6) var(--sp-9);
+    align-items: end;
+    max-width: none;
+    margin-bottom: var(--sp-8);
+}
+.sec-head-split .lead { margin-top: 0; }
+@media (max-width: 860px) {
+    .sec-head-split { grid-template-columns: 1fr; align-items: start; gap: var(--sp-4); }
+}
+
+/* --- Grids -------------------------------------------------------------- */
+.grid { display: grid; gap: var(--sp-5); }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-auto { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+
+/* Asymmetric splits — used instead of 50/50 wherever a section has a visual
+   and a text column, so consecutive sections do not read identically. */
+.split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: center;
+}
+.split-wide-l { grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr); }
+.split-wide-r { grid-template-columns: minmax(0, 1fr) minmax(0, 1.28fr); }
+.split-top    { align-items: start; }
+.split-rev > :first-child { order: 2; }
+
+@media (max-width: 960px) {
+    .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+    .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .split, .split-wide-l, .split-wide-r { grid-template-columns: 1fr; }
+    .split-rev > :first-child { order: 0; }
+}
+@media (max-width: 620px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* --- Stack / cluster ---------------------------------------------------- */
+.stack   { display: flex; flex-direction: column; gap: var(--sp-4); }
+.stack-2 { gap: var(--sp-2); }
+.stack-3 { gap: var(--sp-3); }
+.stack-6 { gap: var(--sp-6); }
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-3);
+}
+.cluster-4 { gap: var(--sp-4); }
+.cluster-center { justify-content: center; }
+.cluster-between { justify-content: space-between; }
+
+/* --- Full bleed --------------------------------------------------------- */
+.bleed {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+}
+
+/* --- Page shell --------------------------------------------------------- */
+main { display: block; min-height: 50vh; }
+
+.page-head {
+    padding-top: calc(var(--header-h) + clamp(3rem, 1.5rem + 5vw, 6rem));
+    padding-bottom: var(--section-y-s);
+    position: relative;
+}
+
+.breadcrumbs {
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    margin-bottom: var(--sp-5);
+}
+.breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.breadcrumbs li { margin: 0; display: flex; align-items: center; gap: var(--sp-2); }
+.breadcrumbs li + li::before {
+    content: '/';
+    color: var(--line-strong);
+}
+.breadcrumbs a { color: var(--ink-3); }
+.breadcrumbs a:hover { color: var(--blue); }
+.breadcrumbs [aria-current] { color: var(--ink); font-weight: var(--fw-medium); }

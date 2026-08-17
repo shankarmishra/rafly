@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Footer — a near-black slab with rounded top corners, so the page closes on
+   an object rather than trailing off.
+   ========================================================================== */
+
+.site-footer {
+    position: relative;
+    background: var(--ink);
+    color: var(--on-dark-2);
+    border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+    margin-top: var(--section-y);
+    overflow: hidden;
+}
+/* When a coloured band closes the page, the footer meets it flush — a white
+   gap between two dark surfaces reads as a rendering fault.
+   :has() rather than a sibling selector on the band itself, because the band is
+   the last child of <main> and the footer is <main>'s sibling, not the band's.
+   A general sibling combinator, not an adjacent one: partials/tail.php emits
+   the back-to-top button, the sticky CTA, the toast stack and the modal
+   between </main> and the footer, so they are never actually adjacent. */
+main:has(> section:last-child.band-blue) ~ .site-footer,
+main:has(> section:last-child.band-ink)  ~ .site-footer { margin-top: 0; border-radius: 0; }
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(70% 55% at 12% 0%, rgba(22, 82, 224, .30) 0%, rgba(22, 82, 224, 0) 68%),
+        radial-gradient(50% 45% at 92% 8%, rgba(255, 107, 53, .12) 0%, rgba(255, 107, 53, 0) 70%);
+}
+.site-footer > * { position: relative; }
+
+.footer-top {
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) var(--sp-9);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+}
+
+.footer-brand { display: grid; gap: var(--sp-5); align-content: start; }
+.footer-logo img { height: 30px; width: auto; }
+.footer-statement {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-bold);
+    line-height: 1.2;
+    letter-spacing: var(--tr-heading);
+    color: #fff;
+    margin: 0;
+    max-width: 18ch;
+}
+.footer-blurb { color: var(--on-dark-3); font-size: var(--fs-sm); max-width: 44ch; margin: 0; }
+
+.footer-cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6) var(--sp-5);
+}
+.footer-col-title {
+    font-size: var(--fs-2xs);
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-semi);
+    color: #fff;
+    margin: 0 0 var(--sp-4);
+}
+.footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+.footer-links li { margin: 0; }
+.footer-links a {
+    color: var(--on-dark-3);
+    font-size: var(--fs-sm);
+    transition: color var(--dur-1) var(--ease);
+}
+.footer-links a:hover { color: #fff; }
+
+.footer-contact { display: grid; gap: var(--sp-4); }
+.footer-contact-row { display: flex; gap: var(--sp-3); align-items: flex-start; font-size: var(--fs-sm); }
+.footer-contact-row .icon { color: var(--on-dark-3); margin-top: 0.2em; width: 1.05em; height: 1.05em; }
+.footer-contact-row a { color: var(--on-dark-2); }
+.footer-contact-row a:hover { color: #fff; }
+
+.footer-social { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.footer-social a {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .07);
+    color: var(--on-dark-2);
+    transition: background var(--dur-2) var(--ease), color var(--dur-2) var(--ease),
+                transform var(--dur-2) var(--ease);
+}
+.footer-social a:hover { background: rgba(255, 255, 255, .16); color: #fff; transform: translateY(-2px); }
+.footer-social .icon { width: 16px; height: 16px; }
+
+.footer-bottom {
+    padding-block: var(--sp-5);
+    border-top: 1px solid var(--on-dark-line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3) var(--sp-5);
+    font-size: var(--fs-xs);
+    color: var(--on-dark-3);
+}
+.footer-bottom a { color: var(--on-dark-3); }
+.footer-bottom a:hover { color: #fff; }
+.footer-legal { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+
+@media (max-width: 940px) {
+    .footer-top { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .footer-cols { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 760px) {
+    .site-footer { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+}

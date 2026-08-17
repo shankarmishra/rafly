@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Legal / policy pages.
+
+   These are read, not scanned, so the whole page is one narrow measure with a
+   sticky table of contents and generous leading. Nothing decorative.
+   ========================================================================== */
+
+.policy-updated {
+    margin-top: var(--sp-4);
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+}
+
+.policy-wrap { padding-block: var(--section-y) 0; }
+
+.policy-notice {
+    padding: var(--sp-6);
+    margin-bottom: var(--sp-8);
+    background: var(--blue-tint);
+    border-radius: var(--r-lg);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+}
+
+.policy-toc {
+    padding: var(--sp-6);
+    margin-bottom: var(--sp-9);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+}
+.policy-toc h2 {
+    font-size: var(--fs-2xs);
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: var(--sp-4);
+}
+.policy-toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    columns: 2;
+    column-gap: var(--sp-6);
+}
+.policy-toc li { margin-bottom: var(--sp-2); break-inside: avoid; }
+.policy-toc a { font-size: var(--fs-sm); color: var(--ink-2); }
+.policy-toc a:hover { color: var(--blue); }
+@media (max-width: 640px) { .policy-toc ol { columns: 1; } }
+
+.policy-section {
+    padding-bottom: var(--sp-8);
+    margin-bottom: var(--sp-8);
+    border-bottom: 1px solid var(--line);
+    /* An anchored heading must clear the fixed header when jumped to. */
+    scroll-margin-top: calc(var(--header-h) + var(--sp-6));
+}
+.policy-section:last-of-type { border-bottom: 0; }
+
+.policy-section h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-size: var(--fs-h3);
+    margin-bottom: var(--sp-5);
+}
+.policy-section h2 .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--blue);
+    flex: none;
+}
+.policy-section h3 {
+    font-size: var(--fs-h4);
+    margin: var(--sp-6) 0 var(--sp-3);
+}
+.policy-section p,
+.policy-section li {
+    color: var(--ink-2);
+    line-height: 1.8;
+}
+.policy-section ul,
+.policy-section ol { margin-bottom: var(--sp-5); padding-left: 1.15em; }
+.policy-section li { margin-bottom: var(--sp-3); }
+.policy-section li::marker { color: var(--ink-3); }
+.policy-section a { text-decoration: underline; }
+
+.contact-callout {
+    padding: var(--sp-6);
+    background: var(--paper-2);
+    border-radius: var(--r-lg);
+    margin-top: var(--sp-5);
+}
+.contact-callout h3 { margin-top: 0; }
+.contact-callout p { margin-bottom: var(--sp-5); }

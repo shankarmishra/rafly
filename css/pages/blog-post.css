@@ -1,0 +1,118 @@
+/* ==========================================================================
+   A single article.
+
+   One narrow measure, large type, generous leading. The body is author HTML
+   passed through sanitize_html(), so every element it can emit is styled here
+   — an article must never depend on a class the author remembered to add.
+   ========================================================================== */
+
+.post-main { padding-top: calc(var(--header-h) + clamp(2rem, 1rem + 3vw, 3.5rem)); }
+
+.post-header { margin-bottom: var(--sp-8); }
+.post-topics { margin-bottom: var(--sp-5); }
+.post-title {
+    font-size: clamp(2.125rem, 1.4rem + 3vw, 3.5rem);
+    margin-bottom: var(--sp-5);
+}
+.post-standfirst { max-width: 62ch; }
+
+.post-byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-4) var(--sp-6);
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--line);
+}
+
+.post-cover { margin-block: var(--sp-8); }
+
+/* ==========================================================================
+   Body
+   ========================================================================== */
+.post-body {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.8;
+    color: var(--ink-2);
+}
+.post-body > * + * { margin-top: var(--sp-5); }
+.post-body h2 {
+    font-size: var(--fs-h3);
+    margin-top: var(--sp-9);
+    margin-bottom: var(--sp-4);
+    scroll-margin-top: calc(var(--header-h) + var(--sp-6));
+}
+.post-body h3 {
+    font-size: var(--fs-h4);
+    margin-top: var(--sp-7);
+    margin-bottom: var(--sp-3);
+}
+.post-body ul, .post-body ol { padding-left: 1.3em; }
+.post-body li { margin-bottom: var(--sp-3); }
+.post-body li::marker { color: var(--blue); }
+.post-body a { text-decoration: underline; }
+
+.post-body blockquote {
+    margin: var(--sp-7) 0;
+    padding: var(--sp-5) var(--sp-6);
+    border-left: 3px solid var(--blue);
+    background: var(--blue-tint);
+    border-radius: 0 var(--r) var(--r) 0;
+    font-size: var(--fs-lead);
+    color: var(--ink);
+}
+.post-body blockquote p:last-child { margin-bottom: 0; }
+
+.post-body img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-2);
+}
+.post-body figure { margin: var(--sp-7) 0; }
+.post-body figcaption {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    text-align: center;
+}
+
+.post-body pre {
+    padding: var(--sp-5);
+    background: var(--ink);
+    color: var(--on-dark-1);
+    border-radius: var(--r-lg);
+    overflow-x: auto;
+    font-size: var(--fs-sm);
+    line-height: 1.65;
+}
+.post-body :not(pre) > code {
+    padding: 0.15em 0.4em;
+    background: var(--paper-3);
+    border-radius: var(--r-xs);
+    font-size: 0.88em;
+    color: var(--ink);
+}
+
+.post-body table { margin: var(--sp-6) 0; font-size: var(--fs-sm); }
+.post-body th, .post-body td {
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+}
+.post-body th { font-weight: var(--fw-semi); color: var(--ink); }
+
+.post-body hr { margin: var(--sp-9) 0; }
+
+/* ==========================================================================
+   Closing CTA inside the article
+   ========================================================================== */
+.post-cta {
+    margin-top: var(--sp-9);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--paper-2);
+    border-radius: var(--r-xl);
+}
+.post-cta h2 { font-size: var(--fs-h3); margin-bottom: var(--sp-3); }
+.post-cta p { color: var(--ink-3); margin-bottom: var(--sp-6); max-width: 58ch; }

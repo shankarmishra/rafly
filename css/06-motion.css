@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Motion — ONE vocabulary.
+
+   The previous build ran two reveal systems side by side (an IntersectionObserver
+   one and a scroll-timeline one) and they collided whenever both landed on the
+   same element. Here there is a single attribute, `data-r`, and two engines that
+   are mutually exclusive by @supports:
+
+     • Browsers with `animation-timeline: view()` drive it natively. Resting
+       state IS the finished state, so nothing is hidden and no JS is involved.
+     • Browsers without it fall back to IntersectionObserver, and their resting
+       state is scoped to `.js-motion` (set by js/motion.js) so no-JS still
+       renders a complete page.
+
+   `prefers-reduced-motion` disables both and everything sits at its finished
+   state.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Native scroll-driven timelines — the primary engine
+   ========================================================================== */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+        [data-r] {
+            animation-timeline: view();
+            animation-range: entry 4% cover 40%;
+            animation-fill-mode: both;
+            animation-duration: 1ms;   /* required; the timeline supplies progress */
+        }
+
+        [data-r="rise"]  { animation-name: r-rise; }
+        [data-r="lift"]  { animation-name: r-lift; }
+        [data-r="left"]  { animation-name: r-left; }
+        [data-r="right"] { animation-name: r-right; }
+        [data-r="scale"] { animation-name: r-scale; }
+        [data-r="blur"]  { animation-name: r-blur; }
+        [data-r="wipe"]  { animation-name: r-wipe; animation-range: entry 6% cover 46%; }
+        [data-r="fade"]  { animation-name: r-fade; }
+
+        /* A group whose children arrive in sequence. The stagger is an
+           animation-RANGE offset rather than a delay, so scrubbing backwards
+           behaves correctly. */
+        [data-r="group"] > * {
+            animation: r-rise 1ms both;
+            animation-timeline: view();
+            animation-range: entry 2% cover 34%;
+        }
+        [data-r="group"] > :nth-child(1) { animation-range: entry  2% cover 30%; }
+        [data-r="group"] > :nth-child(2) { animation-range: entry  6% cover 34%; }
+        [data-r="group"] > :nth-child(3) { animation-range: entry 10% cover 38%; }
+        [data-r="group"] > :nth-child(4) { animation-range: entry 14% cover 42%; }
+        [data-r="group"] > :nth-child(5) { animation-range: entry 18% cover 46%; }
+        [data-r="group"] > :nth-child(n+6) { animation-range: entry 22% cover 50%; }
+
+        /* A heading that resolves line by line. */
+        [data-r="lines"] > * {
+            animation: r-line 1ms both;
+            animation-timeline: view();
+        }
+        [data-r="lines"] > :nth-child(1) { animation-range: entry  0% entry 55%; }
+        [data-r="lines"] > :nth-child(2) { animation-range: entry 10% entry 68%; }
+        [data-r="lines"] > :nth-child(3) { animation-range: entry 20% entry 82%; }
+
+        /* Depth — travels across the whole time the element is on screen. */
+        [data-r="parallax"] {
+            animation-name: r-parallax;
+            animation-range: cover 0% cover 100%;
+            animation-timing-function: linear;
+        }
+    }
+}
+
+@keyframes r-rise  { from { opacity: 0; transform: translate3d(0, 34px, 0); } }
+@keyframes r-lift  { from { opacity: 0; transform: translate3d(0, 26px, 0) scale(.975); } }
+@keyframes r-left  { from { opacity: 0; transform: translate3d(-44px, 0, 0); } }
+@keyframes r-right { from { opacity: 0; transform: translate3d(44px, 0, 0); } }
+@keyframes r-scale { from { opacity: 0; transform: scale(.9); } }
+@keyframes r-blur  { from { opacity: 0; filter: blur(12px); } }
+@keyframes r-fade  { from { opacity: 0; } }
+@keyframes r-wipe  { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes r-line  { from { opacity: 0; transform: translate3d(0, 0.5em, 0); } }
+@keyframes r-parallax {
+    from { transform: translate3d(0, calc(var(--depth, 40px) * 1), 0); }
+    to   { transform: translate3d(0, calc(var(--depth, 40px) * -1), 0); }
+}
+
+/* ==========================================================================
+   2. IntersectionObserver fallback — only where timelines are unavailable
+   ========================================================================== */
+@supports not (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+        .js-motion [data-r] {
+            opacity: 0;
+            transition: opacity var(--dur-4) var(--ease-out),
+                        transform var(--dur-4) var(--ease-out),
+                        filter var(--dur-4) var(--ease-out),
+                        clip-path var(--dur-4) var(--ease-out);
+        }
+        .js-motion [data-r="rise"]  { transform: translate3d(0, 34px, 0); }
+        .js-motion [data-r="lift"]  { transform: translate3d(0, 26px, 0) scale(.975); }
+        .js-motion [data-r="left"]  { transform: translate3d(-44px, 0, 0); }
+        .js-motion [data-r="right"] { transform: translate3d(44px, 0, 0); }
+        .js-motion [data-r="scale"] { transform: scale(.9); }
+        .js-motion [data-r="blur"]  { filter: blur(12px); }
+        .js-motion [data-r="wipe"]  { opacity: 1; clip-path: inset(0 100% 0 0); }
+        .js-motion [data-r="parallax"] { opacity: 1; }
+
+        .js-motion [data-r].is-in {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            clip-path: inset(0 0 0 0);
+        }
+
+        .js-motion [data-r="group"] { opacity: 1; }
+        .js-motion [data-r="group"] > * {
+            opacity: 0;
+            transform: translate3d(0, 30px, 0);
+            transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-4) var(--ease-out);
+            transition-delay: calc(var(--i, 0) * var(--stagger));
+        }
+        .js-motion [data-r="group"].is-in > * { opacity: 1; transform: none; }
+
+        .js-motion [data-r="lines"] { opacity: 1; }
+        .js-motion [data-r="lines"] > * {
+            opacity: 0;
+            transform: translate3d(0, .5em, 0);
+            transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-4) var(--ease-out);
+            transition-delay: calc(var(--i, 0) * 90ms);
+        }
+        .js-motion [data-r="lines"].is-in > * { opacity: 1; transform: none; }
+    }
+}
+
+/* ==========================================================================
+   3. Split text — words, driven by js/motion.js
+   ========================================================================== */
+.split-word { display: inline-block; will-change: transform; }
+.js-motion [data-split] .split-word {
+    opacity: 0;
+    transform: translate3d(0, 0.45em, 0);
+    transition: opacity 620ms var(--ease-out), transform 620ms var(--ease-out);
+    transition-delay: calc(var(--w, 0) * 42ms);
+}
+.js-motion [data-split].is-in .split-word { opacity: 1; transform: none; }
+
+/* ==========================================================================
+   4. Sticky storytelling — the layout IS the feature, so this sits outside
+      the @supports blocks and works everywhere.
+   ========================================================================== */
+.st-scroller {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+}
+.st-stage {
+    position: sticky;
+    top: calc(var(--header-h) + var(--sp-6));
+    align-self: start;
+}
+.st-steps { display: grid; }
+.st-steps.has-rail { position: relative; padding-left: var(--sp-7); }
+.st-steps.has-rail::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--line);
+    border-radius: 2px;
+}
+.st-steps.has-rail::after {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 12px;
+    width: 2px;
+    height: var(--st-progress, 0%);
+    background: var(--blue);
+    border-radius: 2px;
+    transition: height var(--dur-3) var(--ease);
+}
+
+.st-step {
+    position: relative;
+    padding-block: var(--sp-6);
+    /* Enough scroll distance for the pinned stage to feel driven, without the
+       column becoming mostly air. */
+    min-height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-3);
+    opacity: .42;
+    transition: opacity var(--dur-3) var(--ease);
+}
+.st-step.is-active { opacity: 1; }
+
+.st-step-num {
+    position: absolute;
+    left: calc(var(--sp-7) * -1);
+    top: 50%;
+    translate: 0 -50%;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    font-family: var(--font-display);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    color: var(--ink-3);
+    transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
+                color var(--dur-2) var(--ease);
+}
+.st-step.is-active .st-step-num {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+}
+.st-step-title { font-size: var(--fs-h4); color: var(--ink); }
+.st-step-text  { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; max-width: 46ch; }
+
+@media (max-width: 940px) {
+    .st-scroller { grid-template-columns: 1fr; }
+    .st-stage { position: static; margin-bottom: var(--sp-6); }
+    .st-step { min-height: 0; opacity: 1; padding-block: var(--sp-4); }
+}
+
+/* ==========================================================================
+   5. Page scroll progress
+   ========================================================================== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: calc(var(--z-header) + 1);
+    background: var(--blue);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .scroll-progress {
+            animation: sp-grow 1ms linear both;
+            animation-timeline: scroll(root block);
+        }
+    }
+}
+@keyframes sp-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ==========================================================================
+   6. Idle motion
+   ========================================================================== */
+.float { animation: float-y 6s var(--ease-in-out) infinite; }
+.float-slow { animation: float-y 9s var(--ease-in-out) infinite; }
+@keyframes float-y {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50%      { transform: translate3d(0, -12px, 0); }
+}
+
+.shake { animation: shake-x 420ms var(--ease); }
+@keyframes shake-x {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+/* ==========================================================================
+   7. Reduced motion — one kill switch for everything above
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+    [data-r], [data-r] > *, .split-word {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        clip-path: none !important;
+    }
+    .st-step { opacity: 1 !important; }
+    .marquee-track { animation: none !important; }
+    .scroll-progress { display: none; }
+}

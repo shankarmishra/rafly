@@ -1,0 +1,222 @@
+/* ==========================================================================
+   About.
+
+   Two drawn figures — the branching core and the P.E.A.C.E. orbit — plus the
+   mission/vision pair and the numbered service rail. The figures are CSS and
+   the sprite, no images: nothing here has a licence or a download attached.
+   ========================================================================== */
+
+/* ==========================================================================
+   The branching figure — one core, five branches
+   ========================================================================== */
+.branch-figure {
+    position: relative;
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 460px;
+    /* An absolute radius, not a percentage. A percentage translate resolves
+       against the ELEMENT's own box, not its container — so `translate(38%)`
+       moved each branch 38% of its own 120px width and stacked all five on
+       top of the core. */
+    --branch-r: clamp(104px, 6rem + 6vw, 168px);
+    margin-inline: auto;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 50% 45%, #ffffff 0%, var(--paper-2) 46%, var(--paper-3) 72%, transparent 74%);
+}
+/* Two faint orbit rings, so the branches read as arranged rather than scattered */
+.branch-figure::before,
+.branch-figure::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed var(--line-strong);
+}
+.branch-figure::before { inset: 18%; }
+.branch-figure::after  { inset: 34%; }
+
+.branch-core {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    box-shadow: var(--sh-3);
+}
+.branch-core .icon { width: 34px; height: 34px; }
+
+.branch-list {
+    position: absolute;
+    inset: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.branch-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    /* Rotate out to the angle, translate along the radius, then un-rotate the
+       content so the label stays upright. */
+    transform: rotate(var(--a)) translate(var(--branch-r)) rotate(calc(var(--a) * -1));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+    width: 120px;
+    margin-left: -60px;
+    margin-top: -30px;
+    text-align: center;
+}
+.branch-dot {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--blue);
+    box-shadow: var(--sh-2);
+}
+.branch-dot .icon { width: 20px; height: 20px; }
+.branch-label {
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-semi);
+    color: var(--ink-2);
+    line-height: 1.25;
+}
+
+@media (max-width: 480px) {
+    .branch-item { width: 96px; margin-left: -48px; }
+    .branch-label { font-size: 0.6875rem; }
+}
+
+/* ==========================================================================
+   Mission / vision
+   ========================================================================== */
+.mv-grid { gap: var(--sp-5); }
+.mv-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--paper);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-2);
+}
+.mv-card h3 { font-size: var(--fs-h3); }
+.mv-card p { color: var(--ink-2); margin: 0; }
+.mv-card.is-vision { background: var(--ink); color: var(--on-dark-2); }
+.mv-card.is-vision h3 { color: #fff; }
+.mv-card.is-vision p { color: var(--on-dark-2); }
+.mv-card.is-vision .icon-box-ink { background: rgba(255, 255, 255, .12); }
+
+/* ==========================================================================
+   The numbered service rail
+   ========================================================================== */
+.rail { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+.rail-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    margin: 0;
+    padding: var(--sp-5);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease),
+                border-color var(--dur-2) var(--ease);
+}
+.rail-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sh-3);
+    border-color: transparent;
+}
+.rail-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-bold);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    flex: none;
+}
+.rail-body { flex: 1; min-width: 0; }
+.rail-title { display: block; font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-h4); }
+.rail-text  { display: block; font-size: var(--fs-sm); color: var(--ink-3); margin-top: 2px; }
+.rail-go { color: var(--ink-3); flex: none; transition: transform var(--dur-2) var(--ease), color var(--dur-2) var(--ease); }
+.rail-item:hover .rail-go { transform: translateX(4px); color: var(--blue); }
+
+@media (max-width: 620px) {
+    .rail-item { gap: var(--sp-3); padding: var(--sp-4); }
+    .rail-item .icon-box { display: none; }
+}
+
+/* ==========================================================================
+   The P.E.A.C.E. orbit
+   ========================================================================== */
+.peace-orbit {
+    position: relative;
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    display: grid;
+    place-items: center;
+}
+.peace-orbit::before {
+    content: '';
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: radial-gradient(circle, #ffffff 0%, var(--paper) 62%, transparent 72%);
+}
+.peace-orbit-core {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.06em;
+    color: var(--ink);
+}
+.peace-orbit-ring {
+    position: absolute;
+    inset: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.peace-orbit-ring li {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -24px 0 0 -24px;
+    transform: rotate(var(--a)) translate(150px) rotate(calc(var(--a) * -1));
+}
+.peace-orbit-ring span {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    box-shadow: var(--sh-2);
+}
+.peace-orbit-ring li:nth-child(even) span { background: var(--blue-deep); }
+
+@media (max-width: 520px) {
+    .peace-orbit-ring li { transform: rotate(var(--a)) translate(108px) rotate(calc(var(--a) * -1)); }
+    .peace-orbit-ring span { width: 40px; height: 40px; }
+}

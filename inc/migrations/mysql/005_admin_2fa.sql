@@ -1,0 +1,89 @@
+-- ---------------------------------------------------------------------------
+-- 005 — admin two-factor auth, IP-keyed rate limiting (MySQL / MariaDB)
+--
+-- Counterpart of ../005_admin_2fa.sql.
+--
+-- TOTP (RFC 6238), not SMS or a paid verification API: the secret and the
+-- authenticator app both derive the same 6-digit code from a shared secret
+-- plus the current time, entirely offline. Nothing here calls out to a
+-- third-party service, which is a hard requirement, not a preference.
+--
+-- totp_secret is nullable and unconfirmed until totp_confirmed_at is set —
+-- enrollment is two steps (show the QR, then prove a code was scanned) so a
+-- secret that was generated but never actually scanned can never silently
+-- start being required at login. totp_last_counter is the replay guard: the
+-- last accepted 30-second time-step is stored so the same code cannot be
+-- reused twice inside its own window if it were ever shoulder-surfed.
+--
+-- kind on login_attempts turns a single-purpose table into a shared one
+-- rather than adding a parallel totp_attempts table: a wrong TOTP code is
+-- exactly the same shape of event as a wrong password (something to throttle
+-- per identifier+ip), and login_throttle_ok() already counts failures across
+-- both kinds together — a second factor that could be brute-forced on its own
+-- budget would not be much of a second factor.
+--
+-- user_recovery_codes stores HASHES, never the plain codes — password_hash()
+-- with the same algorithm as the password itself (password_algo() in
+-- inc/helpers.php already tolerates a host without argon2). Ten single-use
+-- codes are generated at enrollment and shown exactly once; this table is how
+-- "I lost my phone" does not mean "I lost my site".
+--
+-- rate_limit_hits replaces nothing — rate_limit_ok() in inc/security.php stays
+-- session-keyed for the contact form's original soft check. This table backs
+-- a new, separate IP-keyed check for cases a discarded cookie jar defeats
+-- entirely, following the exact precedent and reasoning already written down
+-- in 003_login_attempts.sql for why login could not be session-keyed either.
+--
+-- The two new indexes on case_studies/testimonials are unrelated to auth —
+-- bundled here because they are one-line, and both tables are queried with
+-- WHERE is_published ORDER BY sort_order, id on every homepage load with no
+-- index behind that filter today.
+-- ---------------------------------------------------------------------------
+
+ALTER TABLE users
+    ADD COLUMN totp_secret       VARCHAR(64) NULL
+        COMMENT 'Base32 secret. NULL until enrollment starts.',
+    ADD COLUMN totp_confirmed_at DATETIME    NULL
+        COMMENT 'Set only once a scanned code has been verified. NULL = 2FA not required at login.',
+    ADD COLUMN totp_last_counter BIGINT      NULL
+        COMMENT 'Last accepted 30s time-step, so the same code cannot be replayed within its window.';
+
+ALTER TABLE login_attempts
+    ADD COLUMN kind VARCHAR(20) NOT NULL DEFAULT 'password'
+        COMMENT 'password | totp | recovery — same throttle budget, recorded separately for the audit trail.';
+
+CREATE TABLE user_recovery_codes (
+    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT       NOT NULL,
+
+    -- Hashed with password_algo(), same as the account password. A leaked
+    -- database backup must not hand out working recovery codes any more than
+    -- it should hand out working passwords.
+    code_hash  VARCHAR(255) NOT NULL,
+
+    -- NULL = still valid. Set on first successful use; a used code is refused
+    -- a second time rather than deleted, so the audit log keeps the event.
+    used_at    DATETIME     NULL,
+    created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY user_recovery_codes_user_idx (user_id),
+    CONSTRAINT user_recovery_codes_user_fk FOREIGN KEY (user_id)
+        REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  COMMENT 'Single-use 2FA recovery codes. Re-enrolling replaces the whole set.';
+
+CREATE TABLE rate_limit_hits (
+    id         BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
+    -- Which limiter this hit counts against ('lead', etc.) — one table, many
+    -- independent buckets, same shape as login_attempts.identifier.
+    bucket     VARCHAR(60) NOT NULL,
+    ip         VARCHAR(45) NOT NULL DEFAULT '',
+    created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    KEY rate_limit_hits_bucket_ip_idx (bucket, ip, created_at DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  COMMENT 'IP-keyed rate limiting. Prune rows older than the longest window; nothing reads them beyond that.';
+
+CREATE INDEX case_studies_pub_idx ON case_studies (is_published, sort_order, id);
+CREATE INDEX testimonials_pub_idx ON testimonials (is_published, sort_order, id);
