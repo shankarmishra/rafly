@@ -62,16 +62,20 @@ const SLOTS = [
     { file: 'service-content',   group: 'service', q: 'video camera studio production',  alt: 'A camera set up for a studio shoot' },
     { file: 'service-ecom',      group: 'service', q: 'warehouse boxes shipping',        alt: 'Parcels ready for e-commerce delivery' },
 
-    // Challenge cards.
-    { file: 'challenge-1', group: 'challenge', q: 'business meeting discussion',  alt: 'A team meeting in progress' },
-    { file: 'challenge-2', group: 'challenge', q: 'paperwork documents invoices', alt: 'Paperwork spread across a desk' },
-    { file: 'challenge-3', group: 'challenge', q: 'whiteboard planning workshop',alt: 'A team planning at a whiteboard' },
+    /* Challenge cards. The file names are NOT free: index.php builds the path
+       as challenge-{key}.jpg from the first column of $CHALLENGES, so these
+       three names have to stay cables / hourglass / lock. photo() returns an
+       empty string for a file it cannot find, so a rename here does not error —
+       it silently empties the top of all three cards. */
+    { file: 'challenge-cables',    group: 'challenge', q: 'messy desk cluttered papers', alt: 'A tangle of cables' },
+    { file: 'challenge-hourglass', group: 'challenge', q: 'clock time deadline office',   alt: 'A clock on an office wall' },
+    { file: 'challenge-lock',      group: 'challenge', q: 'padlock chain door security',  alt: 'A padlock on a door' },
 
     // The About figure and the work covers.
     { file: 'about-desk', group: 'about', q: 'office desk notebook coffee',   alt: 'A notebook and coffee on a working desk' },
-    { file: 'work-1',     group: 'work',  q: 'empty modern office interior',  alt: '' },
-    { file: 'work-2',     group: 'work',  q: 'retail store shop interior',     alt: '' },
-    { file: 'work-3',     group: 'work',  q: 'cafe restaurant interior',      alt: '' },
+    { file: 'work-1',     group: 'work',  q: 'empty modern office interior',  alt: 'A modern office interior' },
+    { file: 'work-2',     group: 'work',  q: 'retail store shop interior',     alt: 'The interior of a clothing store' },
+    { file: 'work-3',     group: 'work',  q: 'cafe restaurant interior',      alt: 'The interior of a cafe' },
 ];
 
 /* Three passes, loosening as they go. The first asks for exactly what the slot

@@ -33,12 +33,6 @@
     background:
         radial-gradient(120% 90% at 20% 0%, #ffffff 0%, var(--paper-2) 55%, var(--paper-3) 100%);
 }
-/* photo() wraps its <img> in a <picture>, which is inline and auto-sized. The
-   img's own width/height:100% then resolve against a wrapper that has already
-   collapsed, so the screen shows its gradient wash and the capture never
-   appears. Every place on the site that puts a photo() inside a fixed frame
-   needs this — see .arc-tile picture in section 2. */
-.device-screen picture { display: block; width: 100%; height: 100%; }
 .device-laptop .device-screen img,
 .device-laptop .device-screen video {
     width: 100%;
@@ -238,10 +232,7 @@
     text-align: center;
     opacity: .88;
 }
-/* Kept for the day a tile does carry a photograph: photo() wraps its <img> in
-   a <picture>, which is inline and auto-sized, so sizing only the <img> leaves
-   it filling a box that has already collapsed. */
-.arc-tile picture { display: block; width: 100%; height: 100%; grid-area: 1 / 1; }
+/* Kept for the day a tile carries a photograph again. */
 .arc-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* The ring's colour rhythm. t-tint is the one light tile, so it carries ink

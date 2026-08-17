@@ -362,6 +362,26 @@ async function main() {
                 awaitPromise: true,
             });
 
+            /* Force every lazy image to load, and wait until they have decoded.
+
+               captureBeyondViewport renders the whole document, but it does NOT
+               make the browser fetch an image that loading="lazy" has never
+               brought near the viewport. The scroll pass above triggers most of
+               them; anything that was still in flight, or that the scroll
+               stepped straight past, photographs as an empty frame. That is
+               indistinguishable from a broken layout in a screenshot, and it
+               silently exempted every below-the-fold image from the broken-image
+               check — the harness was reviewing a page nobody will ever see. */
+            await cdp.send('Runtime.evaluate', {
+                expression: `(async () => {
+                    document.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });
+                    const imgs = Array.from(document.images);
+                    await Promise.all(imgs.map(i => (i.decode ? i.decode() : Promise.resolve()).catch(() => {})));
+                })()`,
+                awaitPromise: true,
+            });
+            await sleep(250);
+
             /* Freeze every entrance animation at its FINISHED state before
                measuring or shooting.
 

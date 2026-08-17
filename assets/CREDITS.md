@@ -120,9 +120,9 @@ that chose the file — so the credit cannot drift from what was downloaded.
 | File | Photographer | Source | Licence |
 |---|---|---|---|
 | `assets/photos/about-desk.jpg` | [Green Chameleon](https://stocksnap.io/author/6745) | [stocksnap](https://stocksnap.io/photo/writing-drawing-8Y0EDX4VP9) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-1.jpg` | [Direct Media](https://stocksnap.io/author/145556) | [stocksnap](https://stocksnap.io/photo/business-team-W6PNBNYHM6) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-2.jpg` | [public.resource.org](https://www.flickr.com/photos/8212496@N06) | [flickr](https://www.flickr.com/photos/8212496@N06/7782753778) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-3.jpg` | [Startup Stock Photos](https://startupstockphotos.com) | [stocksnap](https://stocksnap.io/photo/whiteboard-planning-NQQ2PJW1JM) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| `assets/photos/challenge-cables.jpg` | [roland](https://www.flickr.com/photos/35034347371@N01) | [flickr](https://www.flickr.com/photos/35034347371@N01/84136) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| `assets/photos/challenge-hourglass.jpg` | [Negative Space](https://stocksnap.io/author/4440) | [stocksnap](https://stocksnap.io/photo/clock-time-72R81VRMM0) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| `assets/photos/challenge-lock.jpg` | [Jennifer Bourn](https://jenniferbourn.com) | [wordpress](https://wordpress.org/photos/photo/93624f06d0/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
 | `assets/photos/service-content.jpg` | [Kristin Hardwick](https://www.kristinhardwick.com) | [stocksnap](https://stocksnap.io/photo/camera-tripod-LAYS8FQZWO) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
 | `assets/photos/service-ecom.jpg` | U.S. Department of Agriculture | [rawpixel](https://www.rawpixel.com/image/3306152/free-photo-image-warehouse-logistics-delivery) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
 | `assets/photos/service-marketing.jpg` | [Serpstat](https://serpstat.com/ru) | [stocksnap](https://stocksnap.io/photo/seo-ppc-9699Y6WKLD) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |

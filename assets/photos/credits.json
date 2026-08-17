@@ -54,28 +54,6 @@
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "alt": "Parcels ready for e-commerce delivery"
   },
-  "challenge-1.jpg": {
-    "id": "4f7416d8-83d8-4e08-b11e-c076e5877671",
-    "title": "Business Team",
-    "creator": "Direct Media",
-    "creator_url": "https://stocksnap.io/author/145556",
-    "source": "stocksnap",
-    "landing": "https://stocksnap.io/photo/business-team-W6PNBNYHM6",
-    "license": "CC0",
-    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "alt": "A team meeting in progress"
-  },
-  "challenge-2.jpg": {
-    "id": "300c7458-fb21-45b5-a255-bbf658b8aab4",
-    "title": "The QA Station",
-    "creator": "public.resource.org",
-    "creator_url": "https://www.flickr.com/photos/8212496@N06",
-    "source": "flickr",
-    "landing": "https://www.flickr.com/photos/8212496@N06/7782753778",
-    "license": "CC0",
-    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "alt": "Paperwork spread across a desk"
-  },
   "about-desk.jpg": {
     "id": "39c6bb74-dbb6-4415-9345-c9be3fa9e686",
     "title": "Writing Drawing",
@@ -120,15 +98,37 @@
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "alt": ""
   },
-  "challenge-3.jpg": {
-    "id": "4a23ec82-e0f9-4f68-883b-275a37bc70f4",
-    "title": "Whiteboard Planning",
-    "creator": "Startup Stock Photos",
-    "creator_url": "https://startupstockphotos.com",
-    "source": "stocksnap",
-    "landing": "https://stocksnap.io/photo/whiteboard-planning-NQQ2PJW1JM",
+  "challenge-cables.jpg": {
+    "id": "0e78909a-6db2-4d73-9354-175b3d1c2f19",
+    "title": "My messy desk",
+    "creator": "roland",
+    "creator_url": "https://www.flickr.com/photos/35034347371@N01",
+    "source": "flickr",
+    "landing": "https://www.flickr.com/photos/35034347371@N01/84136",
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-    "alt": "A team planning at a whiteboard"
+    "alt": "A tangle of cables"
+  },
+  "challenge-hourglass.jpg": {
+    "id": "c67a2633-4f4e-462d-8216-9cbae40ce2c4",
+    "title": "Clock Time",
+    "creator": "Negative Space",
+    "creator_url": "https://stocksnap.io/author/4440",
+    "source": "stocksnap",
+    "landing": "https://stocksnap.io/photo/clock-time-72R81VRMM0",
+    "license": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "alt": "A clock on an office wall"
+  },
+  "challenge-lock.jpg": {
+    "id": "770e17d3-2cc5-4cf4-91bc-1a950fb4230c",
+    "title": "Metal Door With Security Lock",
+    "creator": "Jennifer Bourn",
+    "creator_url": "https://jenniferbourn.com",
+    "source": "wordpress",
+    "landing": "https://wordpress.org/photos/photo/93624f06d0/",
+    "license": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "alt": "A padlock on a door"
   }
 }

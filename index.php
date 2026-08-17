@@ -606,8 +606,16 @@ require __DIR__ . '/partials/social-rail.php';
             </div>
 
             <div class="grid grid-3" data-r="group">
-                <?php foreach ($caseStudies as $c): ?>
+                <?php foreach ($caseStudies as $wi => $c): ?>
                     <article class="card card-hover work-card">
+                        <?php /* Cycled by position rather than stored per case study:
+                           these are illustrative covers for the sector, not
+                           photographs of the client's premises, and nothing on the
+                           card claims otherwise. photo() returns '' for a missing
+                           file, so the card degrades to its text form. */ ?>
+                        <div class="card-media" data-fx="zoom" style="--grow: .05;">
+                            <?= photo('assets/photos/work-' . (($wi % 3) + 1) . '.jpg', '') ?>
+                        </div>
                         <div class="card-body">
                             <span class="badge badge-soft"><?= e($c['sector']) ?></span>
                             <p class="work-metric"><?= e($c['metric_value']) ?></p>

@@ -248,3 +248,17 @@ blockquote { margin: 0; }
        anything is animated, so it stands down with the rest. */
     .bg-field { position: absolute; height: 100%; }
 }
+
+
+/* inc/helpers.php photo() wraps every image in a <picture> when a WebP twin
+   exists. The rule above already gives <picture> display:block, but not a
+   height — so an <img> written as height:100% resolves that percentage against
+   an auto-height parent, which means auto. In a square frame holding a
+   landscape photograph that is visible as a band of the fallback gradient
+   across the bottom of the tile.
+
+   display:contents removes the wrapper box entirely and lets the <img> be laid
+   out by the real parent, which is what every one of those rules already
+   assumed. Done here rather than per component so the next frame that holds a
+   photo() cannot inherit the same bug. */
+picture { display: contents; }
