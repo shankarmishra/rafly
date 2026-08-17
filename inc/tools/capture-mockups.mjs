@@ -30,7 +30,8 @@ const args = process.argv.slice(2);
 const arg = (n, f) => { const i = args.indexOf(n); return i >= 0 && args[i + 1] ? args[i + 1] : f; };
 
 const BASE = arg('--base', 'http://127.0.0.1:8877').replace(/\/$/, '');
-const OUT = path.resolve(import.meta.dirname, '../../assets/mockups');
+const OUT     = path.resolve(import.meta.dirname, '../../assets/mockups');
+const OUT_ARC = path.resolve(import.meta.dirname, '../../assets/arc');
 
 const CHROME = [
     'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -45,11 +46,36 @@ if (!CHROME) { console.error('No Chrome binary found.'); process.exit(2); }
  * fills the screen with no crop and no letterbox:
  *   .device-laptop .device-screen  aspect-ratio: 16 / 10
  *   .device-phone  .device-screen  aspect-ratio: 9 / 19.5
+ *
+ * The `arc` group is different in kind: square tiles for the hero ring, each a
+ * real region of a real page of this site.
+ *
+ * WHY THE RING IS NOT STOCK PHOTOGRAPHY
+ * It was, for one round. A CC0 search for "digital agency" subjects returns a
+ * gas mask, a Twitch logo and a Burger King sign — the free-licence pools are
+ * simply not deep enough to curate twelve coherent tiles from, and every
+ * near-miss puts someone else's trademark in our hero. Capturing our own pages
+ * costs nothing, needs no licence, cannot be off-topic by construction, and
+ * re-runs into the new design the moment the design changes.
+ *
+ * `scroll` is where on the page to stop; `clip` is the square to take from
+ * there. Both were picked by looking at the result, not by arithmetic.
  */
 const SHOTS = [
     { name: 'laptop-screen', url: '/pricing', width: 1440, height: 900, dpr: 1, mobile: false },
     { name: 'phone-screen',  url: '/blog',    width: 390,  height: 845, dpr: 1, mobile: true  },
-];
+
+    { group: 'arc', name: 'arc-pricing', url: '/pricing',                 scroll: 780,  clip: [340, 0, 760, 760] },
+    { group: 'arc', name: 'arc-blog',    url: '/blog',                    scroll: 620,  clip: [120, 0, 760, 760] },
+    { group: 'arc', name: 'arc-web',     url: '/web-development',         scroll: 1150, clip: [340, 0, 760, 760] },
+    { group: 'arc', name: 'arc-work',    url: '/case-studies',            scroll: 560,  clip: [120, 0, 760, 760] },
+    { group: 'arc', name: 'arc-team',    url: '/team',                    scroll: 420,  clip: [340, 0, 760, 760] },
+    { group: 'arc', name: 'arc-contact', url: '/contact',                 scroll: 330,  clip: [560, 0, 760, 760] },
+    { group: 'arc', name: 'arc-market',  url: '/marketing-advertisement', scroll: 980,  clip: [120, 0, 760, 760] },
+    { group: 'arc', name: 'arc-secure',  url: '/web-security',            scroll: 1400, clip: [340, 0, 760, 760] },
+].map((s) => ({
+    width: 1440, height: 900, dpr: 1, mobile: false, scroll: 0, ...s,
+}));
 
 /* Written as WebP with a JPEG twin, which is what inc/helpers.php photo()
    expects: it emits a <picture> with the .webp as a <source> and the .jpg as
@@ -101,6 +127,7 @@ class CDP {
 
 async function main() {
     await mkdir(OUT, { recursive: true });
+    await mkdir(OUT_ARC, { recursive: true });
 
     const profile = path.join(os.tmpdir(), 'rafly-mockup-profile');
     await rm(profile, { recursive: true, force: true });
@@ -149,16 +176,22 @@ async function main() {
             expression: `(() => {
                 const s = document.createElement('style');
                 s.textContent = \`
-                    [data-r],[data-r] > *,.split-word{animation:none!important;transition:none!important;
+                    [data-r],[data-r] > *,[data-fx],.arc-tile,.split-word{animation:none!important;transition:none!important;
                         opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
                     .social-rail,.to-top,.sticky-cta,.scroll-progress,.toast-stack{display:none!important}
                     .site-header{position:absolute!important}
                 \`;
                 document.head.appendChild(s);
-                scrollTo(0, 0);
+                scrollTo(0, ${shot.scroll});
             })()`,
         });
-        await sleep(200);
+        await sleep(shot.scroll ? 450 : 200);
+
+        /* captureScreenshot's clip is DOCUMENT-relative, not viewport-relative,
+           so a scrolled shot has to add the scroll back into y. Getting this
+           wrong is silent: you get a valid square of the wrong part of the
+           page, which looks like a bad choice of crop rather than a bug. */
+        if (shot.clip && shot.scroll) shot.clip[1] += shot.scroll;
 
         // clip, not captureBeyondViewport: exactly one screen of the page, at
         // exactly the frame's aspect ratio.
@@ -166,14 +199,18 @@ async function main() {
             const shotData = await cdp.send('Page.captureScreenshot', {
                 format: fmt.format,
                 quality: fmt.quality,
-                clip: { x: 0, y: 0, width: shot.width, height: shot.height, scale: shot.dpr },
+                clip: shot.clip
+                    ? { x: shot.clip[0], y: shot.clip[1], width: shot.clip[2], height: shot.clip[3], scale: 1 }
+                    : { x: 0, y: 0, width: shot.width, height: shot.height, scale: shot.dpr },
                 captureBeyondViewport: false,
                 optimizeForSpeed: false,
             });
 
             const buf = Buffer.from(shotData.data, 'base64');
-            await writeFile(path.join(OUT, `${shot.name}.${fmt.ext}`), buf);
-            console.log(`${(shot.name + '.' + fmt.ext).padEnd(22)} ${shot.url.padEnd(10)} ${shot.width}x${shot.height}  ${(buf.length / 1024).toFixed(0)} KB`);
+            const dir = shot.group === 'arc' ? OUT_ARC : OUT;
+            await writeFile(path.join(dir, `${shot.name}.${fmt.ext}`), buf);
+            const size = shot.clip ? `${shot.clip[2]}x${shot.clip[3]}` : `${shot.width}x${shot.height}`;
+            console.log(`${(shot.name + '.' + fmt.ext).padEnd(22)} ${shot.url.padEnd(26)} ${size.padEnd(9)} ${(buf.length / 1024).toFixed(0)} KB`);
         }
     }
 

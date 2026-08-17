@@ -374,7 +374,7 @@ async function main() {
             await cdp.send('Runtime.evaluate', {
                 expression: `(() => {
                     const s = document.createElement('style');
-                    s.textContent = '[data-r],[data-r] > *,.split-word,.st-step{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}';
+                    s.textContent = '[data-r],[data-r] > *,[data-fx],.arc-tile,.split-word,.st-step{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}';
                     document.head.appendChild(s);
                 })()`,
             });

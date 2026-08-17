@@ -107,3 +107,226 @@
 .team-empty { max-width: 46rem; margin-inline: auto; text-align: center; }
 .team-empty .lead { margin: var(--sp-4) auto var(--sp-6); }
 .team-empty .cluster { justify-content: center; }
+
+/* ==========================================================================
+   The profile overlay
+
+   One shared dialog rather than one per person, so stepping to the next member
+   is a re-render instead of a close-and-reopen. The <details> cards underneath
+   stay exactly as they are — this is layered on top of them by
+   js/pages/team.js, and with the script absent the cards still open in place.
+
+   THE FAN-OUT is the whole point of the effect: the detail card starts tucked
+   BEHIND the photo card, rotated a few degrees, and swings out to the right on
+   a spring. The negative margin is what makes that literal — a strip of the
+   panel is genuinely hidden behind the card in front of it, and the padding
+   puts the text back clear of the overlap.
+   ========================================================================== */
+.team-detail {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: grid;
+    place-items: center;
+    padding: var(--sp-6);
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+}
+.team-detail.is-open { opacity: 1; }
+.team-detail[hidden] { display: none; }
+
+.team-detail-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 26, .55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.team-detail-stage {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    width: min(100%, 62rem);
+    transform: translateY(14px) scale(.985);
+    transition: transform var(--dur-3) var(--ease-out);
+}
+.team-detail.is-open .team-detail-stage { transform: none; }
+.team-detail-stage:focus { outline: none; }
+
+.team-detail-photo {
+    position: relative;
+    z-index: 2;
+    flex: none;
+    width: clamp(200px, 26vw, 268px);
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-6) var(--sp-5);
+    text-align: center;
+    background: linear-gradient(160deg, var(--blue-deep), var(--ink));
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-4);
+    color: #fff;
+}
+.team-detail-avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, .12);
+    margin-bottom: var(--sp-3);
+}
+.team-detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.team-detail-avatar-icon { width: 42px; height: 42px; color: rgba(255, 255, 255, .8); }
+.team-detail-avatar img[hidden],
+.team-detail-avatar .icon[hidden],
+.team-detail-links[hidden],
+.team-detail-brief[hidden],
+.team-detail-bio[hidden] { display: none; }
+
+.team-detail-photo strong {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    line-height: var(--lh-heading);
+    color: #fff;
+}
+.team-detail-role {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semi);
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--on-dark-2);
+}
+
+.team-detail-card {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: min(78vh, 620px);
+    margin-left: -52px;
+    padding: var(--sp-6) var(--sp-6) var(--sp-5) calc(52px + var(--sp-6));
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-4);
+
+    /* The fan-out. The 90ms delay lets the stage land first, so the two moves
+       read as sequential rather than as one blurred event. */
+    opacity: 0;
+    transform: translateX(-64px) rotate(-3.5deg);
+    transform-origin: left center;
+    transition: opacity var(--dur-2) var(--ease-out) 90ms,
+                transform var(--dur-3) var(--ease-out) 90ms;
+}
+.team-detail.is-open .team-detail-card { opacity: 1; transform: none; }
+
+.team-detail-close {
+    position: absolute;
+    top: var(--sp-4);
+    right: var(--sp-4);
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink-2);
+    cursor: pointer;
+}
+.team-detail-close:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.team-detail-close .icon { width: 17px; height: 17px; }
+
+.team-detail-scroll {
+    overflow-y: auto;
+    padding-right: var(--sp-2);
+    flex: 1;
+}
+.team-detail-brief {
+    font-size: var(--fs-lead);
+    line-height: var(--lh-heading);
+    color: var(--ink);
+    padding-right: var(--sp-8);
+    margin-bottom: var(--sp-4);
+}
+.team-detail-bio { color: var(--ink-2); line-height: var(--lh-body); }
+.team-detail-links { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-5); }
+.team-detail-links .icon { width: 14px; height: 14px; }
+
+.team-detail-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--line);
+}
+.team-detail-step {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-4);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    background: var(--paper);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    cursor: pointer;
+}
+.team-detail-step:hover { background: var(--paper-2); color: var(--ink); }
+.team-detail-step .icon { width: 15px; height: 15px; }
+.team-detail-step .is-flipped { transform: rotate(180deg); }
+.team-detail-count { font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* Stepping between members: the two panels that carry text cross-fade in the
+   direction of travel, so ‹ and › feel like movement along a roster rather
+   than like the same card blinking. */
+@keyframes teamSwapNext {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes teamSwapPrev {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: none; }
+}
+.team-detail-stage.is-swap-next .team-detail-photo,
+.team-detail-stage.is-swap-next .team-detail-scroll { animation: teamSwapNext var(--dur-2) var(--ease-out); }
+.team-detail-stage.is-swap-prev .team-detail-photo,
+.team-detail-stage.is-swap-prev .team-detail-scroll { animation: teamSwapPrev var(--dur-2) var(--ease-out); }
+
+@media (max-width: 760px) {
+    /* Stacked: the fan-out needs a horizontal axis it does not have here, so
+       the card comes up from under the photo instead of out from behind it. */
+    .team-detail { padding: var(--sp-4); }
+    .team-detail-stage { flex-direction: column; width: 100%; }
+    .team-detail-photo {
+        width: auto;
+        padding: var(--sp-5);
+        grid-auto-flow: column;
+        justify-content: start;
+        justify-items: start;
+        align-items: center;
+        gap: var(--sp-4);
+        text-align: left;
+    }
+    .team-detail-avatar { width: 64px; height: 64px; margin-bottom: 0; }
+    .team-detail-card {
+        margin-left: 0;
+        margin-top: -46px;
+        padding: calc(46px + var(--sp-5)) var(--sp-5) var(--sp-5);
+        transform: translateY(-34px) rotate(-2deg);
+        transform-origin: center top;
+        max-height: 72vh;
+    }
+    .team-detail-brief { padding-right: var(--sp-7); }
+    .team-detail-step span { display: none; }   /* arrows alone at this width */
+}

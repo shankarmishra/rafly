@@ -92,6 +92,40 @@ $bundles      = bundles_all();
 /** Deterministic tint per service, so the carousel reads as a set. */
 $svcTint = ['web' => 't-deep', 'security' => 't-ink', 'marketing' => 't-orange', 'content' => 't-blue', 'ecom' => 't-tint'];
 
+/**
+ * The hero arc: thirteen tiles on a 240-degree ring, n running -6..+6 so the
+ * bottom of the circle stays clear for the call to action.
+ *
+ * Each row is [icon, label, tint]. The tiles are DRAWN, not photographed, and
+ * that is a decision with two reasons behind it.
+ *
+ * Photography failed twice here. A CC0 search for digital-agency subjects
+ * returns a gas mask, a Twitch logo and a Burger King sign — the free-licence
+ * pools are not deep enough to curate a coherent ring, and every near miss puts
+ * somebody else's trademark in our hero. Screenshots of our own pages failed
+ * differently: this site is light and text-heavy, so a 760px square of it
+ * shrinks to grey mush in a 124px tile.
+ *
+ * A drawn tile has neither problem. It is on-topic by construction, it is sharp
+ * at any size and any pixel ratio, it costs no bytes and no licence, and it
+ * recolours with the tokens. The ring says what we do, in twelve words.
+ */
+$ARC = [
+    ['code',          'Web',        't-deep'],
+    ['shield',        'Security',   't-ink'],
+    ['megaphone',     'Marketing',  't-orange'],
+    ['pencil',        'Content',    't-blue'],
+    ['shopping-cart', 'Commerce',   't-tint'],
+    ['search',        'SEO',        't-ink'],
+    ['gauge',         'Speed',      't-blue'],
+    ['bot',           'Automation','t-deep'],
+    ['pie-chart',     'Analytics',  't-orange'],
+    ['layers',        'Design',     't-tint'],
+    ['database',      'Hosting',    't-ink'],
+    ['message-circle','Support',    't-blue'],
+    ['rocket',        'Launch',     't-deep'],
+];
+
 $page = [
     'id'        => 'home',
     'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
@@ -110,63 +144,75 @@ require __DIR__ . '/partials/social-rail.php';
 <main id="main">
 
     <?php /* ==========================================================
-       HERO — a two-tone display line over the product itself. The device
-       sits on a field of cards that fades to nothing at the edges, so the
-       page opens on something built rather than on a stock photograph.
+       HERO — the headline inside a ring of work.
+
+       Three layers: a soft bloom on the paper, the arc of tiles, and the
+       words. The arc is placed entirely in CSS (one transform per tile, see
+       css/07-fx.css section 2) and deals itself out from the centre of the
+       headline on load.
+
+       The device mockups used to live here. They moved to the app stage
+       below, where they have room to arrive from the two sides and be the
+       point of their own section rather than a detail in someone else's.
        ========================================================== */ ?>
     <section class="section hero" id="home">
         <div class="container">
-            <div class="hero-head">
-                <p class="eyebrow">One partner &middot; Every service</p>
-                <h1 class="display" data-r="lines">
-                    <span>Build fast.</span>
-                    <span>Grow faster.</span>
-                    <span class="soft">Scale smarter.</span>
-                </h1>
-                <p class="lead hero-lead">
-                    Web development, AI automation, content, marketing, security and e-commerce
-                    support &mdash; one team, one bundled package, instead of five vendors who
-                    have never met.
-                </p>
-                <div class="cluster cluster-4 hero-actions">
-                    <button type="button" class="btn btn-pill btn-lg" data-modal-open="consultationModal">
-                        Get a free quote <?= icon('arrow-up-right') ?>
-                    </button>
-                    <a class="btn btn-line btn-lg" href="#services">See what we ship</a>
-                </div>
-            </div>
+            <div class="hero-stage">
+                <div class="hero-glow" aria-hidden="true"></div>
 
-            <div class="hero-stage" data-r="lift">
-                <div class="hero-fan" aria-hidden="true">
-                    <?php
-                    /* 32 cells, tinted on a fixed pattern rather than randomly,
-                       so the field is identical on every render and on every
-                       screenshot. Photographs drop into the same cells when
-                       they are added; nothing here depends on them existing. */
-                    $fanPattern = ['t-tint','','t-blue','','','t-deep','','t-tint','','t-orange','','t-ink','t-tint','','t-blue','',
-                                   '','t-deep','','t-tint','t-ink','','t-blue','','t-tint','','t-orange','','t-deep','','t-tint',''];
-                    foreach ($fanPattern as $t): ?>
-                        <div class="hero-fan-cell <?= e($t) ?>"></div>
+                <div class="arc" aria-hidden="true" data-fx="spin" style="--turn: 7deg;">
+                    <?php foreach ($ARC as $i => [$ico, $label, $tint]):
+                        $n    = $i - 6;              // -6 .. +6, so the ring is centred
+                        $out  = abs($n);             // steps from the top of the arc
+                        $tier = $out >= 5 ? ' is-wide-only' : ($out >= 3 ? ' is-tablet-up' : '');
+                    ?>
+                        <div class="arc-cell<?= $tier ?>" style="--n: <?= $n ?>;">
+                            <?php /* --i drives the deal delay, counted outward from the
+                               centre tile so the ring opens from the middle rather than
+                               unrolling from one end. */ ?>
+                            <span class="arc-tile <?= e($tint) ?>" style="--i: <?= $out ?>;">
+                                <?php /* Counter-rotated as one unit. The tile stays tangent
+                                   to the ring — that is what makes it read as a ring rather
+                                   than a bent row — but its contents come back upright, or
+                                   the labels on the flanks are printed sideways. */ ?>
+                                <span class="arc-inner">
+                                    <?= icon($ico, 'arc-ico') ?>
+                                    <span class="arc-label"><?= e($label) ?></span>
+                                </span>
+                            </span>
+                        </div>
                     <?php endforeach; ?>
                 </div>
 
-                <div class="hero-devices">
-                    <div class="device device-laptop">
-                        <div class="device-lid">
-                            <div class="device-screen">
-                                <?= photo('assets/mockups/laptop-screen.jpg', 'The Rafly pricing page open on a laptop', ['loading' => 'eager', 'fetchpriority' => 'high']) ?>
-                            </div>
-                        </div>
-                        <div class="device-base"></div>
-                    </div>
-                    <div class="device device-phone float-slow">
-                        <div class="device-body">
-                            <div class="device-screen">
-                                <?= photo('assets/mockups/phone-screen.jpg', 'The Rafly blog open on a phone', ['loading' => 'eager']) ?>
-                            </div>
-                        </div>
+                <div class="hero-head">
+                    <p class="eyebrow">One partner &middot; Every service</p>
+                    <h1 class="display" data-r="lines">
+                        <span>Build fast.</span>
+                        <span>Grow faster.</span>
+                        <span><u class="ul-draw is-orange">Scale smarter.</u></span>
+                    </h1>
+                    <p class="lead hero-lead">
+                        Web development, AI automation, content, marketing, security and e-commerce
+                        support &mdash; one team, one bundled package, instead of five vendors who
+                        have never met.
+                    </p>
+                    <div class="cluster cluster-4 hero-actions">
+                        <button type="button" class="btn btn-pill btn-lg" data-modal-open="consultationModal">
+                            Get a free quote <?= icon('arrow-up-right') ?>
+                        </button>
+                        <a class="btn btn-line btn-lg" href="#services">See what we ship</a>
                     </div>
                 </div>
+
+                <?php /* The arc only covers 240 degrees, so the bottom of the stage
+                   is empty by construction. The cue is what belongs there. A link
+                   rather than an ornament, so the keyboard gets the shortcut too,
+                   and a sibling of .hero-head rather than a child so it anchors to
+                   the stage instead of to the bottom of the buttons. */ ?>
+                <a class="hero-cue" href="#challenges">
+                    <span>Scroll</span>
+                    <span class="hero-cue-rail" aria-hidden="true"></span>
+                </a>
             </div>
         </div>
     </section>
@@ -323,6 +369,78 @@ require __DIR__ . '/partials/social-rail.php';
                 &mdash; <button type="button" class="link-inline" data-modal-open="consultationModal">reach out</button>
                 if you'd like to be among the first to try them.
             </p>
+        </div>
+    </section>
+
+    <?php /* ========================= APP STAGE =========================
+       The laptop and the phone arrive from the two sides and settle
+       overlapping in the middle, with a panel of live numbers rising in
+       front. All three are placed with the `translate` property and moved
+       with `transform`, which is what lets the arrival be animated without
+       the resting composition depending on the animation having run — see the
+       note at css/07-fx.css section 2b.
+
+       The screens are real captures of /pricing and /blog taken by
+       inc/tools/capture-mockups.mjs, so they cost nothing, need no licence,
+       and update with the design the next time the tool is run.
+       ========================================================== */ ?>
+    <section class="section app-show" id="work-on-every-screen">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <p class="eyebrow">Built once &middot; Right everywhere</p>
+                <h2>Your business, <span class="ul-mark is-gold" data-r="mark">on every screen</span></h2>
+                <p class="lead">
+                    Every site we ship is designed on the phone first and proven on the
+                    desktop &mdash; the same content, the same speed, the same checkout,
+                    whichever screen your customer happens to be holding.
+                </p>
+            </div>
+
+            <div class="app-stage">
+                <div class="app-glow" aria-hidden="true"></div>
+
+                <div class="device device-laptop" data-fx="in-left" style="--travel: 30%; --turn: 4deg;">
+                    <div class="device-lid">
+                        <div class="device-screen">
+                            <?= photo('assets/mockups/laptop-screen.jpg', 'The Rafly pricing page open on a laptop', ['loading' => 'eager']) ?>
+                        </div>
+                    </div>
+                    <div class="device-base"></div>
+                </div>
+
+                <div class="device device-phone" data-fx="in-right" style="--travel: 46%; --turn: 6deg;">
+                    <div class="device-body">
+                        <div class="device-screen">
+                            <?= photo('assets/mockups/phone-screen.jpg', 'The Rafly blog open on a phone', ['loading' => 'eager']) ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-panel" data-fx="in-up" style="--travel: 54px;">
+                    <p class="app-panel-label">Largest Contentful Paint</p>
+                    <p class="app-panel-value">1.2s</p>
+                    <p class="app-panel-bar"><span style="--w: 88%;"></span></p>
+                    <p class="app-panel-foot">Core Web Vitals &mdash; passing on mobile</p>
+                </div>
+            </div>
+
+            <div class="steps-row app-points" data-r="group">
+                <div class="step-item">
+                    <span class="step-num">+01</span>
+                    <h3 class="step-title">One codebase</h3>
+                    <p class="step-text">No separate mobile site to fall out of date, and no second bill to keep it alive.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">+02</span>
+                    <h3 class="step-title">Real devices</h3>
+                    <p class="step-text">Tested on the phones your customers actually own, not only in a browser window resized by hand.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">+03</span>
+                    <h3 class="step-title">Measured, not claimed</h3>
+                    <p class="step-text">Every build is scored against Core Web Vitals before it ships, and the numbers go in your report.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -644,7 +762,7 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==================== CONTACT — the blue band ==================
        The full-bleed colour band from the reference, doing real work rather
        than repeating a CTA the page has already made three times. */ ?>
-    <section class="section band-blue" id="contact">
+    <section class="section band-ink" id="contact">
         <div class="container">
             <div class="split split-wide-l split-top">
                 <div data-r="left">

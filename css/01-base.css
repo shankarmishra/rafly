@@ -114,6 +114,7 @@ blockquote { margin: 0; }
 /* On a dark band the blue ring loses contrast, so it becomes white there. */
 .on-dark :focus-visible,
 .band-blue :focus-visible,
+.band-ink :focus-visible,
 .band-ink :focus-visible { outline-color: #fff; }
 
 .skip-link {
@@ -210,3 +211,40 @@ blockquote { margin: 0; }
 .prose h3 { margin: var(--sp-7) 0 var(--sp-3); }
 .prose > :first-child { margin-top: 0; }
 .prose ul, .prose ol { margin-bottom: var(--sp-5); }
+
+
+/* ==========================================================================
+   Page texture
+
+   A fixed dot lattice with a soft colour wash over it. Fixed rather than
+   scrolled on purpose: the content then slides across a stationary field, so
+   every section gets parallax against the ground for one element and no
+   script. It sits behind everything at z-index -1 and never takes a click.
+
+   Kept faint — 4% ink on white. A visible grid on a business site reads as a
+   template; this reads as paper having a surface.
+   ========================================================================== */
+.bg-field {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--paper);
+    background-image:
+        radial-gradient(circle at 18% 12%, rgba(22, 82, 224, .09), transparent 42%),
+        radial-gradient(circle at 84% 8%,  rgba(255, 107, 53, .07), transparent 40%),
+        radial-gradient(circle at 62% 88%, rgba(13, 71, 161, .07), transparent 46%),
+        radial-gradient(circle, rgba(10, 14, 26, .055) 1px, transparent 1.4px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 26px 26px;
+}
+
+/* Sections that paint their own ground sit on top of the field; the ones that
+   do not let it show through. .band-paper is deliberately transparent here so
+   the lattice is visible on the site's default ground. */
+.band-paper { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+    /* A fixed layer under a scrolling page is a parallax effect whether or not
+       anything is animated, so it stands down with the rest. */
+    .bg-field { position: absolute; height: 100%; }
+}

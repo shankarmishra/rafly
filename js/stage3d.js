@@ -27,6 +27,14 @@ function init() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
 
+    /* three.js is ~730 KB raw / ~190 KB gzipped. That is a fair price for a
+       real lit object on a desktop connection and an unfair one on a metered
+       phone, so the two signals a browser actually gives us are honoured:
+       Save-Data, and an effectiveType at or below 2G. Both mean the still
+       shows — and the still is a designed object, not an empty box. */
+    const net = navigator.connection;
+    if (net && (net.saveData || /(^|-)2g$/.test(net.effectiveType || ''))) return;
+
     // WebGL2 or nothing — the fallback still is good enough that a half-working
     // WebGL1 path is not worth carrying.
     const probe = document.createElement('canvas');
@@ -44,7 +52,10 @@ function init() {
 }
 
 async function mount(host) {
-    const THREE = await import('/vendor/three/three.module.js');
+    const [THREE, roomMod] = await Promise.all([
+        import('/vendor/three/three.module.min.js'),
+        import('/vendor/three/RoomEnvironment.js'),
+    ]);
 
     const width = host.clientWidth;
     const height = host.clientHeight;
@@ -53,24 +64,44 @@ async function mount(host) {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(width, height, false);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
     host.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0.6, 7.4);
+    camera.position.set(0, 1.35, 7.0);
     camera.lookAt(0, 0, 0);
 
-    /* Light, not flat colour. The whole reason for bringing three.js in is
-       that a real material under real lights reads as an object; the CSS-3D
-       and point-cloud layers cannot do that. */
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xd6def0, 1.25));
+    /* THE ENVIRONMENT IS THE LIGHTING, and it is generated rather than loaded.
 
-    const key = new THREE.DirectionalLight(0xffffff, 2.1);
+       Three directional lights make a shape legible; they do not make it look
+       like a photographed object. What does that is an environment map, because
+       a metal or a clearcoat surface is mostly a mirror and a mirror with
+       nothing to reflect is flat grey no matter how many lamps you point at it.
+
+       The obvious way to get one is an HDRI, and the obvious HDRI is a 1k .hdr
+       from Poly Haven — 2 to 3 MB of float data for a decorative object, plus a
+       loader, plus a licence row. RoomEnvironment builds an equivalent studio
+       lightbox out of a dozen emissive boxes at runtime: about 5 KB of code, no
+       download, no licence, and PMREMGenerator turns it into the same
+       prefiltered cube map an HDRI would have produced. */
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envScene = new roomMod.RoomEnvironment();
+    scene.environment = pmrem.fromScene(envScene, 0.04).texture;
+    scene.environmentIntensity = 0.85;
+    envScene.dispose?.();
+    pmrem.dispose();
+
+    /* One key on top of the environment, for a directional highlight the room
+       alone does not give, and a warm rim so the object separates from a light
+       ground on the side away from the key. */
+    const key = new THREE.DirectionalLight(0xffffff, 1.4);
     key.position.set(4, 6, 5);
     scene.add(key);
 
-    const rim = new THREE.DirectionalLight(0xff6b35, 1.15);
+    const rim = new THREE.DirectionalLight(0xff6b35, 0.9);
     rim.position.set(-5, -1, -3);
     scene.add(rim);
 
@@ -185,41 +216,85 @@ async function mount(host) {
 function buildObject(THREE) {
     const group = new THREE.Group();
 
-    const palette = [0x1652e0, 0x1f5fe8, 0x2a6bf0, 0x0d47a1, 0x123f8f];
+    /* Five rings and a core, the five P.E.A.C.E. stages and the work at the
+       centre of them. The geometry is deliberately primitive — every shape here
+       is one three.js constructor, so nothing is downloaded and nothing can
+       arrive at the wrong scale, wrong orientation or wrong licence.
+
+       The look comes from the MATERIAL, not from the mesh. MeshPhysicalMaterial
+       with a clearcoat over a low-roughness metal is what turns a torus into
+       something that looks manufactured: the environment map above supplies the
+       reflections, the clearcoat adds the second, sharper highlight that reads
+       as lacquer, and iridescence puts a faint colour shift on the grazing
+       angles the way an anodised surface does. */
+    const palette = [0x2a6bf0, 0x1f5fe8, 0x1652e0, 0x0d47a1, 0x123f8f];
 
     for (let i = 0; i < 5; i++) {
-        const radius = 1.85 - i * 0.16;
-        const geometry = new THREE.TorusGeometry(radius, 0.085, 22, 120);
-        const material = new THREE.MeshStandardMaterial({
+        const radius = 1.86 - i * 0.17;
+        const geometry = new THREE.TorusGeometry(radius, 0.075, 28, 140);
+        const material = new THREE.MeshPhysicalMaterial({
             color: palette[i],
-            roughness: 0.32,
-            metalness: 0.55,
+            roughness: 0.18,
+            metalness: 0.9,
+            clearcoat: 1,
+            clearcoatRoughness: 0.12,
+            iridescence: 0.35,
+            iridescenceIOR: 1.4,
             emissive: palette[i],
-            emissiveIntensity: 0.05,
+            emissiveIntensity: 0.04,
         });
 
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = Math.PI / 2;
         mesh.rotation.z = i * 0.22;
-        mesh.position.y = -0.9 + i * 0.45;
+        mesh.position.y = -0.92 + i * 0.46;
         mesh.userData.baseY = mesh.position.y;
         group.add(mesh);
     }
 
+    /* The core is glass rather than metal so it reads as a different kind of
+       thing from the rings around it — transmission is the one property that
+       makes an object look like it is made of a material rather than painted
+       one. thickness and ior are what stop it looking like a soap bubble. */
     const core = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(0.42, 1),
-        new THREE.MeshStandardMaterial({
-            color: 0xff6b35,
-            roughness: 0.25,
-            metalness: 0.3,
-            emissive: 0xff6b35,
-            emissiveIntensity: 0.18,
+        new THREE.IcosahedronGeometry(0.44, 3),
+        new THREE.MeshPhysicalMaterial({
+            color: 0xffd9c8,
+            roughness: 0.06,
+            metalness: 0,
+            transmission: 0.92,
+            thickness: 0.85,
+            ior: 1.45,
+            clearcoat: 1,
+            clearcoatRoughness: 0.05,
+            attenuationColor: new THREE.Color(0xff6b35),
+            attenuationDistance: 1.6,
         })
     );
     core.position.y = 0.05;
     core.userData.baseY = core.position.y;
     group.add(core);
 
-    group.rotation.x = -0.18;
+    /* A halo of small spheres on the outer ring, so the object has some
+       small-scale detail to catch light. Without them the silhouette is five
+       smooth curves and reads as a diagram. */
+    const beadGeo = new THREE.SphereGeometry(0.055, 18, 18);
+    const beadMat = new THREE.MeshPhysicalMaterial({
+        color: 0xff8a5c,
+        roughness: 0.15,
+        metalness: 0.35,
+        clearcoat: 1,
+        emissive: 0xff6b35,
+        emissiveIntensity: 0.22,
+    });
+    for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        const bead = new THREE.Mesh(beadGeo, beadMat);
+        bead.position.set(Math.cos(a) * 2.02, -0.90, Math.sin(a) * 2.02);
+        bead.userData.baseY = bead.position.y;
+        group.add(bead);
+    }
+
+    group.rotation.x = -0.30;
     return group;
 }

@@ -214,7 +214,7 @@ async function main() {
             returnByValue: true,
             expression: `(() => {
                 const running = document.getAnimations().filter(a => a.playState === 'running');
-                const stuck = [...document.querySelectorAll('[data-r], [data-r] > *, .split-word')]
+                const stuck = [...document.querySelectorAll('[data-r], [data-r] > *, [data-fx], .arc-tile, .split-word')]
                     .filter(el => {
                         const cs = getComputedStyle(el);
                         return +cs.opacity < 0.9 || (cs.transform !== 'none' && cs.transform !== 'matrix(1, 0, 0, 1, 0, 0)');
@@ -304,8 +304,16 @@ async function main() {
                    fallback CONTRACT, not a failure. Underneath each one is a
                    designed still (.gl-still, .three-stage-still), which is what a
                    visitor without JS, or without WebGL2, actually sees. */
-                const els = [...document.querySelectorAll('[data-r], [data-r] > *')]
-                    .filter(el => !el.closest('.gl-host, .three-stage'));
+                const els = [...document.querySelectorAll('[data-r], [data-r] > *, [data-fx], .arc-tile')]
+                    .filter(el => !el.closest('.gl-host, .three-stage'))
+                    /* Skip anything with no layout box. A display:none element is
+                       not hidden-but-present, it is ABSENT by design — the arc
+                       sheds its outer tiles below 900px, and a CSS animation on a
+                       display:none element never starts, so fill-mode holds it at
+                       the entrance state forever and it reads as a failure. The
+                       fallback path in css/06-motion.css never uses display, so
+                       nothing this check is meant to catch can hide here. */
+                    .filter(el => el.getClientRects().length > 0);
                 const hidden = els.filter(el => +getComputedStyle(el).opacity < 0.5);
                 return {
                     total: els.length,

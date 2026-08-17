@@ -59,8 +59,22 @@
             animation-timeline: view();
         }
         [data-r="lines"] > :nth-child(1) { animation-range: entry  0% entry 55%; }
-        [data-r="lines"] > :nth-child(2) { animation-range: entry 10% entry 68%; }
-        [data-r="lines"] > :nth-child(3) { animation-range: entry 20% entry 82%; }
+        [data-r="lines"] > :nth-child(2) { animation-range: entry  8% entry 64%; }
+        [data-r="lines"] > :nth-child(3) { animation-range: entry 16% entry 73%; }
+        [data-r="lines"] > :nth-child(4) { animation-range: entry 24% entry 82%; }
+        [data-r="lines"] > :nth-child(5) { animation-range: entry 32% entry 91%; }
+        [data-r="lines"] > :nth-child(n+6) { animation-range: entry 40% entry 100%; }
+
+        /* An SVG stroke that draws itself. --len is the path length; the
+           element sets it, because only the markup knows the path. */
+        [data-r="draw"] path,
+        [data-r="draw"] line { animation-name: r-draw; animation-range: entry 18% cover 44%; }
+
+        /* A highlighter swipe painted BEHIND the word. It grows the background
+           rather than changing the text colour, so the ink stays at full
+           contrast for the whole sweep instead of passing through a washed-out
+           middle — the failure mode of every "fade the highlight in" version. */
+        [data-r="mark"] { animation-name: r-mark; animation-range: entry 20% cover 46%; }
 
         /* Depth — travels across the whole time the element is on screen. */
         [data-r="parallax"] {
@@ -80,6 +94,11 @@
 @keyframes r-fade  { from { opacity: 0; } }
 @keyframes r-wipe  { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes r-line  { from { opacity: 0; transform: translate3d(0, 0.5em, 0); } }
+@keyframes r-draw  { from { stroke-dashoffset: var(--len, 400); } to { stroke-dashoffset: 0; } }
+/* --mark-h lets the highlighted element choose the band height (.ul-mark in
+   03-components.css sets 42%) so only the width sweeps. Defaults to the full
+   box for anything that just wants a plain background reveal. */
+@keyframes r-mark  { from { background-size: 0 var(--mark-h, 100%); } to { background-size: 100% var(--mark-h, 100%); } }
 @keyframes r-parallax {
     from { transform: translate3d(0, calc(var(--depth, 40px) * 1), 0); }
     to   { transform: translate3d(0, calc(var(--depth, 40px) * -1), 0); }
@@ -106,6 +125,21 @@
         .js-motion [data-r="blur"]  { filter: blur(12px); }
         .js-motion [data-r="wipe"]  { opacity: 1; clip-path: inset(0 100% 0 0); }
         .js-motion [data-r="parallax"] { opacity: 1; }
+        .js-motion [data-r="draw"] { opacity: 1; }
+        .js-motion [data-r="draw"] path,
+        .js-motion [data-r="draw"] line {
+            stroke-dashoffset: var(--len, 400);
+            transition: stroke-dashoffset var(--dur-4) var(--ease-out);
+        }
+        .js-motion [data-r="draw"].is-in path,
+        .js-motion [data-r="draw"].is-in line { stroke-dashoffset: 0; }
+
+        .js-motion [data-r="mark"] {
+            opacity: 1;
+            background-size: 0 var(--mark-h, 100%);
+            transition: background-size var(--dur-4) var(--ease-out);
+        }
+        .js-motion [data-r="mark"].is-in { background-size: 100% var(--mark-h, 100%); }
 
         .js-motion [data-r].is-in {
             opacity: 1;
@@ -234,6 +268,89 @@
 }
 
 /* ==========================================================================
+   4b. data-fx — CONTINUOUS scroll-linked motion
+
+   `data-r` is an entrance: it plays once and ends at a finished state. Most of
+   what this pass adds is different — objects that keep moving for as long as
+   they are on screen. Putting both on one attribute is exactly the collision
+   the note at the top of this file describes, so they get separate namespaces.
+
+   THE ONE RULE: an element's UN-ANIMATED CSS state must be the state you want
+   to see. Everything here is symmetric about that pose (from -x to +x, or
+   travel-in to settled), so an element with `animation: none` sits exactly
+   where it belongs. That is what lets inc/tools/shoot.mjs freeze the page for
+   a screenshot, lets audit.mjs assert on a no-JS render, and lets the reduced
+   motion switch below stay a one-liner instead of a special case per effect.
+
+   No JS is involved. Knobs are custom properties on the element:
+   --travel (in-*), --depth (drift), --turn (spin/tilt/in-*), --grow (zoom).
+   ========================================================================== */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+        [data-fx] {
+            animation-timeline: view();
+            animation-range: cover 0% cover 100%;
+            animation-fill-mode: both;
+            animation-duration: 1ms;
+            animation-timing-function: linear;
+        }
+
+        /* Arrivals from the sides. These resolve well before the section is
+           centred — an object still sliding in after you have finished reading
+           the heading beside it reads as lag, not as motion. */
+        [data-fx="in-left"]  { animation-name: fx-in-left;  animation-range: entry 0% cover 42%; }
+        [data-fx="in-right"] { animation-name: fx-in-right; animation-range: entry 0% cover 42%; }
+        [data-fx="in-up"]    { animation-name: fx-in-up;    animation-range: entry 0% cover 46%; }
+
+        /* Continuous, symmetric about the resting pose. */
+        [data-fx="drift"] { animation-name: fx-drift; }
+        [data-fx="spin"]  { animation-name: fx-spin; }
+        [data-fx="zoom"]  { animation-name: fx-zoom; }
+        [data-fx="tilt"]  { animation-name: fx-tilt; }
+    }
+}
+
+/* Transform-only, deliberately. The freeze stylesheets in inc/tools/*.mjs
+   neutralise animation, transition, opacity, transform, filter and clip-path —
+   nothing else. An effect built on the separate `rotate`, `translate` or
+   `scale` properties would survive the freeze and photograph mid-move. */
+@keyframes fx-in-left {
+    from { opacity: 0; transform: translate3d(calc(var(--travel, 34%) * -1), 0, 0) rotate(calc(var(--turn, 5deg) * -1)); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes fx-in-right {
+    from { opacity: 0; transform: translate3d(var(--travel, 34%), 0, 0) rotate(var(--turn, 5deg)); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes fx-in-up {
+    from { opacity: 0; transform: translate3d(0, var(--travel, 60px), 0) scale(.94); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes fx-drift {
+    from { transform: translate3d(0, var(--depth, 40px), 0); }
+    to   { transform: translate3d(0, calc(var(--depth, 40px) * -1), 0); }
+}
+@keyframes fx-spin {
+    from { transform: rotate(calc(var(--turn, 10deg) * -1)); }
+    to   { transform: rotate(var(--turn, 10deg)); }
+}
+@keyframes fx-zoom {
+    from { transform: scale(calc(1 - var(--grow, .09))); }
+    to   { transform: scale(calc(1 + var(--grow, .09))); }
+}
+@keyframes fx-tilt {
+    from { transform: perspective(1200px) rotateX(var(--turn, 6deg)); }
+    to   { transform: perspective(1200px) rotateX(calc(var(--turn, 6deg) * -1)); }
+}
+
+/* No IntersectionObserver fallback, and that is a decision rather than an
+   omission. These are decorative continuous effects; a browser without scroll
+   timelines gets the resting pose, which is the composed layout. Faking them
+   with an observer would mean a one-shot transition that fires once and then
+   contradicts the scroll position for the rest of the page. */
+
+/* ==========================================================================
    5. Page scroll progress
    ========================================================================== */
 .scroll-progress {
@@ -287,12 +404,22 @@
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
-    [data-r], [data-r] > *, .split-word {
+    /* .arc-TILE, never .arc-cell: the cell's transform is the tile's PLACEMENT
+       on the ring, and resetting it would stack all thirteen on the pivot. The
+       same distinction is why inc/tools/*.mjs freeze .arc-tile only. */
+    /* [data-fx] but NOT [data-fx] > *. A continuous effect sits on the object
+       that moves; its children may be carrying their own layout transforms —
+       .arc is [data-fx="spin"] and every .arc-cell inside it is placed BY a
+       transform, so resetting the children collapses the whole ring onto its
+       pivot. The same line was wrong in all three inc/tools/*.mjs freezes. */
+    [data-r], [data-r] > *, [data-fx], .split-word, .arc-tile {
         opacity: 1 !important;
         transform: none !important;
         filter: none !important;
         clip-path: none !important;
     }
+    [data-r="draw"] path, [data-r="draw"] line { stroke-dashoffset: 0 !important; }
+    [data-r="mark"] { background-size: 100% var(--mark-h, 100%) !important; }
     .st-step { opacity: 1 !important; }
     .marquee-track { animation: none !important; }
     .scroll-progress { display: none; }

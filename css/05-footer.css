@@ -19,6 +19,7 @@
    the back-to-top button, the sticky CTA, the toast stack and the modal
    between </main> and the footer, so they are never actually adjacent. */
 main:has(> section:last-child.band-blue) ~ .site-footer,
+main:has(> section:last-child.band-ink) ~ .site-footer,
 main:has(> section:last-child.band-ink)  ~ .site-footer { margin-top: 0; border-radius: 0; }
 
 .site-footer::before {

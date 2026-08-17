@@ -182,4 +182,5 @@ if (!$page['noindex']) {
 <body class="<?= e($page['bodyClass']) ?>">
 <?= icon_sprite() ?>
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="bg-field" aria-hidden="true"></div>
 <div class="scroll-progress" aria-hidden="true"></div>

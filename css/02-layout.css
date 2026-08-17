@@ -37,7 +37,14 @@
     --line: var(--on-dark-line);
 }
 .band-ink {
-    background: var(--ink);
+    /* Not a flat slab. Two soft blooms keep a full-width dark band from reading
+       as a hole punched in the page, and they are what stops the two ink
+       sections on the homepage (the process band and the closing band) looking
+       like the same element repeated. */
+    background:
+        radial-gradient(ellipse 70% 60% at 18% 0%, rgba(22, 82, 224, .26), transparent 62%),
+        radial-gradient(ellipse 54% 52% at 88% 100%, rgba(255, 107, 53, .13), transparent 66%),
+        var(--ink);
     color: var(--on-dark-2);
     --line: var(--on-dark-line);
 }
@@ -48,6 +55,7 @@
 .band-blue .lead, .band-ink .lead,
 .band-blue .muted, .band-ink .muted { color: var(--on-dark-2); }
 .band-blue :is(.display, h1, h2, h3, h4) .soft,
+.band-ink :is(.display, h1, h2, h3, h4) .soft,
 .band-ink  :is(.display, h1, h2, h3, h4) .soft { color: rgba(255, 255, 255, .62); }
 
 /* Rounded top corners where a coloured band meets the paper above it —

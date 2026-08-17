@@ -81,7 +81,7 @@ require __DIR__ . '/partials/social-rail.php';
         </div>
     </section>
 
-    <section class="section band-blue" id="form">
+    <section class="section band-ink" id="form">
         <div class="container">
             <div class="split split-wide-l split-top">
                 <div data-r="left">

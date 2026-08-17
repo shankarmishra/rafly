@@ -907,3 +907,83 @@ body.modal-open { overflow: hidden; }
    ========================================================================== */
 .way-card .card-body { gap: var(--sp-4); }
 .way-card .icon-box { margin-bottom: var(--sp-2); }
+
+
+/* ==========================================================================
+   Key-word highlights
+
+   Three ways to make one word in a heading carry the promise. Two of them draw
+   themselves as the line arrives; the third is a static recolour.
+
+   CONTRAST, WHICH IS WHERE THIS NORMALLY GOES WRONG
+   None of these changes the colour of the text. `--orange` is 2.84:1 on white:
+   fine as a rule, a line or a fill (non-text, needs 3:1), a failure the instant
+   it carries a word. So .ul-draw paints UNDER the text and .ul-mark paints
+   BEHIND it, and in both cases the word keeps --ink at 16:1. The one variant
+   that does recolour text, .ul-ink, uses --orange-ink (4.93:1) and nothing else.
+
+   ANIMATION IS SCROLL-TIMELINE ONLY, ON PURPOSE
+   There is no IntersectionObserver fallback here. A browser without timelines
+   shows the finished underline, which is the whole point — the line is the
+   message, the drawing of it is the flourish. Wiring an observer to a decorative
+   mark inside a heading would mean adding a JS dependency to text.
+   ========================================================================== */
+
+/* --- A rule that wipes in under the word -------------------------------- */
+.ul-draw {
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.ul-draw::after {
+    content: '';
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    bottom: -0.04em;
+    height: 0.055em;
+    min-height: 3px;
+    border-radius: var(--r-pill);
+    background: var(--ul-colour, var(--blue));
+    transform-origin: 0 50%;
+    /* Resting state is the finished rule. Rounded caps read as drawn rather
+       than as a border, and the scale needs its own box — which is why this is
+       a pseudo element and not text-decoration. */
+}
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .ul-draw::after {
+            animation: ul-wipe 1ms linear both;
+            animation-timeline: view();
+            animation-range: entry 15% cover 40%;
+        }
+    }
+}
+@keyframes ul-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.ul-draw.is-orange { --ul-colour: var(--orange); }        /* 3.4:1 as a rule on white */
+.band-ink .ul-draw,
+.band-blue .ul-draw { --ul-colour: var(--orange); }       /* 6.8:1 on ink */
+
+/* --- A highlighter swipe behind the word -------------------------------- */
+/* --mark-h is read by the r-mark keyframes in css/06-motion.css, so the band
+   grows sideways only. Animating the height as well smears rather than sweeps. */
+.ul-mark {
+    --mark-h: 42%;
+    background-image: linear-gradient(var(--mark-tint, var(--blue-tint-2)), var(--mark-tint, var(--blue-tint-2)));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 100% var(--mark-h);
+    padding-inline: 0.12em;
+    border-radius: 0.12em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+.ul-mark.is-gold   { --mark-tint: rgba(255, 184, 0, .45); }
+.ul-mark.is-orange { --mark-tint: var(--orange-tint); }
+.band-ink .ul-mark,
+.band-blue .ul-mark { --mark-tint: rgba(255, 107, 53, .32); }
+
+/* --- Orange as actual text: the only token that may, at 4.93:1 ---------- */
+.ul-ink { color: var(--orange-ink); }
+.band-ink .ul-ink, .band-blue .ul-ink { color: var(--orange); }

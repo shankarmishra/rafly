@@ -16,6 +16,13 @@
 
     var doc = document;
     var flatQuery = window.matchMedia('(max-width: 760px), (prefers-reduced-motion: reduce)');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Degrees the ring turns across one full pass of the section through the
+       viewport. A third of a turn: enough that the movement is unmistakably
+       tied to the scroll, little enough that a cell you were reading has not
+       swung away by the time you finish the sentence. */
+    var SCROLL_TURN = 120;
 
     function Carousel(root) {
         var ring = root.querySelector('.carousel-ring');
@@ -55,6 +62,11 @@
         var step = 360 / count;
         var index = 0;
         var dots = [];
+        /* Declared here, not beside the scroll handler below: reset() runs
+           before that point and calls apply(), and a hoisted  would be
+           undefined at that moment — which writes "--rot: NaNdeg". */
+        var scrollRot = 0;
+        var ticking = false;
         var flat = flatQuery.matches;
 
         var prev = root.querySelector('[data-carousel="prev"]');
@@ -75,9 +87,19 @@
             root.style.setProperty('--radius', radius + 'px');
         }
 
+        /* The single writer for --rot. index is the committed position, live is
+           the in-flight drag, scrollRot is the section's scroll offset; every
+           path sets its own part and calls this rather than writing the
+           property, which is what keeps them from overwriting each other. */
+        function apply(live) {
+            if (flat) return;
+            var base = live === undefined ? -index * step : live;
+            root.style.setProperty('--rot', (base + scrollRot) + 'deg');
+        }
+
         function render() {
             if (flat) return;
-            root.style.setProperty('--rot', (-index * step) + 'deg');
+            apply();
 
             cells.forEach(function (cell, i) {
                 var active = i === index;
@@ -144,8 +166,7 @@
             root.addEventListener('pointermove', function (e) {
                 if (!dragging) return;
                 moved = e.clientX - startX;
-                var live = (-index * step) + (moved * 0.16);
-                root.style.setProperty('--rot', live + 'deg');
+                apply((-index * step) + (moved * 0.16));
             });
 
             function end() {
@@ -198,6 +219,51 @@
         }
 
         reset();
+
+        /* ------------------------------------------------------------------
+           Scroll drive.
+
+           The ring already answers to drag, the two arrows and the keyboard.
+           What it did not answer to was the one input every visitor gives it:
+           scrolling past. So the section's own progress through the viewport
+           adds a rotation on top of whatever the index is set to, and the ring
+           turns about a third of a turn while you read past it.
+
+           It is ADDITIVE, deliberately. --rot stays owned by render() and the
+           drag handler; this only contributes an offset, so there is still one
+           source of truth for which cell is at the front and the arrows never
+           fight the wheel. Under reduced motion, in flat mode, or with the
+           section off screen it contributes nothing at all.
+           ------------------------------------------------------------------ */
+        function scrollDrive() {
+            ticking = false;
+            if (flat) return;
+
+            var rect = root.getBoundingClientRect();
+            var span = rect.height + window.innerHeight;
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+            // 0 as the section enters the bottom of the screen, 1 as it leaves
+            // the top — the same normalisation js/gl.js uses for its dissolve.
+            var p = (window.innerHeight - rect.top) / span;
+            p = p < 0 ? 0 : p > 1 ? 1 : p;
+
+            var turn = (p - 0.5) * SCROLL_TURN;
+            if (Math.abs(turn - scrollRot) < 0.15) return;   // sub-pixel churn
+            scrollRot = turn;
+            apply();
+        }
+
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(scrollDrive);
+        }
+
+        if (!reduceMotion) {
+            window.addEventListener('scroll', onScroll, { passive: true });
+            scrollDrive();
+        }
 
         var resizeTimer = null;
         window.addEventListener('resize', function () {

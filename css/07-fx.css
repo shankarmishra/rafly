@@ -33,6 +33,12 @@
     background:
         radial-gradient(120% 90% at 20% 0%, #ffffff 0%, var(--paper-2) 55%, var(--paper-3) 100%);
 }
+/* photo() wraps its <img> in a <picture>, which is inline and auto-sized. The
+   img's own width/height:100% then resolve against a wrapper that has already
+   collapsed, so the screen shows its gradient wash and the capture never
+   appears. Every place on the site that puts a photo() inside a fixed frame
+   needs this — see .arc-tile picture in section 2. */
+.device-screen picture { display: block; width: 100%; height: 100%; }
 .device-laptop .device-screen img,
 .device-laptop .device-screen video {
     width: 100%;
@@ -125,68 +131,291 @@
 }
 
 /* ==========================================================================
-   2. Hero stage — devices over a fanned grid of cards
+   2. The hero arc, and the app stage
+
+   THE ARC
+   A ring of tiles curving over the headline, the reference Naveen supplied.
+   Placement is one transform per tile and needs no JavaScript at all:
+
+       rotate(n * step) translateY(-radius)
+
+   with `n` running -6..+6 from PHP, so thirteen tiles cover 240 degrees and the
+   bottom of the circle stays empty for the call to action. Tiles are NOT
+   counter-rotated — they tilt with the arc, which is what makes it read as a
+   ring rather than as a row bent into a curve.
+
+   Two moves, and they live on different elements on purpose. The ring carries
+   `data-fx="spin"` so the whole arc turns as the hero scrolls away. Each tile's
+   INNER span carries the deal-in: because the parent has already applied
+   `translateY(-radius)`, a child `translateY(+radius)` lands exactly back on
+   the pivot, so the tiles fly out of the centre of the headline along their own
+   spokes without a single hard-coded coordinate.
    ========================================================================== */
 .hero-stage {
     position: relative;
     display: grid;
     place-items: center;
     isolation: isolate;
-    min-height: clamp(320px, 20rem + 18vw, 560px);
+    /* Tall enough for the ring's vertical diameter (2 x --ry) plus one tile, so
+       the top of the arc never disappears under the floating nav. */
+    min-height: clamp(452px, 40vw + 224px, 800px);
 }
 
-.hero-fan {
+.arc {
     position: absolute;
-    inset: -8% -14%;
+    inset: 0;
     z-index: 0;
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: clamp(6px, 0.55vw, 11px);
-    align-content: center;
-    transform: perspective(1500px) rotateX(9deg);
-    transform-style: preserve-3d;
     pointer-events: none;
-    /* Fades to nothing towards the edges so the grid reads as endless and the
-       device is the only thing fully resolved. */
-    -webkit-mask-image:
-        radial-gradient(ellipse 62% 66% at 50% 46%, #000 6%, rgba(0, 0, 0, .45) 42%, transparent 76%);
-    mask-image:
-        radial-gradient(ellipse 62% 66% at 50% 46%, #000 6%, rgba(0, 0, 0, .45) 42%, transparent 76%);
+    /* An ELLIPSE, not a circle. A circle wide enough to clear the headline is
+       also tall enough to push its top tiles behind the header and off the top
+       of the screen; the reference ring is markedly wider than it is tall. */
+    --rx: clamp(210px, 34vw, 610px);
+    --ry: clamp(172px, 21vw, 378px);
+    --step: 20deg;
+    --tile: clamp(62px, 3.8vw + 42px, 124px);
+    /* The ring's centre sits BELOW the middle of the stage. Centring it would
+       mean either the top of the arc disappearing under the floating nav or a
+       stage tall enough to leave a dead band under the buttons — the arc only
+       covers 240 degrees, so its empty bottom third does not need the room. */
+    --pivot-y: 52%;
+    transform-origin: 50% 50%;
 }
-.hero-fan-cell {
-    aspect-ratio: 3 / 4;
-    border-radius: 10px;
+.arc-cell {
+    position: absolute;
+    left: 50%;
+    top: var(--pivot-y);
+    width: var(--tile);
+    aspect-ratio: 1;
+    margin: calc(var(--tile) / -2);
+    --a: calc(var(--n) * var(--step));
+    transform:
+        translate(calc(var(--rx) * sin(var(--a))), calc(var(--ry) * cos(var(--a)) * -1))
+        rotate(var(--a));
+}
+/* trigonometric functions are CSS Values 4 — Chrome 111, Safari 15.4,
+   Firefox 118, so 2023 everywhere. Older engines drop the whole declaration
+   and would stack all thirteen tiles on the pivot, which is why the circular
+   form is spelled out rather than left to chance. */
+@supports not (width: calc(1px * sin(90deg))) {
+    .arc-cell {
+        transform: rotate(var(--a)) translateY(calc(var(--ry) * -1));
+    }
+}
+.arc-tile {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 8%;
+    border-radius: clamp(14px, 22%, 30px);
     overflow: hidden;
     background: var(--paper-3);
-    box-shadow: 0 2px 8px rgba(10, 14, 26, .07);
+    color: #fff;
+    box-shadow: 0 12px 30px -14px rgba(10, 14, 26, .40), 0 2px 6px rgba(10, 14, 26, .07);
 }
-.hero-fan-cell img { width: 100%; height: 100%; object-fit: cover; }
-/* A few cells carry a flat brand tint instead of a photo, so the field has
-   rhythm without needing two dozen licensed images. */
-.hero-fan-cell.t-blue   { background: var(--blue); }
-.hero-fan-cell.t-deep   { background: var(--blue-deep); }
-.hero-fan-cell.t-ink    { background: var(--ink); }
-.hero-fan-cell.t-orange { background: var(--orange); }
-.hero-fan-cell.t-tint   { background: var(--blue-tint-2); }
-
-.hero-devices {
-    position: relative;
-    z-index: 1;
+.arc-inner {
     display: grid;
-    place-items: end center;
-    width: min(100%, 760px);
+    justify-items: center;
+    gap: 8%;
+    width: 100%;
+    /* --a is set on .arc-cell and custom properties inherit, so the exact
+       counter-angle is available here without repeating the arithmetic. */
+    transform: rotate(calc(var(--a) * -1));
 }
-.hero-devices .device-laptop { grid-area: 1 / 1; }
-.hero-devices .device-phone {
-    grid-area: 1 / 1;
-    width: clamp(120px, 9rem + 6vw, 208px);
-    translate: 0 12%;
-    z-index: 2;
+.arc-ico {
+    width: 34%;
+    height: auto;
+    aspect-ratio: 1;
+    stroke-width: 1.7;
+    opacity: .95;
+}
+.arc-label {
+    font-size: clamp(8px, 9.5%, 13px);
+    font-weight: var(--fw-semi);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    line-height: 1;
+    text-align: center;
+    opacity: .88;
+}
+/* Kept for the day a tile does carry a photograph: photo() wraps its <img> in
+   a <picture>, which is inline and auto-sized, so sizing only the <img> leaves
+   it filling a box that has already collapsed. */
+.arc-tile picture { display: block; width: 100%; height: 100%; grid-area: 1 / 1; }
+.arc-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* The ring's colour rhythm. t-tint is the one light tile, so it carries ink
+   rather than white — 16:1 instead of the 1.1:1 white-on-pale it would be
+   otherwise, which is the whole reason it is spelled out separately. */
+.arc-tile.t-blue   { background: linear-gradient(150deg, #2a6bf0, var(--blue-deep)); }
+.arc-tile.t-deep   { background: linear-gradient(150deg, var(--blue-deep), #0a1f4d); }
+.arc-tile.t-ink    { background: linear-gradient(150deg, #2b3448, var(--ink)); }
+.arc-tile.t-orange { background: linear-gradient(150deg, #ff8a5c, var(--orange-mid)); }
+.arc-tile.t-tint   { background: linear-gradient(150deg, #ffffff, var(--blue-tint-2)); color: var(--ink); }
+.arc-tile.t-tint .arc-ico { opacity: .8; }
+
+/* The deal. Time-based rather than scroll-driven because the arc is above the
+   fold on load — scrubbing an entrance against a scroll position the visitor
+   has not moved yet would simply mean it never plays. */
+@media (prefers-reduced-motion: no-preference) {
+    .arc-tile {
+        animation: arc-deal 820ms var(--ease-out) both;
+        animation-delay: calc(var(--i, 0) * 52ms + 120ms);
+    }
+}
+@keyframes arc-deal {
+    /* The parent has already carried the tile out along its spoke, so an equal
+       and opposite offset here lands it back on the pivot — the tiles fly out
+       of the middle of the headline without one hard-coded coordinate. */
+    from {
+        opacity: 0;
+        transform: translate(calc(var(--rx) * sin(var(--a)) * -1), calc(var(--ry) * cos(var(--a)))) scale(.2);
+    }
+    to { opacity: 1; transform: none; }
+}
+
+/* Behind the ring: a soft bloom that gives the white ground some depth and
+   keeps the headline sitting on light rather than on nothing. */
+.hero-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 46% 40% at 50% 44%, rgba(22, 82, 224, .13), transparent 68%),
+        radial-gradient(ellipse 30% 26% at 74% 30%, rgba(255, 107, 53, .10), transparent 70%);
+}
+
+@media (max-width: 900px) {
+    /* Fewer, smaller tiles and a wider step: at this width a thirteen-tile ring
+       is a texture, not a composition. The outermost four hide themselves. */
+    .arc { --step: 27deg; --rx: clamp(168px, 40vw, 320px); --ry: clamp(152px, 30vw, 272px); }
+    .arc-cell.is-wide-only { display: none; }
 }
 
 @media (max-width: 700px) {
-    .hero-fan { grid-template-columns: repeat(7, minmax(0, 1fr)); inset: -6% -22%; }
-    .hero-devices .device-phone { translate: 0 14%; }
+    /* The ring stops surrounding the headline and becomes a crown above it.
+       There is no width at which a 390px screen can hold both a ring wide
+       enough to clear the type and type large enough to be the hero — trying
+       lands the tiles straight through the words. So the stage stops being a
+       stack: the arc takes its own strip of the page and the words follow it. */
+    .hero-stage { display: block; min-height: 0; }
+    .arc {
+        position: relative;
+        inset: auto;
+        height: clamp(150px, 46vw, 200px);
+        --rx: clamp(120px, 34vw, 168px);
+        --ry: clamp(78px, 22vw, 104px);
+        --tile: clamp(54px, 15vw, 68px);
+        --step: 27deg;
+        --pivot-y: 74%;
+    }
+    .arc-cell.is-tablet-up { display: none; }
+    .hero-head { margin-top: var(--sp-5); }
+    /* .hero-cue's phone rule lives in css/pages/home.css beside its base rule —
+       that sheet loads after this one, so an override here would lose. */
+}
+
+/* ==========================================================================
+   2b. App stage — the laptop and the phone arriving from the two sides
+
+   Position is set with the `translate` property and motion with `transform`,
+   which is not a stylistic split. css/06-motion.css animates `transform`, and
+   the freeze stylesheets in inc/tools/*.mjs reset `transform` to none. If the
+   resting offsets lived in `transform` too, both the animation and the
+   screenshot freeze would erase them and the three objects would stack dead
+   centre on top of each other.
+   ========================================================================== */
+.app-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(100%, 940px);
+    margin-inline: auto;
+    min-height: clamp(300px, 16rem + 20vw, 520px);
+    isolation: isolate;
+}
+.app-stage > * { grid-area: 1 / 1; }
+
+.app-glow {
+    width: min(100%, 720px);
+    aspect-ratio: 16 / 9;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(22, 82, 224, .16), transparent 66%);
+    z-index: -1;
+}
+
+.app-stage .device-laptop {
+    width: min(78%, 660px);
+    translate: -6% 0;
+    z-index: 1;
+}
+.app-stage .device-phone {
+    width: clamp(112px, 8rem + 6vw, 194px);
+    translate: 62% 16%;
+    z-index: 3;
+}
+/* A real fragment of the pricing table, floating in front of the laptop lid —
+   the thing that makes the composition read as software rather than as a photo
+   of hardware. */
+.app-panel {
+    z-index: 2;
+    translate: -68% 26%;
+    width: clamp(180px, 12rem + 6vw, 268px);
+    padding: var(--sp-4) var(--sp-5);
+    background: rgba(255, 255, 255, .86);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    backdrop-filter: blur(14px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    text-align: left;
+}
+.app-panel-label {
+    font-size: var(--fs-2xs);
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    font-weight: var(--fw-semi);
+    color: var(--ink-3);
+}
+.app-panel-value {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    line-height: 1;
+    letter-spacing: var(--tr-display);
+    color: var(--ink);
+    margin-top: 2px;
+}
+.app-panel-bar {
+    height: 6px;
+    border-radius: var(--r-pill);
+    background: var(--paper-3);
+    margin-top: var(--sp-3);
+    overflow: hidden;
+}
+.app-panel-bar > span {
+    display: block;
+    height: 100%;
+    width: var(--w, 68%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--blue), var(--blue-deep));
+}
+.app-panel-foot {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-2xs);
+    color: var(--ink-3);
+}
+
+@media (max-width: 760px) {
+    /* Stacked, and no horizontal travel: on a 390px screen an object arriving
+       from 34% off-canvas is off-screen for most of its journey, so it reads as
+       a pop-in rather than as an arrival. */
+    .app-stage { min-height: 0; }
+    .app-stage .device-laptop { width: 100%; translate: 0 -12%; }
+    .app-stage .device-phone  { translate: 34% 34%; }
+    .app-panel { translate: -34% 40%; padding: var(--sp-3) var(--sp-4); }
+    .app-stage [data-fx="in-left"],
+    .app-stage [data-fx="in-right"] { --travel: 12%; --turn: 2deg; }
 }
 
 /* ==========================================================================
@@ -373,6 +602,7 @@
 .band-blue .step-text, .band-ink .step-text,
 .band-blue .step-time, .band-ink .step-time { color: var(--on-dark-2); }
 .band-blue .step-num { color: #fff; }
+.band-ink .step-num { color: var(--orange); }   /* 6.8:1 on ink */
 .band-ink  .step-num { color: var(--orange); }
 
 /* ==========================================================================
@@ -457,6 +687,14 @@
     place-items: center;
     transition: opacity 600ms var(--ease);
 }
+/* WebGL2 missing, context refused, or a shader that would not compile. gl.js
+   has written this class since it was first authored and nothing consumed it,
+   so the "flat gradient fallback" its docblock promises was never actually
+   reachable. The still is already the fallback; this makes it explicit, and
+   removes the canvas from the box so it cannot eat pointer events. */
+.gl-host.is-gl-off canvas { display: none; }
+.gl-host.is-gl-off .gl-still { opacity: 1; }
+
 .gl-host.is-gl-live .gl-still { opacity: 0; }
 .gl-still::before {
     content: '';

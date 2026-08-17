@@ -32,6 +32,7 @@ $page = [
     'desc'      => 'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
     'bodyClass' => 'page-team',
     'styles'    => ['home', 'team'],
+    'scripts'   => ['team'],
     'schema'    => [
         [
             '@type'       => 'AboutPage',
@@ -51,6 +52,31 @@ $page = [
  * an empty section rather than a fatal.
  */
 $team = team_all();
+
+/**
+ * One payload for the overlay, rather than js/pages/team.js scraping the cards.
+ * Scraping would re-parse markup that has already been escaped once and would
+ * tie the overlay's fields to the card's layout; a change to the card would
+ * then silently drop a field from the profile.
+ *
+ * Keys are one letter because this is serialised into the document on every
+ * request and read by exactly one file.
+ */
+$teamData = [];
+foreach ($team as $tp) {
+    $teamData[] = [
+        'n' => (string)$tp['name'],
+        'r' => (string)$tp['role'],
+        'b' => (string)$tp['brief'],
+        'd' => (string)$tp['bio'],
+        'g' => (string)$tp['github_url'],
+        'l' => (string)$tp['linkedin_url'],
+        'p' => $tp['photo'] !== null
+            ? site_path('/uploads/' . rawurlencode((string)$tp['photo']))
+            : '',
+        'a' => (string)($tp['photo_alt'] !== '' ? $tp['photo_alt'] : $tp['name']),
+    ];
+}
 
 /* team_all() no longer returns unfinished profiles at all, so every person
    reaching this page is a real, published one and can be claimed as such in
@@ -110,7 +136,7 @@ require __DIR__ . '/partials/social-rail.php';
             $hasLinks = $p['github_url'] !== '' || $p['linkedin_url'] !== '';
             $alt      = (string)($p['photo_alt'] !== '' ? $p['photo_alt'] : $p['name']);
 ?>
-                <details class="team-card">
+                <details class="team-card" data-team-index="<?= (int)$i ?>">
                     <summary class="team-card-head">
                         <span class="team-avatar">
 <?php if ($p['photo'] !== null): ?>
@@ -161,6 +187,103 @@ require __DIR__ . '/partials/social-rail.php';
                 </details>
 <?php endforeach; ?>
             </div>
+
+            <?php /* Same JSON_HEX_TAG|JSON_HEX_AMP pair schema_render() uses: a bio
+
+               containing "</script>" would otherwise close this element early and drop
+
+               the rest of the page into the document as markup. */ ?>
+
+            <script type="application/json" id="team-data"><?= json_encode($teamData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+
+
+            <?php /* Inert until js/pages/team.js un-hides it, so no-JS never meets an
+
+               empty dialog. Every text node below is filled with textContent, which is
+
+               why none of them are pre-escaped here — there is nothing to escape yet. */ ?>
+
+            <div class="team-detail" id="teamDetail" hidden>
+
+                <div class="team-detail-backdrop" data-team-close></div>
+
+
+                <div class="team-detail-stage" role="dialog" aria-modal="true"
+
+                     aria-labelledby="teamDetailName" tabindex="-1">
+
+
+                    <?php /* Photo first in the DOM so a screen reader hears the name
+
+                       before the biography; CSS raises it in front of the detail card,
+
+                       which is a paint-order question, not a reading-order one. */ ?>
+
+                    <div class="team-detail-photo">
+
+                        <?php /* No src attribute at all, not src="". An empty src
+
+                           resolves against the document URL, so the browser fetches the
+
+                           page itself as an image and reports a broken one. */ ?>
+
+                        <span class="team-detail-avatar">
+
+                            <img id="teamDetailPhoto" alt="" width="240" height="240" hidden>
+
+                            <?= icon('user', 'team-detail-avatar-icon') ?>
+
+                        </span>
+
+                        <strong id="teamDetailName"></strong>
+
+                        <span class="team-detail-role" id="teamDetailRole"></span>
+
+                    </div>
+
+
+                    <article class="team-detail-card" id="teamDetailCard">
+
+                        <button type="button" class="team-detail-close" data-team-close
+
+                                aria-label="Close profile"><?= icon('x') ?></button>
+
+
+                        <div class="team-detail-scroll">
+
+                            <p class="team-detail-brief" id="teamDetailBrief"></p>
+
+                            <p class="team-detail-bio" id="teamDetailBio"></p>
+
+                            <div class="team-detail-links" id="teamDetailLinks"></div>
+
+                        </div>
+
+
+                        <div class="team-detail-nav">
+
+                            <button type="button" class="team-detail-step" data-team-prev>
+
+                                <?= icon('chevron-right', 'is-flipped') ?><span>Previous</span>
+
+                            </button>
+
+                            <p class="team-detail-count" id="teamDetailCount" aria-live="polite"></p>
+
+                            <button type="button" class="team-detail-step" data-team-next>
+
+                                <span>Next</span><?= icon('chevron-right') ?>
+
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
 
             <p class="team-note">
                 Every card opens on its own &mdash; several can be open at once. The people
