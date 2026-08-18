@@ -15,6 +15,7 @@ $page = [
     'desc'      => 'Notes on bundled digital growth, web security, content, marketing, and the systems we build behind every package.',
     'bodyClass' => 'page-blog',
     'styles'    => ['home', 'blog'],
+    'module'    => 'stage3d',
 ];
 
 /**
@@ -161,6 +162,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <div class="sec-head-split">
                 <div>
@@ -252,7 +254,7 @@ if ($featured !== null):
     $furl   = site_path('/blog/' . rawurlencode((string)$featured['slug']));
     $fbadge = (string)($featured['category_name'] ?? '') ?: (string)$featured['tag'];
 ?>
-            <article class="blog-featured" data-r="lift">
+            <article class="blog-featured" data-fx="in-up" style="--travel: 52px;">
                 <div class="blog-featured-visual">
 <?php if ($featured['cover'] !== null): ?>
                     <img src="<?= e(site_path('/uploads/' . rawurlencode((string)$featured['cover']))) ?>"

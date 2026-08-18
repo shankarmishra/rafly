@@ -73,6 +73,21 @@
                 : el;
             onceInView(probe, function () { markIn(el); });
         });
+
+        /* The three ARRIVAL effects from the data-fx namespace.
+           data-fx is otherwise deliberately native-only: drift, spin, zoom and
+           tilt are CONTINUOUS, and an observer can only fire them once, after
+           which they contradict the scroll position for the rest of the page.
+
+           in-left, in-right and in-up are not continuous. They finish at
+           `cover 42%` and end at a defined resting state — they are entrances
+           that happen to live in the other namespace. Without this they simply
+           never move on any engine that lacks scroll timelines, and side
+           arrivals are now the site's main motion rather than a homepage
+           flourish, so "it does nothing there" is not an acceptable answer. */
+        each('[data-fx="in-left"], [data-fx="in-right"], [data-fx="in-up"]', function (el) {
+            onceInView(el, function () { markIn(el); });
+        });
     }
 
     /* --------------------------------------------------------------------

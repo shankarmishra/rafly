@@ -91,5 +91,18 @@ $navServices = services_all();
             <a href="mailto:<?= e(CONTACT_EMAIL) ?>"><?= e(CONTACT_EMAIL) ?></a>
             <a href="tel:<?= e(str_replace(' ', '', CONTACT_PHONE)) ?>"><?= e(CONTACT_PHONE) ?></a>
         </div>
+
+        <?php /* The fixed .social-rail is display:none below 1240px
+           (css/04-nav.css). Every width that loses it has this drawer, so the
+           links move here rather than simply disappearing for the entire
+           tablet and phone range — which is what happened before. */ ?>
+        <div class="drawer-social">
+            <?php foreach (SOCIAL_LINKS as $s): ?>
+                <a href="<?= e($s['url']) ?>" target="_blank" rel="noopener noreferrer"
+                   aria-label="Rafly on <?= e($s['label']) ?>">
+                    <?= icon($s['icon'], 'icon-fill') ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
     </div>
 </div>

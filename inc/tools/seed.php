@@ -203,17 +203,68 @@ $n('testimonials', count($quotes));
 $imported = 0;
 $skipped  = 0;
 if (is_file(LEAD_CSV_FILE) && ($fp = fopen(LEAD_CSV_FILE, 'r')) !== false) {
-    $header = fgetcsv($fp);   // Timestamp, Company Name, Contact Number, Requirements Description
+    /* MAP BY HEADER NAME, NOT BY POSITION.
+
+       This used to destructure the first four cells: [$ts, $company, $phone,
+       $desc] = $row. Migration 006 added contact_name and contact_email, and
+       submit.php now writes SIX columns — timestamp, name, email, company,
+       phone, description — so positional reading silently shifted every field
+       one place left. Sixteen leads imported with the person's NAME in
+       company_name and their EMAIL in contact_number, and nothing reported a
+       problem, because every one of those fields is just a string.
+
+       Worse, the header on an existing file is whatever was written the day it
+       was created, so a CSV can legitimately hold a four-column header above
+       six-column rows — which is exactly the file this repo has. Reading by
+       name handles a correct header; the $wide fallback handles that one. */
+    $header = fgetcsv($fp);
+    $map = [];
+    foreach ((array)$header as $i => $name) {
+        $map[strtolower(trim((string)$name))] = $i;
+    }
+    $col = static function (array $row, array $names, ?int $fallback) use ($map) {
+        foreach ($names as $n) {
+            if (isset($map[$n]) && array_key_exists($map[$n], $row)) {
+                return (string)$row[$map[$n]];
+            }
+        }
+        return ($fallback !== null && array_key_exists($fallback, $row)) ? (string)$row[$fallback] : '';
+    };
+    $legacyHeader = count((array)$header) < 6;
+
     while (($row = fgetcsv($fp)) !== false) {
         if (count($row) < 4) {
             continue;
         }
-        [$ts, $company, $phone, $desc] = $row;
+        // A six-cell row under a four-cell header: the header cannot name these,
+        // so fall back to the layout submit.php actually writes.
+        $six = $legacyHeader && count($row) >= 6;
+
+        if ($six) {
+            /* The header is FOUR columns and this row is SIX, so the header is
+               not merely incomplete — it is actively wrong. It still contains
+               the strings "Company Name" and "Contact Number", pointing at
+               indices 1 and 2, which in a six-column row hold the name and the
+               email. Consulting it here is worse than ignoring it: a name-based
+               lookup finds a match and confidently returns the wrong cell.
+               So for these rows the header is skipped entirely and the layout
+               submit.php writes is used directly. */
+            [$ts, $name, $email, $company, $phone, $desc] = array_slice($row, 0, 6);
+        } else {
+            $ts      = $col($row, ['timestamp'], 0);
+            $name    = $col($row, ['name', 'contact name'], null);
+            $email   = $col($row, ['email', 'contact email'], null);
+            $company = $col($row, ['company name', 'company'], 1);
+            $phone   = $col($row, ['contact number', 'phone'], 2);
+            $desc    = $col($row, ['requirements description', 'description'], 3);
+        }
 
         // csv_safe() in submit.php tab-prefixes fields starting = + - @ to stop
         // Excel executing them. Strip it back off on the way in.
         $company = ltrim($company, "\t");
         $desc    = ltrim($desc, "\t");
+        $name    = ltrim($name, "\t");
+        $email   = ltrim($email, "\t");
 
         // No explicit cast: the CSV writes date('Y-m-d H:i:s'), which both
         // PostgreSQL and MySQL resolve from the column's own type. The old
@@ -229,9 +280,10 @@ if (is_file(LEAD_CSV_FILE) && ($fp = fopen(LEAD_CSV_FILE, 'r')) !== false) {
         }
 
         q('
-            INSERT INTO leads (company_name, contact_number, description, consent_given, created_at, updated_at)
-            VALUES (?, ?, ?, true, ?, ?)
-        ', [$company, $phone, $desc, $ts, $ts]);
+            INSERT INTO leads (company_name, contact_name, contact_email, contact_number,
+                               description, consent_given, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, true, ?, ?)
+        ', [$company, $name, $email, $phone, $desc, $ts, $ts]);
         $imported++;
     }
     fclose($fp);

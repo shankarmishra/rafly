@@ -50,14 +50,7 @@ function schema_organization(): array
         'priceRange' => '$$',
         'email'     => CONTACT_EMAIL,
         'telephone' => CONTACT_PHONE,
-        'address'   => [
-            '@type'           => 'PostalAddress',
-            'streetAddress'   => 'A523, T3, NX-One, Tech Zone IV',
-            'addressLocality' => 'Greater Noida West',
-            'addressRegion'   => 'Uttar Pradesh',
-            'postalCode'      => '201306',
-            'addressCountry'  => 'IN',
-        ],
+        'address'   => schema_postal_address(),
         'openingHoursSpecification' => [[
             '@type'     => 'OpeningHoursSpecification',
             'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -66,6 +59,58 @@ function schema_organization(): array
         ]],
         'sameAs' => array_map(static fn(array $s) => $s['href'], SOCIAL_LINKS),
     ];
+}
+
+/**
+ * The PostalAddress node, derived from the contact.address SETTING.
+ *
+ * This was hardcoded, and that was a real bug rather than a shortcut: editing
+ * the address in the admin moved it on the contact page, the footer and the
+ * map link, but left the structured data — the copy search engines actually
+ * read — pointing at the old premises, with nothing anywhere to say so.
+ *
+ * The setting is one human display string and JSON-LD wants parts, so the
+ * string is split on commas by a fixed convention, read from the END because
+ * that is the part with a stable shape:
+ *
+ *     …street parts…, <locality>, <postcode>
+ *
+ * A trailing all-digit segment (5-8 chars, so a PIN or a ZIP+4) is taken as
+ * the postcode; the segment before it as the locality; everything left as the
+ * street. If the string does not fit that shape nothing is guessed — the whole
+ * value goes in streetAddress, which is valid and honest, rather than
+ * scattering it across fields it might not belong in.
+ *
+ * Region and country stay constant. They are not in the setting, and inventing
+ * a parser for them from a free-text field would fail silently the first time
+ * somebody typed a different state.
+ */
+function schema_postal_address(): array
+{
+    $raw   = trim((string)setting('contact.address', ''));
+    $parts = array_values(array_filter(array_map('trim', explode(',', $raw)), static fn($p) => $p !== ''));
+
+    $postal   = '';
+    $locality = '';
+
+    $last = end($parts);
+    if ($last !== false && preg_match('/^\d{5,8}$/', $last)) {
+        $postal = array_pop($parts);
+        if (count($parts) > 1) {
+            $locality = array_pop($parts);
+        }
+    }
+
+    $address = array_filter([
+        '@type'           => 'PostalAddress',
+        'streetAddress'   => implode(', ', $parts),
+        'addressLocality' => $locality,
+        'addressRegion'   => 'Uttar Pradesh',
+        'postalCode'      => $postal,
+        'addressCountry'  => 'IN',
+    ], static fn($v) => $v !== '');
+
+    return $address;
 }
 
 /** The WebSite node, so the site name can be used in results. */

@@ -22,6 +22,7 @@ $page = [
     'desc'      => 'Tell us what is slowing your growth down. One point of contact for web development, content, marketing, security and e-commerce support. We reply within one working day.',
     'bodyClass' => 'page-contact',
     'styles'    => ['home'],
+    'module'    => 'stage3d',
     'canonical' => 'contact',
     'schema'    => [schema_breadcrumbs($crumbs)],
 ];
@@ -44,6 +45,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split">
@@ -84,7 +86,7 @@ require __DIR__ . '/partials/social-rail.php';
     <section class="section band-ink" id="form">
         <div class="container">
             <div class="split split-wide-l split-top">
-                <div data-r="left">
+                <div data-fx="in-left" style="--travel: 14%;">
                     <p class="eyebrow on-dark">Start a conversation</p>
                     <h2>Tell us what's <span class="soft">slowing you down</span></h2>
                     <p class="lead">
@@ -111,7 +113,7 @@ require __DIR__ . '/partials/social-rail.php';
                     </div>
                 </div>
 
-                <div class="contact-card" data-r="right">
+                <div class="contact-card" data-fx="in-right" style="--travel: 18%; --turn: 3deg;">
                     <h3 class="contact-card-title">Send us your requirements</h3>
                     <?php
                     $formId      = 'contactPageForm';

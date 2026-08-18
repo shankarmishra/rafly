@@ -24,6 +24,7 @@ $page = [
     'desc'      => 'How bundled delivery actually plays out — the problem, our approach, and the measurable result for each engagement.',
     'bodyClass' => 'page-case-studies',
     'styles'    => ['home', 'work'],
+    'module'    => 'stage3d',
     'schema'    => array_filter([
         schema_breadcrumbs($crumbs),
         // Each card gets an id="case-study-N" anchor so this ItemList can point
@@ -47,6 +48,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split">
@@ -121,8 +123,19 @@ if (!$caseStudies): ?>
         // number with no unit) is the one thing on this page a reader stops on.
         $hasMetric = trim((string)$w['metric_value']) !== '' && trim((string)$w['metric_label']) !== '';
 ?>
-                <article class="cs-item" id="case-study-<?= (int)$i ?>" data-r="rise">
+                <article class="cs-item" id="case-study-<?= (int)$i ?>"
+                         data-fx="<?= $i % 2 ? 'in-right' : 'in-left' ?>"
+                         style="--travel: 9%; --turn: 2deg;">
                     <div class="cs-item-head">
+                        <?php /* Cycled by position, not stored per case study. These are
+                           illustrative covers FOR THE SECTOR — an office, a shop, a cafe —
+                           and nothing on the card claims they are the client's premises,
+                           because they are not and we have no photographs that are.
+                           photo() returns '' for a missing file, so the card degrades to
+                           the text form it had before rather than breaking. */ ?>
+                        <div class="cs-cover" data-fx="zoom" style="--grow: .04;">
+                            <?= photo('assets/photos/work-' . (($i % 3) + 1) . '.jpg', '') ?>
+                        </div>
                         <span class="badge badge-soft"><?= e((string)$w['sector']) ?></span>
                         <h2><?= e((string)$w['client_name']) ?></h2>
 <?php if ($hasMetric): ?>

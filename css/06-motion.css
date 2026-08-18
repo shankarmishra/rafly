@@ -258,7 +258,24 @@
     border-color: var(--blue);
     color: #fff;
 }
-.st-step-title { font-size: var(--fs-h4); color: var(--ink); }
+.st-step-title {
+    font-size: var(--fs-h4);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+}
+/* The step's own mark. Sized to the cap height rather than to the line box, so
+   it reads as part of the heading and not as a bullet stuck in front of it. */
+.st-step-ico {
+    flex: none;
+    width: 1.05em;
+    height: 1.05em;
+    color: var(--blue);
+    opacity: .55;
+    transition: opacity var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+.st-step.is-active .st-step-ico { opacity: 1; color: var(--orange-mid); }
 .st-step-text  { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; max-width: 46ch; }
 
 @media (max-width: 940px) {
@@ -344,11 +361,55 @@
     to   { transform: perspective(1200px) rotateX(calc(var(--turn, 6deg) * -1)); }
 }
 
-/* No IntersectionObserver fallback, and that is a decision rather than an
-   omission. These are decorative continuous effects; a browser without scroll
-   timelines gets the resting pose, which is the composed layout. Faking them
-   with an observer would mean a one-shot transition that fires once and then
-   contradicts the scroll position for the rest of the page. */
+/* THE FALLBACK, AND WHERE IT STOPS.
+
+   drift, spin, zoom and tilt get NO IntersectionObserver fallback, and that is
+   a decision rather than an omission. They are continuous and symmetric about
+   the resting pose; an observer can only fire once, and a one-shot transition
+   would then contradict the scroll position for the rest of the page. Without
+   scroll timelines they sit at the resting pose, which IS the composed layout.
+
+   in-left, in-right and in-up are different in kind. They resolve at cover 42%
+   and end at a defined finished state — entrances that happen to live in this
+   namespace because they are authored as travel rather than as a reveal. Those
+   three DO get the observer, on the same .js-motion path data-r uses, because
+   side arrivals are now the site's main motion on every page and "nothing
+   happens on this browser" is not an acceptable answer for the main motion.
+
+   js/motion.js only registers these when scroll timelines are ABSENT, so the
+   two engines stay mutually exclusive — the collision the note at the top of
+   this file was written about. */
+@supports not (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+        .js-motion [data-fx="in-left"],
+        .js-motion [data-fx="in-right"],
+        .js-motion [data-fx="in-up"] {
+            opacity: 0;
+            transition: opacity var(--dur-4) var(--ease-out),
+                        transform var(--dur-4) var(--ease-out);
+        }
+        /* Percentages, matching the keyframes — the travel of a device that
+           arrives from off-stage has to scale with the device, not with a pixel
+           count measured once at 1440. */
+        .js-motion [data-fx="in-left"] {
+            transform: translate3d(calc(var(--travel, 34%) * -1), 0, 0) rotate(calc(var(--turn, 5deg) * -1));
+        }
+        .js-motion [data-fx="in-right"] {
+            transform: translate3d(var(--travel, 34%), 0, 0) rotate(var(--turn, 5deg));
+        }
+        .js-motion [data-fx="in-up"] {
+            transform: translate3d(0, var(--travel, 60px), 0) scale(.94);
+        }
+
+        .js-motion [data-fx="in-left"].is-in,
+        .js-motion [data-fx="in-right"].is-in,
+        .js-motion [data-fx="in-up"].is-in {
+            opacity: 1;
+            transform: none;
+        }
+    }
+}
 
 /* ==========================================================================
    5. Page scroll progress

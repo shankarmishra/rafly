@@ -48,6 +48,7 @@ $page = [
     'desc'      => $data['intro'],
     'bodyClass' => 'page-service svc-' . $data['key'],
     'styles'    => ['home', 'service'],
+    'module'    => 'stage3d',
 
     // This page's content varies by slug, so the canonical must carry it.
     // Without it all five service pages self-canonicalise to the same URL
@@ -72,6 +73,7 @@ require __DIR__ . '/partials/social-rail.php';
 
     <?php /* ============================== 1. HERO ============================= */ ?>
     <section class="section page-head svc-hero">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="split split-wide-l split-top">
@@ -104,7 +106,7 @@ require __DIR__ . '/partials/social-rail.php';
                    and it said nothing about THIS service that it did not also
                    say about the other four. If a real photograph of Rafly's own
                    work exists later, it drops into the same frame. */ ?>
-                <div class="svc-mark" aria-hidden="true" data-r="scale">
+                <div class="svc-mark" aria-hidden="true" data-fx="drift" style="--depth: 24px;">
                     <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
                     <span class="svc-mark-ring"></span>
                     <span class="svc-mark-ring is-2"></span>
@@ -162,7 +164,7 @@ require __DIR__ . '/partials/social-rail.php';
     <section class="section band-soft">
         <div class="container">
             <div class="split split-wide-l split-top">
-                <div data-r="left">
+                <div data-fx="in-left" style="--travel: 12%;">
                     <p class="eyebrow">What changes</p>
                     <h2>What you should <span class="soft">notice afterwards</span></h2>
                     <p class="lead">Not a promise about numbers &mdash; we do not make those. These are the practical differences the work is meant to produce.</p>
@@ -173,7 +175,7 @@ require __DIR__ . '/partials/social-rail.php';
                     </ul>
                 </div>
 
-                <div class="panel panel-line" data-r="right">
+                <div class="panel panel-line" data-fx="in-right" style="--travel: 16%; --turn: 3deg;">
                     <h3>How we approach it</h3>
                     <p class="muted">Every engagement is shaped around clarity, delivery reliability, and being straight with you about trade-offs.</p>
                     <ul class="list-check" style="margin-top:1.5rem">

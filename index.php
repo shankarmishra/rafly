@@ -144,45 +144,32 @@ require __DIR__ . '/partials/social-rail.php';
 <main id="main">
 
     <?php /* ==========================================================
-       HERO — the headline inside a ring of work.
+       HERO — a cloud of points that changes shape as you leave it.
 
-       Three layers: a soft bloom on the paper, the arc of tiles, and the
-       words. The arc is placed entirely in CSS (one transform per tile, see
-       css/07-fx.css section 2) and deals itself out from the centre of the
-       headline on load.
+       The ring of service tiles used to live here. It moved to #capabilities
+       below: it is a statement about the range of the work, and a statement
+       reads better in a section of its own than wrapped around the one line
+       a visitor has to get past first.
 
-       The device mockups used to live here. They moved to the app stage
-       below, where they have room to arrive from the two sides and be the
-       point of their own section rather than a detail in someone else's.
+       What replaces it is js/gl.js, which is already on this page. Two of its
+       capabilities had never been switched on:
+
+         data-ink="dark"   draws DARK points on a LIGHT ground — premultiplied
+                           "over" instead of additive, and a damped bloom pass.
+                           Written for the paper edition and never wired up.
+         data-morph="scroll"  new this pass. Hero mode dissolves; story mode
+                           changes form. Here it does both off one 0..1, so the
+                           object becomes a knot, a helix, a lattice and a core
+                           on the way out rather than only blowing apart.
+
+       Five forms, one viewport of scroll. No three.js — that is 730 KB gated to
+       load only near the P.E.A.C.E. section, and pulling it above the fold would
+       undo the entire weight argument for a hero nobody has scrolled to yet.
        ========================================================== */ ?>
     <section class="section hero" id="home">
         <div class="container">
             <div class="hero-stage">
                 <div class="hero-glow" aria-hidden="true"></div>
-
-                <div class="arc" aria-hidden="true" data-fx="spin" style="--turn: 7deg;">
-                    <?php foreach ($ARC as $i => [$ico, $label, $tint]):
-                        $n    = $i - 6;              // -6 .. +6, so the ring is centred
-                        $out  = abs($n);             // steps from the top of the arc
-                        $tier = $out >= 5 ? ' is-wide-only' : ($out >= 3 ? ' is-tablet-up' : '');
-                    ?>
-                        <div class="arc-cell<?= $tier ?>" style="--n: <?= $n ?>;">
-                            <?php /* --i drives the deal delay, counted outward from the
-                               centre tile so the ring opens from the middle rather than
-                               unrolling from one end. */ ?>
-                            <span class="arc-tile <?= e($tint) ?>" style="--i: <?= $out ?>;">
-                                <?php /* Counter-rotated as one unit. The tile stays tangent
-                                   to the ring — that is what makes it read as a ring rather
-                                   than a bent row — but its contents come back upright, or
-                                   the labels on the flanks are printed sideways. */ ?>
-                                <span class="arc-inner">
-                                    <?= icon($ico, 'arc-ico') ?>
-                                    <span class="arc-label"><?= e($label) ?></span>
-                                </span>
-                            </span>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
 
                 <div class="hero-head">
                     <p class="eyebrow">One partner &middot; Every service</p>
@@ -204,11 +191,33 @@ require __DIR__ . '/partials/social-rail.php';
                     </div>
                 </div>
 
-                <?php /* The arc only covers 240 degrees, so the bottom of the stage
-                   is empty by construction. The cue is what belongs there. A link
-                   rather than an ornament, so the keyboard gets the shortcut too,
-                   and a sibling of .hero-head rather than a child so it anchors to
-                   the stage instead of to the bottom of the buttons. */ ?>
+                <?php /* THE OBJECT.
+
+                   This was a point cloud for one pass and Naveen threw it out:
+                   "ye 3d design bilkul pasand nahi". Fair — a cloud of dots has
+                   no surface, and with no surface there is nothing for the
+                   environment to reflect, so it can never look manufactured.
+                   What he did like was the P.E.A.C.E. object, and the reason is
+                   that that one is made of MATERIAL.
+
+                   So this is the same engine as P.E.A.C.E., at hero scale and
+                   with its own geometry: a refractive glass knot inside two
+                   crossed chrome rings, with twenty-two small metal solids
+                   scattered on a golden-angle sphere around it. Scrolling spins
+                   it up, tips it, pushes it back, and pulls the satellites out
+                   along their own vectors.
+
+                   THE COST, STATED PLAINLY. three.js is ~730 KB raw / ~190 KB
+                   gzipped, and above the fold it is no longer deferred behind a
+                   scroll the way the P.E.A.C.E. object is. Every other gate
+                   still holds: WebGL2 or nothing, never under reduced motion,
+                   never on Save-Data or 2G, and any failure at all leaves the
+                   designed still in place. It is a real price for the first
+                   impression, and it is being paid on purpose. */ ?>
+                <div class="hero-3d three-stage" data-stage3d="hero" aria-hidden="true">
+                    <div class="three-stage-still" aria-hidden="true"></div>
+                </div>
+
                 <a class="hero-cue" href="#challenges">
                     <span>Scroll</span>
                     <span class="hero-cue-rail" aria-hidden="true"></span>
@@ -372,6 +381,66 @@ require __DIR__ . '/partials/social-rail.php';
         </div>
     </section>
 
+    <?php /* ====================== CAPABILITIES ========================
+
+       The ring, in the place it belongs. It spent one pass wrapped around the
+       hero headline, where it competed with the one line a visitor has to read
+       first; here it IS the point of its own section, so it closes into a full
+       circle and the middle carries the statement instead of a call to action.
+
+       Thirteen tiles at 360/13 = 27.7deg, which is why the geometry needs no
+       gap reserved at the bottom any more. Placement is still one transform per
+       tile in css/07-fx.css section 2 and still needs no JavaScript.
+       ========================================================== */ ?>
+    <section class="section cap-sec" id="capabilities">
+        <div class="container">
+            <div class="cap-stage">
+                <div class="cap-glow" aria-hidden="true"></div>
+
+                <?php /* --turn is large on purpose. At the 7deg the hero used,
+                   the ring technically rotated and nobody could tell; a quarter
+                   of a tile's spacing across the section is the point at which
+                   the movement becomes legible as movement. */ ?>
+                <div class="arc" aria-hidden="true" data-fx="spin" style="--turn: 26deg;">
+                    <?php foreach ($ARC as $i => [$ico, $label, $tint]):
+                        $n    = $i - 6;              // -6 .. +6, thirteen evenly spaced
+                        $out  = abs($n);             // steps from the top of the ring
+                        /* Which tiles survive a narrower ring. Hiding by distance
+                           from the top keeps what is left EVENLY spaced, which is
+                           the only thing that lets --step widen to 40deg and then
+                           72deg and still close a full circle at each width. */
+                        $tier = $out >= 5 ? ' is-wide-only' : ($out >= 3 ? ' is-tablet-up' : '');
+                    ?>
+                        <div class="arc-cell<?= $tier ?>" style="--n: <?= $n ?>;">
+                            <span class="arc-tile <?= e($tint) ?>" style="--i: <?= $out ?>;">
+                                <?php /* Counter-rotated as one unit. The tile stays
+                                   tangent to the ring — that is what makes it read
+                                   as a ring rather than a bent row — but its
+                                   contents come back upright, or the labels on the
+                                   flanks are printed sideways. */ ?>
+                                <span class="arc-inner">
+                                    <?= icon($ico, 'arc-ico') ?>
+                                    <span class="arc-label"><?= e($label) ?></span>
+                                </span>
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="cap-head">
+                    <p class="eyebrow">Everything in one place</p>
+                    <h2><?= count($ARC) ?> capabilities.<br><span class="ul-draw">One team.</span></h2>
+                    <p class="lead">
+                        Not a list of things we could subcontract &mdash; the work we do
+                        in-house, on one contract, with one person to call when any of
+                        it needs attention.
+                    </p>
+                    <a class="btn btn-line" href="#pricing">See how it is packaged</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <?php /* ========================= APP STAGE =========================
        The laptop and the phone arrive from the two sides and settle
        overlapping in the middle, with a panel of live numbers rising in
@@ -489,7 +558,13 @@ require __DIR__ . '/partials/social-rail.php';
                     <?php foreach ($PEACE as $i => [$letter, $ico, $title, $copy]): ?>
                         <div class="st-step" data-letter="<?= e($letter) ?>">
                             <span class="st-step-num"><?= (int)($i + 1) ?></span>
-                            <h3 class="st-step-title"><span class="peace-letter"><?= e($letter) ?></span> <?= e($title) ?></h3>
+                            <?php /* $ico was destructured out of $PEACE and then never
+                               used — five icons defined and none drawn. It marks the
+                               step, beside the letter that names it. */ ?>
+                            <h3 class="st-step-title">
+                                <?= icon($ico, 'st-step-ico') ?>
+                                <span class="peace-letter"><?= e($letter) ?></span> <?= e($title) ?>
+                            </h3>
                             <p class="st-step-text"><?= e($copy) ?></p>
                         </div>
                     <?php endforeach; ?>

@@ -72,9 +72,16 @@
             }
 
             /* Let the pinned visual respond to the step, if it wants to.
-               data-st-target on the stage names a custom property to write the
-               index into; a stage that does not declare one is simply not
-               told, which keeps the two decoupled. */
+
+               This used to describe a data-st-target attribute naming a custom
+               property to write into. That was never implemented. What is
+               actually written is fixed and unconditional: --st-index for CSS,
+               and data-st-step for anything watching attributes.
+
+               js/gl.js and js/stage3d.js both read data-st-step through a
+               MutationObserver rather than doing their own scroll maths, which
+               is what keeps the object and the text from ever disagreeing
+               about which step is current. */
             if (stage) {
                 stage.style.setProperty('--st-index', i);
                 stage.setAttribute('data-st-step', String(i));

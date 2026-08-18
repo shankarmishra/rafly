@@ -48,6 +48,11 @@
  *   data-mode    'hero' (default) dissolves on scroll; 'story' morphs on scroll
  *                or on the active .st-step, whichever the host provides
  *   data-density 0..2 multiplier on point count (default 1)
+ *   data-morph   'scroll' makes a hero-mode object ALSO change form as it goes
+ *   data-zoom    0.2..3 multiplier on camera distance; below 1 fills the frame
+ *   data-dissolve 0..2 multiplier on how far a hero-mode object breaks apart
+ *   data-ink     'dark' draws dark points on a light ground (paper edition)
+ *   data-col-a / data-col-b / data-col-hot   palette overrides, hex
  */
 (function () {
     'use strict';
@@ -427,6 +432,32 @@
            "over", and the palette defaults flip to ink. */
         this.ink = canvas.getAttribute('data-ink') === 'dark';
 
+        /* MORPH ON SCROLL. 'hero' mode dissolves as the host leaves the
+           viewport; 'story' mode changes form. The homepage hero is asked to do
+           both, so it opts in here rather than getting a third mode: the two
+           mappings then run off the same 0..1 and the cloud reads as BECOMING
+           the next shape while it comes apart, instead of merely blowing away.
+           Opt-in, so the delivery band already using hero mode is unchanged. */
+        this.morphOnScroll = canvas.getAttribute('data-morph') === 'scroll';
+
+        /* ZOOM. The camera distance is otherwise fixed, and the object is framed
+           by the canvas HEIGHT, so a host that is much wider than it is tall
+           gets a small object in a lot of empty space. Below 1 pulls the camera
+           in and the object fills more of the frame. Multiplier rather than an
+           absolute distance, so the per-mode dolly maths above is untouched. */
+        var zoom = parseFloat(canvas.getAttribute('data-zoom'));
+        this.zoom = (zoom > 0.2 && zoom < 3) ? zoom : 1;
+
+        /* DISSOLVE SCALE. Hero mode pushes every point out along its normal by
+           up to 2.6 units as the section leaves. That was tuned against a small
+           object on a dark band, where the scatter reads as sparks. Pulled in
+           close on a light ground it becomes a web of strands across the whole
+           section — over the lead, over the buttons — and the effect stops
+           being the object leaving and starts being a mess. Below 1 keeps the
+           form legible while it goes. */
+        var diss = parseFloat(canvas.getAttribute('data-dissolve'));
+        this.dissolveScale = (diss >= 0 && diss <= 2) ? diss : 1;
+
         /* Resolution. The strand count (R) stays fixed so the topology reads the
            same everywhere; only the ring count (S) steps down, which costs
            density rather than shape. */
@@ -693,15 +724,15 @@
             // Only a slight pull-back for very wide strips, so the object does
             // not touch the top and bottom edges.
             var aspect = this.w / Math.max(1, this.h);
-            camZ = -(5.4 + Math.min(1.2, Math.max(0, aspect - 1.6) * 0.5));
+            camZ = -(5.4 + Math.min(1.2, Math.max(0, aspect - 1.6) * 0.5)) * this.zoom;
             ry = spin + this.px * 0.5 + scroll * 0.7;
             rx = -0.18 + this.py * 0.28;
         } else {
             // The hero object comes apart as the page leaves it, and the camera
             // pulls back at the same time. Scrolling past IS the animation.
             var e = scroll * scroll;
-            dissolve = e * 2.6;
-            camZ = -(6.1 + e * 4.2);
+            dissolve = e * 2.6 * this.dissolveScale;
+            camZ = -(6.1 + e * 4.2) * this.zoom;
             ry = spin + this.px * 0.55 + scroll * 1.5;
             rx = -0.12 + this.py * 0.3 + scroll * 0.45;
         }
@@ -713,7 +744,9 @@
 
         // Fade the whole object out as it dissolves, so the last frames are
         // dust rather than a wide grey smear.
-        var alpha = Math.max(0, 1 - scroll * (this.mode === 'story' ? 0.15 : 0.85));
+        var alpha = Math.max(0, 1 - scroll * (this.mode === 'story'
+            ? 0.15
+            : 0.85 + (1 - this.dissolveScale) * 0.55));
         if (alpha <= 0.01) return;
 
         var self = this;
@@ -815,6 +848,9 @@
             this.targetMorph = this.scroll * (this.buffers.length - 1);
         } else {
             this.scroll = Math.min(1, Math.max(0, -rect.top / span));
+            if (this.morphOnScroll) {
+                this.targetMorph = this.scroll * (this.buffers.length - 1);
+            }
         }
     };
 

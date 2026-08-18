@@ -33,6 +33,7 @@ $page = [
     'desc'      => 'Indicative pricing for our bundled packages — Starter, Growth and Enterprise. Get an exact quote for your specific requirements.',
     'bodyClass' => 'page-pricing',
     'styles'    => ['home'],
+    'module'    => 'stage3d',
     'schema'    => [schema_breadcrumbs($crumbs), schema_faq($PRICING_FAQ)],
 ];
 
@@ -51,6 +52,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split">

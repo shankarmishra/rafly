@@ -174,6 +174,35 @@ body.svc-marketing { --accent: var(--svc-marketing); }
 body.svc-content   { --accent: var(--svc-content); }
 body.svc-ecom      { --accent: var(--svc-ecom); }
 
+/* ==========================================================================
+   Paper grain
+
+   One fractalNoise filter, rendered by the browser into a 140px tile that
+   repeats seamlessly (stitchTiles). It is a few hundred bytes of markup inside
+   a CSS value: no request, no binary, no licence, and it resolves at whatever
+   pixel ratio the screen has rather than at the one a PNG was exported for.
+
+   Three strengths, because the same noise over ink, over paper and inside a
+   letterform needs three different amounts to read as the same surface:
+
+     --grain-fine   the page ground and section bands. Barely there by design —
+                    a texture you can SEE on a business site reads as a
+                    pattern; one you can only see when it is removed reads as
+                    stock.
+     --grain-card   panels and cards. Slightly stronger, because a card is
+                    small and sits on a ground that already has --grain-fine.
+     --grain-text   inside display letterforms. The highest of the three and
+                    still only a tenth: this one is multiplied against ink and
+                    lands directly on measured contrast, so it is the one
+                    number in this file that inc/tools/audit.mjs will fail us
+                    over if it grows.
+   ========================================================================== */
+:root {
+    --grain-fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+    --grain-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.05'/%3E%3C/svg%3E");
+    --grain-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.98' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.10'/%3E%3C/svg%3E");
+}
+
 @media (max-width: 700px) {
     :root { --header-h: 66px; --nav-pill-h: 52px; }
 }

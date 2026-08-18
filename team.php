@@ -32,6 +32,7 @@ $page = [
     'desc'      => 'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
     'bodyClass' => 'page-team',
     'styles'    => ['home', 'team'],
+    'module'    => 'stage3d',
     'scripts'   => ['team'],
     'schema'    => [
         [
@@ -93,6 +94,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split">

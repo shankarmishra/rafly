@@ -125,53 +125,85 @@
 }
 
 /* ==========================================================================
-   2. The hero arc, and the app stage
+   2. The capabilities ring, and the app stage
 
-   THE ARC
-   A ring of tiles curving over the headline, the reference Naveen supplied.
+   THE RING
+   It began life wrapped around the hero headline and only covered 240 degrees,
+   because the bottom third had to stay clear for the call to action. It now has
+   a section of its own, so it closes: thirteen tiles at 360/13 = 27.7deg.
+
    Placement is one transform per tile and needs no JavaScript at all:
 
-       rotate(n * step) translateY(-radius)
+       translate(rx*sin(a), -ry*cos(a)) rotate(a)      a = n * step
 
-   with `n` running -6..+6 from PHP, so thirteen tiles cover 240 degrees and the
-   bottom of the circle stays empty for the call to action. Tiles are NOT
-   counter-rotated — they tilt with the arc, which is what makes it read as a
-   ring rather than as a row bent into a curve.
+   with `n` running -6..+6 from PHP. Tiles are NOT counter-rotated — they tilt
+   with the ring, which is what makes it read as a ring rather than as a row
+   bent into a curve. Only their CONTENTS come back upright.
 
-   Two moves, and they live on different elements on purpose. The ring carries
-   `data-fx="spin"` so the whole arc turns as the hero scrolls away. Each tile's
-   INNER span carries the deal-in: because the parent has already applied
-   `translateY(-radius)`, a child `translateY(+radius)` lands exactly back on
-   the pivot, so the tiles fly out of the centre of the headline along their own
-   spokes without a single hard-coded coordinate.
+   Two moves, on different elements on purpose. The ring carries data-fx="spin"
+   so the whole thing turns as the section passes. Each TILE deals itself in on
+   its own view timeline: because the parent has already applied the placement
+   transform, an equal and opposite offset in the keyframe lands the tile back
+   on the pivot, so the tiles fly out of the middle along their own spokes
+   without one hard-coded coordinate.
    ========================================================================== */
 .hero-stage {
     position: relative;
     display: grid;
     place-items: center;
     isolation: isolate;
-    /* Tall enough for the ring's vertical diameter (2 x --ry) plus one tile, so
-       the top of the arc never disappears under the floating nav. */
-    min-height: clamp(452px, 40vw + 224px, 800px);
+    /* Tall enough to hold the ring of objects around the words. The two-column
+       split this replaces put the object beside the text; Naveen asked for the
+       text back in the CENTRE with the models around it, which needs height on
+       both sides of the type rather than width next to it. */
+    min-height: clamp(480px, 30vw + 260px, 700px);
 }
+
+.cap-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    isolation: isolate;
+    /* Tall enough for the ring's vertical diameter (2 x --ry) plus one tile, so
+       the top and bottom of the circle are never clipped by the section. */
+    min-height: clamp(520px, 46vw + 240px, 920px);
+}
+.cap-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 40% 34% at 50% 50%, rgba(22, 82, 224, .11), transparent 70%),
+        radial-gradient(ellipse 24% 22% at 22% 24%, rgba(255, 107, 53, .09), transparent 72%);
+}
+.cap-head {
+    position: relative;
+    z-index: 1;
+    max-width: 34rem;
+    text-align: center;
+}
+/* The underline on the last word of the h2 is drawn BELOW the baseline, so the
+   heading's own box does not account for it and the lead's first line lands on
+   the stroke. The gap is set here rather than by growing the h2's margin, which
+   would also push the ring's centre off the type. */
+.cap-head .lead { margin: var(--sp-5) auto 0; }
+.cap-head .btn { margin-top: var(--sp-5); }
 
 .arc {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    /* An ELLIPSE, not a circle. A circle wide enough to clear the headline is
-       also tall enough to push its top tiles behind the header and off the top
-       of the screen; the reference ring is markedly wider than it is tall. */
-    --rx: clamp(210px, 34vw, 610px);
-    --ry: clamp(172px, 21vw, 378px);
-    --step: 20deg;
-    --tile: clamp(62px, 3.8vw + 42px, 124px);
-    /* The ring's centre sits BELOW the middle of the stage. Centring it would
-       mean either the top of the arc disappearing under the floating nav or a
-       stage tall enough to leave a dead band under the buttons — the arc only
-       covers 240 degrees, so its empty bottom third does not need the room. */
-    --pivot-y: 52%;
+    /* An ELLIPSE, not a circle. A circle wide enough to clear the statement in
+       the middle is also tall enough to make the section a screen and a half of
+       mostly empty paper; the reference ring is markedly wider than it is tall. */
+    --rx: clamp(230px, 36vw, 620px);
+    --ry: clamp(190px, 24vw, 400px);
+    /* 360 / 13. The one number in this file that is not a taste decision. */
+    --step: 27.7deg;
+    --tile: clamp(64px, 3.8vw + 44px, 128px);
+    --pivot-y: 50%;
     transform-origin: 50% 50%;
 }
 .arc-cell {
@@ -245,13 +277,25 @@
 .arc-tile.t-tint   { background: linear-gradient(150deg, #ffffff, var(--blue-tint-2)); color: var(--ink); }
 .arc-tile.t-tint .arc-ico { opacity: .8; }
 
-/* The deal. Time-based rather than scroll-driven because the arc is above the
-   fold on load — scrubbing an entrance against a scroll position the visitor
-   has not moved yet would simply mean it never plays. */
-@media (prefers-reduced-motion: no-preference) {
-    .arc-tile {
-        animation: arc-deal 820ms var(--ease-out) both;
-        animation-delay: calc(var(--i, 0) * 52ms + 120ms);
+/* The deal. It USED to be time-based, because the ring was above the fold and
+   scrubbing an entrance against a scroll position nobody had moved yet would
+   simply mean it never played. Below the fold that inverts, and the scroll
+   timeline is now the right driver.
+
+   Each tile runs on its OWN view(), not on a shared named timeline. That is
+   deliberate twice over: the stagger then comes from the ring's own geometry —
+   the tiles at the top of the circle enter the viewport before the ones at the
+   bottom, so it unrolls without a single delay being written — and, more
+   importantly, an unresolved timeline reference with fill-mode:both pins an
+   element at its FROM state forever. FROM here is scale(.2) at opacity 0. A
+   self-contained view() cannot fail to resolve; a --named one can. */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .arc-tile {
+            animation: arc-deal 1ms linear both;
+            animation-timeline: view();
+            animation-range: entry 0% cover 26%;
+        }
     }
 }
 @keyframes arc-deal {
@@ -277,35 +321,13 @@
         radial-gradient(ellipse 30% 26% at 74% 30%, rgba(255, 107, 53, .10), transparent 70%);
 }
 
-@media (max-width: 900px) {
-    /* Fewer, smaller tiles and a wider step: at this width a thirteen-tile ring
-       is a texture, not a composition. The outermost four hide themselves. */
-    .arc { --step: 27deg; --rx: clamp(168px, 40vw, 320px); --ry: clamp(152px, 30vw, 272px); }
-    .arc-cell.is-wide-only { display: none; }
-}
-
-@media (max-width: 700px) {
-    /* The ring stops surrounding the headline and becomes a crown above it.
-       There is no width at which a 390px screen can hold both a ring wide
-       enough to clear the type and type large enough to be the hero — trying
-       lands the tiles straight through the words. So the stage stops being a
-       stack: the arc takes its own strip of the page and the words follow it. */
-    .hero-stage { display: block; min-height: 0; }
-    .arc {
-        position: relative;
-        inset: auto;
-        height: clamp(150px, 46vw, 200px);
-        --rx: clamp(120px, 34vw, 168px);
-        --ry: clamp(78px, 22vw, 104px);
-        --tile: clamp(54px, 15vw, 68px);
-        --step: 27deg;
-        --pivot-y: 74%;
-    }
-    .arc-cell.is-tablet-up { display: none; }
-    .hero-head { margin-top: var(--sp-5); }
-    /* .hero-cue's phone rule lives in css/pages/home.css beside its base rule —
-       that sheet loads after this one, so an override here would lose. */
-}
+/* The hero once carried three small drawn objects — a wireframe cube, a </>
+   pair and a terminal caret — on the continuous drift. They were there to give
+   a flat point cloud some depth. The cloud is now a lit glass knot orbited by
+   twenty-two real solids, and the drawn ones read as clip art stuck on top of
+   it, so they are gone rather than retuned. Two languages competing in one
+   frame is worse than either alone.
+   -------------------------------------------------------------------------- */
 
 /* ==========================================================================
    2b. App stage — the laptop and the phone arriving from the two sides
@@ -687,28 +709,6 @@
 .gl-host.is-gl-off .gl-still { opacity: 1; }
 
 .gl-host.is-gl-live .gl-still { opacity: 0; }
-.gl-still::before {
-    content: '';
-    width: 58%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background:
-        conic-gradient(from 210deg, var(--blue) 0deg, var(--blue-deep) 120deg,
-                       var(--orange) 220deg, var(--blue) 360deg);
-    filter: blur(2px);
-    opacity: .9;
-    mask: radial-gradient(circle, transparent 52%, #000 54%);
-    -webkit-mask: radial-gradient(circle, transparent 52%, #000 54%);
-}
-.gl-still::after {
-    content: '';
-    position: absolute;
-    width: 30%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--paper);
-    box-shadow: var(--sh-3);
-}
 
 /* ==========================================================================
    7. Three.js stage
@@ -742,6 +742,60 @@
 }
 .three-stage.is-3d-live .three-stage-still { opacity: 0; }
 .three-stage-still img { width: 100%; height: 100%; object-fit: contain; }
+
+/* --------------------------------------------------------------------------
+   7a. THE HERO'S 3-D STAGE — and why it lives after the base rule
+
+   .three-stage is a CARD on the P.E.A.C.E. section: 4:3, rounded, on its own
+   gradient, with a shadow. In the hero it has to be none of those things.
+
+   These are single-class selectors, the same specificity as the rules above,
+   so they only win by coming LATER IN THE FILE. Written up beside the rest of
+   the hero they lose silently, and the failure is not subtle — the base rule
+   sets aspect-ratio, so the stage takes a row of the grid and pushes the
+   headline most of a screen down the page. That exact bug shipped once
+   already this pass. Do not move this block up.
+   -------------------------------------------------------------------------- */
+.hero-3d {
+    /* An overlay again, and this time it needs NO mask and no paper bloom
+       behind the words. That was the flaw in every previous attempt: one object
+       centred behind the type meant each fix for legibility was also a fix
+       against the object. The composition now has an EMPTY MIDDLE by
+       construction — every model is placed outside the headline's rectangle in
+       js/stage3d.js — so the two simply do not overlap. */
+    position: absolute;
+    inset: -10% -6% -6%;
+    z-index: 0;
+    aspect-ratio: auto;
+    width: auto;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+    pointer-events: none;
+}
+.hero-3d .three-stage-still { padding: 10% 22%; opacity: .8; }
+
+@media (max-width: 980px) {
+    .hero-3d { inset: -6% -10% -4%; }
+}
+@media (max-width: 760px) {
+    /* GONE on a phone, and that is the right answer rather than a compromise.
+
+       The camera frames the scene by HEIGHT, so a tall narrow canvas crops the
+       sides away — the scatter is 13.5 units wide and a 390px viewport shows
+       maybe four of them, all clipped. A phone was therefore downloading
+       ~730 KB of three.js to render a few specks in the margins.
+
+       display:none also stops the download rather than merely hiding it: the
+       IntersectionObserver in js/stage3d.js never fires for an element with no
+       layout box, so the dynamic import is never reached. .head-3d has done
+       the same below 560px since it was written.
+
+       What is left is a centred headline on textured paper, which is a good
+       phone hero on its own terms and not a gap where something should be. */
+    .hero-3d { display: none; }
+}
 
 /* ==========================================================================
    8. Media frames
@@ -789,4 +843,50 @@
     border-radius: 50%;
     background: radial-gradient(50% 50% at 50% 50%, rgba(22, 82, 224, .22), rgba(22, 82, 224, 0) 70%);
     filter: blur(30px);
+}
+
+/* ==========================================================================
+   9. The secondary pages' head object
+
+   Same overrides .hero-3d needs, and for the same reason: .three-stage is a
+   card on the P.E.A.C.E. section and these only beat it by sitting later in
+   the file. See the note at section 7a.
+
+   Held to the right and kept off the type entirely rather than faded through
+   it. A page head is two columns of prose with no empty middle to open a hole
+   in, so the object takes the margin instead of the centre.
+   ========================================================================== */
+.head-3d {
+    position: absolute;
+    top: calc(var(--header-h) * -0.35);
+    right: -12%;
+    bottom: -26%;
+    left: auto;
+    z-index: 0;
+    width: min(44%, 560px);
+    aspect-ratio: auto;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+    pointer-events: none;
+    opacity: .62;
+    /* Falls away towards the text side, so the object never reaches the column
+       it sits beside however long that column's lines run. */
+    mask: linear-gradient(to left, #000 46%, transparent 98%);
+}
+.head-3d .three-stage-still { padding: 22%; opacity: .7; }
+
+/* The head's own content has to sit in front of it. .page-head is already
+   position:relative, so this is a stacking order fix and nothing else. */
+.page-head > .container { position: relative; z-index: 1; }
+
+@media (max-width: 900px) {
+    /* At this width the head is one column that uses the full measure, so
+       there is no margin left for the object to occupy. It becomes a presence
+       behind the top of the page rather than a shape beside it. */
+    .head-3d { width: 82%; right: -26%; opacity: .42; }
+}
+@media (max-width: 560px) {
+    .head-3d { display: none; }
 }

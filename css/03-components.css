@@ -205,7 +205,11 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     position: relative;
     display: flex;
     flex-direction: column;
-    background: var(--paper);
+    /* Grain over the fill, in one background shorthand. A ::before overlay
+       would have been the other way, and it would sit above .card-media —
+       putting texture on the photographs, which is the one place on a card
+       that must stay untouched. */
+    background: var(--grain-card) repeat 0 0 / 140px 140px, var(--paper);
     border-radius: var(--r-lg);
     box-shadow: var(--sh-2);
     overflow: hidden;
@@ -253,12 +257,12 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
 
 /* Flat panel — a soft inset region, not an object */
 .panel {
-    background: var(--paper-2);
+    background: var(--grain-card) repeat 0 0 / 140px 140px, var(--paper-2);
     border-radius: var(--r-lg);
     padding: var(--sp-6);
 }
-.panel-line { background: var(--paper); border: 1px solid var(--line); }
-.panel-blue { background: var(--blue-tint); }
+.panel-line { background: var(--grain-card) repeat 0 0 / 140px 140px, var(--paper); border: 1px solid var(--line); }
+.panel-blue { background: var(--grain-card) repeat 0 0 / 140px 140px, var(--blue-tint); }
 
 /* ==========================================================================
    Stats / counters
@@ -987,3 +991,182 @@ body.modal-open { overflow: hidden; }
 /* --- Orange as actual text: the only token that may, at 4.93:1 ---------- */
 .ul-ink { color: var(--orange-ink); }
 .band-ink .ul-ink, .band-blue .ul-ink { color: var(--orange); }
+
+
+/* .ul-ink recolours the TEXT, where .ul-draw and .ul-mark paint behind it. A
+   heading with background-clip:text has -webkit-text-fill-color: transparent,
+   which is inherited and beats `color` on every descendant — so inside a
+   grained heading this word would come out in the heading's ink instead of in
+   orange, losing the highlight without any warning. It opts back out. */
+.display .ul-ink,
+.sec-head h2 .ul-ink,
+.sec-head-split h2 .ul-ink,
+.sec-head-center h2 .ul-ink,
+.cap-head h2 .ul-ink {
+    -webkit-text-fill-color: var(--orange-ink);
+    color: var(--orange-ink);
+}
+
+/* ==========================================================================
+   SURFACE — light and texture inside the components
+
+   Naveen: "diagine models effect textures bahut kuch chahiya, UI ka ander."
+
+   The grain added earlier is on the page ground, the bands and the display
+   letterforms. This is the same idea one level in: the cards, panels, buttons
+   and frames themselves.
+
+   Everything here is a BACKGROUND LAYER or a box-shadow — never a text colour,
+   never a filter on a container. That is deliberate and it is what makes it
+   safe to add this much at once: not one rule below can move a contrast ratio,
+   because not one of them touches type.
+
+   Layer order in the shorthands is: sheen, grain, fill. Grain under the sheen
+   so the highlight reads as light ON the paper rather than as another texture
+   beside it; both above the fill, which never moves.
+   ========================================================================== */
+
+/* --- The specular sweep ---------------------------------------------------
+   A flat fill has no direction. One soft diagonal band of lighter paper gives
+   the surface an angle to face, which is the whole difference between "a grey
+   rectangle" and "a card catching the light". Kept under 5% so it reads as a
+   sheen and not as a stripe. */
+.card,
+.panel {
+    background:
+        linear-gradient(118deg,
+            rgba(255, 255, 255, 0) 18%,
+            rgba(255, 255, 255, .55) 42%,
+            rgba(255, 255, 255, 0) 62%) no-repeat,
+        var(--grain-card) repeat 0 0 / 140px 140px,
+        var(--paper);
+    background-size: 240% 100%, 140px 140px, auto;
+    background-position: 120% 0, 0 0, 0 0;
+    /* Only the sweep moves on hover. Transitioning `background` wholesale
+       would re-rasterise the grain tile every frame for no visible gain. */
+    transition: background-position var(--dur-4) var(--ease-out),
+                transform var(--dur-3) var(--ease-out),
+                box-shadow var(--dur-3) var(--ease-out);
+}
+.panel { background-color: var(--paper-2); }
+.panel-line { background-color: var(--paper); }
+.panel-blue { background-color: var(--blue-tint); }
+
+.card-hover:hover,
+.panel:hover { background-position: -20% 0, 0 0, 0 0; }
+
+@media (prefers-reduced-motion: reduce) {
+    /* A highlight that travels on hover is motion. The surface keeps its
+       angle; it just stops sliding. */
+    .card, .panel { transition: none; }
+    .card-hover:hover, .panel:hover { background-position: 120% 0, 0 0, 0 0; }
+}
+
+/* --- Lit edges ------------------------------------------------------------
+   A one-pixel highlight along the top and a soft dark line under the base.
+   The cheapest trick there is for making a surface look lit rather than drawn:
+   it is what a real edge does under a light that is above it. Inset shadows,
+   so it costs no pseudo-element and cannot cover content. */
+.card,
+.panel,
+.faq-card {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .9),
+        inset 0 -1px 0 rgba(10, 14, 26, .05),
+        var(--sh-2);
+}
+.card-hover:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .95),
+        inset 0 -1px 0 rgba(10, 14, 26, .06),
+        var(--sh-4);
+}
+
+/* --- Buttons --------------------------------------------------------------
+   The primary pill is the darkest object on a light page, so it is the one
+   that most obviously wants a top light. */
+.btn-pill {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 58%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        0 10px 24px -12px rgba(10, 14, 26, .55);
+}
+.btn-pill:hover {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, 0) 62%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .3),
+        0 14px 30px -12px rgba(10, 14, 26, .6);
+}
+.btn-line {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 2px 8px -4px rgba(10, 14, 26, .18);
+}
+
+/* --- Media frames ---------------------------------------------------------
+   An inner vignette and a glass edge, so a photograph sits IN its frame rather
+   than being pasted on top of one. ::after and not a background, because the
+   frame's background is the image. pointer-events:none so it cannot eat a
+   click on a card that is a link. */
+.card-media,
+.cs-cover,
+.blog-card-media,
+.blog-featured-visual {
+    position: relative;
+}
+.card-media::after,
+.cs-cover::after,
+.blog-card-media::after,
+.blog-featured-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 100% at 50% 0%,
+                rgba(10, 14, 26, 0) 55%, rgba(10, 14, 26, .16) 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .34);
+}
+
+/* --- Small surfaces -------------------------------------------------------
+   Badges and chips are 24px tall, so they get the same edge at their own
+   scale — a full sweep inside one would land entirely on one letter. */
+.badge,
+.chip {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75),
+                inset 0 -1px 0 rgba(10, 14, 26, .05);
+}
+
+/* --- The ink bands --------------------------------------------------------
+   A very slow, very low-contrast light drift across the dark sections. Bound
+   to `view()` rather than an infinite loop on purpose: a forever-animating
+   gradient on a full-width band is a permanent compositor job on every page
+   that has one, and it moves when the reader is not even looking at it. */
+.band-ink { position: relative; }
+.band-ink::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(104deg,
+                rgba(255, 255, 255, 0) 30%,
+                rgba(255, 255, 255, .05) 50%,
+                rgba(255, 255, 255, 0) 70%);
+    background-size: 260% 100%;
+    background-position: 130% 0;
+    background-repeat: no-repeat;
+}
+.band-ink > * { position: relative; z-index: 1; }
+
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .band-ink::before {
+            animation: band-sheen 1ms linear both;
+            animation-timeline: view();
+            animation-range: cover 0% cover 100%;
+        }
+    }
+}
+@keyframes band-sheen {
+    from { background-position: 130% 0; }
+    to   { background-position: -30% 0; }
+}

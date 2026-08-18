@@ -10,28 +10,38 @@
    Hero
    ========================================================================== */
 .hero {
-    /* The arc extends past the container on both sides by design; clipping is
-       what keeps it from widening the document. */
+    /* The 3-D object is inset NEGATIVELY past the right edge of its column so
+       the panels reach beyond the stage rather than stopping at a visible
+       border; clipping here keeps that overhang from widening the document. */
     padding-top: calc(var(--header-h) + clamp(1.5rem, .5rem + 3vw, 3.25rem));
-    padding-bottom: 0;
+    padding-bottom: clamp(2rem, 1rem + 3vw, 4rem);
     overflow: clip;
 }
+
+/* The ring overhangs its container on both sides in exactly the same way, and
+   for exactly the same reason. */
+.cap-sec { overflow: clip; }
+/* CENTRED, with the models around it.
+
+   This was briefly a two-column split — words left, object right — and it was
+   rejected: "text center me chahiya". Centred is also the composition of the
+   reference Naveen sent in the first place, a block of type with objects
+   arranged around it.
+
+   What makes it work this time is that the object leaves the middle empty, so
+   the words need no mask, no bloom and no scrim to stay readable. */
 .hero-head {
     position: relative;
     z-index: 1;
     text-align: center;
-    max-width: 52rem;
+    max-width: 48rem;
     margin-inline: auto;
-    /* Pushed below the ring's upper shoulder. The tiles two steps out from the
-       top sit at roughly a third of the arc's height, which is exactly where a
-       vertically centred text block puts its eyebrow. */
-    margin-top: clamp(0rem, 6vw, 5rem);
 }
 .hero-head .eyebrow { justify-content: center; }
 .hero .display > span { display: block; }
 .hero-lead {
     margin: var(--sp-5) auto 0;
-    max-width: 54ch;
+    max-width: 52ch;
     color: var(--ink-3);
 }
 .hero-actions { justify-content: center; margin-top: var(--sp-7); }
@@ -306,8 +316,8 @@
 .band-blue .contact-card :focus-visible, .band-ink .contact-card :focus-visible { outline-color: var(--blue); }
 
 /* --- The scroll cue ------------------------------------------------------ */
-/* Sits in the empty bottom of the arc. A link, not a decoration: it goes to the
-   first section, so a keyboard user gets the same shortcut the scroll gives. */
+/* A link, not a decoration: it goes to the first section, so a keyboard user
+   gets the same shortcut the scroll gives. */
 .hero-cue {
     position: absolute;
     left: 50%;
@@ -347,14 +357,15 @@
     60%, 100% { transform: translateY(250%); }
 }
 
-@media (max-width: 700px) {
-    /* The stage is a block at this width (css/07-fx.css section 2), so the cue
-       flows after the buttons instead of being pinned into them. */
-    .hero-cue {
-        position: static;
-        transform: none;
-        margin: var(--sp-7) auto 0;
-    }
+/* The cue belongs under the words, not centred under a two-column stage —
+   centred, it lands between the two columns and points at nothing. */
+/* Centred under the words. */
+.hero-cue {
+    position: static;
+    transform: none;
+    justify-items: center;
+    margin: clamp(1.5rem, 3vw, 2.75rem) auto 0;
+    padding-inline: 0;
 }
 
 /* ==========================================================================
@@ -362,7 +373,7 @@
    ========================================================================== */
 /* The stage deliberately overhangs its container — that is the composition,
    not a bug. Clipping here is what stops the overhang widening the document,
-   the same bargain .hero makes with the arc. */
+   the same bargain .hero and .cap-sec make. */
 .app-show { overflow: clip; }
 .app-show .sec-head { margin-bottom: clamp(1.5rem, 1rem + 2vw, 3rem); }
 .app-points { margin-top: clamp(2rem, 1rem + 3vw, 3.5rem); }

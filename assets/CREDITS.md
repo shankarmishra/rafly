@@ -43,9 +43,47 @@ written and dependency-free:
 | `vendor/three/RoomEnvironment.js` | three.js addon | MIT | 5 KB |
 
 `js/stage3d.js` is the only file that touches it, and it dynamic-imports only
-when the P.E.A.C.E. section comes within 300px of the viewport, WebGL2 exists
-and motion is not reduced. Any failure falls back silently to the designed SVG
-still, so a visitor who never scrolls that far downloads none of it.
+when a `[data-stage3d]` host comes within 300px of the viewport, WebGL2 exists,
+motion is not reduced, and the connection is neither Save-Data nor 2G. Any
+failure at all falls back silently to the designed still.
+
+**Where it loads, and what that costs.** There are three hosts:
+
+| Host | Where | Object |
+|---|---|---|
+| `data-stage3d="hero"` | the homepage hero | browser window, phone, analytics card, shield, parcel, `< />`, chat bubble, database stack, plus connecting nodes — scattered around the centred headline |
+| `data-stage3d="head"` | seven secondary page heads | the same object, fewer parts, framed tighter |
+| `data-stage3d="peace"` | the P.E.A.C.E. section | five stacked rings and a glass core |
+
+The hero object took four attempts. A ring of flat tiles was right but belonged
+elsewhere, and moved to `#capabilities`. A `js/gl.js` point cloud was rejected —
+dots have no surface, so nothing reflects, so it cannot look manufactured. A
+glass torus knot was rejected as generic, correctly: a knot is the default
+object of every 3-D demo and said nothing about this company. What is there now
+is built from the subject instead of from a geometry library — the things Rafly
+actually sells, arranged around the words rather than behind them, so the
+composition has an empty middle and the type needs no mask to stay readable.
+
+Three gates decide whether any of it is fetched:
+
+- **WebGL2 or nothing**, never under `prefers-reduced-motion`, never on
+  Save-Data or an effectiveType at or below 2G.
+- **Never on a phone.** `.hero-3d` is `display: none` below 760px and
+  `.head-3d` below 560px. That is not merely hidden — an element with no layout
+  box never intersects, so the IntersectionObserver never fires and the dynamic
+  import is never reached. Measured: a 390px viewport requests **0** files from
+  `vendor/three/`; a 1440px one requests 3.
+- **Never during first paint.** The P.E.A.C.E. object is below the fold, so its
+  observer is the whole gate. The hero and the page heads are above it, so they
+  would otherwise land in the middle of the initial render; they wait for
+  `load` and then an idle callback (1200ms backstop). Both cross-fade in over a
+  designed still that is already on screen, so arriving a beat later costs
+  nothing visible.
+
+On a desktop that passes all three, the homepage is about **1.5 MB
+uncompressed**, of which roughly 1 MB is JavaScript and most of that is
+three.js. That is a real price and it is paid deliberately, for the first
+impression, on the devices that can afford it.
 
 **No HDRI was downloaded, deliberately.** A physical material is mostly a mirror,
 and a mirror with nothing to reflect is flat grey however many lamps you add — so
@@ -81,8 +119,8 @@ There are now twelve third-party photographs, all CC0, each listed below with
 its photographer and source. Everything else visual is drawn in CSS, generated
 by a tool in `inc/tools/`, or a screenshot of this site taken from this site.
 
-**The hero ring is drawn, not photographed, and that took two attempts to
-settle.** A CC0 search for digital-agency subjects returns a gas mask, a Twitch
+**The capabilities ring is drawn, not photographed, and that took two attempts
+to settle.** (It spent one pass in the hero before moving to its own section.) A CC0 search for digital-agency subjects returns a gas mask, a Twitch
 logo and a Burger King sign — the free-licence pools are not deep enough to
 curate thirteen coherent tiles from, and every near miss puts somebody else's
 trademark in the first thing a visitor sees. Screenshots of our own pages failed

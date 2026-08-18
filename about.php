@@ -12,6 +12,7 @@ $page = [
     'desc'      => 'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
     'bodyClass' => 'page-about',
     'styles'    => ['home', 'about'],
+    'module'    => 'stage3d',
     'schema'    => [
         [
             '@type'       => 'AboutPage',
@@ -34,6 +35,7 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
     <section class="section page-head">
+        <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split">
@@ -66,7 +68,7 @@ require __DIR__ . '/partials/social-rail.php';
     <section class="section-bot">
         <div class="container">
             <div class="split split-wide-r">
-                <div class="branch-figure" aria-hidden="true" data-r="scale">
+                <div class="branch-figure" aria-hidden="true" data-fx="drift" style="--depth: 30px;">
                     <span class="branch-core"><?= icon('layers') ?></span>
                     <ol class="branch-list">
                         <?php foreach ($services as $n => $svc): ?>
@@ -78,7 +80,7 @@ require __DIR__ . '/partials/social-rail.php';
                     </ol>
                 </div>
 
-                <div data-r="right">
+                <div data-fx="in-right" style="--travel: 12%;">
                     <p class="eyebrow">Who we are</p>
                     <h2>One core. <span class="soft">Five branches.</span></h2>
                     <p class="lead">
@@ -158,7 +160,7 @@ require __DIR__ . '/partials/social-rail.php';
     <section class="section band-soft">
         <div class="container">
             <div class="split split-wide-l">
-                <div data-r="left">
+                <div data-fx="in-left" style="--travel: 12%;">
                     <p class="eyebrow">Our approach</p>
                     <h2>Structured, <span class="soft">and boring on purpose</span></h2>
                     <p class="lead">
@@ -174,7 +176,7 @@ require __DIR__ . '/partials/social-rail.php';
                     <p style="margin-top:2rem"><a class="link-arrow" href="/#method">See the P.E.A.C.E. framework <?= icon('arrow-right') ?></a></p>
                 </div>
 
-                <div class="peace-orbit" aria-hidden="true" data-r="scale">
+                <div class="peace-orbit" aria-hidden="true" data-fx="drift" style="--depth: 26px;">
                     <span class="peace-orbit-core">P.E.A.C.E.</span>
                     <ol class="peace-orbit-ring">
                         <li style="--a:-90deg"><span>P</span></li>

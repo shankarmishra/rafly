@@ -230,12 +230,16 @@ blockquote { margin: 0; }
     z-index: -1;
     pointer-events: none;
     background-color: var(--paper);
+    /* Grain FIRST, so it sits over the blooms and the lattice rather than under
+       them — noise beneath a colour wash is invisible, which is how it ends up
+       being described as added and not seen. */
     background-image:
+        var(--grain-fine),
         radial-gradient(circle at 18% 12%, rgba(22, 82, 224, .09), transparent 42%),
         radial-gradient(circle at 84% 8%,  rgba(255, 107, 53, .07), transparent 40%),
         radial-gradient(circle at 62% 88%, rgba(13, 71, 161, .07), transparent 46%),
         radial-gradient(circle, rgba(10, 14, 26, .055) 1px, transparent 1.4px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 26px 26px;
+    background-size: 140px 140px, 100% 100%, 100% 100%, 100% 100%, 26px 26px;
 }
 
 /* Sections that paint their own ground sit on top of the field; the ones that
@@ -262,3 +266,59 @@ blockquote { margin: 0; }
    assumed. Done here rather than per component so the next frame that holds a
    photo() cannot inherit the same bug. */
 picture { display: contents; }
+
+
+/* ==========================================================================
+   Letterpress grain on the display type
+
+   Naveen: "text ka ander bhi paper type textures add kar."
+
+   LARGE HEADINGS ONLY, and that restriction is the whole reason this is safe.
+   The grain tile is 140px; inside a 60px letterform its variation lands in the
+   middle of a stroke and reads as paper. Inside a 15px letterform the same
+   tile lands ON the stroke edge and reads as a rendering fault — which is what
+   makes a site look cheap rather than expensive. So: .display and section
+   headings, nothing else. Not leads, not h3, not buttons, not labels, not body.
+
+   HOW IT IS BUILT
+   Two layers, and the order matters. The ink is a gradient rather than the
+   `color` property because `color` is what background-clip:text throws away;
+   painting the ink AS a background layer is the only way to keep the grain on
+   top of a solid, full-strength letter instead of on top of nothing.
+
+   THE FALLBACK IS DECLARED FIRST, OUTSIDE THE @supports
+   `color` is set to ink normally. An engine that does not take
+   background-clip:text ignores the whole block and keeps that colour. If the
+   transparent colour were declared unconditionally, the same engine would
+   paint invisible headings — a total content loss from a decorative effect.
+   ========================================================================== */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .display,
+    .sec-head h2,
+    .sec-head-split h2,
+    .sec-head-center h2,
+    .cap-head h2 {
+        background-image: var(--grain-text), linear-gradient(var(--ink), var(--ink));
+        background-size: 140px 140px, 100% 100%;
+        background-repeat: repeat, no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        /* Chrome paints the text-clipped background with its own antialiasing;
+           without this the strokes thin out and the heading looks lighter than
+           the same size elsewhere on the page. */
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* On the dark bands the heading is PAPER on ink, so a grain built to
+       lighten ink would erase it. Those keep their solid colour — the ground
+       under them already carries the texture. */
+    .band-ink .display,
+    .band-ink h2,
+    .band-blue .display,
+    .band-blue h2 {
+        background-image: none;
+        color: var(--paper);
+        -webkit-text-fill-color: currentColor;
+    }
+}
