@@ -371,9 +371,22 @@
    should have to scroll three screens to watch five cards move apart.
    ========================================================================== */
 
+/* OVERFLOW: CLIP, NOT HIDDEN, AND IT IS THE WHOLE SECTION.
+
+   `overflow: hidden` makes the box a SCROLL CONTAINER, and a sticky child
+   sticks to its nearest scrolling ancestor. This section does not scroll, so
+   the child had nothing to stick to and never pinned — the deck simply drifted
+   past with the page while decks.js scrubbed the fan against a viewport it was
+   no longer holding still in. It looked almost right, which is why it survived
+   a byte-budget pass and a contrast pass: nothing measures whether a thing
+   that should be still is moving.
+
+   `overflow: clip` clips identically and creates NO scroll container, so the
+   pin works. Where it is unsupported the orbs bleed past the section edge and
+   nothing else changes. */
 .platform {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     isolation: isolate;
     background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 42%, var(--paper) 100%);
 }
@@ -494,6 +507,13 @@
         0 2px 8px color-mix(in srgb, var(--ink) 6%, transparent);
     will-change: transform;
 
+    /* THE COVERFLOW DIM. js/decks.js writes --slot-dim as the fan collapses;
+       the side cards fall to 0.60 so the centre one has somewhere to be read.
+       It is a custom property rather than an inline opacity precisely so the
+       reduced-motion rule at the foot of this file can pin it back to 1 — an
+       inline style.opacity would beat any stylesheet trying to undo it. */
+    opacity: var(--slot-dim, 1);
+
     /* THE STILL FORM, and it is a design rather than a fallback shrug. With
        no JS all five cards would sit exactly on top of each other and read as
        one card. This fans them at a third of their full spread, so the deck
@@ -599,9 +619,10 @@
    objects sitting on the page rather than as drawings of phones.
    ========================================================================== */
 
+/* clip, not hidden — see the note on .platform. The same bug was here. */
 .apps {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     isolation: isolate;
     background: var(--paper);
 }
@@ -641,6 +662,10 @@
     transform-style: preserve-3d;
 }
 
+/* THE SHELL. overflow:hidden lives on .phone-screen, NOT here — a phone with
+   its buttons clipped off at the bezel is a drawing of a phone. The screen
+   carries the clip and its own inner radius; the frame is free to have
+   something on its edge. */
 .phone {
     position: absolute;
     left: 50%; top: 50%;
@@ -648,21 +673,39 @@
     margin: -241px 0 0 -118px;
     border-radius: 34px;
     background: var(--ink-chapter-2);
-    border: 8px solid var(--ink-chapter-3);
-    overflow: hidden;
+    border: 6px solid var(--ink-chapter-3);
     will-change: transform;
     box-shadow:
         0 40px 90px -30px color-mix(in srgb, var(--ink) 55%, transparent),
         0 0 0 1px color-mix(in srgb, var(--blue) 18%, transparent),
         inset 0 1px 0 color-mix(in srgb, #fff 22%, transparent);
+
+    /* The still form, at a third of the full spread, including the height
+       stagger and the tilt — the no-JS arrangement is the same composition
+       held closer, not a different one. */
     transform:
-        translate3d(calc(var(--slot-x, 0) * 0.34px), 0, 0)
+        translate3d(calc(var(--slot-x, 0) * 0.34px), calc(var(--slot-y, 0) * 0.34px), 0)
         rotateY(calc(var(--slot-r, 0) * 0.34deg))
+        rotateZ(calc(var(--slot-rz, 0) * 0.34deg))
         scale(.9);
 }
-.phone[data-slot="0"] { --slot-x: 0;    --slot-r: 0;   z-index: 6; }
-.phone[data-slot="1"] { --slot-x: -206; --slot-r: 19;  z-index: 5; }
-.phone[data-slot="2"] { --slot-x: 206;  --slot-r: -19; z-index: 5; }
+.phone[data-slot="0"] { --slot-x: 0;    --slot-y: 30;  --slot-r: 0;   --slot-rz: 0;  z-index: 6; }
+.phone[data-slot="1"] { --slot-x: -248; --slot-y: -44; --slot-r: 20;  --slot-rz: 5;  z-index: 5; }
+.phone[data-slot="2"] { --slot-x: 248;  --slot-y: -44; --slot-r: -20; --slot-rz: -5; z-index: 5; }
+
+/* The side buttons. Two pseudo-elements rather than two more spans in twelve
+   lines of PHP — nothing here is content, and the shells are aria-hidden. */
+.phone::after,
+.phone::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--ink-chapter-3);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 16%, transparent);
+}
+.phone::after  { right: -3px; top: 22%; height: 56px; }   /* power  */
+.phone::before { left:  -3px; top: 17%; height: 34px; }   /* volume */
 
 .phone-notch {
     position: absolute; left: 50%; top: 0;
@@ -674,6 +717,8 @@
 }
 .phone-screen {
     height: 100%;
+    border-radius: 28px;
+    overflow: hidden;
     background: linear-gradient(180deg, var(--ink-chapter-2), var(--ink-chapter));
     padding: 32px 14px 14px;
     display: flex; flex-direction: column; gap: 11px;
@@ -744,9 +789,15 @@
 
 @media (prefers-reduced-motion: reduce) {
     /* The still fan IS the design at rest. Nothing has to move for either
-       section to say what it says. */
+       section to say what it says.
+
+       AND IT RESOLVES TO THE FAN, NOT THE COVERFLOW. Five separated cards are
+       legible standing still; five overlapping ones with three of them at 60%
+       are a pile. The coverflow is the reward for scrolling, so when there is
+       no scrolling there is no coverflow. */
     .platform, .apps { height: auto; padding-block: var(--section-y); }
     .platform-sticky, .apps-sticky { position: static; height: auto; }
+    .mock { --slot-dim: 1; }
 }
 
 /* ==========================================================================
