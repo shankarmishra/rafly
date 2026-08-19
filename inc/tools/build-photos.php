@@ -1,6 +1,7 @@
 <?php
 /**
- * build-photos.php — writes a WebP twin beside every photograph.
+ * build-photos.php — writes a WebP twin beside every photograph, plus a small
+ * set of narrower WebP variants for photo()'s srcset.
  *
  *     php inc/tools/build-photos.php [dir]         # default: assets/photos
  *     php inc/tools/build-photos.php --quality 78
@@ -15,9 +16,18 @@
  * WebP typically lands around 40% of an equivalent-quality JPEG, and .htaccess
  * has carried the image/webp MIME type since it was written.
  *
+ * WIDTH VARIANTS. "<name>.webp" alone means a card showing a photo at 320px
+ * wide still downloads the same file as the full 1300px hero use of the same
+ * master — srcset needs more than one width to choose from. WIDTHS below are
+ * written as "<name>-640.webp" etc. beside the full-size twin; a variant
+ * wider than the source is simply skipped rather than upscaled.
+ *
  * The masters are never modified and never deleted. Re-running is safe: a twin
  * newer than its master is left alone unless --force is passed.
  */
+
+/** Narrower widths generated alongside the full-size twin, for srcset. */
+const PHOTO_WIDTHS = [480, 800, 1280];
 
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
@@ -94,6 +104,37 @@ foreach ($files as $file) {
         fwrite(STDERR, "  ! could not write " . basename($twin) . "\n");
         continue;
     }
+
+    // Width variants, narrowest first, each resampled from the ORIGINAL
+    // (never from a smaller variant — re-encoding a re-encode compounds
+    // quality loss for no size benefit worth the code). Only widths strictly
+    // narrower than the source: a "variant" the same size as the full twin
+    // is a duplicate, and upscaling makes a file both bigger and softer.
+    $srcW = imagesx($im);
+    $srcH = imagesy($im);
+
+    foreach (PHOTO_WIDTHS as $w) {
+        if ($w >= $srcW) {
+            continue;
+        }
+        $variant = preg_replace('/\.(jpe?g|png)$/i', '-' . $w . '.webp', $src);
+        if (!$force && is_file($variant) && filemtime($variant) >= filemtime($src)) {
+            continue;
+        }
+
+        $h = (int)round($srcH * ($w / $srcW));
+        $resized = imagecreatetruecolor($w, $h);
+        if ($ext === 'png') {
+            imagealphablending($resized, false);
+            imagesavealpha($resized, true);
+        }
+        imagecopyresampled($resized, $im, 0, 0, 0, 0, $w, $h, $srcW, $srcH);
+        if (!imagewebp($resized, $variant, $quality)) {
+            fwrite(STDERR, "  ! could not write " . basename($variant) . "\n");
+        }
+        imagedestroy($resized);
+    }
+
     imagedestroy($im);
 
     $srcSize  = filesize($src);

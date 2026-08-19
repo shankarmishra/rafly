@@ -13,6 +13,17 @@ require __DIR__ . '/inc/bootstrap.php';
 
 $caseStudies = case_studies_all();
 
+// lowercase title => slug, so a tag chip that names a real service ("Web
+// Development", or an admin's "web development") can link to it. tags is
+// admin-typed free text — "SEO", "Content" and plenty of others will never
+// match, and stay a plain chip. Same case-insensitive-exact rule
+// related_case_studies_for_service() uses, so a service page's "Case study"
+// cards and this page's chip links agree on what counts as a match.
+$serviceSlugByTitle = [];
+foreach (services_all() as $svc) {
+    $serviceSlugByTitle[mb_strtolower((string)$svc['title'], 'UTF-8')] = $svc['slug'];
+}
+
 $crumbs = [
     ['name' => 'Home',         'url' => '/'],
     ['name' => 'Case Studies', 'url' => '/case-studies'],
@@ -127,15 +138,12 @@ if (!$caseStudies): ?>
                          data-fx="<?= $i % 2 ? 'in-right' : 'in-left' ?>"
                          style="--travel: 9%; --turn: 2deg;">
                     <div class="cs-item-head">
-                        <?php /* Cycled by position, not stored per case study. These are
-                           illustrative covers FOR THE SECTOR — an office, a shop, a cafe —
-                           and nothing on the card claims they are the client's premises,
-                           because they are not and we have no photographs that are.
-                           photo() returns '' for a missing file, so the card degrades to
-                           the text form it had before rather than breaking. */ ?>
-                        <div class="cs-cover" data-fx="zoom" style="--grow: .04;">
-                            <?= photo('assets/photos/work-' . (($i % 3) + 1) . '.jpg', '') ?>
-                        </div>
+                        <?php /* No cover image. The illustrative sector photographs that used
+                           to sit here were stock — an office, a shop, a cafe — beside a real
+                           client's name, which reads as "this is their premises" whatever the
+                           alt text says. They are gone, and the whole photo set with them.
+                           The replacement is a generated sector plate, not another photograph;
+                           until it lands the card is text, which is the honest form. */ ?>
                         <span class="badge badge-soft"><?= e((string)$w['sector']) ?></span>
                         <h2><?= e((string)$w['client_name']) ?></h2>
 <?php if ($hasMetric): ?>
@@ -144,7 +152,14 @@ if (!$caseStudies): ?>
 <?php endif; ?>
 <?php if ($tags): ?>
                         <div class="cluster cs-tags">
-                            <?php foreach ($tags as $t): ?><span class="chip"><?= e($t) ?></span><?php endforeach; ?>
+                            <?php foreach ($tags as $t): ?>
+                                <?php $tSlug = $serviceSlugByTitle[mb_strtolower($t, 'UTF-8')] ?? null; ?>
+                                <?php if ($tSlug !== null): ?>
+                                    <a class="chip" href="/<?= e($tSlug) ?>"><?= e($t) ?></a>
+                                <?php else: ?>
+                                    <span class="chip"><?= e($t) ?></span>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </div>
 <?php endif; ?>
                     </div>

@@ -89,18 +89,29 @@ function site_path(string $path): string
 }
 
 /**
- * A photograph, served as WebP where the browser can take it.
+ * Narrower WebP widths inc/tools/build-photos.php generates alongside the
+ * full-size twin — kept in sync with that file's own PHOTO_WIDTHS by hand,
+ * the same way router.php and .htaccess are: two files, one contract, no
+ * shared runtime to enforce it from.
+ */
+const PHOTO_SRCSET_WIDTHS = [480, 800, 1280];
+
+/**
+ * A photograph, served as WebP where the browser can take it, at a width the
+ * browser actually needs rather than always the full master.
  *
  * The photographs are the heaviest thing this site ships — around 1.2 MB of
  * JPEG against 173 KB of CSS and 52 KB of JS — and .htaccess has carried a
  * MIME type for .webp since it was written without anything ever producing
- * one. inc/tools/build-photos.php generates a twin beside each master; this
- * emits the <picture> that lets a browser choose.
+ * one. inc/tools/build-photos.php generates a full-size twin AND a small set
+ * of narrower ones beside each master; this emits the <picture> that lets a
+ * browser choose both format and size.
  *
  * The JPEG remains the <img> src, so a client that cannot read WebP is served
- * exactly what it was served before. The <source> is only emitted when the
- * twin actually exists on disk, so a photograph added without re-running the
- * build tool degrades to a plain JPEG rather than to a broken image.
+ * exactly what it was served before — one file, no srcset, same as before
+ * this function grew one. The <source> and each srcset candidate are only
+ * emitted when that exact file exists on disk, so a photograph added without
+ * re-running the build tool degrades gracefully rather than 404ing a variant.
  *
  * width/height are MEASURED, never passed in. They are the hint the browser
  * uses to reserve space before the image arrives, and service.php already
@@ -112,7 +123,11 @@ function site_path(string $path): string
  * @param string $alt   Alternative text. Pass '' only for decorative images.
  * @param array<string,string|bool> $attrs Extra <img> attributes. loading and
  *                      decoding default to lazy/async; pass loading => 'eager'
- *                      for anything above the fold.
+ *                      for anything above the fold. Pass 'sizes' to override
+ *                      the default, which assumes this photo sits in a
+ *                      one/two/three-column grid at this site's own
+ *                      breakpoints (css/02-layout.css) — correct for most
+ *                      call sites, wrong for e.g. a full-bleed hero image.
  */
 function photo(string $path, string $alt, array $attrs = []): string
 {
@@ -126,6 +141,10 @@ function photo(string $path, string $alt, array $attrs = []): string
     $dims = @getimagesize($full);
     $w    = $dims ? (int)$dims[0] : null;
     $h    = $dims ? (int)$dims[1] : null;
+
+    $defaultSizes = '(max-width: 620px) 100vw, (max-width: 960px) 50vw, 33vw';
+    $sizes        = (string)($attrs['sizes'] ?? $defaultSizes);
+    unset($attrs['sizes']);
 
     $attrs = $attrs + ['loading' => 'lazy', 'decoding' => 'async'];
 
@@ -148,7 +167,32 @@ function photo(string $path, string $alt, array $attrs = []): string
         return $out;
     }
 
-    return '<picture><source srcset="' . e(asset($webp)) . '" type="image/webp">' . $out . '</picture>';
+    // Every narrower variant that actually exists AND is genuinely narrower
+    // than the master — build-photos.php never writes one wider than its
+    // source, but a photo swapped for a smaller replacement without
+    // re-running --force could otherwise leave a stale, now-upscaled variant
+    // on disk that this would happily reference.
+    $candidates = [];
+    foreach (PHOTO_SRCSET_WIDTHS as $vw) {
+        if ($w !== null && $vw >= $w) {
+            continue;
+        }
+        $variant = preg_replace('/\.webp$/i', '-' . $vw . '.webp', $webp);
+        if (is_file(dirname(__DIR__) . '/' . $variant)) {
+            $candidates[] = asset($variant) . ' ' . $vw . 'w';
+        }
+    }
+    // The full-size twin is always the widest candidate — it is what the
+    // plain <source srcset="…webp"> below used to be on its own.
+    if ($w !== null) {
+        $candidates[] = asset($webp) . ' ' . $w . 'w';
+    }
+
+    $srcsetAttr = $candidates
+        ? ' srcset="' . e(implode(', ', $candidates)) . '" sizes="' . e($sizes) . '"'
+        : ' srcset="' . e(asset($webp)) . '"';
+
+    return '<picture><source' . $srcsetAttr . ' type="image/webp">' . $out . '</picture>';
 }
 
 /**
