@@ -50,7 +50,7 @@
 }
 .post-body ul, .post-body ol { padding-left: 1.3em; }
 .post-body li { margin-bottom: var(--sp-3); }
-.post-body li::marker { color: var(--blue); }
+.post-body li::marker { color: var(--accent-fg); }
 .post-body a { text-decoration: underline; }
 
 .post-body blockquote {

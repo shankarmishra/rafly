@@ -181,7 +181,7 @@ body.nav-open { overflow: hidden; }
     letter-spacing: var(--tr-heading);
 }
 .drawer-link .icon { color: var(--ink-3); transition: transform var(--dur-2) var(--ease); }
-.drawer-link[aria-expanded="true"] .icon { transform: rotate(180deg); color: var(--blue); }
+.drawer-link[aria-expanded="true"] .icon { transform: rotate(180deg); color: var(--accent-fg); }
 
 /* Collapsed sub-panels: `hidden` (not just height 0) so the links inside are
    genuinely out of the tab order. The old build animated height only, which

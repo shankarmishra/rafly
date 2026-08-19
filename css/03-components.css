@@ -32,7 +32,7 @@
     height: 46px;
     border-radius: var(--r);
     background: var(--blue-tint);
-    color: var(--blue);
+    color: var(--accent-fg);
     flex: none;
 }
 .icon-box-note { background: var(--paper-3); color: var(--ink-2); }
@@ -142,7 +142,7 @@
     gap: var(--sp-2);
     font-weight: var(--fw-semi);
     font-size: var(--fs-sm);
-    color: var(--blue);
+    color: var(--accent-fg);
 }
 .link-arrow .icon { transition: transform var(--dur-2) var(--ease); }
 .link-arrow:hover .icon { transform: translateX(4px); }
@@ -181,12 +181,12 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     padding: 0.3125rem 0.6875rem;
     border-radius: var(--r-pill);
     background: var(--blue-tint);
-    color: var(--blue);
+    color: var(--accent-fg);
     font-size: var(--fs-2xs);
     font-weight: var(--fw-semi);
     letter-spacing: 0.02em;
 }
-.badge-accent { background: var(--blue-tint); color: var(--blue); }
+.badge-accent { background: var(--blue-tint); color: var(--accent-fg); }
 .badge-ink    { background: var(--ink); color: #fff; }
 .badge-soft   { background: var(--paper-3); color: var(--ink-2); }
 
@@ -344,7 +344,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     line-height: 1.55;
 }
 .list-check .icon {
-    color: var(--blue);
+    color: var(--accent-fg);
     margin-top: 0.15em;
     width: 1.15em;
     height: 1.15em;
@@ -387,7 +387,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     line-height: 1.45;
     transition: color var(--dur-2) var(--ease);
 }
-.accordion-trigger:hover { color: var(--blue); }
+.accordion-trigger:hover { color: var(--accent-fg); }
 .accordion-icon {
     flex: none;
     display: grid;
@@ -435,7 +435,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     font-weight: var(--fw-semi);
     color: var(--ink-2);
 }
-.field label .req { color: var(--blue); }
+.field label .req { color: var(--accent-fg); }
 
 .form-control {
     width: 100%;
@@ -566,7 +566,7 @@ select.form-control {
     background: var(--paper-2);
     white-space: nowrap;
 }
-.table-compare thead th.is-us { color: var(--blue); background: var(--blue-tint); }
+.table-compare thead th.is-us { color: var(--accent-fg); background: var(--blue-tint); }
 .table-compare tbody th {
     font-family: var(--font-body);
     font-weight: var(--fw-semi);
@@ -821,7 +821,7 @@ body.modal-open { overflow: hidden; }
     display: inline;
     padding: 0;
     font: inherit;
-    color: var(--blue);
+    color: var(--accent-fg);
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
@@ -846,7 +846,7 @@ body.modal-open { overflow: hidden; }
     margin: 0 auto var(--sp-5);
     border-radius: 50%;
     background: var(--blue-tint);
-    color: var(--blue);
+    color: var(--accent-fg);
 }
 .notice-icon .icon { width: 30px; height: 30px; stroke-width: 2.5; }
 

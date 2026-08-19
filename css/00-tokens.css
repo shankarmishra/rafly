@@ -1,102 +1,153 @@
 /* ==========================================================================
-   MACHINED PAPER — design tokens. The single source of truth.
+   LOGO BLUE — design tokens. The single source of truth.
    ==========================================================================
 
-   The site has ONE ground language: warm paper. Not white. #ffffff is a
-   screen default; a warm off-white is a decision, and it is the difference
-   between a page that looks unstyled and one that looks printed.
+   The palette is sampled from logo.png, not chosen beside it. The three
+   colours that came out of the mark are #0a63ff (the blue), #1bba3a (the
+   green) and a near-black that resolves to #050f33 once it is neutralised
+   against the blue rather than against grey. Everything below is built from
+   those three.
 
-   Three paper tones exist so a long page can have CHAPTERS without hard
-   section edges — the eye reads a half-step of tone as "new part" far more
-   quietly than a rule or a colour block does.
+   THE GROUND IS COOL PAPER. Not white and not warm. #ffffff is a screen
+   default; #f6f8fc is a decision, and it is the half-step of blue that makes
+   the accent look like it belongs to the page instead of sitting on top of
+   it. Three tones exist so a long page can have CHAPTERS without hard section
+   edges — the eye reads a half-step of tone as "new part" far more quietly
+   than a rule or a colour block does.
 
-   ONE ACCENT. The previous palette ran an orange ladder (decorative 2.84:1 /
-   fill 3.76:1 / text 4.93:1) plus a brand blue plus gold stars. Three accents
-   is no accent: the CTA could never be the loudest thing on screen because
-   two other colours were already shouting. Orange and gold are RETIRED —
-   not aliased, removed, and every call site migrated — so the retirement
-   cannot quietly undo itself.
+   This REPLACES the machined-paper set (warm #f7f6f2 paper, #14161a ink,
+   #1b4fd8 blue). That palette was not wrong; it was a different direction,
+   and it lost to one Naveen approved against a running prototype rather than
+   against a description. The type scale, spacing, radii, elevation structure,
+   motion tiers and grain blocks below are carried over unchanged, because
+   none of them encode a direction and rewriting them would be pure diff noise.
 
    MEASURED, NOT CHOSEN BY EYE
    ---------------------------
    Every ratio below is computed per WCAG relative luminance,
-   (L1 + .05) / (L2 + .05), against the real ground it sits on. The four
-   grounds are paper-01, paper-02, paper-03 and ink-chapter. A colour that
-   passes on one is not assumed to pass on the next — that assumption is what
-   put 2.15:1 white-on-amber on the build before last.
+   (L1 + .05) / (L2 + .05), against the real ground it sits on, by
+   `node inc/tools/contrast.mjs` — which runs on the values BEFORE they are
+   written here, so a failure is an edit rather than a rewrite.
+   inc/tools/shoot.mjs then re-measures the RENDERED page, and it is the
+   authority: it knows about the grain overlay, inherited opacity and the
+   ancestor grounds that this file cannot see.
 
    THE ONE RULE MOST LIKELY TO BE BROKEN LATER
    -------------------------------------------
-   --blue is 6.15:1 on paper and 2.68:1 on the chapter ground.
-   --accent-chapter is 6.90:1 on the chapter ground and 2.39:1 on paper.
+   THE LOGO BLUE IS NOT A TEXT COLOUR. --blue #0a63ff measures 4.66:1 on
+   paper-01 and only 4.07:1 on paper-03. It is a FILL. The accent as text is
+   --blue-ink #0b52d8 (6.15 / 5.83 / 5.37), and --accent-fg points at it.
 
-   They are mirror images and each is dangerous where the other is safe. A
-   component that hardcodes --blue will pass on paper and fail inside the
-   dark chapter, which is the hardest class of bug to see because the page
-   still looks fine on the screen you were designing at. Read --accent-fg
-   (css/08-ground.css remaps it per ground) rather than either literal.
+   This inverts the previous palette's failure mode, which is what makes it
+   dangerous. The machined-paper blue was 6.15:1 everywhere, so `color:
+   var(--blue)` was safe everywhere and the habit is in the codebase. It is
+   now a bug on every well, input and table stripe on the site. Any new
+   `color: var(--blue)` is wrong; read --accent-fg.
+
+   And the mirror still holds on the dark ground:
+     --blue-ink       5.37:1 on paper-03 /  2.86:1 on the chapter — unreadable
+     --accent-chapter 2.43:1 on paper-01 /  7.25:1 on the chapter
+   --blue itself is 3.78:1 on the chapter, which clears the 3:1 non-text
+   minimum — so the FILL is the one thing that works on both grounds, and
+   white on it is 4.95:1 either way. That is why --accent does not have to be
+   remapped in the chapter and --accent-fg does.
+   Each is dangerous exactly where the other is safe, and a component that
+   hardcodes either looks completely correct on the ground it was written on.
+   css/08-ground.css remaps --accent-fg per ground; components read that.
    ========================================================================== */
 
 :root {
     /* --- Paper: the three grounds ---------------------------------------
        01 is the page. 02 marks a chapter. 03 is a recess — a well, an input,
        a table stripe. Anything below 03 stops reading as paper and starts
-       reading as a grey box, which is why there is no 04 in the type scale
-       of grounds; --paper-4 exists only as a pressed state. */
-    --paper:        #f7f6f2;   /* paper-01 — the page ground                */
-    --paper-2:      #efede7;   /* paper-02 — chapter ground                 */
-    --paper-3:      #e4e2da;   /* paper-03 — wells, inputs, stripes         */
-    --paper-4:      #d8d5cc;   /* pressed / active well                     */
+       reading as a grey box, which is why there is no 04 in the scale of
+       grounds; --paper-4 exists only as a pressed state.
+
+       Each step keeps the same blue cast rather than desaturating toward
+       grey. A ground that loses its hue as it darkens reads as dirt on the
+       page, and the recess is exactly where the accent has least contrast to
+       spare — which is why --blue's 4.07:1 on paper-03 is the number this
+       whole file is organised around. */
+    --paper:        #f6f8fc;   /* paper-01 — the page ground                */
+    --paper-2:      #eef2fa;   /* paper-02 — chapter ground                 */
+    --paper-3:      #e3e9f6;   /* paper-03 — wells, inputs, stripes         */
+    --paper-4:      #d5ddef;   /* pressed / active well                     */
 
     /* --- Ink ------------------------------------------------------------
-       Ratios read: paper-01 / paper-02 / paper-03. */
-    --ink:          #14161a;   /* display, headings   16.75 / 15.47 / 13.96 */
-    --ink-2:        #43494f;   /* body                 8.43 /  7.78 /  7.03 */
-    --ink-3:        #5d6469;   /* captions, metadata   5.56 /  5.14 /  4.64 */
-    --ink-4:        #767e85;   /* the grey half of a two-tone display line  */
-                               /* 3.81 / 3.52 / 3.18 — LARGE TEXT ONLY.     */
+       Ratios read: paper-01 / paper-02 / paper-03. The ink is a navy, not a
+       black: #050f33 is the logo's dark neutralised against the blue, and it
+       is also the chapter ground further down. One colour doing both jobs is
+       why the dark chapter reads as the same room with the lights off rather
+       than as a different site. */
+    --ink:          #050f33;   /* display, headings   17.59 / 16.67 / 15.37 */
+    --ink-2:        #3a4468;   /* body                 8.95 /  8.48 /  7.82 */
+    --ink-3:        #5b6384;   /* captions, metadata   5.54 /  5.25 /  4.84 */
+    --ink-4:        #767ea6;   /* the grey half of a two-tone display line  */
+                               /* 3.72 / 3.53 / 3.25 — LARGE TEXT ONLY.     */
                                /* Never body, never a caption, never an icon */
-                               /* that must be seen. It was #8a9299 for one  */
-                               /* render and inc/tools/shoot.mjs failed it   */
-                               /* at 2.92:1 against the 3:1 large-text       */
-                               /* minimum on all three papers — which is the */
-                               /* entire reason the harness measures the     */
-                               /* rendered page and not this file.           */
-    --line:         #e2dfd6;   /* hairline — warm, so it belongs to paper   */
-    --line-strong:  #cfccc2;
+                               /* that must be seen. The prototype used this */
+                               /* value for an 11.5px .eyebrow, which is     */
+                               /* small text at 3.72:1 — a fail. Eyebrows    */
+                               /* read --ink-3.                              */
+    --line:         #e2e7f2;   /* hairline — cool, so it belongs to paper   */
+    --line-strong:  #cbd3e6;
 
     /* --- The accent ------------------------------------------------------
-       One colour. It is the CTA, the link, the active state, and the single
-       anodised component in the 3-D assembly — the same blue in the render
-       and in the interface, which is what makes the object read as part of
-       the brand rather than as an illustration dropped onto it.
+       ONE accent, and it is the mark's own blue. It is the CTA, the link,
+       the active state and the lit edge in the 3-D scene — the same blue in
+       the render and in the interface, which is what makes the object read
+       as part of the brand rather than as an illustration dropped onto it.
+
+       TWO VARIABLES, NOT ONE, and the split is the point:
+         --blue      the FILL. Buttons, bars, the packet on a circuit trace,
+                     the glow. Never text, never a border that carries
+                     meaning: 4.07:1 on paper-03 clears neither the 4.5
+                     text minimum nor, on a well, much headroom over the 3.0
+                     non-text one.
+         --blue-ink  the accent AS TEXT. Links, active labels, the focus
+                     ring. 6.15 / 5.83 / 5.37, safe on all three papers.
 
        The name stays --blue because ~200 call sites across nine stylesheets
-       already read it. Renaming the variable and renaming the colour in the
+       already read it. Renaming the variable and changing the colour in the
        same pass is how a redesign acquires a week of unrelated diff noise. */
-    --blue:         #1b4fd8;   /* 6.15 / 5.68 / 5.13 on paper — 2.68 on chapter */
-    --blue-hover:   #1740b0;   /* 8.10 / 7.48 / 6.75                        */
-    --blue-deep:    #123aa8;   /* gradient / deep end only                  */
-    --blue-tint:    #edf0fb;   /* pale accent wash — a GROUND, never a text colour */
-    --blue-tint-2:  #dde4f8;
+    --blue:         #0a63ff;   /* 4.66 / 4.41 / 4.07 — FILL ONLY            */
+    --blue-ink:     #0b52d8;   /* 6.15 / 5.83 / 5.37 — the accent as TEXT   */
+    --blue-hover:   #0842ad;   /* 8.25 / 7.82 / 7.21                        */
+    --blue-deep:    #0230c6;   /* gradient mid — white on it is 9.37:1      */
+    --blue-abyss:   #001a7a;   /* gradient deep end, and the aurora's floor */
+    --blue-tint:    #e8effe;   /* pale accent wash — a GROUND, never text   */
+    --blue-tint-2:  #d5e2fd;
+
+    /* The logo green. It is 2.43:1 on paper — below even the 3:1 NON-TEXT
+       minimum — so on paper it can be a FILL and nothing else: not a tick,
+       not a status dot, not a border. Ink on it measures 7.24:1, and on the
+       chapter ground it measures 7.24:1 as text. Those are its only two
+       legal uses, and --success-ink exists because "green text" on paper has
+       to be a different green. */
+    --green:        #1bba3a;
 
     /* --- Semantic -------------------------------------------------------- */
-    --pill:         #14161a;   /* the ink pill CTA — the same ink as display */
-    --pill-fg:      #f7f6f2;   /* the pill LABEL — inverts inside a chapter  */
-    --pill-hover:   #26292f;
-    --wash:         rgba(20, 22, 26, .035); /* hover wash, flips light in a chapter */
+    --pill:         #050f33;   /* the ink pill CTA — the same ink as display */
+    --pill-fg:      #f6f8fc;   /* the pill LABEL — 18.71:1, inverts in a chapter */
+    --pill-hover:   #0c1a45;
+    --wash:         rgba(5, 15, 51, .04);   /* hover wash, flips light in a chapter */
     --sheen-face:   rgba(255, 255, 255, .78);
-    --sheen-edge:   rgba(255, 255, 255, .90);
-    --success:      #15803d;
-    --danger:       #c62828;
-    --warning:      #a45309;
-    --whatsapp:     #128c4a;
+    --sheen-edge:   rgba(255, 255, 255, .92);
+    --success-ink:  #0e6f31;   /* success AS TEXT   5.52 / — / 4.82         */
+    --success:      var(--success-ink);  /* legacy name, same value          */
+    --danger:       #c62828;   /* 5.29 / — / 4.62                            */
+    --warning:      #96560a;   /* 5.44 / — / 4.75                            */
+    --whatsapp:     #128c4a;   /* brand mark, non-text — 4.05                */
 
-    /* --- On a coloured (accent) band ------------------------------------- */
+    /* --- On a coloured (accent) band -------------------------------------
+       White on --blue is 4.95:1, which passes but has under half a point of
+       headroom. Anything smaller than body text on a blue fill should use
+       --blue-deep as the fill instead (9.37:1) rather than shrinking the
+       margin further. */
     --on-dark-1:    #ffffff;
-    --on-dark-2:    #d7e0fa;   /* 4.6:1 on --blue                            */
-    --on-dark-3:    #a9bbec;
-    --on-dark-line: rgba(255, 255, 255, .18);
+    --on-dark-2:    #d3e0ff;
+    --on-dark-3:    #a6bffb;
+    --on-dark-line: rgba(255, 255, 255, .20);
 
     /* --- Type -----------------------------------------------------------
        No new font files. Space Grotesk and Inter are already self-hosted
@@ -125,7 +176,10 @@
        voice of a specification sheet. It carries part numbers, durations and
        section indices, and it is a large part of why the page reads as
        engineering rather than as marketing. It must never carry a sentence,
-       and it must never carry a number the site cannot back. */
+       and it must never carry a number the site cannot back.
+
+       It is also SMALL TEXT at every size in this tier, so it reads --ink-3
+       and never --ink-4. */
     --fs-meta:    0.6875rem;
     --tr-meta:    0.18em;
 
@@ -158,9 +212,7 @@
     --gutter:      clamp(1.125rem, 0.6rem + 2.2vw, 2.5rem);
     --measure:     66ch;
 
-    /* --- Radius ---------------------------------------------------------
-       Reduced from the previous set. A machined part has a controlled bevel,
-       not a 30px corner; the interface follows the object. */
+    /* --- Radius ---------------------------------------------------------- */
     --r-xs:   4px;
     --r-sm:   8px;
     --r:      12px;
@@ -170,20 +222,26 @@
     --r-pill: 999px;
 
     /* --- Elevation ------------------------------------------------------
-       Warm-tinted, because a neutral-black shadow on warm paper reads as
-       dirt. Two-part: a tight contact term and a wide ambient term, which is
-       how a real shadow behaves and why these do not look like a preset. */
-    --sh-1: 0 1px 1px rgba(38, 32, 20, .05),
-            0 2px 6px rgba(38, 32, 20, .045);
-    --sh-2: 0 1px 2px rgba(38, 32, 20, .06),
-            0 8px 20px rgba(38, 32, 20, .06);
-    --sh-3: 0 2px 4px rgba(38, 32, 20, .06),
-            0 18px 40px rgba(38, 32, 20, .09);
-    --sh-4: 0 4px 8px rgba(38, 32, 20, .07),
-            0 36px 80px rgba(38, 32, 20, .13);
-    --sh-pill: 0 1px 2px rgba(20, 22, 26, .18),
-               0 8px 20px rgba(20, 22, 26, .16);
-    --sh-blue: 0 8px 24px rgba(27, 79, 216, .26);
+       Two-part: a tight contact term and a wide ambient term, which is how a
+       real shadow behaves and why these do not look like a preset.
+
+       The TINT follows the ground and always has. On the warm paper this
+       replaces it was rgba(38, 32, 20) — a warm brown, because a neutral
+       black shadow on warm paper reads as dirt. On cool paper the same
+       reasoning inverts: the tint is the ink itself, rgba(5, 15, 51), so the
+       shadow reads as the page's own colour in shade. The structure and the
+       opacities are unchanged. */
+    --sh-1: 0 1px 1px rgba(5, 15, 51, .05),
+            0 2px 6px rgba(5, 15, 51, .045);
+    --sh-2: 0 1px 2px rgba(5, 15, 51, .06),
+            0 8px 20px rgba(5, 15, 51, .06);
+    --sh-3: 0 2px 4px rgba(5, 15, 51, .06),
+            0 18px 40px rgba(5, 15, 51, .09);
+    --sh-4: 0 4px 8px rgba(5, 15, 51, .07),
+            0 36px 80px rgba(5, 15, 51, .13);
+    --sh-pill: 0 1px 2px rgba(5, 15, 51, .18),
+               0 8px 20px rgba(5, 15, 51, .16);
+    --sh-blue: 0 8px 24px rgba(10, 99, 255, .28);
 
     /* --- Motion ---------------------------------------------------------
        Four tiers, and the tier IS the meaning:
@@ -192,8 +250,7 @@
          3  section  420-700ms  content arriving
          4  cine     1100-1400ms a scene changing
        There is deliberately no tier above 4. "Cinematic" is a budget, not a
-       licence, and the budget is spent in exactly three places on the
-       homepage: hero entrance, exploded assembly, final reassembly. */
+       licence. */
     --dur-1: 160ms;
     --dur-2: 280ms;
     --dur-3: 420ms;
@@ -204,7 +261,7 @@
 
     /* One easing family. Entrances decelerate hard (they arrive and settle);
        scene changes ease at both ends (they are camera moves). Nothing here
-       overshoots — a machined part does not bounce. */
+       overshoots. */
     --ease:        cubic-bezier(.22, .61, .36, 1);
     --ease-out:    cubic-bezier(.16, 1, .3, 1);
     --ease-in-out: cubic-bezier(.65, 0, .35, 1);
@@ -214,9 +271,14 @@
     --header-h:   74px;
     --nav-pill-h: 56px;
 
-    /* --- Focus ----------------------------------------------------------- */
-    --focus:      var(--blue);
-    --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--blue);
+    /* --- Focus ----------------------------------------------------------
+       The ring is --blue-ink, NOT --blue. A focus ring is non-text UI and
+       holds to the 3:1 minimum; --blue on paper-03 is 4.07:1 against the
+       page, but the ring's inner halo is --paper, and the pair that actually
+       has to be distinguishable is ring-against-ground. --blue-ink gives
+       5.37:1 in the worst case with no thinking required. */
+    --focus:      var(--blue-ink);
+    --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--blue-ink);
 
     /* --- Layers ---------------------------------------------------------- */
     --z-base: 1;
@@ -232,7 +294,13 @@
        .ground-chapter ancestor remaps them (css/08-ground.css). A component
        that reads these instead of --paper / --ink / --blue works on both
        grounds for free, and that is the entire reason the dark chapter is
-       not a second copy of 03-components.css. */
+       not a second copy of 03-components.css.
+
+       --accent and --accent-fg are DIFFERENT VALUES on this palette. That is
+       new, and it is the single most important line in the file: --accent is
+       the fill, --accent-fg is the same accent when it is text. On the
+       previous palette they were the same colour and the distinction cost
+       nothing to ignore. */
     --surface:      var(--paper);
     --surface-2:    var(--paper-2);
     --surface-3:    var(--paper-3);
@@ -240,8 +308,8 @@
     --on-surface:   var(--ink);
     --on-surface-2: var(--ink-2);
     --on-surface-3: var(--ink-3);
-    --accent:       var(--blue);
-    --accent-fg:    var(--blue);   /* the accent AS TEXT on the current ground */
+    --accent:       var(--blue);       /* FILL                              */
+    --accent-fg:    var(--blue-ink);   /* the accent AS TEXT on this ground */
     --elevate-1:    var(--sh-1);
     --elevate-2:    var(--sh-2);
     --elevate-3:    var(--sh-3);
@@ -250,24 +318,29 @@
 /* ==========================================================================
    THE CHAPTER GROUND
 
-   Exactly one section of the site is dark: selected work. It is punctuation,
-   not an identity — the visual equivalent of walking into another room and
-   back out again. Everything below is measured against #15181c.
+   The dark sections are the ink colour used as a ground — the same #050f33
+   that sets every heading on paper. That is why walking into one reads as
+   the same room with the lights off rather than as a different site, and it
+   is also why the accent has to change: --blue-ink is 1.94:1 down here.
+   Everything below is measured against #050f33.
    ========================================================================== */
 :root {
-    --ink-chapter:    #15181c;   /* the chapter ground                      */
-    --ink-chapter-2:  #1c2026;   /* raised — a panel inside the chapter     */
-    --ink-chapter-3:  #23282f;   /* well inside the chapter                 */
+    --ink-chapter:    #050f33;   /* the chapter ground                      */
+    --ink-chapter-2:  #0a1746;   /* raised — a panel inside the chapter     */
+    --ink-chapter-3:  #101f57;   /* well inside the chapter                 */
 
-    --on-chapter-1:   #f7f6f2;   /* display, headings          16.47:1      */
-    --on-chapter-2:   #c9cdd2;   /* body                       11.15:1      */
-    --on-chapter-3:   #8a9299;   /* captions, metadata          5.64:1      */
-    --chapter-line:        rgba(247, 246, 242, .11);
-    --chapter-line-strong: rgba(247, 246, 242, .20);
+    --on-chapter-1:   #f6f8fc;   /* display, headings          17.59:1      */
+    --on-chapter-2:   #c4cbe4;   /* body                       11.59:1      */
+    --on-chapter-3:   #8a96c6;   /* captions, metadata          6.47:1      */
+                                 /* The prototype used #6c78a8 here, which  */
+                                 /* is 4.36:1 — a fail at the 12.5px this   */
+                                 /* tier is set at.                         */
+    --chapter-line:        rgba(246, 248, 252, .12);
+    --chapter-line-strong: rgba(246, 248, 252, .22);
 
-    /* The accent, lifted so it survives the dark ground. 6.90:1 here and
-       2.39:1 on paper — the mirror of --blue, and the reason --accent-fg
-       exists rather than a literal at the call site. */
+    /* The accent, lifted so it survives the dark ground. 7.25:1 here and
+       1.63:1 on paper — the mirror of --blue-ink, and the reason
+       --accent-fg exists rather than a literal at the call site. */
     --accent-chapter: #6ea0ff;
 
     /* Depth on a dark ground comes from a lighter surface and a lit top
@@ -278,20 +351,29 @@
 }
 
 /* One accent variable, remapped per service page, so a service template never
-   has to hardcode a colour. All five are measured on paper-01 and clear 4.5:1
-   as small text: the hue moves, the weight does not. */
+   has to hardcode a colour. All five are measured on paper-01 AND paper-03
+   and clear 4.5:1 as small text on both: the hue moves, the weight does not.
+
+   --svc-marketing was #a8430f, the last surviving value from the retired
+   orange ladder. It is now a magenta-leaning purple: it had to move anyway,
+   and orange beside #0a63ff is the one pairing on the wheel that makes the
+   brand blue look like a mistake.
+
+   Note these set --accent-fg, which is TEXT — so each value is a text-safe
+   colour, not a fill. --accent stays the fill and stays the brand blue on
+   every service page, because the CTA is the same CTA everywhere. */
 :root {
-    --svc-web:       #1b4fd8;
-    --svc-security:  #0b6b7d;
-    --svc-marketing: #a8430f;
-    --svc-content:   #6d3ad4;
-    --svc-ecom:      #126d38;
+    --svc-web:       #0b52d8;   /* 6.15 / 5.37                              */
+    --svc-security:  #046070;   /* 6.78 / 5.92                              */
+    --svc-marketing: #8c2fbf;   /* 6.03 / 5.27                              */
+    --svc-content:   #6134c9;   /* 6.95 / 6.07                              */
+    --svc-ecom:      #0d6b34;   /* 6.23 / 5.44                              */
 }
-body.svc-web       { --blue: var(--svc-web);       --accent: var(--svc-web);       --accent-fg: var(--svc-web); }
-body.svc-security  { --blue: var(--svc-security);  --accent: var(--svc-security);  --accent-fg: var(--svc-security); }
-body.svc-marketing { --blue: var(--svc-marketing); --accent: var(--svc-marketing); --accent-fg: var(--svc-marketing); }
-body.svc-content   { --blue: var(--svc-content);   --accent: var(--svc-content);   --accent-fg: var(--svc-content); }
-body.svc-ecom      { --blue: var(--svc-ecom);      --accent: var(--svc-ecom);      --accent-fg: var(--svc-ecom); }
+body.svc-web       { --accent-fg: var(--svc-web);       }
+body.svc-security  { --accent-fg: var(--svc-security);  }
+body.svc-marketing { --accent-fg: var(--svc-marketing); }
+body.svc-content   { --accent-fg: var(--svc-content);   }
+body.svc-ecom      { --accent-fg: var(--svc-ecom);      }
 
 /* ==========================================================================
    Paper grain
@@ -301,10 +383,6 @@ body.svc-ecom      { --blue: var(--svc-ecom);      --accent: var(--svc-ecom);   
    inside a CSS value: no request, no binary, no licence, and it resolves at
    whatever pixel ratio the screen has rather than at the one a PNG was
    exported for.
-
-   It matters more on this design than on the last one. Warm paper with no
-   texture reads as a flat beige fill; the grain is what makes it read as a
-   SURFACE, and a surface is what the object's shadow needs to fall on.
 
    Three strengths, because the same noise over paper, over a panel and
    inside a letterform needs three different amounts to read as one material.

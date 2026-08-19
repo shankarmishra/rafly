@@ -13,9 +13,11 @@
    a second copy of the component sheet.
 
    The corollary, and it is the rule most likely to be broken later: a
-   component must read --on-surface / --accent-fg, NOT --ink / --blue. A rule
-   that hardcodes --blue renders at 6.15:1 on paper and 2.68:1 in the
-   chapter, and it will look completely fine on the screen you wrote it on.
+   component must read --on-surface / --accent-fg, NOT --ink / --blue. On the
+   logo-blue palette --blue is a FILL and is not a legal text colour on any
+   ground — 4.07:1 in a paper well, 3.78:1 in the chapter — so `color:
+   var(--blue)` is now wrong everywhere rather than wrong in one place, and
+   it will still look completely fine on the screen you wrote it on.
 
    THE THREE PAPERS
    ----------------
@@ -45,11 +47,17 @@
    the closing CTA band, which is the same idea at a smaller scale: a change
    of room to mark a change of register.
 
-   Measured against #15181c:
-     --on-chapter-1  #f7f6f2  16.47:1
-     --on-chapter-2  #c9cdd2  11.15:1
-     --on-chapter-3  #8a9299   5.64:1
-     --accent-chapter #6ea0ff   6.90:1
+   The chapter ground is #050f33 — the same navy that sets every heading on
+   paper. Using the ink colour as the ground is why walking into the chapter
+   reads as the same room with the lights off rather than as a different site.
+
+   Measured against #050f33:
+     --on-chapter-1   #f6f8fc  17.59:1
+     --on-chapter-2   #c4cbe4  11.59:1
+     --on-chapter-3   #8a96c6   6.47:1
+     --accent-chapter #6ea0ff   7.25:1
+     --blue           #0a63ff   3.78:1  — non-text minimum only, i.e. a fill
+     --blue-ink       #0b52d8   2.86:1  — unreadable here, hence --accent-fg
    ========================================================================== */
 
 .ground-chapter,
@@ -70,12 +78,19 @@
     --on-surface-2: var(--on-chapter-2);
     --on-surface-3: var(--on-chapter-3);
 
-    /* The mirror pair. --accent stays the brand blue for FILLS, which are
-       fine on dark; --accent-fg lifts to the light blue for anything that
-       has to be READ. */
-    --accent:    var(--accent-chapter);
+    /* The mirror pair, and the one line where paper and chapter genuinely
+       differ. --accent is NOT remapped: the brand blue is 3.78:1 on this
+       ground, which clears the non-text minimum a fill is held to, and white
+       on it stays 4.95:1 — so a CTA is the same colour in both rooms, which
+       is the point of having one accent. --accent-fg has to lift, because
+       --blue-ink is 2.86:1 here and unreadable.
+
+       --blue is deliberately left alone too. On the previous palette it was
+       remapped as a safety net for components that read it as text; those no
+       longer exist (every `color: var(--blue)` was migrated to --accent-fg
+       when this palette landed), and remapping the fill to #6ea0ff would put
+       white labels on a light blue at 2.05:1. */
     --accent-fg: var(--accent-chapter);
-    --blue:      var(--accent-chapter);
 
     /* Paper's own names, remapped, so a component that still reads --ink or
        --paper directly degrades gracefully instead of rendering ink on ink.
@@ -91,7 +106,7 @@
 
     --pill:     var(--on-chapter-1);
     --pill-fg:  var(--ink-chapter);
-    --wash:     rgba(247, 246, 242, .05);
+    --wash:     rgba(246, 248, 252, .06);
     --blue-tint:   rgba(110, 160, 255, .12);
     --blue-tint-2: rgba(110, 160, 255, .20);
 
@@ -168,8 +183,8 @@
     pointer-events: none;
     background:
         radial-gradient(120% 100% at 50% 100%,
-            rgba(38, 32, 20, .055) 0%,
-            rgba(38, 32, 20, .022) 42%,
+            rgba(5, 15, 51, .055) 0%,
+            rgba(5, 15, 51, .022) 42%,
             transparent 72%);
     z-index: 0;
 }

@@ -67,7 +67,7 @@ p { margin: 0 0 var(--sp-4); }
 p:last-child { margin-bottom: 0; }
 
 a {
-    color: var(--blue);
+    color: var(--accent-fg);
     text-decoration: none;
     text-underline-offset: 3px;
     transition: color var(--dur-1) var(--ease);
@@ -165,7 +165,7 @@ blockquote { margin: 0; }
 /* :is() so a .soft span works in any heading, not only .display. Without it
    a two-tone h2 silently fell back to the light-ground grey on a blue band. */
 :is(.display, h1, h2, h3, h4) .soft { color: var(--ink-4); }
-:is(.display, h1, h2, h3, h4) .blue { color: var(--blue); }
+:is(.display, h1, h2, h3, h4) .blue { color: var(--accent-fg); }
 
 .lead {
     font-size: var(--fs-lead);
@@ -194,7 +194,7 @@ blockquote { margin: 0; }
     background: var(--blue-tint-2);
     flex: none;
 }
-.eyebrow.is-blue { color: var(--blue); }
+.eyebrow.is-blue { color: var(--accent-fg); }
 .eyebrow.is-blue::before { background: var(--blue); }
 .eyebrow.on-dark { color: #fff; }
 .eyebrow.on-dark::before { background: rgba(255, 255, 255, .7); }
@@ -244,8 +244,8 @@ blockquote { margin: 0; }
        pattern behind an object whose entire job is to look like a photograph
        of a real thing on real paper. All four layers are gone.
 
-       What is left is the one thing a warm paper ground genuinely needs:
-       texture. Without grain, #f7f6f2 reads as a flat beige fill; with it, it
+       What is left is the one thing a paper ground genuinely needs:
+       texture. Without grain, #f6f8fc reads as a flat blue-grey fill; with it, it
        reads as a surface — and a surface is what the object's contact shadow
        has to land on for the object to have any weight at all. */
     background-image: var(--grain-fine);

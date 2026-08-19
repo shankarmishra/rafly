@@ -55,7 +55,7 @@
     display: block;
     font-size: var(--fs-xs);
     font-weight: var(--fw-semi);
-    color: var(--blue);
+    color: var(--accent-fg);
     margin-top: 1px;
 }
 .team-brief {

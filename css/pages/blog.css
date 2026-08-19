@@ -74,7 +74,7 @@
 .blog-featured-body { display: flex; flex-direction: column; gap: var(--sp-4); }
 .blog-featured-title { font-size: var(--fs-h2); }
 .blog-featured-title a { color: inherit; }
-.blog-featured-title a:hover { color: var(--blue); }
+.blog-featured-title a:hover { color: var(--accent-fg); }
 .blog-featured-excerpt { color: var(--ink-3); margin: 0; }
 
 @media (max-width: 900px) {

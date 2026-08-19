@@ -21,8 +21,13 @@
     color: var(--ink-3);
 }
 
-/* The eyebrow, the chips and the mark all take the service's own accent. */
-.page-service .page-head .eyebrow { color: var(--accent); }
+/* The eyebrow, the chips and the mark all take the service's own accent —
+   but the eyebrow is TEXT at 12px, so it reads --accent-fg (the per-service
+   value set by body.svc-*), never --accent. --accent is the brand blue fill
+   and measures 4.41:1 against the page head's paper-02, which is a fail that
+   inc/tools/shoot.mjs catches on all five service pages at both viewports.
+   The ::before is a 2px bar, i.e. non-text, so it keeps the fill. */
+.page-service .page-head .eyebrow { color: var(--accent-fg); }
 .page-service .page-head .eyebrow::before { background: var(--accent); }
 .svc-pills .chip { border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
 
@@ -103,7 +108,12 @@
    Tools strip
    ========================================================================== */
 .svc-tools .tag { margin-bottom: var(--sp-4); }
-.svc-tools .chip .icon { color: var(--accent); }
+/* An icon inside a chip sits beside its label and repeats what the label
+   says, so it is decorative and holds to the 3:1 non-text minimum rather
+   than 4.5. --accent clears that on paper-01 (4.66) but only just on
+   paper-03 (4.07), and a chip can land on either — so this takes the text
+   value, which has headroom on both. */
+.svc-tools .chip .icon { color: var(--accent-fg); }
 
 /* ==========================================================================
    Cross-links

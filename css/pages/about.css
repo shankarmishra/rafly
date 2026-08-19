@@ -82,7 +82,7 @@
     height: 46px;
     border-radius: 50%;
     background: var(--paper);
-    color: var(--blue);
+    color: var(--accent-fg);
     box-shadow: var(--sh-2);
 }
 .branch-dot .icon { width: 20px; height: 20px; }
@@ -152,7 +152,7 @@
 .rail-title { display: block; font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-h4); }
 .rail-text  { display: block; font-size: var(--fs-sm); color: var(--ink-3); margin-top: 2px; }
 .rail-go { color: var(--ink-3); flex: none; transition: transform var(--dur-2) var(--ease), color var(--dur-2) var(--ease); }
-.rail-item:hover .rail-go { transform: translateX(4px); color: var(--blue); }
+.rail-item:hover .rail-go { transform: translateX(4px); color: var(--accent-fg); }
 
 @media (max-width: 620px) {
     .rail-item { gap: var(--sp-3); padding: var(--sp-4); }

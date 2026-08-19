@@ -46,7 +46,7 @@
 }
 .policy-toc li { margin-bottom: var(--sp-2); break-inside: avoid; }
 .policy-toc a { font-size: var(--fs-sm); color: var(--ink-2); }
-.policy-toc a:hover { color: var(--blue); }
+.policy-toc a:hover { color: var(--accent-fg); }
 @media (max-width: 640px) { .policy-toc ol { columns: 1; } }
 
 .policy-section {
@@ -68,7 +68,7 @@
 .policy-section h2 .icon {
     width: 1.5rem;
     height: 1.5rem;
-    color: var(--blue);
+    color: var(--accent-fg);
     flex: none;
 }
 .policy-section h3 {

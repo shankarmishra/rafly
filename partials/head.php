@@ -150,7 +150,15 @@ $pixelId = !$page['noindex']
     <meta name="twitter:image:alt" content="<?= e(SITE_NAME . ' — ' . SITE_TAGLINE) ?>">
     <?php /* twitter:site / twitter:creator omitted — no verified @handle exists in SOCIAL_LINKS/config
              to attribute this to; adding one would be fabricated metadata. */ ?>
-    <meta name="theme-color" content="#0d47a1">
+    <?php /* The logo blue, matching --blue in css/00-tokens.css. This paints the
+             browser chrome on Android and the status bar in an iOS PWA, so it is
+             the one colour a visitor sees BEFORE the stylesheet has parsed — a
+             stale value here is the site introducing itself in the wrong colour.
+             It was #0d47a1, from a palette two directions ago. Not a CSS
+             variable: a <meta> cannot read one, and this is why the value has
+             to be changed in two places by hand (here and
+             assets/site.webmanifest) whenever the accent moves. */ ?>
+    <meta name="theme-color" content="#0a63ff">
 
 <?php /* Search Console / Bing Webmaster "HTML tag" verification. Both
          constants (inc/config.php) default to '' and are unset on every

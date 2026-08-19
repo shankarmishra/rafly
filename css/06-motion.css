@@ -275,7 +275,7 @@
     flex: none;
     width: 1.05em;
     height: 1.05em;
-    color: var(--blue);
+    color: var(--accent-fg);
     opacity: .55;
     transition: opacity var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
 }

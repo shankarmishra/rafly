@@ -187,21 +187,52 @@ const PROBE = `(() => {
         const a = lum(fg), b = lum(bg);
         return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     };
+    /* The paper grain. It is an inline SVG noise tile at 0.038-0.10 opacity,
+       and it is on the page ground, every panel and every large heading — so
+       treating a "has a background-image" as "unmeasurable" made the harness
+       give up on most of the site. It shifts luminance by well under a
+       hundredth of a ratio point. Skip past it and measure the colour under
+       it. Any OTHER image or gradient is still unmeasurable, which is the
+       case this rule was written for. */
+    const GRAIN = /^url\\("?data:image\\/svg\\+xml/;
+
     /* Returns the effective background, or null when it cannot be known.
-       A gradient or an image behind the text means the real ratio depends on
-       WHERE the text sits over it, which computed style cannot answer — so the
-       honest result is "unverifiable", not "fail". Reporting a scrimmed label
-       as a failure would train me to ignore this list. */
-    const bgOf = (el) => {
-        let node = el;
+       A gradient or a photograph behind the text means the real ratio depends
+       on WHERE the text sits over it, which computed style cannot answer — so
+       the honest result is "unverifiable", not "fail". Reporting a scrimmed
+       label as a failure would train me to ignore this list.
+
+       skipSelf is for background-clip:text, where the element's own
+       background IS the letterform and the ground is its parent's. */
+    const bgOf = (el, skipSelf) => {
+        let node = skipSelf ? el.parentElement : el;
         while (node && node !== document.documentElement) {
             const style = getComputedStyle(node);
-            if (style.backgroundImage && style.backgroundImage !== 'none') return null;
+            const img = style.backgroundImage;
+            if (img && img !== 'none' && !GRAIN.test(img)) return null;
             const c = parse(style.backgroundColor);
             if (c.length === 3 || (c[3] ?? 1) > 0.6) return c.slice(0, 3);
             node = node.parentElement;
         }
         return [255, 255, 255];
+    };
+
+    /* background-clip:text throws the 'color' property away and paints the
+       letterforms with the background instead. Computed 'color' then reads
+       rgba(0, 0, 0, 0), so measuring it naively reports black-on-anything —
+       a SILENT PASS on the largest type on the page, which is worse than not
+       checking. Every grained heading on this site hits that path.
+
+       When all the colour stops in that background are the same value, the
+       text has exactly one real colour and it is measurable. Pull it out and
+       measure THAT. When they differ it is a genuine gradient and stays
+       honestly unverifiable. */
+    const clippedColor = (style) => {
+        const clip = style.webkitBackgroundClip || style.backgroundClip;
+        if (clip !== 'text') return null;
+        const stops = (style.backgroundImage || '').match(/rgba?\\([^)]*\\)/g);
+        if (!stops || !stops.length) return null;
+        return stops.every((s) => s === stops[0]) ? parse(stops[0]).slice(0, 3) : null;
     };
 
     const contrast = [];
@@ -220,10 +251,11 @@ const PROBE = `(() => {
         const large = size >= 24 || (size >= 18.66 && weight >= 700);
         const need = large ? 3 : 4.5;
 
-        const bg = bgOf(el);
+        const clipped = clippedColor(style);
+        const bg = bgOf(el, clipped !== null);
         if (bg === null) { unverifiable++; continue; }
 
-        const fg = parse(style.color).slice(0, 3);
+        const fg = clipped || parse(style.color).slice(0, 3);
         const r = ratio(fg, bg);
         if (r >= need) continue;
 

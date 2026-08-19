@@ -191,5 +191,5 @@ main { display: block; min-height: 50vh; }
     color: var(--line-strong);
 }
 .breadcrumbs a { color: var(--ink-3); }
-.breadcrumbs a:hover { color: var(--blue); }
+.breadcrumbs a:hover { color: var(--accent-fg); }
 .breadcrumbs [aria-current] { color: var(--ink); font-weight: var(--fw-medium); }

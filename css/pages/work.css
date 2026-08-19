@@ -46,7 +46,7 @@
     font-weight: var(--fw-bold);
     line-height: 1.05;
     letter-spacing: var(--tr-display);
-    color: var(--blue);
+    color: var(--accent-fg);
     margin: var(--sp-3) 0 0;
 }
 .cs-metric-label { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; }
