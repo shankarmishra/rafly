@@ -91,9 +91,9 @@ const COVER = [
  * like a door; a few degrees of rotateZ with it is a phone held in a hand.
  */
 const PHONE_FAN = [
-    { x: 0,    y: 30,  z: 120,  ry: 0,   rz: 0,  s: 1.00 },
-    { x: -248, y: -44, z: -190, ry: 20,  rz: 5,  s: 0.86 },
-    { x: 248,  y: -44, z: -190, ry: -20, rz: -5, s: 0.86 },
+    { x: 0,    y: 26,  z: 120,  ry: 0,   rz: 0,  s: 1.00 },
+    { x: -228, y: -40, z: -190, ry: 20,  rz: 5,  s: 0.86 },
+    { x: 228,  y: -40, z: -190, ry: -20, rz: -5, s: 0.86 },
 ];
 
 /**

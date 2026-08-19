@@ -11,6 +11,8 @@
 
   "_whyTheDefaultCssFELL": "default css 200 -> 175, and this is the more interesting half of the same change. css/09-scenes.css is a CORE sheet, so all sixteen routes downloaded it -- including the hero and its floor, the glass cluster, the product deck, the service bento, the phones and the coverflow gallery, none of which exist outside index.php. Splitting those into css/pages/home-scenes.css took every inner page from 215 KB to 164 KB. The line is set just above the new measurement rather than left at the old one, because a budget that still allows the mistake it just caught is not a budget.",
 
+  "_whyTheMOCKSCost": "home css 220 -> 230. The deck rendered one shared body -- three KPI blocks and a bar chart -- for all five surfaces, and the three phones rendered one shared screen. Five identical screens tinted five ways read as one product screenshotted five times, so each surface now has its own layout (a code and deploy view, a scan, a channel report, an editor, an order list) and the phones have three different app screens. That is five layouts where there was one and three where there was one, on markup that is otherwise unchanged in size -- the html figure did not move. The orphaned .mock-top .c rule the old shared body left behind was deleted before the line moved.",
+
   "_whyHomeCssRoseAgain": "home css 200 -> 220. The homepage gained three sections in this pass -- the capability strip, the service bento with its gradient-border cards, and the coverflow gallery built to OriginKit's own geometry -- plus a perspective floor under the hero. It is the only route that pays for them now. Two things were deleted before the line moved rather than after: the whole sticky scrollytelling system (js/scroll.js plus 3.3 KB of CSS for markup no template has ever rendered) and the dead .assembly-* block the bento replaced.",
 
   "_whyHtmlRose": "home html 100 -> 110. The homepage gained two sections whose markup IS the content — five browser mocks and three phone shells are rendered as elements, not built by JavaScript, which is the whole reason both survive with scripts off. Paying for that in HTML rather than in JS is the correct trade, and it is why the phone js figure fell from 59 KB to 46 KB in the same change.",
@@ -24,8 +26,8 @@
     "home": {
       "match": ["/"],
       "note": "No three.js: vendor/three/ is deleted and no page fetches a 3-D library. Desktop's js figure is js/field.js + js/aurora.js + js/decks.js + js/cluster.js + js/interactions.js, every one behind a gate in js/gates.js and none of them fetched before window load plus an idle callback. The phone gets decks.js and nothing else from that list.",
-      "desktop": { "html": 115, "css": 220, "js": 300, "font": 90, "img": 120, "total": 800 },
-      "phone":   { "html": 115, "css": 220, "js":  80, "font": 90, "img":  60, "total": 600 }
+      "desktop": { "html": 115, "css": 230, "js": 300, "font": 90, "img": 120, "total": 800 },
+      "phone":   { "html": 115, "css": 230, "js":  80, "font": 90, "img":  60, "total": 600 }
     },
     "blog": {
       "match": ["/blog"],

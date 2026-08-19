@@ -180,11 +180,18 @@ $GALLERY = [
     ['Mobile apps',          'iOS and Android, on the same backend as the site.',           '#046070', '#0a97ad', 'phone'],
 ];
 
-/** Three phone shells. Centre, then left, then right. */
+/**
+ * Three phone shells, and the screen each one renders. Centre, then left, then
+ * right — the same order the deck above uses.
+ *
+ * Three copies of one screen would be a filmstrip of one app, so these are
+ * three different screens; the status bar, the tab bar and the home indicator
+ * are shared, which is what makes them read as three screens OF ONE APP.
+ */
 $PHONES = [
-    ['#0a63ff', '#5c93ff'],
-    ['#0230c6', '#3d6ee8'],
-    ['#1b6bff', '#6aa4ff'],
+    ['#0a63ff', '#5c93ff', 'store'],
+    ['#0230c6', '#3d6ee8', 'booking'],
+    ['#1b6bff', '#6aa4ff', 'orders'],
 ];
 
 /**
@@ -511,19 +518,7 @@ require __DIR__ . '/partials/social-rail.php';
                             <span class="mock-logo"></span>
                             <b class="is-on"></b><b></b><b></b><b></b>
                         </div>
-                        <div class="mock-body">
-                            <div class="mock-top"><span class="h"></span><span class="c"></span></div>
-                            <div class="mock-kpis">
-                                <div class="mock-kpi"><u></u><s style="background:var(--c)"></s></div>
-                                <div class="mock-kpi"><u></u><s style="background:var(--c2)"></s></div>
-                                <div class="mock-kpi"><u></u><s></s></div>
-                            </div>
-                            <div class="mock-chart">
-<?php foreach ([42, 66, 54, 78, 61, 86, 72, 94] as $bar): ?>
-                                <i style="height:<?= (int)$bar ?>%"></i>
-<?php endforeach; ?>
-                            </div>
-                        </div>
+<?php require __DIR__ . '/partials/deck-mock.php'; ?>
                     </div>
                     <span class="mock-tag"><?= e($label) ?></span>
                 </div>
@@ -633,43 +628,42 @@ require __DIR__ . '/partials/social-rail.php';
              background:radial-gradient(circle, color-mix(in srgb, var(--blue) 18%, transparent), transparent 64%);"></div>
 
         <div class="apps-sticky">
-            <div class="container apps-grid">
-                <div class="apps-copy">
+            <?php /* CENTRED, not copy-left and phones-right. Three phones on
+                     the right of a paragraph read as an illustration OF the
+                     paragraph; the same three in the middle of the section are
+                     the subject of it. It also matches the platform section
+                     directly above, which is the composition this page has
+                     settled on for anything that is one object being shown. */ ?>
+            <div class="container">
+                <div class="apps-head">
                     <p class="eyebrow" data-r="lift">On the phone</p>
-                    <h2 data-r="lift">Mobile apps, built by<br>the same team.</h2>
+                    <h2 data-r="lift">Mobile apps, built by the same team.</h2>
                     <p class="lead" data-r="lift">
                         Native and cross-platform builds, store submission, and the releases
                         after it &mdash; from the people already running your site, so the app
                         and the web are never two versions of the truth.
                     </p>
-                    <ul class="apps-feat">
-<?php foreach ($APP_POINTS as $point): ?>
-                        <li data-fx="in-up"><span><?= icon('check') ?></span><?= e($point) ?></li>
-<?php endforeach; ?>
-                    </ul>
-                    <p class="apps-cta">
-                        <a class="btn btn-line" href="<?= e(site_path('/contact')) ?>" data-magnetic>Talk about an app build</a>
-                    </p>
                 </div>
+            </div>
 
-                <div class="phones" data-phones aria-hidden="true">
-<?php foreach ($PHONES as $i => [$accent, $accent2]): ?>
-                    <div class="phone" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
-                        <span class="phone-notch"></span>
-                        <div class="phone-screen">
-                            <span class="ttl"></span>
-                            <span class="sub"></span>
-                            <div class="phone-hero"></div>
-                            <div class="phone-list">
-                                <div class="it"><u></u><b></b></div>
-                                <div class="it"><u class="is-dim"></u><b style="width:70%"></b></div>
-                                <div class="it"><u class="is-dim"></u><b style="width:52%"></b></div>
-                            </div>
-                            <div class="phone-nav"><i class="on"></i><i></i><i></i><i></i></div>
-                        </div>
-                    </div>
-<?php endforeach; ?>
+            <div class="phones" data-phones aria-hidden="true">
+<?php foreach ($PHONES as $i => [$accent, $accent2, $variant]): ?>
+                <div class="phone" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
+                    <span class="phone-notch"></span>
+<?php require __DIR__ . '/partials/phone-screen.php'; ?>
                 </div>
+<?php endforeach; ?>
+            </div>
+
+            <div class="container">
+                <ul class="apps-feat">
+<?php foreach ($APP_POINTS as $point): ?>
+                    <li data-r="lift"><span><?= icon('check') ?></span><?= e($point) ?></li>
+<?php endforeach; ?>
+                </ul>
+                <p class="apps-cta">
+                    <a class="btn btn-line" href="<?= e(site_path('/contact')) ?>" data-magnetic>Talk about an app build</a>
+                </p>
             </div>
         </div>
     </section>

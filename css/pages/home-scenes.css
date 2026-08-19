@@ -796,34 +796,152 @@
 .mock-side b { width: 20px; height: 6px; border-radius: 3px; background: var(--paper-3); display: block; }
 .mock-side b.is-on { background: color-mix(in srgb, var(--c) 34%, var(--paper-3)); }
 
-.mock-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+/* The bottom padding is the tag's room. .mock-tag is absolutely positioned
+   over the card at bottom:11px, so anything the body puts at its own bottom
+   edge lands underneath it — which is exactly what happened the first time
+   these layouts ended in a row rather than in a chart. */
+.mock-body { flex: 1; padding: 12px 14px 32px; display: flex; flex-direction: column; gap: 9px; }
 .mock-top { display: flex; align-items: center; justify-content: space-between; }
 .mock-top .h { height: 9px; width: 96px; border-radius: 5px; background: var(--paper-4); }
-.mock-top .c {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--c), var(--c2));
-}
+/* --- the five insides ---------------------------------------------------
 
-.mock-kpis { display: flex; gap: 8px; }
-.mock-kpi {
-    flex: 1;
-    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
-    border-radius: var(--r-sm);
-    padding: 8px;
-    background: var(--paper);
-}
-.mock-kpi u { display: block; height: 5px; width: 60%; border-radius: 3px; background: var(--paper-4); margin-bottom: 6px; }
-.mock-kpi s { display: block; height: 11px; width: 78%; border-radius: 3px; text-decoration: none; background: var(--paper-4); }
+   Every mock used to render the same three KPI blocks and the same bar chart
+   with only the accent changed. Five identical screens tinted five ways read
+   as one product screenshotted five times, which is the opposite of what the
+   section says. These are five layouts.
 
-.mock-chart {
+   The FRAME does not vary — browser chrome, sidebar, accent — and that is
+   deliberate: those are the parts that make five surfaces read as one system,
+   which is the argument. Only the body changes.
+
+   NOTHING IN HERE CARRIES A NUMBER. Every bar, ring and row is a shape. The
+   only words are states a screen would really show; a figure in a mock is a
+   claim nobody made. */
+
+.mock-body > * { flex: none; }
+
+/* shared parts ---------------------------------------------------------- */
+.mock-pill {
+    font-family: var(--font-display);
+    font-size: 8px; font-weight: var(--fw-semi);
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 8px; min-width: 8px; min-height: 8px;
+    border-radius: var(--r-pill);
+    background: var(--paper-3);
+    color: var(--ink-3);
+}
+.mock-pill.is-ok { background: color-mix(in srgb, var(--success) 16%, var(--paper)); color: var(--success-ink); }
+
+/* web — build and deploy ------------------------------------------------- */
+.mock-code {
     flex: 1;
+    display: flex; gap: 9px;
     border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
     border-radius: var(--r-sm);
     background: var(--paper);
     padding: 9px;
-    display: flex; align-items: flex-end; gap: 5px;
 }
-.mock-chart i { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--c2), var(--c)); }
+.mock-gut {
+    width: 3px; flex: none;
+    border-radius: 2px;
+    background: repeating-linear-gradient(var(--paper-4) 0 4px, transparent 4px 11px);
+}
+.mock-code-lines { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.mock-code-lines i { height: 5px; border-radius: 3px; background: var(--paper-4); }
+.mock-code-lines i.is-hi { background: color-mix(in srgb, var(--c) 46%, var(--paper-3)); }
+.mock-strip { display: flex; gap: 6px; }
+.mock-strip .mock-chip {
+    flex: 1; height: 16px; border-radius: var(--r-sm);
+    background: var(--paper-2);
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.mock-strip .mock-chip.is-on { background: linear-gradient(115deg, var(--c), var(--c2)); border-color: transparent; }
+
+/* security — a scan ------------------------------------------------------ */
+.mock-split { flex: 1; display: flex; gap: 11px; align-items: center; }
+.mock-ring {
+    width: 74px; height: 74px; flex: none;
+    border-radius: 50%;
+    background: conic-gradient(var(--c) 0 72%, var(--paper-3) 72% 100%);
+    position: relative;
+}
+.mock-ring::after {
+    content: '';
+    position: absolute; inset: 11px;
+    border-radius: 50%;
+    background: #fff;
+}
+.mock-findings { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.mock-find { display: flex; align-items: center; gap: 7px; }
+.mock-find u { width: 7px; height: 7px; border-radius: 2px; flex: none; background: var(--paper-4); }
+.mock-find u.is-ok   { background: var(--success); }
+.mock-find u.is-warn { background: var(--warning); }
+.mock-find i { height: 5px; border-radius: 3px; background: var(--paper-4); }
+.mock-rowline { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+.mock-rowline i { height: 5px; border-radius: 3px; background: var(--paper-4); }
+
+/* marketing — channels --------------------------------------------------- */
+.mock-area {
+    flex: 1;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    padding: 8px;
+    display: flex; align-items: flex-end;
+}
+/* One shape, drawn as a clipped block rather than as a path: a polygon on a
+   gradient is an area chart and needs no SVG to be one. */
+.mock-area span {
+    display: block; width: 100%; height: 72%;
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--c) 62%, transparent),
+        color-mix(in srgb, var(--c) 6%, transparent));
+    clip-path: polygon(0 78%, 14% 58%, 28% 68%, 42% 36%, 56% 48%, 70% 22%, 84% 34%, 100% 8%, 100% 100%, 0 100%);
+}
+.mock-channels { display: flex; flex-direction: column; gap: 7px; }
+.mock-ch { display: flex; align-items: center; gap: 8px; }
+.mock-ch i { height: 5px; border-radius: 3px; background: var(--paper-4); flex: none; }
+.mock-ch b {
+    height: 8px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--c), var(--c2));
+}
+
+/* content — an editor ---------------------------------------------------- */
+.mock-split.is-editor { align-items: stretch; }
+.mock-outline {
+    width: 52px; flex: none;
+    display: flex; flex-direction: column; gap: 8px;
+    padding-right: 10px;
+    border-right: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.mock-outline i { height: 5px; border-radius: 3px; background: var(--paper-3); }
+.mock-outline i.is-on { background: color-mix(in srgb, var(--c) 42%, var(--paper-3)); }
+.mock-doc { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.mock-doc i { height: 5px; border-radius: 3px; background: var(--paper-4); }
+.mock-doc i.mock-head { height: 13px; border-radius: 5px; background: var(--paper-4); margin-bottom: 3px; }
+.mock-doc i.is-hi { background: color-mix(in srgb, var(--c) 30%, var(--paper-3)); }
+
+/* commerce — orders ------------------------------------------------------ */
+.mock-spark {
+    height: 56px; flex: none;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    padding: 7px;
+    display: flex; align-items: flex-end; gap: 4px;
+}
+.mock-spark i { flex: 1; border-radius: 2px 2px 0 0; background: linear-gradient(180deg, var(--c2), var(--c)); }
+.mock-orders { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.mock-order {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+}
+.mock-order u { width: 16px; height: 16px; border-radius: 4px; flex: none;
+                background: linear-gradient(135deg, var(--c), var(--c2)); }
+.mock-order i { height: 5px; border-radius: 3px; background: var(--paper-4); }
 
 .mock-tag {
     position: absolute; left: 64px; bottom: 11px;
@@ -859,20 +977,32 @@
 
 .apps-sticky { position: relative; z-index: 2; }
 
-.apps-grid {
+/* CENTRED. The section used to be a paragraph on the left with the phones
+   beside it, which makes the phones an illustration of the paragraph. Naveen
+   asked for them in the middle, and he is right: this section is about the
+   objects, so the objects go in the middle and the words go above and below
+   them. It also matches .platform directly above, which is the composition
+   this page has settled on for anything that is one thing being shown. */
+.apps-head { text-align: center; max-width: 40rem; margin: 0 auto; }
+.apps-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.apps-head .lead { margin: var(--sp-4) auto 0; max-width: 36rem; }
+
+/* The three points, in a row under the phones. As a left-hand column they
+   were a list beside a picture; across the foot of the section they are a
+   caption for it. */
+.apps-feat {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 62rem;
     display: grid;
-    grid-template-columns: minmax(0, 26rem) 1fr;
-    gap: var(--sp-9);
-    align-items: center;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-5);
 }
-
-.apps-copy h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
-.apps-copy .lead { margin-top: var(--sp-4); }
-
-.apps-feat { list-style: none; margin: var(--sp-6) 0; padding: 0; display: grid; gap: var(--sp-3); }
 .apps-feat li {
-    display: flex; align-items: center; gap: var(--sp-3);
+    display: flex; align-items: flex-start; gap: var(--sp-3);
     font-size: var(--fs-sm);
+    line-height: var(--lh-body);
     color: var(--ink-2);
 }
 .apps-feat li > span {
@@ -882,12 +1012,12 @@
     color: #fff;
 }
 .apps-feat li > span svg { width: 13px; height: 13px; }
-.apps-cta { margin: 0; }
+.apps-cta { margin: var(--sp-6) 0 0; text-align: center; }
 
 /* --- the phones --- */
 .phones {
     position: relative;
-    height: 560px;
+    height: 500px;
     perspective: 1600px;
     transform-style: preserve-3d;
 }
@@ -899,8 +1029,12 @@
 .phone {
     position: absolute;
     left: 50%; top: 50%;
-    width: 236px; height: 482px;
-    margin: -241px 0 0 -118px;
+    /* Smaller than the original 236x482. The section is a column now — head,
+       phones, points, button — and all four have to sit inside one 100vh
+       sticky; at the old size the centre shell ran straight through the row of
+       points underneath it. */
+    width: 196px; height: 400px;
+    margin: -200px 0 0 -98px;
     border-radius: 34px;
     background: var(--ink-chapter-2);
     border: 6px solid var(--ink-chapter-3);
@@ -919,9 +1053,9 @@
         rotateZ(calc(var(--slot-rz, 0) * 0.34deg))
         scale(.9);
 }
-.phone[data-slot="0"] { --slot-x: 0;    --slot-y: 30;  --slot-r: 0;   --slot-rz: 0;  z-index: 6; }
-.phone[data-slot="1"] { --slot-x: -248; --slot-y: -44; --slot-r: 20;  --slot-rz: 5;  z-index: 5; }
-.phone[data-slot="2"] { --slot-x: 248;  --slot-y: -44; --slot-r: -20; --slot-rz: -5; z-index: 5; }
+.phone[data-slot="0"] { --slot-x: 0;    --slot-y: 26;  --slot-r: 0;   --slot-rz: 0;  z-index: 6; }
+.phone[data-slot="1"] { --slot-x: -228; --slot-y: -40; --slot-r: 20;  --slot-rz: 5;  z-index: 5; }
+.phone[data-slot="2"] { --slot-x: 228;  --slot-y: -40; --slot-r: -20; --slot-rz: -5; z-index: 5; }
 
 /* The side buttons. Two pseudo-elements rather than two more spans in twelve
    lines of PHP — nothing here is content, and the shells are aria-hidden. */
@@ -934,8 +1068,8 @@
     background: var(--ink-chapter-3);
     box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 16%, transparent);
 }
-.phone::after  { right: -3px; top: 22%; height: 56px; }   /* power  */
-.phone::before { left:  -3px; top: 17%; height: 34px; }   /* volume */
+.phone::after  { right: -3px; top: 22%; height: 48px; }   /* power  */
+.phone::before { left:  -3px; top: 17%; height: 30px; }   /* volume */
 
 .phone-notch {
     position: absolute; left: 50%; top: 0;
@@ -945,40 +1079,158 @@
     border-radius: 0 0 12px 12px;
     z-index: 3;
 }
+/* --- the screen ---------------------------------------------------------
+
+   WHAT WAS THERE BEFORE WAS A WEB PAGE RENDERED NARROW: a title, a hero block,
+   three list rows, four nav squares. Naveen's note was exactly that - "uske
+   app ke andar abhi website ka mockup hai". An app has four things a page does
+   not, and all four are here now: a status bar it does not own, a title that
+   belongs to the screen rather than to the document, a tab bar that persists
+   between screens, and a home indicator.
+
+   The status bar, the tab bar and the indicator are identical on all three
+   shells. That is what makes them three screens OF ONE APP instead of three
+   unrelated products - the same argument the deck above makes with its shared
+   browser chrome. */
 .phone-screen {
     height: 100%;
     border-radius: 28px;
     overflow: hidden;
     background: linear-gradient(180deg, var(--ink-chapter-2), var(--ink-chapter));
-    padding: 32px 14px 14px;
-    display: flex; flex-direction: column; gap: 11px;
+    padding: 8px 12px 10px;
+    display: flex; flex-direction: column; gap: 9px;
 }
-.phone-screen .ttl { height: 11px; width: 64%; border-radius: 5px; background: color-mix(in srgb, #fff 22%, transparent); }
-.phone-screen .sub { height: 7px;  width: 44%; border-radius: 4px; background: color-mix(in srgb, #fff 11%, transparent); }
-.phone-hero {
-    height: 92px; border-radius: 14px; margin-top: 4px;
+
+/* Every value in here is a shape. Nothing is a figure, for the same reason
+   nothing in the deck is: a number in a mock is a claim nobody made. */
+.ph-status {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2px 6px 0;
+    height: 18px; flex: none;
+}
+.ph-time { width: 26px; height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 42%, transparent); }
+.ph-icons { display: flex; align-items: center; gap: 4px; }
+.ph-icons i { width: 8px; height: 7px; border-radius: 2px; background: color-mix(in srgb, #fff 34%, transparent); }
+.ph-icons i.ph-batt { width: 14px; border-radius: 3px; }
+
+.ph-head { display: flex; align-items: center; justify-content: space-between; flex: none; padding: 2px 0 0; }
+.ph-title { width: 52%; height: 12px; border-radius: 5px; background: color-mix(in srgb, #fff 30%, transparent); }
+.ph-av {
+    width: 24px; height: 24px; border-radius: 50%;
     background: linear-gradient(135deg, var(--c), var(--c2));
 }
-.phone-list { display: flex; flex-direction: column; gap: 8px; }
-.phone-list .it {
-    display: flex; align-items: center; gap: 9px;
+
+/* store ------------------------------------------------------------------ */
+.ph-search {
+    height: 26px; flex: none;
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, #fff 8%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 8%, transparent);
+    display: flex; align-items: center; padding: 0 10px;
+}
+.ph-search i { width: 46%; height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 18%, transparent); }
+
+.ph-chips { display: flex; gap: 5px; flex: none; }
+.ph-chips span {
+    flex: 1; height: 14px; border-radius: var(--r-pill);
+    background: color-mix(in srgb, #fff 8%, transparent);
+}
+.ph-chips span.is-on { background: linear-gradient(115deg, var(--c), var(--c2)); }
+
+.ph-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+.ph-prod {
+    border-radius: 11px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 7%, transparent);
+    padding: 7px;
+    display: flex; flex-direction: column; gap: 5px;
+}
+.ph-thumb {
+    height: 42px; border-radius: 7px;
+    background: linear-gradient(150deg,
+        color-mix(in srgb, var(--c) 78%, transparent),
+        color-mix(in srgb, var(--c2) 46%, transparent));
+}
+.ph-prod i { height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 20%, transparent); }
+.ph-prod b { height: 6px; border-radius: 3px; background: color-mix(in srgb, #fff 38%, transparent); }
+
+/* booking ---------------------------------------------------------------- */
+.ph-week { display: flex; gap: 4px; flex: none; }
+.ph-week span {
+    flex: 1;
+    border-radius: 9px;
+    padding: 7px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+}
+.ph-week span.is-on { background: linear-gradient(160deg, var(--c), var(--c2)); }
+.ph-week u { width: 8px; height: 4px; border-radius: 2px; background: color-mix(in srgb, #fff 30%, transparent); }
+.ph-week b { width: 11px; height: 6px; border-radius: 3px; background: color-mix(in srgb, #fff 46%, transparent); }
+
+.ph-slots { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.ph-slot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px;
+    border-radius: 11px;
     background: color-mix(in srgb, #fff 5%, transparent);
     border: 1px solid color-mix(in srgb, #fff 6%, transparent);
+}
+.ph-slot.is-on { border-color: color-mix(in srgb, var(--c) 62%, transparent); }
+.ph-slot i { height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 22%, transparent); }
+.ph-pill {
+    width: 22px; height: 8px; border-radius: var(--r-pill); flex: none;
+    background: color-mix(in srgb, #fff 14%, transparent);
+}
+.ph-pill.is-on { background: linear-gradient(115deg, var(--c), var(--c2)); }
+.ph-cta {
+    height: 30px; flex: none;
+    border-radius: var(--r-pill);
+    background: linear-gradient(115deg, var(--c), var(--c2));
+}
+
+/* orders ----------------------------------------------------------------- */
+.ph-stats { display: flex; gap: 7px; flex: none; }
+.ph-stats > div {
+    flex: 1;
     border-radius: 11px;
     padding: 9px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 6%, transparent);
+    display: flex; flex-direction: column; gap: 6px;
 }
-.phone-list u { width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
-                background: linear-gradient(135deg, var(--c), var(--c2)); }
-.phone-list u.is-dim { background: color-mix(in srgb, #fff 14%, transparent); }
-.phone-list b { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, #fff 16%, transparent); }
-.phone-nav {
+.ph-stats i { height: 4px; border-radius: 2px; background: color-mix(in srgb, #fff 18%, transparent); }
+.ph-stats b { height: 9px; border-radius: 4px; background: color-mix(in srgb, #fff 40%, transparent); }
+
+.ph-orders { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.ph-order {
+    border-radius: 11px;
+    padding: 9px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 6%, transparent);
+    display: flex; flex-direction: column; gap: 8px;
+}
+.ph-order-top { display: flex; align-items: center; justify-content: space-between; }
+.ph-order i { height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 22%, transparent); }
+.ph-bar { display: block; height: 4px; border-radius: 2px; background: color-mix(in srgb, #fff 10%, transparent); }
+.ph-bar u { display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--c), var(--c2)); }
+
+/* the persistent chrome -------------------------------------------------- */
+.ph-tabs {
     margin-top: auto;
+    flex: none;
     display: flex; justify-content: space-around;
-    padding: 11px 0 4px;
+    padding: 11px 0 6px;
     border-top: 1px solid color-mix(in srgb, #fff 8%, transparent);
 }
-.phone-nav i { width: 20px; height: 20px; border-radius: 6px; background: color-mix(in srgb, #fff 13%, transparent); }
-.phone-nav i.on { background: linear-gradient(135deg, var(--c), var(--c2)); }
+.ph-tabs i { width: 20px; height: 20px; border-radius: 6px; background: color-mix(in srgb, #fff 13%, transparent); }
+.ph-tabs i.is-on { background: linear-gradient(135deg, var(--c), var(--c2)); }
+
+.ph-home {
+    width: 84px; height: 4px; flex: none;
+    margin: 0 auto;
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, #fff 30%, transparent);
+}
 
 /* ==========================================================================
    PINNING
@@ -1001,11 +1253,16 @@
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
     }
-    .apps { height: 150vh; padding-block: 0; }
+    /* A column now, not a row: head, phones, points, button. Same shape as
+       .platform-sticky above it, which is the point — the two sections either
+       side of the gallery should read as the same kind of thing. */
+    .apps { height: 170vh; padding-block: 0; }
     .apps-sticky {
         position: sticky; top: 0;
         height: 100vh;
-        display: flex; align-items: center;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: var(--sp-5);
     }
 }
 
@@ -1013,8 +1270,12 @@
     .platform, .apps { padding-block: var(--section-y); }
     .deck   { height: 300px; }
     .mock   { width: 300px; height: 210px; margin: -105px 0 0 -150px; }
-    .phones { height: 430px; }
-    .apps-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
+    /* 520, not 430. Below 960px the section is an ordinary block, but
+       js/decks.js still runs: the centre shell sits at z 120, which the 1600px
+       perspective magnifies to about 1.08, plus its 26px forward offset. At
+       430 it ran straight through the first line of the points underneath. */
+    .phones { height: 520px; }
+    .apps-feat { grid-template-columns: 1fr; gap: var(--sp-4); max-width: 30rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
