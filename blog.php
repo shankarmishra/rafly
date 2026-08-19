@@ -15,7 +15,6 @@ $page = [
     'desc'      => 'Notes on bundled digital growth, web security, content, marketing, and the systems we build behind every package.',
     'bodyClass' => 'page-blog',
     'styles'    => ['home', 'blog'],
-    'module'    => 'stage3d',
 ];
 
 /**

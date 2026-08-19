@@ -12,7 +12,6 @@ $page = [
     'desc'      => 'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
     'bodyClass' => 'page-about',
     'styles'    => ['home', 'about'],
-    'module'    => 'stage3d',
     'schema'    => [
         schema_webpage(
             'about',

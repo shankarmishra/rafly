@@ -361,3 +361,317 @@
     .hero-aurora { display: none; }
     .hero-scene.is-live { background-image: var(--hero-still, none); }
 }
+
+/* ==========================================================================
+   THE PLATFORM — five product surfaces, fanned
+
+   A pinned section: the deck holds still in the middle of the screen while
+   the page scrolls past it, and the fan opens across that scroll. 180vh, not
+   the prototype's 320 — same choreography, resolved faster, because nobody
+   should have to scroll three screens to watch five cards move apart.
+   ========================================================================== */
+
+.platform {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 42%, var(--paper) 100%);
+}
+
+.platform-sticky { position: relative; z-index: 2; }
+
+/* The five services as links, in their own block. It is a sibling of the
+   pinned section rather than a child, because a child sharing the sticky
+   parent consumes the deck pinned range from the bottom — the deck scrolled
+   away a screen early and left blank paper behind it. */
+.platform-list {
+    position: relative;
+    background: var(--paper);
+    padding-block: var(--section-y-s) var(--section-y);
+}
+
+.platform-head { text-align: center; max-width: 39rem; margin: 0 auto; }
+.platform-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.platform-head .lead { margin: var(--sp-4) auto 0; max-width: 34rem; }
+
+/* --- the deck -----------------------------------------------------------
+   perspective on the CONTAINER, not on the cards. One shared vanishing point
+   is what makes five separately-transformed elements read as one scene
+   photographed from one place; per-card perspective makes five drawings. */
+.deck {
+    position: relative;
+    width: 100%;
+    height: 430px;
+    margin-top: var(--sp-6);
+    perspective: 1700px;
+    transform-style: preserve-3d;
+}
+
+.mock {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 430px; height: 300px;
+    margin: -150px 0 0 -215px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    box-shadow:
+        0 34px 76px -28px color-mix(in srgb, var(--ink) 46%, transparent),
+        0 2px 8px color-mix(in srgb, var(--ink) 6%, transparent);
+    will-change: transform;
+
+    /* THE STILL FORM, and it is a design rather than a fallback shrug. With
+       no JS all five cards would sit exactly on top of each other and read as
+       one card. This fans them at a third of their full spread, so the deck
+       is legible as five. js/decks.js overrides the transform the moment it
+       runs, which is why the two use the same slot variables. */
+    transform:
+        translate3d(calc(var(--slot-x, 0) * 0.34px), 0, 0)
+        rotateY(calc(var(--slot-r, 0) * 0.34deg))
+        scale(.9);
+}
+.mock[data-slot="0"] { --slot-x: 0;    --slot-r: 0;   z-index: 6; }
+.mock[data-slot="1"] { --slot-x: -250; --slot-r: 15;  z-index: 5; }
+.mock[data-slot="2"] { --slot-x: 250;  --slot-r: -15; z-index: 5; }
+.mock[data-slot="3"] { --slot-x: -448; --slot-r: 24;  z-index: 4; }
+.mock[data-slot="4"] { --slot-x: 448;  --slot-r: -24; z-index: 4; }
+
+/* --- browser chrome --- */
+.mock-bar {
+    height: 28px;
+    background: var(--paper-2);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+    display: flex; align-items: center; gap: 5px;
+    padding: 0 11px;
+}
+.mock-bar i { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-4); }
+.mock-bar span {
+    margin-left: 9px;
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    color: var(--ink-3);
+    background: #fff;
+    padding: 3px 9px;
+    border-radius: var(--r-pill);
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.mock-app { display: flex; height: calc(100% - 28px); }
+
+.mock-side {
+    width: 52px;
+    background: var(--paper);
+    border-right: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    padding: 11px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+}
+.mock-logo {
+    width: 20px; height: 20px; border-radius: 6px; display: block;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+.mock-side b { width: 20px; height: 6px; border-radius: 3px; background: var(--paper-3); display: block; }
+.mock-side b.is-on { background: color-mix(in srgb, var(--c) 34%, var(--paper-3)); }
+
+.mock-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+.mock-top { display: flex; align-items: center; justify-content: space-between; }
+.mock-top .h { height: 9px; width: 96px; border-radius: 5px; background: var(--paper-4); }
+.mock-top .c {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+
+.mock-kpis { display: flex; gap: 8px; }
+.mock-kpi {
+    flex: 1;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    padding: 8px;
+    background: var(--paper);
+}
+.mock-kpi u { display: block; height: 5px; width: 60%; border-radius: 3px; background: var(--paper-4); margin-bottom: 6px; }
+.mock-kpi s { display: block; height: 11px; width: 78%; border-radius: 3px; text-decoration: none; background: var(--paper-4); }
+
+.mock-chart {
+    flex: 1;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    padding: 9px;
+    display: flex; align-items: flex-end; gap: 5px;
+}
+.mock-chart i { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--c2), var(--c)); }
+
+.mock-tag {
+    position: absolute; left: 64px; bottom: 11px;
+    font-family: var(--font-display);
+    font-size: 10px; font-weight: var(--fw-semi);
+    letter-spacing: .07em; text-transform: uppercase;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    background: linear-gradient(115deg, var(--c), var(--c2));
+}
+
+/* ==========================================================================
+   APPS — three phones, ON PAPER
+
+   Naveen asked for this section on the light ground, against the prototype,
+   which put it on dark ink. He is right: a dark band three quarters of the
+   way down read as a different site rather than as the next paragraph.
+
+   The depth the dark ground used to provide comes from perspective and a lit
+   top edge instead. The SCREENS stay dark, because a phone screen is dark —
+   and that contrast against paper is exactly what makes the shells read as
+   objects sitting on the page rather than as drawings of phones.
+   ========================================================================== */
+
+.apps {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--paper);
+}
+
+.apps-sticky { position: relative; z-index: 2; }
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) 1fr;
+    gap: var(--sp-9);
+    align-items: center;
+}
+
+.apps-copy h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.apps-copy .lead { margin-top: var(--sp-4); }
+
+.apps-feat { list-style: none; margin: var(--sp-6) 0; padding: 0; display: grid; gap: var(--sp-3); }
+.apps-feat li {
+    display: flex; align-items: center; gap: var(--sp-3);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+}
+.apps-feat li > span {
+    width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
+    background: linear-gradient(135deg, var(--blue), #5c93ff);
+    display: grid; place-items: center;
+    color: #fff;
+}
+.apps-feat li > span svg { width: 13px; height: 13px; }
+.apps-cta { margin: 0; }
+
+/* --- the phones --- */
+.phones {
+    position: relative;
+    height: 560px;
+    perspective: 1600px;
+    transform-style: preserve-3d;
+}
+
+.phone {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 236px; height: 482px;
+    margin: -241px 0 0 -118px;
+    border-radius: 34px;
+    background: var(--ink-chapter-2);
+    border: 8px solid var(--ink-chapter-3);
+    overflow: hidden;
+    will-change: transform;
+    box-shadow:
+        0 40px 90px -30px color-mix(in srgb, var(--ink) 55%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--blue) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 22%, transparent);
+    transform:
+        translate3d(calc(var(--slot-x, 0) * 0.34px), 0, 0)
+        rotateY(calc(var(--slot-r, 0) * 0.34deg))
+        scale(.9);
+}
+.phone[data-slot="0"] { --slot-x: 0;    --slot-r: 0;   z-index: 6; }
+.phone[data-slot="1"] { --slot-x: -206; --slot-r: 19;  z-index: 5; }
+.phone[data-slot="2"] { --slot-x: 206;  --slot-r: -19; z-index: 5; }
+
+.phone-notch {
+    position: absolute; left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 88px; height: 20px;
+    background: var(--ink-chapter-3);
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
+}
+.phone-screen {
+    height: 100%;
+    background: linear-gradient(180deg, var(--ink-chapter-2), var(--ink-chapter));
+    padding: 32px 14px 14px;
+    display: flex; flex-direction: column; gap: 11px;
+}
+.phone-screen .ttl { height: 11px; width: 64%; border-radius: 5px; background: color-mix(in srgb, #fff 22%, transparent); }
+.phone-screen .sub { height: 7px;  width: 44%; border-radius: 4px; background: color-mix(in srgb, #fff 11%, transparent); }
+.phone-hero {
+    height: 92px; border-radius: 14px; margin-top: 4px;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+.phone-list { display: flex; flex-direction: column; gap: 8px; }
+.phone-list .it {
+    display: flex; align-items: center; gap: 9px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 6%, transparent);
+    border-radius: 11px;
+    padding: 9px;
+}
+.phone-list u { width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
+                background: linear-gradient(135deg, var(--c), var(--c2)); }
+.phone-list u.is-dim { background: color-mix(in srgb, #fff 14%, transparent); }
+.phone-list b { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, #fff 16%, transparent); }
+.phone-nav {
+    margin-top: auto;
+    display: flex; justify-content: space-around;
+    padding: 11px 0 4px;
+    border-top: 1px solid color-mix(in srgb, #fff 8%, transparent);
+}
+.phone-nav i { width: 20px; height: 20px; border-radius: 6px; background: color-mix(in srgb, #fff 13%, transparent); }
+.phone-nav i.on { background: linear-gradient(135deg, var(--c), var(--c2)); }
+
+/* ==========================================================================
+   PINNING
+
+   Only above 960px, and only where there is room. Below that both sections
+   are ordinary blocks and both decks are static fans — the same composition,
+   just not scrubbed.
+   ========================================================================== */
+
+@media (min-width: 961px) {
+    /* padding-block: 0 is load-bearing. A sticky child can only stick inside
+       its parent CONTENT box, so .section padding at both ends took 288px off
+       the deck pinned range — it released a screen early and left blank paper
+       where the deck had been. The height IS the range here; the breathing
+       room comes from the sticky centring its own content. */
+    .platform { height: 180vh; padding-block: 0; }
+    .platform-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+    }
+    .apps { height: 170vh; padding-block: 0; }
+    .apps-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; align-items: center;
+    }
+}
+
+@media (max-width: 960px) {
+    .platform, .apps { padding-block: var(--section-y); }
+    .deck   { height: 300px; }
+    .mock   { width: 300px; height: 210px; margin: -105px 0 0 -150px; }
+    .phones { height: 430px; }
+    .apps-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* The still fan IS the design at rest. Nothing has to move for either
+       section to say what it says. */
+    .platform, .apps { height: auto; padding-block: var(--section-y); }
+    .platform-sticky, .apps-sticky { position: static; height: auto; }
+}

@@ -35,7 +35,6 @@ $page = [
     'desc'      => 'How bundled delivery actually plays out — the problem, our approach, and the measurable result for each engagement.',
     'bodyClass' => 'page-case-studies',
     'styles'    => ['home', 'work'],
-    'module'    => 'stage3d',
     'schema'    => array_filter([
         schema_breadcrumbs($crumbs),
         // Each card gets an id="case-study-N" anchor so this ItemList can point

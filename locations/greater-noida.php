@@ -32,7 +32,6 @@ $page = [
     'desc'      => $desc,
     'bodyClass' => 'page-location',
     'styles'    => ['home', 'about'],
-    'module'    => 'stage3d',
     'canonical' => 'locations/greater-noida',
     'schema'    => [
         schema_webpage('locations/greater-noida', $title, $desc, 'WebPage'),

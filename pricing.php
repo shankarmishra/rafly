@@ -33,7 +33,6 @@ $page = [
     'desc'      => 'Indicative pricing for our bundled packages — Starter, Growth and Enterprise. Get an exact quote for your specific requirements.',
     'bodyClass' => 'page-pricing',
     'styles'    => ['home'],
-    'module'    => 'stage3d',
     'schema'    => [schema_breadcrumbs($crumbs), schema_faq($PRICING_FAQ)],
 ];
 

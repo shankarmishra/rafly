@@ -32,7 +32,6 @@ $page = [
     'desc'      => 'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
     'bodyClass' => 'page-team',
     'styles'    => ['home', 'team'],
-    'module'    => 'stage3d',
     'scripts'   => ['team'],
     'schema'    => [
         schema_webpage(

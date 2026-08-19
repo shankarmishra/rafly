@@ -66,6 +66,20 @@ if (hero) {
     }
 }
 
+/* ------------------------------------------------------- the two decks */
+
+/* The browser fan and the phones. Transforms only, so they are the cheapest
+   thing on the page after the cluster and are gated on motion preference
+   rather than on the full canvas ladder — a phone should still get the fan,
+   it is the section's whole point. Under reduced motion the CSS lays both out
+   as a static open fan, which is the same composition holding still. */
+if ((document.querySelector('[data-deck]') || document.querySelector('[data-phones]'))
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    import('./decks.js')
+        .then((m) => m.initDecks())
+        .catch(() => { /* the CSS stack is a complete, readable fallback */ });
+}
+
 /* ------------------------------------------------ interaction polish */
 
 /* Magnetic buttons and the custom cursor. The file gates itself again on

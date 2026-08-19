@@ -54,7 +54,6 @@ $page = [
     'desc'      => $data['intro'],
     'bodyClass' => 'page-service svc-' . $data['key'],
     'styles'    => ['home', 'service'],
-    'module'    => 'stage3d',
 
     // This page's content varies by slug, so the canonical must carry it.
     // Without it all five service pages self-canonicalise to the same URL

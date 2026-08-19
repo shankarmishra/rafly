@@ -22,7 +22,6 @@ $page = [
     'desc'      => 'Tell us what is slowing your growth down. One point of contact for web development, content, marketing, security and e-commerce support. We reply within one working day.',
     'bodyClass' => 'page-contact',
     'styles'    => ['home'],
-    'module'    => 'stage3d',
     'canonical' => 'contact',
     'schema'    => [schema_breadcrumbs($crumbs)],
 ];

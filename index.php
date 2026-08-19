@@ -2,43 +2,46 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 /**
- * THE HOMEPAGE — nine sections.
+ * THE HOMEPAGE — ten sections.
  *
- * It was seventeen, with the primary call to action repeated five times and a
- * documented height of about 15,000px. Seventeen sections is not thoroughness;
- * it is an offer that has not been decided on. Every section below answers a
- * question a buyer actually asks, in the order they ask it:
+ * Every section answers a question a buyer actually asks, in the order they
+ * ask it:
  *
- *   1  what is this              hero
- *   2  what do you believe       the statement
- *   3  what do I get             the assembly, opened
- *   4  how does it run           delivery
- *   5  what is it built on       the stack
- *   6  who have you done it for  selected work   (conditional — see below)
- *   7  what will you NOT do      honest limits
- *   8  what does it cost         pricing and FAQ
- *   9  how do I start            the close
+ *   1   what is this              hero
+ *   2   what do you believe       the statement
+ *   3   what do I get             the platform — five products, fanned
+ *   3b  do you build apps         apps — three phones
+ *   4   how does it run           delivery
+ *   5   what is it built on       the stack
+ *   6   who have you done it for  selected work   (conditional — see below)
+ *   7   what will you NOT do      honest limits
+ *   8   what does it cost         pricing and FAQ
+ *   9   how do I start            the close
  *
  * TWO calls to action, not five: the hero and the close.
  *
- * THE OBJECT
- * ----------
- * Sections 1-3 share one sticky WebGL stage (js/stage3d.js). The object is
- * assembled in the hero, hidden behind the statement — which is opaque paper
- * and simply covers it — and comes apart across section 3. It is the same
- * object throughout; it never disappears and re-appears, it transforms.
+ * THERE IS NO 3-D ON THIS PAGE, AND THAT TOOK FOUR ATTEMPTS TO LEARN
+ * ------------------------------------------------------------------
+ * A WebGL point cloud, a glass torus knot, a rotating capability ring and a
+ * machined assembly that came apart on scroll were all built for this page,
+ * and all four were rejected on sight. The last of them was the best-executed
+ * by a distance — a real studio lighting rig, PMREM environment maps,
+ * pre-rendered stills that could not drift from the live scene — and it was
+ * rejected for the same reason as the first three: a metal part says nothing
+ * about what this company sells. Executing an idea better does not fix the
+ * idea.
  *
- * Everything that stage does is an upgrade. assets/render/core-*.webp is
- * rendered offline from the same scene (inc/tools/render-stills.mjs) and is
- * what phones, crawlers, printers, reduced-motion and no-WebGL visitors get.
+ * What replaced it is drawn from the subject instead of from a geometry
+ * library: the five services as five working screens, and the app work as
+ * three phones. Deleted with the object: js/stage3d.js, js/assembly.js,
+ * js/studio.js, inc/tools/render-stills.mjs, vendor/three/ (744 KB) and
+ * assets/render/ (712 KB). The homepage is roughly 1.5 MB lighter and no page
+ * on the site loads a 3-D library any more.
  *
- * WHAT IS NOT HERE ANY MORE, AND WHY
- * ----------------------------------
- *   the 13-tile rotating capability ring   a fourth focal device
- *   the 3-D perspective carousel           a fifth
+ * WHAT ELSE IS NOT HERE, AND WHY
+ * ------------------------------
+ *   the 3-D perspective carousel           a competing focal device
  *   the point-cloud band                   shipped a visibly empty frame
- *   the device-mockup "app stage"          carried unverified LCP figures
- *   the marquee                            motion with nothing to say
  *   the trust bar                          "120+ projects / 98% satisfaction"
  *                                          were seeded sample values
  *   24 stock photographs                   other companies' premises,
@@ -118,6 +121,41 @@ $MODULES = [
 ];
 
 /**
+ * The five product surfaces in the deck, in the order they sit on screen:
+ * centre first, then the inner pair, then the outer pair. That order is the
+ * z-order and the paint order both, so a slot's index IS how far back it sits.
+ *
+ * The accents are the five --svc-* values re-expressed as a light/dark pair
+ * for a gradient. They are chrome, not identity: nothing in a mock is labelled
+ * with a number, so none of these needs to clear a text contrast ratio.
+ */
+$DECK = [
+    ['web',       'Web Development', '#0a63ff', '#4b8bff'],
+    ['security',  'Web Security',    '#0230c6', '#3d6ee8'],
+    ['marketing', 'Marketing',       '#1b6bff', '#6aa4ff'],
+    ['content',   'Content',         '#001a7a', '#3a63d8'],
+    ['commerce',  'Commerce',        '#0847d6', '#5c93ff'],
+];
+
+/**
+ * The app section, and it is deliberately CAPABILITY rather than claim. Not
+ * "we shipped N apps" and not a store rating: those are numbers, and the site
+ * does not publish a number it cannot back. These say what the work is.
+ */
+$APP_POINTS = [
+    'iOS and Android, native or cross-platform',
+    'Store submission, review responses, and the release after that',
+    'One backend behind the app and the website, never two',
+];
+
+/** Three phone shells. Centre, then left, then right. */
+$PHONES = [
+    ['#0a63ff', '#5c93ff'],
+    ['#0230c6', '#3d6ee8'],
+    ['#1b6bff', '#6aa4ff'],
+];
+
+/**
  * Admin-owned content, read before any output so a slow or failed query
  * cannot leave a half-rendered page. db_available() never throws; with the
  * database down these sections render empty and the rest of the page is
@@ -142,12 +180,15 @@ foreach (services_all() as $svc) {
 
 $page = [
     'id'        => 'home',
-    'title'     => 'Rafly | One Core, Five Branches — Web, Security, Marketing, Content & Commerce',
+    'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
     'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
     'styles'    => ['home'],
     'module'    => 'home',
-    'ogImage'   => 'assets/render/core-og-1200.webp',
+    /* Was assets/render/core-og-1200.webp, a render of the deleted object.
+       assets/og-cover.png is generated from logo.png by inc/tools/build-assets.php
+       and is the real mark, at the 1200x630 the meta tags promise. */
+    'ogImage'   => 'assets/og-cover.png',
     'schema'    => [
         schema_faq($FAQS),
     ],
@@ -157,32 +198,6 @@ require __DIR__ . '/partials/header.php';
 require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
-
-<?php /* ==============================================================
-   THE STAGE — sections 01 to 03 share one sticky scene.
-
-   .stage-sticky carries a negative bottom margin equal to its own height, so
-   it takes no space in the flow: the three sections below scroll over it. The
-   statement is opaque paper and therefore hides the object completely, which
-   is what gives section 02 its rest.
-   ============================================================== */ ?>
-<div class="stage" data-stage>
-
-    <div class="stage-sticky" aria-hidden="true">
-        <div class="stage-ground"></div>
-        <picture class="stage-still">
-            <source media="(max-width: 760px)" srcset="<?= e(asset('assets/render/core-hero-560.webp')) ?>">
-            <source media="(max-width: 1180px)" srcset="<?= e(asset('assets/render/core-hero-900.webp')) ?>">
-            <img src="<?= e(asset('assets/render/core-hero-1400.webp')) ?>"
-                 width="1400" height="1560" decoding="async" alt="">
-        </picture>
-        <canvas class="stage-canvas"></canvas>
-        <div class="stage-labels">
-<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
-            <span class="stage-label"><i><?= e($idx) ?></i><?= e($label) ?></span>
-<?php endforeach; ?>
-        </div>
-    </div>
 
     <?php /* ==========================================================
        01 — HERO
@@ -366,31 +381,94 @@ require __DIR__ . '/partials/social-rail.php';
     </section>
 
     <?php /* ==========================================================
-       03 — THE FIVE, EXPLODED
+       03 — THE PLATFORM
 
-       The signature interaction, and the only expensive one on the page. As
-       you scroll, the assembly separates and the core is revealed running
-       through all five modules.
+       Five product surfaces, fanned. This REPLACES a WebGL assembly that came
+       apart as you scrolled: a machined object drawn with three.js, 755 KB of
+       library plus 712 KB of pre-rendered stills, and it was rejected on sight
+       along with the two 3-D objects before it. The objection was never the
+       execution. It was that a metal part says nothing about what this company
+       sells.
 
-       Below 761px there is no WebGL at all. The section becomes a vertical
-       sequence of three pre-rendered stills carrying the same five labels —
-       the same story in the same visual language, at about a tenth of the
-       cost. See .assembly-seq below and css/pages/home.css.
+       These do. Each mock is one of the five services as a working screen, and
+       the fan opens on scroll: a tight stack when the section arrives,
+       spreading to centre-plus-two-plus-two by the time you are through it.
+       The depth is real perspective rather than a drop shadow — the outer pair
+       sit 350px further back and turn 24 degrees to face the middle.
+
+       THEY ARE CHROME, NOT CLAIMS. Every bar, ring and KPI block inside is a
+       shape with no number on it. Nothing here reports a metric, because
+       nothing here measured one — the same rule inc/repo/metrics.php enforces
+       for the trust bar. The whole deck is aria-hidden.
+
+       With no JS the section is a normal-height block: the deck renders as a
+       readable stack and the list below carries the same five services as real
+       links, which is what a crawler and a screen reader use either way.
        ========================================================== */ ?>
-    <section class="section assembly" id="services" data-stage-open>
-        <div class="container">
-            <div class="assembly-head">
-                <p class="eyebrow">The five</p>
-                <h2>One assembly.<br>Five modules.<br><span class="soft">One core.</span></h2>
-                <p class="lead">
-                    Not five services sold from one invoice. Five parts of one system,
-                    built to fit each other, on one shaft.
-                </p>
+    <section class="section platform" id="services">
+        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:760px; height:760px; left:-14%; top:6%;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 16%, transparent), transparent 66%);"></div>
+        <div class="orb" aria-hidden="true" style="width:700px; height:700px; right:-12%; bottom:0;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue-deep) 14%, transparent), transparent 66%);"></div>
+
+        <div class="platform-sticky">
+            <div class="container">
+                <div class="platform-head">
+                    <p class="eyebrow" data-fx="fade">One platform</p>
+                    <h2 data-fx="fade">Five products.<br>One place they all live.</h2>
+                    <p class="lead" data-fx="fade">
+                        Every service ships its own working surface &mdash; and they read as one
+                        system, not five logins stitched together.
+                    </p>
+                </div>
             </div>
 
+            <div class="deck" data-deck aria-hidden="true">
+<?php foreach ($DECK as $i => [$app, $label, $accent, $accent2]): ?>
+                <div class="mock" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
+                    <div class="mock-bar">
+                        <i></i><i></i><i></i>
+                        <span>rafly.in/app/<?= e($app) ?></span>
+                    </div>
+                    <div class="mock-app">
+                        <div class="mock-side">
+                            <span class="mock-logo"></span>
+                            <b class="is-on"></b><b></b><b></b><b></b>
+                        </div>
+                        <div class="mock-body">
+                            <div class="mock-top"><span class="h"></span><span class="c"></span></div>
+                            <div class="mock-kpis">
+                                <div class="mock-kpi"><u></u><s style="background:var(--c)"></s></div>
+                                <div class="mock-kpi"><u></u><s style="background:var(--c2)"></s></div>
+                                <div class="mock-kpi"><u></u><s></s></div>
+                            </div>
+                            <div class="mock-chart">
+<?php foreach ([42, 66, 54, 78, 61, 86, 72, 94] as $bar): ?>
+                                <i style="height:<?= (int)$bar ?>%"></i>
+<?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="mock-tag"><?= e($label) ?></span>
+                </div>
+<?php endforeach; ?>
+            </div>
+        </div>
+
+    </section>
+
+    <?php /* The same five, as real links, in their OWN block outside the
+             pinned section. Inside it they fought the sticky: .platform-sticky
+             can only stick for as long as its parent has room left, so a list
+             sharing that parent ate the deck's pinned range from the bottom
+             and left a screen of nothing where the deck used to be. Out here
+             the deck gets the full 180vh and the list gets its own space. */ ?>
+    <section class="section platform-list">
+        <div class="container">
             <ol class="assembly-list">
 <?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
-                <li class="assembly-item">
+                <li class="assembly-item" data-fx="in-up">
                     <a href="<?= e(site_path('/' . $slug)) ?>">
                         <span class="assembly-idx"><?= e($idx) ?></span>
                         <span class="assembly-name"><?= e($label) ?></span>
@@ -400,26 +478,69 @@ require __DIR__ . '/partials/social-rail.php';
 <?php endforeach; ?>
             </ol>
         </div>
-
-        <?php /* The exploded state for everyone the live scene never reaches:
-                 desktop with WebGL off, Save-Data, reduced motion, a dead
-                 driver. One render, beside the list, section at normal
-                 height. Hidden the moment .stage gains .is-live. */ ?>
-        <figure class="assembly-still" aria-hidden="true">
-            <img src="<?= e(asset('assets/render/core-open-1400.webp')) ?>"
-                 width="1400" height="1560" loading="lazy" decoding="async" alt="">
-        </figure>
-
-        <?php /* The phone experience. Designed, not degraded: three states of
-                 the same render, lazily loaded, at 640px. */ ?>
-        <div class="assembly-seq" aria-hidden="true">
-            <img src="<?= e(asset('assets/render/core-seq-1-640.webp')) ?>" width="640" height="760" loading="lazy" decoding="async" alt="">
-            <img src="<?= e(asset('assets/render/core-seq-2-640.webp')) ?>" width="640" height="760" loading="lazy" decoding="async" alt="">
-            <img src="<?= e(asset('assets/render/core-seq-3-640.webp')) ?>" width="640" height="860" loading="lazy" decoding="async" alt="">
-        </div>
     </section>
 
-</div><?php /* /.stage */ ?>
+    <?php /* ==========================================================
+       03b — APPS
+
+       Rafly builds mobile apps, and nothing on the page said so.
+
+       ON PAPER, NOT ON INK. The prototype put this section on the dark ground.
+       Naveen asked for the opposite ("neeche bhi light theme hoga same"), and
+       he is right: a dark band three quarters of the way down read as a
+       different site rather than as the next paragraph. Depth without a dark
+       ground comes from the same place the deck above gets it — perspective, a
+       real turn toward the middle, and a lit top edge on each shell. The
+       SCREENS stay dark, because a phone screen is dark, and that is also what
+       keeps them legible against paper.
+       ========================================================== */ ?>
+    <section class="section apps" id="apps">
+        <div class="tex-hatch" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:900px; height:900px; left:50%; top:46%;
+             transform:translate(-50%,-50%);
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 18%, transparent), transparent 64%);"></div>
+
+        <div class="apps-sticky">
+            <div class="container apps-grid">
+                <div class="apps-copy">
+                    <p class="eyebrow" data-fx="fade">On the phone</p>
+                    <h2 data-fx="fade">Mobile apps, built by<br>the same team.</h2>
+                    <p class="lead" data-fx="fade">
+                        Native and cross-platform builds, store submission, and the releases
+                        after it &mdash; from the people already running your site, so the app
+                        and the web are never two versions of the truth.
+                    </p>
+                    <ul class="apps-feat">
+<?php foreach ($APP_POINTS as $point): ?>
+                        <li data-fx="in-up"><span><?= icon('check') ?></span><?= e($point) ?></li>
+<?php endforeach; ?>
+                    </ul>
+                    <p class="apps-cta">
+                        <a class="btn btn-line" href="<?= e(site_path('/contact')) ?>" data-magnetic>Talk about an app build</a>
+                    </p>
+                </div>
+
+                <div class="phones" data-phones aria-hidden="true">
+<?php foreach ($PHONES as $i => [$accent, $accent2]): ?>
+                    <div class="phone" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
+                        <span class="phone-notch"></span>
+                        <div class="phone-screen">
+                            <span class="ttl"></span>
+                            <span class="sub"></span>
+                            <div class="phone-hero"></div>
+                            <div class="phone-list">
+                                <div class="it"><u></u><b></b></div>
+                                <div class="it"><u class="is-dim"></u><b style="width:70%"></b></div>
+                                <div class="it"><u class="is-dim"></u><b style="width:52%"></b></div>
+                            </div>
+                            <div class="phone-nav"><i class="on"></i><i></i><i></i><i></i></div>
+                        </div>
+                    </div>
+<?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <?php /* ==========================================================
        04 — DELIVERY
@@ -633,10 +754,10 @@ require __DIR__ . '/partials/social-rail.php';
                         <span><b>Reply</b> within one working day</span>
                     </p>
 
-                    <figure class="close-object" aria-hidden="true">
-                        <img src="<?= e(asset('assets/render/core-hero-900.webp')) ?>"
-                             width="900" height="1000" loading="lazy" decoding="async" alt="">
-                    </figure>
+                    <?php /* The rendered object that used to sit here went with the
+                             rest of the 3-D layer. Nothing replaces it: this is a
+                             form, and the quietest thing that can be beside a form
+                             is the ground it is already standing on. */ ?>
                 </div>
 
                 <div class="close-form">
