@@ -47,13 +47,18 @@ $page = ($page ?? []) + [
 /**
  * Core stylesheet stack, in cascade order. 00-tokens must always be first.
  *
- * Nine files. The ninth, 08-ground.css, carries the two-ground token remap
- * and must load after every component sheet, because it wins by being last
- * rather than by being more specific.
+ * TWO FILES AT THE END DO DIFFERENT JOBS AND THE ORDER BETWEEN THEM MATTERS.
  *
- * The previous build carried two competing
- * animation systems and roughly 1,800 superseded lines in one page stylesheet;
- * none of that survived the rebuild, so there is nothing here to keep in sync.
+ * 08-ground.css carries the two-ground token remap and must load after every
+ * component sheet, because it wins by being last rather than by being more
+ * specific.
+ *
+ * 09-scenes.css then loads after IT, and is allowed to because of a rule
+ * written into its own header: 09-scenes may never define a ground token. It
+ * reads --surface / --accent-fg / --paper and defines only scene-local
+ * variables of its own. Custom properties resolve per element at use time, so
+ * a .ground-chapter ancestor still wins over anything in 09-scenes — which is
+ * what makes "last" safe here and would not be if that rule were broken.
  */
 $coreStyles = [
     'css/00-tokens.css',
@@ -65,6 +70,7 @@ $coreStyles = [
     'css/06-motion.css',
     'css/07-fx.css',
     'css/08-ground.css',
+    'css/09-scenes.css',
 ];
 
 /**
@@ -223,4 +229,11 @@ if (!$page['noindex']) {
 <?= icon_sprite() ?>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="bg-field" aria-hidden="true"></div>
+<?php /* The technical field: circuit traces with travelling data packets, and a
+         cursor-reactive dot network. Painted by js/field.js, which is gated in
+         js/home.js and never fetched on a phone, under reduced motion, or on
+         Save-Data. The canvas is EMPTY until then and css/09-scenes.css gives
+         .field a dot-grid background so the still form is the network's own
+         geometry standing still — a design, not a placeholder. */ ?>
+<canvas id="field" class="field" aria-hidden="true"></canvas>
 <div class="scroll-progress" aria-hidden="true"></div>

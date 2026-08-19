@@ -127,7 +127,12 @@
 
 .hero-title {
     font-family: var(--font-display);
-    font-size: var(--fs-display-xl);
+    /* NOT --fs-display-xl. That token caps at 7rem, which was right for a
+       two-line headline and overflows the hero at three — "Build Fast. / Grow
+       Faster. / Scale Smarter." is 336px of type before the eyebrow, the lead
+       and two buttons. This is the display tier one step down, which keeps
+       the hero the loudest thing on the page without spilling out of it. */
+    font-size: clamp(2.625rem, 1.1rem + 4.6vw, 4.75rem);
     line-height: var(--lh-display);
     letter-spacing: var(--tr-display);
     font-weight: var(--fw-bold);

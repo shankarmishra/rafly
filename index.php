@@ -146,7 +146,7 @@ $page = [
     'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
     'styles'    => ['home'],
-    'module'    => 'stage3d',
+    'module'    => 'home',
     'ogImage'   => 'assets/render/core-og-1200.webp',
     'schema'    => [
         schema_faq($FAQS),
@@ -187,49 +187,160 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        01 — HERO
 
-       Editorial and asymmetric: type ranged left, object on the right third,
-       cropped by the frame edge. The LCP element is the headline, never the
-       canvas and never the still.
+       Type ranged left, a cluster of product surfaces on the right.
 
-       This reverses an instruction recorded on the previous build — "text
-       center me chahiya", said about a centred hero. That hero was centred
-       because the object had to be pushed out of the middle to keep the words
-       readable, so centring was the only arrangement left. This object stands
-       on paper with its own shadow and does not compete with type, which
-       makes the asymmetric composition available again.
+       THE HEADLINE IS THE LIVE SITE'S HEADLINE. "Build Fast. Grow Faster.
+       Scale Smarter." is what rafly.in says today and what Naveen asked to
+       keep; the prototype's "One core. Five branches." is retired as a
+       headline, though its five-branch STRUCTURE is what the dark chapter
+       renders further down the page.
+
+       THERE IS NO 3-D OBJECT HERE, AND THAT IS THE DECISION. Three were
+       built for this slot and all three were rejected on sight — a WebGL
+       point cloud, a glass torus knot, and a machined assembly. The knot in
+       particular is the default object of every 3-D demo on the web and said
+       nothing about what this company sells. What is here instead is drawn
+       from the subject: the actual working surfaces a client would see, in
+       glass cards, arranged AROUND the words rather than behind them. The
+       composition has an empty middle, so the type needs no scrim.
+
+       THE LCP ELEMENT IS THE HEADLINE. Never the shader, never a card. Both
+       arrive after load and after an idle callback, and both are gated in JS
+       before their module is fetched (js/home.js -> js/gates.js).
+
+       Everything below renders complete with no JavaScript at all: the cards
+       are real elements in their final positions, and the aurora's four
+       blobs exist as CSS radial-gradients on .hero-scene at their t=0
+       positions. Without JS the hero is the same design, standing still.
        ========================================================== */ ?>
-    <section class="section hero" id="home">
+    <section class="section hero hero-scene" id="home" data-hero>
+        <?php /* Painted by js/aurora.js — raw WebGL2, one fragment shader, one
+                 triangle. Not three.js: loading 365 KB of scene graph, camera
+                 and material system to draw a single full-screen quad is not
+                 defensible. aria-hidden because it is the room's lighting. */ ?>
+        <canvas class="hero-aurora" data-aurora aria-hidden="true"></canvas>
+
         <div class="container">
-            <div class="hero-copy">
-                <p class="meta-row">
-                    <span><b>Built for</b> owner-operated businesses</span>
-                    <span><b>Model</b> one scope, one price</span>
-                </p>
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <p class="meta-row" data-fx="fade">
+                        <span><b>Built for</b> owner-operated businesses</span>
+                        <span><b>Model</b> one scope, one price</span>
+                    </p>
 
-                <h1 class="hero-title">
-                    One core.<br><span class="hero-title-2">Five branches.</span>
-                </h1>
+                    <?php /* Each line is masked and slides up from behind its own
+                             edge, which reads as typeset rather than animated. The
+                             mask boxes are inert without JS — css/09-scenes.css
+                             resolves them to translateY(0) under .no-js. */ ?>
+                    <h1 class="hero-title is-in">
+                        <span class="line-mask"><span>Build Fast.</span></span>
+                        <span class="line-mask"><span>Grow Faster.</span></span>
+                        <span class="line-mask"><span class="grad-word">Scale Smarter.</span></span>
+                    </h1>
 
-                <p class="hero-lead">
-                    Web, security, marketing, content and commerce — built by one team,
-                    on one plan, with one person accountable. Not five vendors who have
-                    never spoken to each other.
-                </p>
+                    <p class="hero-lead" data-fx="fade">
+                        Web, security, marketing, content and commerce — built by one team,
+                        on one plan, with one person accountable. Not five vendors who have
+                        never spoken to each other.
+                    </p>
 
-                <div class="hero-cta">
-                    <a class="btn btn-pill" href="#start">Book a free consultation</a>
-                    <a class="btn btn-line" href="#delivery">See how delivery runs</a>
+                    <div class="hero-cta" data-fx="fade">
+                        <a class="btn btn-pill" href="#start" data-magnetic>Book a free consultation</a>
+                        <a class="btn btn-line" href="#delivery" data-magnetic>See how delivery runs</a>
+                    </div>
+
+                    <dl class="spec">
+<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
+                        <div class="spec-row">
+                            <dt><?= e($idx) ?></dt>
+                            <dd><a href="<?= e(site_path('/' . $slug)) ?>"><?= e($label) ?></a></dd>
+                        </div>
+<?php endforeach; ?>
+                    </dl>
                 </div>
 
-                <dl class="spec">
-<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
-                    <div class="spec-row">
-                        <dt><?= e($idx) ?></dt>
-                        <dd><a href="<?= e(site_path('/' . $slug)) ?>"><?= e($label) ?></a></dd>
+                <?php /* THE CARDS ARE DECORATIVE AND SAY SO. Every number in them
+                         is shape, not data — bar heights, a ring percentage, a
+                         status word. None of it is presented as a measurement of
+                         anything, none of it is a client claim, and the whole
+                         cluster is aria-hidden so a screen reader is never read a
+                         chart that does not exist. That is the same rule
+                         inc/repo/metrics.php enforces for the trust bar: a number
+                         is either backed or it is not shown as fact.
+
+                         data-depth is the z translation js/cluster.js gives each
+                         card, and it also scales that card's parallax travel, so
+                         the nearer cards move further. */ ?>
+                <div class="cluster" data-cluster aria-hidden="true">
+                    <div class="fcard" data-depth="0" style="width:290px; left:34px; top:6px;">
+                        <div class="fcard-head">
+                            <div>
+                                <div class="fcard-meta">Delivery</div>
+                                <div class="fcard-title">This week</div>
+                            </div>
+                            <div class="fcard-pill">On track</div>
+                        </div>
+                        <div class="fcard-row">
+                            <div class="fcard-av"></div>
+                            <div style="flex:1">
+                                <div class="fcard-line" style="width:74%; margin-bottom:6px"></div>
+                                <div class="fcard-line" style="width:46%"></div>
+                            </div>
+                        </div>
+                        <div class="fcard-row">
+                            <div class="fcard-av is-green"></div>
+                            <div style="flex:1">
+                                <div class="fcard-line" style="width:62%; margin-bottom:6px"></div>
+                                <div class="fcard-line" style="width:38%"></div>
+                            </div>
+                        </div>
                     </div>
-<?php endforeach; ?>
-                </dl>
+
+                    <div class="fcard" data-depth="-90" style="width:216px; left:0; top:236px;">
+                        <div class="fcard-head">
+                            <div class="fcard-title">Traffic</div>
+                            <div class="fcard-meta">30d</div>
+                        </div>
+                        <div class="fcard-bars">
+                            <i style="height:34%"></i><i style="height:52%"></i><i style="height:41%"></i>
+                            <i style="height:68%"></i><i style="height:57%"></i><i style="height:83%"></i>
+                            <i style="height:72%"></i>
+                        </div>
+                    </div>
+
+                    <div class="fcard" data-depth="70" style="width:200px; left:246px; top:300px;">
+                        <div class="fcard-head">
+                            <div class="fcard-title">Security</div>
+                            <div class="fcard-meta">Scan</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div class="fcard-ring" style="--p:86%"></div>
+                            <div style="flex:1">
+                                <div class="fcard-line" style="width:82%; margin-bottom:7px"></div>
+                                <div class="fcard-line" style="width:56%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fcard" data-depth="-40" style="width:172px; left:118px; top:436px;">
+                        <div class="fcard-head">
+                            <div class="fcard-title">Uptime</div>
+                            <div class="fcard-pill">Healthy</div>
+                        </div>
+                        <div class="fcard-line" style="width:100%; height:5px; margin-bottom:8px"></div>
+                        <div class="fcard-strip">
+<?php for ($i = 0; $i < 14; $i++): ?>
+                            <i<?= $i === 9 ? ' class="is-warn"' : '' ?>></i>
+<?php endfor; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div class="scroll-cue" aria-hidden="true">
+            <span class="meta">Scroll</span>
+            <span class="rail"><i></i></span>
         </div>
     </section>
 
