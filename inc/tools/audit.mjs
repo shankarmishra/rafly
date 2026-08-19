@@ -20,7 +20,7 @@
  */
 
 import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
@@ -109,6 +109,31 @@ async function goto(cdp, url) {
     await cdp.send('Page.navigate', { url });
     await Promise.race([loaded, sleep(15000)]);
     await sleep(500);
+}
+
+/* ==========================================================================
+   The budget
+
+   inc/tools/perf-budget.json used to be documentation: a file describing what
+   the site weighed, that nothing ever read. A budget nothing enforces is a
+   comment. This reads it and fails the run, which is the only version of a
+   performance budget that survives contact with a deadline.
+   ========================================================================== */
+
+function loadBudget() {
+    try {
+        return JSON.parse(readFileSync(new URL('./perf-budget.json', import.meta.url), 'utf8'));
+    } catch {
+        return null;
+    }
+}
+
+function budgetFor(budget, route, viewport) {
+    if (!budget) return null;
+    for (const spec of Object.values(budget.routes)) {
+        if (spec.match?.includes(route)) return spec[viewport] || null;
+    }
+    return budget.routes.default?.[viewport] || null;
 }
 
 async function main() {
@@ -235,13 +260,32 @@ async function main() {
     }
 
     /* ================================================================== */
+    const budget = loadBudget();
     console.log('\n3. WEIGHT — per page, uncompressed on this dev server\n');
     {
         const { chrome, ws, cdp } = await connect(9343);
         await cdp.send('Page.enable');
         await cdp.send('Network.enable');
 
+        /* TWO viewports, not one.
+           This block used to measure at whatever width headless Chrome opened
+           at, which is always a desktop width — so it reported the desktop
+           figure and called it "the page". The single most important number
+           on this project is the PHONE payload, because that is where
+           three.js is gated OUT and where the visitor is on a mid-range
+           Android on mobile data. Measuring only desktop meant the mobile
+           budget was never actually checked by anything. */
+        const viewports = [
+            { name: 'desktop', width: 1440, height: 900, dpr: 1, mobile: false },
+            { name: 'phone', width: 390, height: 844, dpr: 2, mobile: true },
+        ];
         const routes = ['/', '/about', '/web-development', '/blog', '/contact'];
+        for (const vp of viewports) {
+        await cdp.send('Emulation.setDeviceMetricsOverride', {
+            width: vp.width, height: vp.height, deviceScaleFactor: vp.dpr, mobile: vp.mobile,
+            screenWidth: vp.width, screenHeight: vp.height,
+        });
+        console.log(`  --- ${vp.name} ${vp.width}x${vp.height} ---`);
         for (const route of routes) {
             const seen = new Map();
             const onResponse = (p) => seen.set(p.requestId, { type: p.type, url: p.response.url });
@@ -264,6 +308,21 @@ async function main() {
             const fmt = (n) => (n / 1024).toFixed(0).padStart(4) + ' KB';
             console.log(`  ${route.padEnd(20)} ${String(rows.length).padStart(2)} req  total ${fmt(total)}` +
                 `   html ${fmt(by.html || 0)}  css ${fmt(by.css || 0)}  js ${fmt(by.js || 0)}  font ${fmt(by.font || 0)}  img ${fmt(by.img || 0)}`);
+
+            const cap = budgetFor(budget, route, vp.name);
+            if (cap) {
+                const over = [];
+                for (const [k, limit] of Object.entries(cap)) {
+                    const got = (k === 'total' ? total : (by[k] || 0)) / 1024;
+                    if (got > limit) over.push(`${k} ${got.toFixed(0)}KB > ${limit}KB`);
+                }
+                if (over.length) {
+                    failures++;
+                    console.log(`     [OVER BUDGET] ${over.join(', ')}`);
+                }
+            }
+        }
+        console.log('');
         }
         ws.close(); chrome.kill();
     }
@@ -298,14 +357,15 @@ async function main() {
         const r = await cdp.send('Runtime.evaluate', {
             returnByValue: true,
             expression: `(() => {
-                /* The WebGL and three.js canvases are excluded, and they are the
-                   only exclusion. Both sit at opacity 0 until their script paints
-                   a first frame and adds .is-gl-live / .is-3d-live — that is the
-                   fallback CONTRACT, not a failure. Underneath each one is a
-                   designed still (.gl-still, .three-stage-still), which is what a
-                   visitor without JS, or without WebGL2, actually sees. */
-                const els = [...document.querySelectorAll('[data-r], [data-r] > *, [data-fx], .arc-tile')]
-                    .filter(el => !el.closest('.gl-host, .three-stage'))
+                /* The one exclusion is the WebGL stage. Its canvas sits at
+                   opacity 0 until js/stage3d.js has painted a first frame and
+                   added .is-live to .stage — that is the fallback CONTRACT, not
+                   a failure. Underneath it is a pre-rendered still
+                   (.stage-still), which is what a visitor without JS, without
+                   WebGL2, on a phone or under reduced motion actually sees, and
+                   which is asserted separately below. */
+                const els = [...document.querySelectorAll('[data-r], [data-r] > *, [data-fx]')]
+                    .filter(el => !el.closest('.stage-sticky'))
                     /* Skip anything with no layout box. A display:none element is
                        not hidden-but-present, it is ABSENT by design — the arc
                        sheds its outer tiles below 900px, and a CSS animation on a
@@ -320,7 +380,21 @@ async function main() {
                     invisible: hidden.length,
                     which: hidden.slice(0, 5).map(el => el.tagName.toLowerCase()
                         + '.' + (typeof el.className === 'string' ? el.className.trim().split(/\\s+/)[0] : '')),
-                    stillShown: !!document.querySelector('.gl-still'),
+                    /* Not just present — VISIBLE and pointing at a real file.
+                       A still that exists in the DOM at opacity 0, or with an
+                       empty src, is the same blank frame to a visitor as no
+                       still at all, and that blank frame is exactly what the
+                       previous build shipped. */
+                    still: (() => {
+                        const img = document.querySelector('.stage-still img');
+                        if (!img) return 'missing';
+                        const op = +getComputedStyle(img.closest('.stage-still')).opacity;
+                        if (op < 0.2) return 'transparent (opacity ' + op + ')';
+                        if (!img.getAttribute('src')) return 'no src';
+                        if (!img.getClientRects().length) return 'no layout box';
+                        return 'ok';
+                    })(),
+                    canvasLive: !!document.querySelector('.stage.is-live'),
                     words: (document.body.innerText || '').trim().split(/\\s+/).length,
                     jsMotion: document.documentElement.classList.contains('js-motion'),
                 };
@@ -329,8 +403,9 @@ async function main() {
         const v = r.result.value;
         check('nothing stays hidden without JS, once scrolled', v.invisible === 0,
             v.invisible ? v.which.join(', ') : `${v.total} revealed elements, all visible after a full scroll`);
-        check('the WebGL fallback still is present', v.stillShown,
-            'the canvas stays at opacity 0 without JS; .gl-still is what shows instead');
+        check('the pre-rendered still is what shows without JS', v.still === 'ok', v.still);
+        check('the live canvas never activates without JS', v.canvasLive === false,
+            '.stage must not carry .is-live when scripts are disabled');
         check('.js-motion is absent, so nothing opts into hiding', v.jsMotion === false);
         check('the page still has its content', v.words > 800, `${v.words} words readable`);
 

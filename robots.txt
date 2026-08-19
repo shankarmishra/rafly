@@ -16,9 +16,14 @@ Disallow: /inc/
 Disallow: /partials/
 Disallow: /private/
 
-# Not content: a POST handler and a one-shot session-gated confirmation page.
-Disallow: /submit
-Disallow: /thank-you
+# /submit and /thank-you are NOT listed here. Both already send
+# X-Robots-Tag / <meta name="robots" content="noindex"> (thank-you.php sets
+# noindex => true; submit is a POST-only handler with no renderable GET body),
+# and that is the correct and sufficient control. Disallowing them here as
+# well would be self-defeating: a URL blocked by robots.txt is never fetched,
+# so Google never sees the noindex tag and can still list the bare URL (with
+# no snippet) if anything ever links to it. noindex only works if the crawler
+# is allowed to read it.
 
 # The admin panel, including its pretty gate URL. This is a request, not a
 # control — the pages also send X-Robots-Tag: noindex and require a login.

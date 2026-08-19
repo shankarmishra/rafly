@@ -127,6 +127,21 @@ define('SITE_TAGLINE', 'Digital Growth');
 define('CONTACT_EMAIL', 'support@' . SITE_DOMAIN);
 
 /**
+ * Geo targeting, for local search and the areaServed fields in inc/schema.php.
+ *
+ * These are NOT a second copy of the address — contact.address (the DB
+ * setting rendered in the footer, the contact page and schema_postal_address())
+ * remains the one source for the street-level address. This is the coarser,
+ * unchanging part of it: the locality Rafly is actually registered in, the
+ * metro it sits inside, and the state — stable enough to hardcode, unlike a
+ * suite number an admin might one day edit.
+ */
+define('BUSINESS_GEO_LOCALITY', 'Greater Noida');
+define('BUSINESS_GEO_REGION',   'Delhi NCR');
+define('BUSINESS_GEO_STATE',    'Uttar Pradesh');
+define('BUSINESS_GEO_COUNTRY',  'India');
+
+/**
  * Meta Pixel ID — fallback only. The live value is the admin-editable
  * analytics.meta_pixel_id setting (partials/head.php reads that first); this
  * constant is what the Pixel falls back to if the database is unreachable,
@@ -184,6 +199,35 @@ define('SITE_ORIGIN', (static function (): string {
     // reflecting whatever was sent.
     return 'https://' . SITE_DOMAIN;
 })());
+
+// ---------------------------------------------------------------------------
+// Search engine verification & submission
+//
+// Every constant here defaults to '' and every consumer treats '' as "off".
+// Nothing pings anything, and no verification meta tag renders, until a real
+// value is set — in inc/config.local.php (git-ignored), the same override
+// point META_PIXEL_ID already uses. There is no key here to leak: an
+// IndexNow key is a public token by design (it lives at a public URL, see
+// inc/tools/indexnow.php), and a site-verification token only proves control
+// of a domain you already control.
+// ---------------------------------------------------------------------------
+
+/**
+ * Google Search Console / Bing Webmaster Tools verification, the "HTML tag"
+ * method — the value each console gives you to paste in, not the whole tag.
+ * partials/head.php emits <meta name="google-site-verification"> /
+ * <meta name="msvalidate.01"> only when these are non-empty.
+ */
+if (!defined('GOOGLE_SITE_VERIFICATION')) { define('GOOGLE_SITE_VERIFICATION', ''); }
+if (!defined('BING_SITE_VERIFICATION'))   { define('BING_SITE_VERIFICATION',   ''); }
+
+/**
+ * IndexNow — a Bing-originated, multi-engine protocol for telling a search
+ * engine "this URL changed" the moment it does, instead of waiting for the
+ * next crawl. inc/tools/indexnow.php generates and serves the key file this
+ * key must match; see that file before setting this.
+ */
+if (!defined('INDEXNOW_KEY')) { define('INDEXNOW_KEY', ''); }
 
 // ---------------------------------------------------------------------------
 // Lead storage

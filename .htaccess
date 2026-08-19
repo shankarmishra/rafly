@@ -38,6 +38,27 @@ Options -Indexes
     # RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
     # -----------------------------------------------------------------------
+    # Trailing slash
+    #
+    # Every clean-URL rule below accepts an optional trailing slash
+    # (`^about/?$` etc.) so it can dispatch either form — but with nothing to
+    # redirect one to the other, /about and /about/ both quietly 200, both
+    # self-canonicalise (partials/head.php's canonical falls back to the raw
+    # request path), and a crawler sees two URLs for one page on every clean
+    # route, all five services and every article included.
+    #
+    # !-d excludes anything that resolves to a REAL directory (admin/, css/,
+    # js/, assets/, vendor/, uploads/) — none of those are clean-URL routes,
+    # and stripping their trailing slash would fight Apache's own
+    # DirectorySlash handling instead of this site's rewrites. GET/HEAD only,
+    # same reasoning as router.php's $redirect(): a 301 changes a client's
+    # method to GET on replay, so a write request must never be redirected.
+    RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} ^/(.+)/$
+    RewriteRule ^ /%1 [R=301,L]
+
+    # -----------------------------------------------------------------------
     # Clean URLs
     #
     # Two halves. First, 301 the OLD .php URLs — still real, directly
@@ -63,6 +84,7 @@ Options -Indexes
     RewriteRule ^pricing\.php$ /pricing [R=301,L]
     RewriteRule ^case-studies\.php$ /case-studies [R=301,L]
     RewriteRule ^contact\.php$ /contact [R=301,L]
+    RewriteRule ^locations/greater-noida\.php$ /locations/greater-noida [R=301,L]
 
     # service.php and blog-post.php take a query string rather than a bare
     # filename, so their old URLs need the query matched too, not just the
@@ -103,9 +125,18 @@ Options -Indexes
     RewriteRule ^submit/?$ submit.php [L]
     RewriteRule ^blog/([a-z0-9-]+)/?$ blog-post.php?post=$1 [L,QSA]
     RewriteRule ^(web-development|web-security|marketing-advertisement|content-creation|ecommerce-support)/?$ service.php?service=$1 [L]
+    RewriteRule ^locations/greater-noida/?$ locations/greater-noida.php [L]
 
     # Serve the generated sitemap at the conventional path.
     RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+    # IndexNow key-ownership file. !-f first: a real static file at this exact
+    # path always wins, so this can never shadow an actual .txt asset. The
+    # pattern is deliberately generic — the key itself is not chosen yet
+    # (INDEXNOW_KEY defaults to '' in inc/config.php) — and indexnow-key.php
+    # 404s every request until a real key is configured.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([A-Za-z0-9-]{8,64})\.txt$ indexnow-key.php?key=$1 [L]
 
     # Root-level icon probes. head.php declares assets/favicon.svg,
     # assets/favicon-32.png and assets/apple-touch-icon.png, and a browser that

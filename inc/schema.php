@@ -51,6 +51,36 @@ function schema_organization(): array
         'email'     => CONTACT_EMAIL,
         'telephone' => CONTACT_PHONE,
         'address'   => schema_postal_address(),
+        // A Google Maps search on the same address string the footer and
+        // schema_postal_address() already render — real and clickable, unlike
+        // GeoCoordinates would be: nobody has surveyed a lat/long for the
+        // office, and inventing one is exactly the "fabricated structured
+        // data" this file exists to avoid.
+        'hasMap' => 'https://maps.google.com/?q=' . rawurlencode(
+            (string)setting('contact.address', 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, 201306')
+        ),
+        // Ordered nearest first. The registered office is in Greater Noida,
+        // itself part of the Delhi NCR metro, and delivery reaches across
+        // India — three honest, real scopes rather than the single hardcoded
+        // country this used to declare.
+        'areaServed' => schema_area_served(),
+        // Lightweight refs, not full nodes — each Service's full description,
+        // FAQ and offerings live once, on its own page. This is what lets the
+        // Organization (emitted on every page) point at all five without
+        // repeating any of that.
+        'makesOffer' => array_values(array_map(
+            static fn(string $slug, array $svc): array => [
+                '@type' => 'Offer',
+                'itemOffered' => [
+                    '@type' => 'Service',
+                    '@id'   => schema_id('service-' . $slug),
+                    'name'  => (string)$svc['title'],
+                    'url'   => SITE_ORIGIN . '/' . $slug,
+                ],
+            ],
+            array_keys(services_all()),
+            services_all()
+        )),
         'openingHoursSpecification' => [[
             '@type'     => 'OpeningHoursSpecification',
             'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -58,6 +88,22 @@ function schema_organization(): array
             'closes'    => '18:00',
         ]],
         'sameAs' => array_map(static fn(array $s) => $s['href'], SOCIAL_LINKS),
+    ];
+}
+
+/**
+ * The areaServed list shared by the Organization node and every Service node
+ * — one place, so the two can never disagree the way a hand-copied literal
+ * in each would eventually drift.
+ *
+ * @return array<int,array<string,string>>
+ */
+function schema_area_served(): array
+{
+    return [
+        ['@type' => 'City',    'name' => BUSINESS_GEO_LOCALITY],
+        ['@type' => 'Place',   'name' => BUSINESS_GEO_REGION],
+        ['@type' => 'Country', 'name' => BUSINESS_GEO_COUNTRY],
     ];
 }
 
@@ -105,7 +151,7 @@ function schema_postal_address(): array
         '@type'           => 'PostalAddress',
         'streetAddress'   => implode(', ', $parts),
         'addressLocality' => $locality,
-        'addressRegion'   => 'Uttar Pradesh',
+        'addressRegion'   => BUSINESS_GEO_STATE,
         'postalCode'      => $postal,
         'addressCountry'  => 'IN',
     ], static fn($v) => $v !== '');
@@ -123,6 +169,40 @@ function schema_website(): array
         'name'      => SITE_NAME,
         'publisher' => ['@id' => schema_id('organization')],
         'inLanguage' => 'en-IN',
+        // blog.php's ?q= search (inc/repo/content.php) is real and already
+        // live — this just declares markup for a feature the site already
+        // has, not a promise of one it doesn't.
+        'potentialAction' => [
+            '@type'       => 'SearchAction',
+            'target'      => [
+                '@type'       => 'EntryPoint',
+                'urlTemplate' => SITE_ORIGIN . '/blog?q={search_term_string}',
+            ],
+            'query-input' => 'required name=search_term_string',
+        ],
+    ];
+}
+
+/**
+ * The WebPage node shared by every simple content page (About, Team, a future
+ * location page) — about.php and team.php used to each hand-roll this exact
+ * shape, which is how they could drift: one node with an 'isPartOf' and
+ * another without would be a real disagreement in the graph, not a stylistic
+ * difference.
+ *
+ * $type lets a caller declare a more specific WebPage subtype (AboutPage is
+ * the only one in use today) without needing a second function.
+ */
+function schema_webpage(string $slug, string $name, string $description, string $type = 'WebPage'): array
+{
+    return [
+        '@type'       => $type,
+        '@id'         => schema_id($slug),
+        'url'         => SITE_ORIGIN . '/' . ltrim($slug, '/'),
+        'name'        => $name,
+        'description' => $description,
+        'isPartOf'    => ['@id' => schema_id('website')],
+        'about'       => ['@id' => schema_id('organization')],
     ];
 }
 
@@ -178,17 +258,27 @@ function schema_collection_list(string $name, string $url, array $items): array
 
 /**
  * A single service offering.
+ *
+ * $id, when given, becomes this node's own @id — schema_organization()'s
+ * makesOffer references services by this same id (schema_id('service-<slug>'))
+ * without repeating the full node, so passing it is what lets the two halves
+ * of the same Service actually resolve to one another in the graph.
+ *
  * @param array<int,string> $offerings
  */
-function schema_service(string $name, string $description, array $offerings = []): array
+function schema_service(string $name, string $description, array $offerings = [], ?string $id = null): array
 {
     $node = [
         '@type'       => 'Service',
         'name'        => $name,
         'description' => $description,
         'provider'    => ['@id' => schema_id('organization')],
-        'areaServed'  => ['@type' => 'Country', 'name' => 'India'],
+        'areaServed'  => schema_area_served(),
     ];
+
+    if ($id !== null) {
+        $node['@id'] = $id;
+    }
 
     if ($offerings) {
         $node['hasOfferCatalog'] = [
@@ -227,6 +317,14 @@ function schema_person(array $row): array
         'jobTitle' => (string)$row['role'],
         'worksFor' => ['@id' => schema_id('organization')],
     ];
+
+    // A stable @id, keyed on the team_members row id, is what lets
+    // schema_article() reference this exact node as an article's author
+    // instead of inlining a bare name that repeats — and could drift from —
+    // this one.
+    if (!empty($row['id'])) {
+        $node['@id'] = schema_id('person-' . (int)$row['id']);
+    }
 
     if (!empty($row['brief'])) {
         $node['description'] = (string)$row['brief'];
@@ -301,8 +399,19 @@ function schema_article(array $post): array
 
     // An author is optional in the schema but a missing one is a Search Console
     // warning, so fall back to the organisation rather than omitting it.
-    $node['author'] = !empty($post['author_name'])
-        ? ['@type' => 'Person', 'name' => (string)$post['author_name']]
+    //
+    // A full Person node (via schema_person(), same as team.php renders for
+    // this exact row), not a bare name — it carries the same @id
+    // schema_person() gives that person on /team, which is what lets a
+    // consumer recognise this is the same entity rather than an unrelated
+    // string that happens to match.
+    $node['author'] = !empty($post['author_id']) && !empty($post['author_name'])
+        ? schema_person([
+            'id'    => $post['author_id'],
+            'name'  => $post['author_name'],
+            'role'  => $post['author_role'] ?? '',
+            'photo' => $post['author_photo'] ?? null,
+        ])
         : ['@id' => schema_id('organization')];
 
     foreach (['published_at' => 'datePublished', 'updated_at' => 'dateModified'] as $col => $prop) {

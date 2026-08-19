@@ -15,21 +15,35 @@
  * rule to .htaccess, add the matching case here too.
  */
 
-$uri  = $_SERVER['REQUEST_URI'] ?? '/';
-$path = trim((string)parse_url($uri, PHP_URL_PATH), '/');
-$root = __DIR__;
+$uri     = $_SERVER['REQUEST_URI'] ?? '/';
+$rawPath = (string)parse_url($uri, PHP_URL_PATH);
+$rawPath = $rawPath !== '' ? $rawPath : '/';
+$path    = trim($rawPath, '/');
+$root    = __DIR__;
 
 // -----------------------------------------------------------------------
 // 1. Block application internals — mirrors .htaccess's
 //    RedirectMatch 404 /\.git and RedirectMatch 404 /(inc|partials)/ and
-//    RedirectMatch 404 /admin/lib/
+//    RedirectMatch 404 /admin/lib/, plus the <FilesMatch> deny on
+//    .gitignore/.env*/composer.json|lock/*.md.
+//
+//    The <FilesMatch> half of this was NEVER mirrored here — a real,
+//    pre-existing gap this comment used to just describe two rules, not
+//    three. PHP's built-in server has no equivalent to .htaccess and never
+//    reads it (see this file's own header), so nothing enforced it in dev at
+//    all: assets/CREDITS.md and, this engagement, every file under docs/seo/
+//    were servable over the dev router with no protection whatsoever.
+//    Apache/production was never affected — the real <FilesMatch> rule
+//    already covered this — but "kept in sync by hand" (also this file's own
+//    header) means kept in sync, not mirrored in five sixths.
 // -----------------------------------------------------------------------
 if (
     $path === '.git' || str_starts_with($path, '.git/') ||
     str_starts_with($path, 'inc/') ||
     str_starts_with($path, 'partials/') ||
     str_starts_with($path, 'private/') ||
-    str_starts_with($path, 'admin/lib/')
+    str_starts_with($path, 'admin/lib/') ||
+    preg_match('#(^|/)(\.gitignore|\.env[^/]*|composer\.(json|lock)|[^/]+\.md)$#i', $path)
 ) {
     http_response_code(404);
     require $root . '/404.php';
@@ -62,6 +76,22 @@ $dispatch = static function (string $file, array $params = []) use ($root): bool
 };
 
 // -----------------------------------------------------------------------
+// 1b. Trailing slash, mirrors .htaccess's new trailing-slash block.
+//
+// $path above is already trim()'d, so it alone can't tell /about from
+// /about/ — this checks the UNTRIMMED $rawPath instead. Skipped for a path
+// that resolves to a real directory (admin/, css/, js/, assets/, vendor/,
+// uploads/), same as the .htaccess !-d guard: none of those are clean-URL
+// routes, and PHP's built-in server already serves a real directory's
+// index.php on its own.
+// -----------------------------------------------------------------------
+if ($path !== '' && $rawPath === '/' . $path . '/' && !is_dir($root . '/' . $path)) {
+    if ($redirect('/' . $path . (($qs = $_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $qs : ''))) {
+        return true;
+    }
+}
+
+// -----------------------------------------------------------------------
 // 2. Old .php URLs -> clean URL (301), mirrors .htaccess:56-72.
 //
 // This MUST run before the real-file passthrough below: about.php etc.
@@ -81,6 +111,7 @@ $oldToClean = [
     'pricing.php'      => 'pricing',
     'case-studies.php' => 'case-studies',
     'contact.php'      => 'contact',
+    'locations/greater-noida.php' => 'locations/greater-noida',
 ];
 if (isset($oldToClean[$path]) && $redirect('/' . $oldToClean[$path])) {
     return true;
@@ -135,6 +166,7 @@ $cleanToFile = [
     'privacy'      => 'privacy.php',
     'thank-you'    => 'thank-you.php',
     'submit'       => 'submit.php',
+    'locations/greater-noida' => 'locations/greater-noida.php',
 ];
 if (isset($cleanToFile[$path])) {
     return $dispatch($cleanToFile[$path]);
@@ -142,6 +174,13 @@ if (isset($cleanToFile[$path])) {
 
 if ($path === 'sitemap.xml') {
     return $dispatch('sitemap.php');
+}
+
+// IndexNow key-ownership file, mirrors .htaccess's !-f-guarded rewrite. A
+// real static .txt file at this exact path (checked first, same as the
+// !-f condition there) always wins over this.
+if (preg_match('#^([A-Za-z0-9-]{8,64})\.txt$#', $path, $m) && !is_file($root . '/' . $path)) {
+    return $dispatch('indexnow-key.php', ['key' => $m[1]]);
 }
 
 // Root-level icon probes, mirroring .htaccess. Served rather than dispatched:
