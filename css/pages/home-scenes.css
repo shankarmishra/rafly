@@ -1292,6 +1292,239 @@
 }
 
 /* ==========================================================================
+   THE LAPTOP — a lid that opens as you scroll
+
+   Naveen sent Aceternity's MacbookScroll and asked for the same move with our
+   own screen in it. It earns its place on a page that already has five browser
+   mocks, a coverflow and three phones by being a different VERB: those fan,
+   slide and sit; this one opens.
+
+   THE HINGE IS THE WHOLE TRICK. .mb-lid rotates about its own bottom edge
+   inside a perspective container, so the screen swings up out of the base
+   exactly as a lid does. Two numbers drive it and js/macbook.js writes both:
+
+       --lid   degrees open. 0 shut, 94 resting just past upright.
+       --rig   0 to 1, how far the assembly has come forward.
+
+   THE STILL FORM IS DECLARED HERE, not in the script: --lid and --rig have
+   real values on .mb, so with no JavaScript the laptop stands open at 94
+   degrees, full size, with the screen readable. The module overrides them.
+   That is the same split the deck and the gallery use.
+
+   THE SCREEN IS THE PORTAL, and it is the one surface on this page that is
+   allowed to be dark: it is a screen. Everything in it is a shape — the rule
+   from partials/deck-mock.php holds here too, and there is more room to break
+   it, so it is worth repeating: no figure anywhere, only states.
+   ========================================================================== */
+
+.macbook {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 52%, var(--paper) 100%);
+}
+
+.mb-sticky { position: relative; z-index: 2; }
+
+.mb-head { text-align: center; max-width: 40rem; margin: 0 auto var(--sp-6); }
+.mb-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.mb-head .lead { margin: var(--sp-4) auto 0; max-width: 36rem; }
+
+.mb {
+    --lid: 94;
+    --rig: 1;
+    width: min(820px, 88vw);
+    margin: 0 auto;
+    perspective: 1400px;
+    transform: scale(calc(.78 + var(--rig) * .22)) translateY(calc((1 - var(--rig)) * 40px));
+    transform-origin: 50% 30%;
+    will-change: transform;
+}
+
+/* --- the lid ------------------------------------------------------------
+   transform-origin at the bottom edge IS the hinge. Rotating about the centre
+   makes the screen rise off the keyboard instead of opening out of it, which
+   is the single thing that separates this from a picture of a laptop. */
+.mb-lid {
+    position: relative;
+    transform-origin: 50% 100%;
+    transform: rotateX(calc((var(--lid) - 90) * -1deg));
+    transform-style: preserve-3d;
+}
+
+.mb-shell {
+    position: relative;
+    border-radius: 16px 16px 4px 4px;
+    padding: 12px 12px 16px;
+    background: linear-gradient(180deg, #2b3245, #1b2133);
+    box-shadow:
+        0 30px 70px -30px color-mix(in srgb, var(--ink) 62%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 16%, transparent);
+}
+
+/* The camera. Four pixels that do more for the read than the bezel does. */
+.mb-cam {
+    position: absolute; left: 50%; top: 5px;
+    transform: translateX(-50%);
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #4b5570;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 10%, transparent);
+}
+
+.mb-screen {
+    aspect-ratio: 16 / 10;
+    border-radius: 6px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--ink-chapter-2), var(--ink-chapter));
+    display: flex;
+}
+
+/* --- the base -----------------------------------------------------------
+   Foreshortened deliberately: a laptop base seen from in front is mostly
+   edge, and drawing it at its true depth makes the whole thing read as a
+   plan view. */
+.mb-base {
+    position: relative;
+    height: 22px;
+    border-radius: 3px 3px 12px 12px;
+    background: linear-gradient(180deg, #3a4258, #232a3d 40%, #171d2c);
+    box-shadow: 0 24px 40px -22px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+/* The notch you put a finger in to lift the lid. */
+.mb-base::before {
+    content: '';
+    position: absolute; left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 96px; height: 5px;
+    border-radius: 0 0 6px 6px;
+    background: color-mix(in srgb, #000 34%, transparent);
+}
+
+/* --- what is on the screen ---------------------------------------------- */
+.mb-side {
+    width: 17%;
+    padding: 12px 10px;
+    border-right: 1px solid color-mix(in srgb, #fff 7%, transparent);
+    display: flex; flex-direction: column; gap: 9px;
+}
+.mb-logo {
+    width: 20px; height: 20px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--blue), #5c93ff);
+    margin-bottom: 4px;
+}
+.mb-side i {
+    height: 6px; border-radius: 3px;
+    background: color-mix(in srgb, #fff 12%, transparent);
+}
+.mb-side i.is-on { background: color-mix(in srgb, var(--blue) 68%, transparent); }
+
+.mb-main { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.mb-bar { display: flex; align-items: center; justify-content: space-between; }
+.mb-bar > i { height: 9px; width: 130px; border-radius: 5px; background: color-mix(in srgb, #fff 22%, transparent); }
+.mb-bar > u {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), #5c93ff);
+}
+
+.mb-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+.mb-card {
+    border-radius: 9px;
+    padding: 9px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 7%, transparent);
+    display: flex; flex-direction: column; gap: 6px;
+}
+.mb-card i { height: 4px; width: 62%; border-radius: 2px; background: color-mix(in srgb, #fff 16%, transparent); }
+.mb-card b { height: 9px; width: 78%; border-radius: 4px; background: color-mix(in srgb, #fff 34%, transparent); }
+.mb-card s {
+    height: 3px; border-radius: 2px; text-decoration: none;
+    background: linear-gradient(90deg, var(--sc, var(--blue)), transparent);
+}
+
+/* 1.15 against the table's 0.85 below. At flex: 1 with nothing under it the
+   chart took most of a 16:10 screen, which is a poster of a bar chart rather
+   than a dashboard — a real one is mostly rows. */
+.mb-panels { flex: 1.15; display: grid; grid-template-columns: 1.6fr 1fr; gap: 9px; min-height: 0; }
+.mb-panel {
+    border-radius: 9px;
+    padding: 10px;
+    background: color-mix(in srgb, #fff 4%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 7%, transparent);
+    display: flex; flex-direction: column; gap: 8px;
+    min-height: 0;
+}
+.mb-panel > i { height: 5px; width: 44%; border-radius: 3px; background: color-mix(in srgb, #fff 16%, transparent); }
+.mb-chart { flex: 1; display: flex; align-items: flex-end; gap: 5px; min-height: 0; }
+.mb-chart i {
+    flex: 1; border-radius: 3px 3px 0 0;
+    background: linear-gradient(180deg, #5c93ff, var(--blue));
+}
+.mb-rows { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 7px; }
+.mb-row { display: flex; align-items: center; gap: 7px; }
+.mb-row u { width: 14px; height: 14px; border-radius: 4px; flex: none; background: color-mix(in srgb, #fff 12%, transparent); }
+.mb-row u.is-on { background: linear-gradient(135deg, var(--blue), #5c93ff); }
+.mb-row i { height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 16%, transparent); }
+
+/* The work list. Four columns of different weights so it reads as a table
+   with meaning in it rather than as four equal grey bars. */
+.mb-table {
+    flex: .85;
+    border-radius: 9px;
+    padding: 10px;
+    background: color-mix(in srgb, #fff 4%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 7%, transparent);
+    display: flex; flex-direction: column; gap: 8px;
+    min-height: 0;
+}
+.mb-tr {
+    display: grid;
+    grid-template-columns: 2.2fr 1.2fr 1fr 46px;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid color-mix(in srgb, #fff 5%, transparent);
+}
+.mb-tr:last-child { border-bottom: 0; padding-bottom: 0; }
+.mb-tr i { height: 5px; border-radius: 3px; background: color-mix(in srgb, #fff 15%, transparent); }
+.mb-tr.is-head i { background: color-mix(in srgb, #fff 26%, transparent); height: 4px; }
+.mb-tr b {
+    height: 9px; border-radius: var(--r-pill);
+    background: color-mix(in srgb, #fff 12%, transparent);
+}
+.mb-tr b.is-on { background: linear-gradient(115deg, var(--blue), #5c93ff); }
+
+@media (min-width: 961px) {
+    .macbook { height: 220vh; padding-block: 0; }
+    .mb-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+    }
+    /* Shut, small and low is where the section STARTS on a wide screen; the
+       module opens it. These two lines are the only place the closed state
+       exists, and they are inside the same query as the pin, so a viewport
+       that never pins never shows a shut laptop it cannot open. */
+    .mb { --lid: 0; --rig: 0; }
+}
+
+@media (max-width: 960px) {
+    .macbook { padding-block: var(--section-y); }
+    .mb { width: 92vw; }
+    .mb-side { width: 22%; }
+    .mb-cards { grid-template-columns: 1fr 1fr; }
+    .mb-panels { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* Open, full size, standing still. The laptop was never the message; what
+       is on the screen is. */
+    .macbook { height: auto; padding-block: var(--section-y); }
+    .mb-sticky { position: static; height: auto; }
+    .mb { --lid: 94; --rig: 1; }
+}
+
+/* ==========================================================================
    THE GALLERY — OriginKit's coverflow, at its own numbers
 
    Naveen sent the component's source, so this is not an impression of it. The

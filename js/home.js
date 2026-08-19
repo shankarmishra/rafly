@@ -24,7 +24,7 @@
  * form it already had on screen. No effect here carries meaning.
  */
 
-import { allowCanvas, allowShader, finePointer, whenIdle, token, rgb } from './gates.js';
+import { allowCanvas, allowShader, finePointer, wideEnough, whenIdle, token, rgb } from './gates.js';
 
 /* ------------------------------------------------------- the background */
 
@@ -78,6 +78,22 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
     import('./decks.js')
         .then((m) => m.initDecks())
         .catch(() => { /* the CSS stack is a complete, readable fallback */ });
+}
+
+/* ------------------------------------------------------------ the laptop */
+
+/* GATED ON WIDTH, and the gate matches the stylesheet exactly. The section is
+   only pinned above 960px; below that it is an ordinary block and
+   css/pages/home-scenes.css already declares the laptop OPEN at full size,
+   which is the finished design rather than a fallback. Fetching the module on
+   a phone would animate a lid nobody is scrolling past, on the one budget line
+   that actually matters — phone home JS, 80 KB. */
+if (document.querySelector('[data-macbook]')
+    && wideEnough(961)
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    import('./macbook.js')
+        .then((m) => m.initMacbook(document.querySelector('[data-macbook]')))
+        .catch(() => { /* the CSS resting state is a complete, open laptop */ });
 }
 
 /* ----------------------------------------------------------- the gallery */

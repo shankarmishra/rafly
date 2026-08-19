@@ -2,21 +2,29 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 /**
- * THE HOMEPAGE — ten sections.
+ * THE HOMEPAGE.
  *
  * Every section answers a question a buyer actually asks, in the order they
  * ask it:
  *
  *   1   what is this              hero
  *   2   what do you believe       the statement
+ *   2b  what does it look like    the laptop — a lid that opens on the portal
  *   3   what do I get             the platform — five products, fanned
  *   3b  do you build apps         apps — three phones
+ *   3c  what kinds of build       the gallery — a coverflow of five covers
  *   4   how does it run           delivery
  *   5   what is it built on       the stack
  *   6   who have you done it for  selected work   (conditional — see below)
  *   7   what will you NOT do      honest limits
  *   8   what does it cost         pricing and FAQ
  *   9   how do I start            the close
+ *
+ * FOUR SECTIONS SHOW A DEVICE, AND EACH ONE HAS A DIFFERENT VERB. That is the
+ * rule that keeps them from reading as the same idea four times: the laptop
+ * OPENS, the platform deck FANS and then closes to a coverflow, the phones
+ * STAND STILL and are simply arranged, the gallery SLIDES. A fifth device
+ * section would need a fifth verb before it earns a place.
  *
  * TWO calls to action, not five: the hero and the close.
  *
@@ -461,6 +469,104 @@ require __DIR__ . '/partials/social-rail.php';
             </div>
         </div>
     </div>
+
+    <?php /* ==========================================================
+       02b — THE LAPTOP
+
+       Naveen sent Aceternity's MacbookScroll and asked for the same move with
+       our own screen in it. It sits HERE, between the statement and the
+       platform, because that is where it reads as an argument rather than as
+       an ornament: "we build systems, not deliverables" — the lid opens on the
+       system — "five products, one place they all live".
+
+       IT IS A DIFFERENT VERB, which is the only reason a fourth device section
+       is defensible on this page. The deck fans, the gallery slides, the
+       phones stand still; this one OPENS. The hinge is the whole effect and it
+       is CSS: .mb-lid rotates about its own bottom edge inside a perspective
+       container, so the screen swings up out of the base rather than rising
+       off it.
+
+       js/macbook.js writes exactly two numbers, --lid and --rig. The still
+       form is declared in the stylesheet, so with no JavaScript the laptop
+       stands open at its resting angle with the screen readable — not shut,
+       and not missing.
+
+       THE SCREEN IS THE ONE DARK SURFACE ALLOWED BELOW THE HERO, because it is
+       a screen. Everything inside it is a shape: no figure anywhere, only
+       states, the same rule partials/deck-mock.php holds to.
+       ========================================================== */ ?>
+    <section class="section macbook" id="portal">
+        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:820px; height:820px; left:50%; top:46%;
+             transform:translate(-50%,-50%);
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 16%, transparent), transparent 64%);"></div>
+
+        <div class="mb-sticky">
+            <div class="container">
+                <div class="mb-head">
+                    <p class="eyebrow" data-r="lift">One screen</p>
+                    <h2 data-r="lift">Everything you bought,<br>on one screen.</h2>
+                    <p class="lead" data-r="lift">
+                        Scope, work in progress, what was shipped and what is next &mdash; for
+                        every service you have with us, in one place, without a status call.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb" data-macbook aria-hidden="true">
+                <div class="mb-lid">
+                    <div class="mb-shell">
+                        <span class="mb-cam"></span>
+                        <div class="mb-screen">
+                            <div class="mb-side">
+                                <span class="mb-logo"></span>
+                                <i class="is-on"></i><i></i><i></i><i></i><i></i>
+                            </div>
+                            <div class="mb-main">
+                                <div class="mb-bar"><i></i><u></u></div>
+                                <div class="mb-cards">
+<?php foreach (['--svc-web', '--svc-security', '--svc-marketing', '--svc-ecom'] as $tok): ?>
+                                    <div class="mb-card" style="--sc: var(<?= e($tok) ?>);"><i></i><b></b><s></s></div>
+<?php endforeach; ?>
+                                </div>
+                                <div class="mb-panels">
+                                    <div class="mb-panel">
+                                        <i></i>
+                                        <div class="mb-chart">
+<?php foreach ([38, 62, 47, 71, 55, 82, 66, 91, 74, 96] as $h): ?>
+                                            <i style="height:<?= (int)$h ?>%"></i>
+<?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="mb-panel">
+                                        <i></i>
+                                        <div class="mb-rows">
+                                            <div class="mb-row"><u class="is-on"></u><i style="width:72%"></i></div>
+                                            <div class="mb-row"><u></u><i style="width:54%"></i></div>
+                                            <div class="mb-row"><u></u><i style="width:64%"></i></div>
+                                            <div class="mb-row"><u class="is-on"></u><i style="width:46%"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-table">
+                                    <div class="mb-tr is-head"><i style="width:52%"></i><i style="width:64%"></i><i style="width:58%"></i><i style="width:70%"></i></div>
+<?php foreach ([[78, 62, true], [56, 44, false], [68, 72, true], [62, 54, false], [74, 48, true]] as [$w1, $w2, $on]): ?>
+                                    <div class="mb-tr">
+                                        <i style="width:<?= (int)$w1 ?>%"></i>
+                                        <i style="width:<?= (int)$w2 ?>%"></i>
+                                        <i style="width:56%"></i>
+                                        <b class="<?= $on ? 'is-on' : '' ?>"></b>
+                                    </div>
+<?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-base"></div>
+            </div>
+        </div>
+    </section>
 
     <?php /* ==========================================================
        03 — THE PLATFORM
@@ -929,8 +1035,29 @@ require __DIR__ . '/partials/social-rail.php';
                             <span><?= e($f['q']) ?></span>
                             <span class="accordion-icon" aria-hidden="true"></span>
                         </button>
-                        <div class="accordion-panel" id="faq-p-<?= $i ?>" role="region" aria-labelledby="faq-t-<?= $i ?>" hidden>
-                            <p><?= e($f['a']) ?></p>
+                        <?php /* THE INNER <div> IS NOT DECORATION AND THE `hidden`
+                                 MUST NOT COME BACK.
+
+                                 css/03-components.css collapses this panel with
+                                 grid-template-rows: 0fr, and that only collapses
+                                 anything if the row's item is in a box with
+                                 overflow: hidden — which is what
+                                 `.accordion-panel > div` is for. With a bare <p>
+                                 here the row never collapsed, so all eight
+                                 answers stood permanently open and clicking a
+                                 question did nothing at all.
+
+                                 The `hidden` attribute made it worse rather than
+                                 better: the author `display: grid` on
+                                 .accordion-panel beats the UA stylesheet's
+                                 [hidden] { display: none }, so it hid nothing on
+                                 screen while still telling a screen reader the
+                                 region was hidden — including while it was open.
+
+                                 pricing.php and service.php have always had this
+                                 right; this file was the odd one out. */ ?>
+                        <div class="accordion-panel" id="faq-p-<?= $i ?>" role="region" aria-labelledby="faq-t-<?= $i ?>">
+                            <div><p><?= e($f['a']) ?></p></div>
                         </div>
                     </div>
 <?php endforeach; ?>
