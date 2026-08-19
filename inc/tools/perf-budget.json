@@ -1,11 +1,15 @@
 {
-  "_comment": "Per-route, per-viewport byte budgets, UNCOMPRESSED. These match what inc/tools/audit.mjs measures, which is the dev server with no gzip or brotli. They are NOT what a visitor downloads: production serves mod_deflate + mod_brotli (.htaccess), and the text types compress roughly 5-6x. The phone homepage measures 479 KB here and lands near 245 KB over the wire.",
+  "_comment": "Per-route, per-viewport byte budgets, UNCOMPRESSED. These match what inc/tools/audit.mjs measures, which is the dev server with no gzip or brotli. They are NOT what a visitor downloads: production serves mod_deflate + mod_brotli (.htaccess), and the text types compress roughly 5-6x. The phone homepage measures 469 KB here and lands near 240 KB over the wire.",
 
-  "_methodology": "Re-baselined from scratch for the Machined Paper rebuild, from an actual measured run, not inherited. The previous budget was written against an architecture that no longer exists: it allowed 1250 KB of JS on a homepage whose note said it 'never loads three.js' (it did, via four separate focal devices) and 170 KB of images for 24 stock photographs that have since been deleted. Inheriting it would have meant the redesign passed a test of the thing it replaced.",
+  "_methodology": "Re-baselined twice. First from scratch for the Machined Paper rebuild, because the budget before it allowed 1250 KB of JS on a homepage whose own note claimed it never loaded three.js (it did, via four separate focal devices) and 170 KB of images for 24 stock photographs since deleted — inheriting it would have meant the redesign passing a test of the thing it replaced. Then again when the 3-D layer was deleted outright, which is the numbers below.",
 
   "_howToRead": "budgetKB is a ceiling per resource type. Headroom is about 20% over the measured baseline: enough that a new icon or a paragraph does not fail the build, tight enough that a new dependency, an unoptimised image or a script that stopped being gated does.",
 
-  "_theOneThatMatters": "phone / — total 600. Every other line is housekeeping; this one is the promise. three.js is gated OUT below 761px (js/stage3d.js checks matchMedia explicitly rather than relying on a CSS display:none, because a hidden canvas still costs the full download). If this line ever fails, that gate has broken, and the way it breaks is silent.",
+  "_theOneThatMatters": "phone / — total 600 and js 80. Every other line is housekeeping; these two are the promise. Nothing on this site loads a 3-D library any more, so the failure mode that budget was written to catch is gone — but the two remaining canvas modules (js/field.js, js/aurora.js) are gated the same way and would fail the same line if a gate broke. It breaks silently, which is why it is measured.",
+
+  "_whyCssRose": "css 190 -> 200. The redesign added css/09-scenes.css (the hero, the head field, the product deck, the phones) and this is the second-largest sheet on the site. Before raising the line, inc/tools/deadcss.mjs was written and run: it found ~7 KB of rules for the deleted 3-D stage still shipping on every page view, and those were removed rather than budgeted for. What is left is a real increase for real new sections, on a figure that gzips to roughly 30 KB over the wire.",
+
+  "_whyHtmlRose": "home html 100 -> 110. The homepage gained two sections whose markup IS the content — five browser mocks and three phone shells are rendered as elements, not built by JavaScript, which is the whole reason both survive with scripts off. Paying for that in HTML rather than in JS is the correct trade, and it is why the phone js figure fell from 59 KB to 46 KB in the same change.",
 
   "viewports": {
     "desktop": { "width": 1440, "height": 900 },
@@ -15,21 +19,21 @@
   "routes": {
     "home": {
       "match": ["/"],
-      "note": "Desktop carries three.js (vendor/three/, ~750 KB uncompressed across two files) plus js/assembly.js and js/studio.js, loaded only after window load + requestIdleCallback and only on WebGL2, non-reduced-motion, non-Save-Data clients. Images are the pre-rendered object stills.",
-      "desktop": { "html": 100, "css": 190, "js": 1200, "font": 90, "img": 300, "total": 1850 },
-      "phone":   { "html": 100, "css": 190, "js":   80, "font": 90, "img": 160, "total":  600 }
+      "note": "No three.js: vendor/three/ is deleted and no page fetches a 3-D library. Desktop's js figure is js/field.js + js/aurora.js + js/decks.js + js/cluster.js + js/interactions.js, every one behind a gate in js/gates.js and none of them fetched before window load plus an idle callback. The phone gets decks.js and nothing else from that list.",
+      "desktop": { "html": 110, "css": 200, "js": 300, "font": 90, "img": 120, "total": 800 },
+      "phone":   { "html": 110, "css": 200, "js":  80, "font": 90, "img":  60, "total": 600 }
     },
     "blog": {
       "match": ["/blog"],
       "note": "Heaviest img figure of the default set: the listing page's article cover images.",
-      "desktop": { "html": 80, "css": 190, "js": 80, "font": 90, "img": 250, "total": 660 },
-      "phone":   { "html": 80, "css": 190, "js": 80, "font": 90, "img": 170, "total": 570 }
+      "desktop": { "html": 80, "css": 200, "js": 80, "font": 90, "img": 250, "total": 660 },
+      "phone":   { "html": 80, "css": 200, "js": 80, "font": 90, "img": 170, "total": 570 }
     },
     "default": {
       "match": ["/about", "/web-development", "/contact", "/web-security", "/marketing-advertisement", "/content-creation", "/ecommerce-support", "/team", "/pricing", "/case-studies", "/privacy", "/locations/greater-noida"],
-      "note": "No three.js anywhere. It used to load on all of these for a decorative object behind the page header; partials/head-object.php is now deliberately empty and records why. That single change is most of the 62% drop in secondary-page weight.",
-      "desktop": { "html": 95, "css": 190, "js": 80, "font": 90, "img": 60, "total": 500 },
-      "phone":   { "html": 95, "css": 190, "js": 80, "font": 90, "img": 60, "total": 500 }
+      "note": "Zero JavaScript beyond the shared tail. partials/head-object.php gives all twelve of these an animated hero ground, and it is pure CSS precisely so this line does not move: a canvas here would have cost a module on twelve pages to decorate a heading, which is the exact mistake the previous build made with three.js.",
+      "desktop": { "html": 95, "css": 200, "js": 80, "font": 90, "img": 60, "total": 500 },
+      "phone":   { "html": 95, "css": 200, "js": 80, "font": 90, "img": 60, "total": 500 }
     }
   }
 }

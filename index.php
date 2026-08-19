@@ -238,7 +238,7 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="container">
             <div class="hero-grid">
                 <div class="hero-copy">
-                    <p class="meta-row" data-fx="fade">
+                    <p class="meta-row" data-r="lift">
                         <span><b>Built for</b> owner-operated businesses</span>
                         <span><b>Model</b> one scope, one price</span>
                     </p>
@@ -253,13 +253,13 @@ require __DIR__ . '/partials/social-rail.php';
                         <span class="line-mask"><span class="grad-word">Scale Smarter.</span></span>
                     </h1>
 
-                    <p class="hero-lead" data-fx="fade">
+                    <p class="hero-lead" data-r="lift">
                         Web, security, marketing, content and commerce — built by one team,
                         on one plan, with one person accountable. Not five vendors who have
                         never spoken to each other.
                     </p>
 
-                    <div class="hero-cta" data-fx="fade">
+                    <div class="hero-cta" data-r="lift">
                         <a class="btn btn-pill" href="#start" data-magnetic>Book a free consultation</a>
                         <a class="btn btn-line" href="#delivery" data-magnetic>See how delivery runs</a>
                     </div>
@@ -415,9 +415,9 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="platform-sticky">
             <div class="container">
                 <div class="platform-head">
-                    <p class="eyebrow" data-fx="fade">One platform</p>
-                    <h2 data-fx="fade">Five products.<br>One place they all live.</h2>
-                    <p class="lead" data-fx="fade">
+                    <p class="eyebrow" data-r="lift">One platform</p>
+                    <h2 data-r="lift">Five products.<br>One place they all live.</h2>
+                    <p class="lead" data-r="lift">
                         Every service ships its own working surface &mdash; and they read as one
                         system, not five logins stitched together.
                     </p>
@@ -458,14 +458,20 @@ require __DIR__ . '/partials/social-rail.php';
 
     </section>
 
-    <?php /* The same five, as real links, in their OWN block outside the
-             pinned section. Inside it they fought the sticky: .platform-sticky
-             can only stick for as long as its parent has room left, so a list
-             sharing that parent ate the deck's pinned range from the bottom
-             and left a screen of nothing where the deck used to be. Out here
-             the deck gets the full 180vh and the list gets its own space. */ ?>
+    <?php /* The same five, as real links, in their OWN block outside the pinned
+             section. Inside it they fought the sticky: .platform-sticky can
+             only stick for as long as its PARENT has room left, so a list
+             sharing that parent ate the deck pinned range from the bottom and
+             left a screen of nothing where the deck had been.
+
+             TWO COLUMNS, because one was the other half of the same problem.
+             A single left-hand list on a full-width ground is a column of text
+             beside an empty half-page, which reads as the section having run
+             out rather than having finished. The panel on the right is what the
+             deck was illustrating, said in words. */ ?>
     <section class="section platform-list">
-        <div class="container">
+        <div class="tex-hatch" aria-hidden="true"></div>
+        <div class="container platform-list-grid">
             <ol class="assembly-list">
 <?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
                 <li class="assembly-item" data-fx="in-up">
@@ -477,6 +483,47 @@ require __DIR__ . '/partials/social-rail.php';
                 </li>
 <?php endforeach; ?>
             </ol>
+
+            <aside class="platform-panel" data-r="lift">
+                <p class="eyebrow">What one platform means</p>
+                <h3>Five surfaces, one account, one bill.</h3>
+
+                <?php /* Structural, not claimed. The count comes from
+                         services_all(), the same array the list beside it is
+                         rendered from, so this number cannot drift from the
+                         page it sits on and cannot be wrong. Everything else
+                         here is a property of how the work is organised — not
+                         a metric, not a result, and not something a client
+                         would have to take on trust. */ ?>
+                <dl class="platform-facts">
+                    <div>
+                        <dt>Services</dt>
+                        <dd><?= (int)count($MODULES) ?>, under one scope</dd>
+                    </div>
+                    <div>
+                        <dt>Contact</dt>
+                        <dd>One person, accountable</dd>
+                    </div>
+                    <div>
+                        <dt>Security review</dt>
+                        <dd>In every package</dd>
+                    </div>
+                    <div>
+                        <dt>Ownership</dt>
+                        <dd>Full IP, transferred on final payment</dd>
+                    </div>
+                </dl>
+
+                <p class="platform-panel-foot">
+                    Add a service later and it joins the same scope and the same
+                    invoice &mdash; there is no second onboarding, and no second
+                    team to bring up to speed.
+                </p>
+
+                <a class="btn btn-line" href="<?= e(site_path('/pricing')) ?>" data-magnetic>
+                    See what a package includes <?= icon('arrow-up-right') ?>
+                </a>
+            </aside>
         </div>
     </section>
 
@@ -503,9 +550,9 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="apps-sticky">
             <div class="container apps-grid">
                 <div class="apps-copy">
-                    <p class="eyebrow" data-fx="fade">On the phone</p>
-                    <h2 data-fx="fade">Mobile apps, built by<br>the same team.</h2>
-                    <p class="lead" data-fx="fade">
+                    <p class="eyebrow" data-r="lift">On the phone</p>
+                    <h2 data-r="lift">Mobile apps, built by<br>the same team.</h2>
+                    <p class="lead" data-r="lift">
                         Native and cross-platform builds, store submission, and the releases
                         after it &mdash; from the people already running your site, so the app
                         and the web are never two versions of the truth.

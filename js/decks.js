@@ -74,9 +74,12 @@ function makeDeck(section, host, geo, order) {
         const raw = span > 0 ? clamp01(-r.top / span) : 1;
         eased = lerp(eased, raw, 0.09);
 
-        // The fan completes at 65% of the section, so the last third is the
-        // open deck holding still and being looked at rather than still moving.
-        const spread = easeInOut(clamp01(eased / 0.65));
+        // The fan completes at 78% of the section. It was 65%, which left the
+        // last third as an open deck holding still — correct as choreography
+        // and wrong as layout, because the sticky then released onto a screen
+        // of blank paper. A fifth of the range is enough of a hold to read the
+        // finished arrangement.
+        const spread = easeInOut(clamp01(eased / 0.78));
 
         for (const { el, geo: g, i } of items) {
             const stagger = clamp01((spread - i * 0.05) / (1 - i * 0.05));

@@ -4,96 +4,23 @@
 
    Nine sections. Two calls to action. One object.
 
-   THE STAGE (sections 01-03)
-   --------------------------
-   .stage-sticky is pinned to the viewport and carries margin-bottom equal to
-   minus its own height, so it takes NO space in the flow. The hero, the
-   statement and the assembly scroll over it. The statement is opaque paper,
-   which is how the object disappears for section 02 without anything being
-   turned off — it is simply covered.
+   WHAT USED TO BE HERE
+   --------------------
+   About 5.5 KB of this file drove a sticky WebGL stage: a pinned object that
+   the hero, the statement and the assembly scrolled over, a pre-rendered
+   still sharing its exact box so the cross-fade had nothing to reveal, and a
+   conditional 300svh expansion applied only once a canvas was actually
+   running. It was careful work and all of it is deleted, because the object
+   it was composing is deleted.
 
-   THE COMPOSITION IS DONE HERE, NOT IN THE CAMERA
-   -----------------------------------------------
-   From 1041px up, the stage occupies the right 54% of the viewport and the
-   type is ranged left beside it. The pre-rendered still and the live canvas
-   share that box exactly, so the cross-fade from one to the other has nothing
-   to reveal. Composing with the camera instead would move the live object and
-   not the still, and the seam would show at the precise moment the upgrade
-   arrives.
+   The rules are gone rather than commented out. A stylesheet that keeps a
+   deleted feature "in case" is a stylesheet nobody can safely change, and
+   these shipped on every page view of the homepage to style elements that no
+   longer exist in the markup. inc/tools/deadcss.mjs is what found them.
    ========================================================================== */
 
 .page-home main { overflow-x: clip; }
 
-/* --------------------------------------------------------------- the stage */
-
-.stage { position: relative; }
-
-.stage-sticky {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    margin-bottom: -100svh;   /* occupies no flow space */
-    z-index: 0;
-    pointer-events: none;
-}
-
-.stage-still,
-.stage-canvas,
-.stage-labels {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-}
-
-.stage-still { display: block; }
-.stage-still img,
-.stage-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-.stage-still img { object-fit: contain; object-position: center 58%; }
-
-/* The hand-off. Both layers show the identical frame at the moment of the
-   swap, so this is a cross-fade with nothing to see — which is the point. */
-.stage-canvas { opacity: 0; transition: opacity var(--dur-4) var(--ease-out); }
-.stage.is-live .stage-canvas { opacity: 1; }
-.stage.is-live .stage-still  { opacity: 0; transition: opacity var(--dur-4) var(--ease-out); }
-
-/* Labels on the exploded assembly. DOM, not sprites: they have to be
-   selectable, translatable and reachable by a screen reader. Positioned from
-   projected world anchors by js/stage3d.js. */
-.stage-labels { opacity: 0; transition: opacity var(--dur-3) var(--ease-out); }
-.stage-labels.is-on { opacity: 1; }
-
-.stage-label {
-    position: absolute;
-    left: var(--x, 50%);
-    top: var(--y, 50%);
-    translate: 14px -50%;
-    display: inline-flex;
-    align-items: baseline;
-    gap: var(--sp-2);
-    padding: 5px 11px 6px;
-    /* Opaque, not translucent. A translucent chip over a bright machined
-       highlight is unreadable at exactly the moment it has something to say,
-       and the whole point of a DOM label over a canvas is that it is type on
-       paper rather than pixels in a render. */
-    background: var(--paper);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--r-xs);
-    box-shadow: var(--sh-1);
-    font-family: var(--font-mono);
-    font-size: var(--fs-meta);
-    letter-spacing: var(--tr-meta);
-    text-transform: uppercase;
-    color: var(--ink-2);
-    white-space: nowrap;
-}
-.stage-label i { font-style: normal; color: var(--accent-fg); font-weight: 600; }
-.stage-label.is-behind { opacity: 0; }
 
 /* ==========================================================================
    01 — HERO
@@ -142,7 +69,6 @@
 }
 /* The two-tone display line. --ink-4 is 3.81:1 on paper-01 and is rated for
    exactly this: large display type, never body, never a caption. */
-.hero-title-2 { color: var(--ink-4); }
 
 .hero-lead {
     margin-top: var(--sp-5);
@@ -229,58 +155,6 @@
     color: var(--ink-2);
 }
 
-/* ==========================================================================
-   03 — THE ASSEMBLY
-
-   Three viewport-heights of scroll, with the copy pinned beside the object
-   while it comes apart.
-   ========================================================================== */
-
-/* THE HEIGHT IS CONDITIONAL, and this is the important part.
-
-   Three viewport-heights of scroll only makes sense if something is moving
-   through them. Making 300svh the default meant that anyone the live scene
-   never reaches — WebGL off, Save-Data, reduced motion, a dead driver, any
-   phone — scrolled past three screens of empty paper to read a five-item
-   list. So the tall, pinned version is opt-IN, applied only once js/stage3d.js
-   has a running canvas to put in it.
-
-   The expansion happens at idle after load, far below the fold, so it costs
-   no layout shift the visitor can see; and the failure mode is a normal
-   section rather than a void. */
-.assembly {
-    position: relative;
-    z-index: 1;
-    padding-block: var(--section-y);
-}
-.stage.is-live .assembly {
-    min-height: 300svh;
-    padding-block: 0;
-}
-.stage.is-live .assembly > .container {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* The exploded still. Present until the live scene takes over, then gone. */
-.assembly-still {
-    margin: var(--sp-8) 0 0;
-    display: flex;
-    justify-content: flex-end;
-}
-.assembly-still img {
-    width: min(100%, 30rem);
-    height: auto;
-    display: block;
-}
-.stage.is-live .assembly-still { display: none; }
-.assembly-head { max-width: 30rem; }
-.assembly-head h2 { margin: var(--sp-3) 0 0; }
-
 .assembly-list {
     list-style: none;
     margin: var(--sp-7) 0 0;
@@ -319,9 +193,6 @@
     color: var(--ink-3);
 }
 .assembly-item a:hover .assembly-name { color: var(--accent-fg); }
-
-/* The phone sequence. Hidden wherever the live stage runs. */
-.assembly-seq { display: none; }
 
 /* ==========================================================================
    04 — DELIVERY
@@ -498,12 +369,6 @@
 .close-copy .lead { margin-top: var(--sp-5); max-width: 44ch; }
 .close-copy .meta-row { margin-top: var(--sp-6); }
 
-.close-object {
-    margin: var(--sp-7) 0 0;
-    max-width: 22rem;
-}
-.close-object img { width: 100%; height: auto; display: block; }
-
 /* ==========================================================================
    THE HERO ENTRANCE
 
@@ -528,8 +393,6 @@
     to   { opacity: 1; }
 }
 
-.page-home .stage-ground { animation: groundIn 520ms var(--ease-out) backwards; }
-.page-home .stage-still  { animation: settleIn 760ms var(--ease-out) 180ms backwards; }
 
 .page-home .hero-copy > * { animation: riseIn var(--dur-4) var(--ease-out) backwards; }
 .page-home .hero-copy .meta-row { animation-delay: 500ms; }
@@ -544,44 +407,16 @@
    Three real layouts, not one layout squeezed twice.
    ========================================================================== */
 
-/* --- 1041px and up: the asymmetric composition ---------------------------- */
-@media (min-width: 1041px) {
-    .stage-still,
-    .stage-canvas,
-    .stage-labels { width: 54%; }
-}
-
-/* --- 761px to 1040px: WebGL still runs, but the object goes behind ---------
-   There is not enough width for type and object side by side, so the object
-   returns to full width and sits BEHIND the copy at low contrast rather than
-   beside it. Still one object, still one scene. */
+/* --- 761px to 1040px --- */
 @media (min-width: 761px) and (max-width: 1040px) {
-    .stage-still { opacity: .5; }
-    .stage.is-live .stage-canvas { opacity: .55; }
     .hero-copy { max-width: 30rem; }
-    .assembly > .container { justify-content: flex-end; padding-bottom: var(--sp-9); }
-    .assembly-head, .assembly-list { max-width: 34rem; }
 }
 
 /* --- 760px and down: no WebGL, ever -------------------------------------
    The sticky layer stops being sticky and becomes a plain block at the top of
-   the hero: object above copy. The exploded story becomes a vertical sequence
-   of three pre-rendered stills, which is a designed experience rather than a
-   shrunken desktop one — and it costs about a tenth of the desktop scene. */
+   the hero: copy first, and the card cluster stands down entirely
+   (css/09-scenes.css) rather than shrinking to illegibility. */
 @media (max-width: 760px) {
-    .stage-sticky {
-        position: static;
-        height: auto;
-        margin-bottom: 0;
-    }
-    .stage-still,
-    .stage-canvas,
-    .stage-labels { position: static; width: 100%; }
-    .stage-canvas,
-    .stage-labels { display: none; }
-    .stage-ground { display: none; }
-    .stage-still img { height: auto; aspect-ratio: 7 / 8; }
-
     .hero {
         min-height: 0;
         padding-top: var(--sp-6);
@@ -592,43 +427,23 @@
     .statement { min-height: 0; padding-block: var(--section-y); }
     .statement-line { max-width: none; }
 
-    .assembly, .stage.is-live .assembly { min-height: 0; padding-block: var(--section-y); }
-    .assembly > .container,
-    .stage.is-live .assembly > .container { position: static; height: auto; display: block; }
-    .assembly-still { display: none; }   /* the sequence below says it better */
-    .assembly-head, .assembly-list { max-width: none; }
-
-    .assembly-seq {
-        display: grid;
-        gap: var(--sp-6);
-        margin-top: var(--sp-8);
-        padding-inline: var(--gutter);
-    }
-    .assembly-seq img { width: 100%; height: auto; display: block; }
+    .assembly-list { max-width: none; }
 
     .flow-step { grid-template-columns: 3rem minmax(0, 1fr); gap: var(--sp-3); }
     .flow-when { grid-column: 2; text-align: left; padding-top: var(--sp-2); }
 
     .faq { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
     .close-grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-8); }
-    .close-object { display: none; }   /* the hero still already showed it */
 }
 
 /* ==========================================================================
    REDUCED MOTION
 
    Everything staged, scrubbed or drifting is switched off. The content is
-   identical: the object is still there, assembled and at rest, because it is
-   an image. Nothing is left stuck at an entrance state.
+   identical, because none of it was ever carried by the motion. Nothing is
+   left stuck at an entrance state.
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-    .page-home .stage-ground,
-    .page-home .stage-still,
-    .page-home .hero-copy > * {
-        animation: none !important;
-    }
-    .stage-canvas,
-    .stage-still,
-    .stage-labels { transition: none !important; }
+    .page-home .hero-copy > * { animation: none !important; }
 }

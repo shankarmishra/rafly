@@ -387,8 +387,81 @@
 .platform-list {
     position: relative;
     background: var(--paper);
-    padding-block: var(--section-y-s) var(--section-y);
+    padding-block: var(--sp-8) var(--section-y);
+    overflow: hidden;
 }
+/* --- the list block under the deck ------------------------------------
+   Two columns. One was the other half of the dead-space problem: a single
+   left-hand list on a full-width ground is a column of text beside an empty
+   half-page, which reads as the section having run out rather than having
+   finished. */
+.platform-list-grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 24rem);
+    gap: var(--sp-9);
+    align-items: start;
+    position: relative;
+    z-index: 1;
+}
+
+.platform-panel {
+    position: sticky;
+    top: calc(var(--header-h) + var(--sp-5));
+    padding: var(--sp-6);
+    border-radius: var(--r-xl);
+    background: color-mix(in srgb, #ffffff 76%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid color-mix(in srgb, #ffffff 88%, transparent);
+    box-shadow:
+        0 24px 60px -30px color-mix(in srgb, var(--ink) 36%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+.platform-panel h3 {
+    margin: var(--sp-3) 0 var(--sp-5);
+    font-size: var(--fs-h3);
+    line-height: var(--lh-heading);
+    color: var(--ink);
+}
+
+.platform-facts { margin: 0 0 var(--sp-5); display: grid; gap: var(--sp-4); }
+.platform-facts > div {
+    display: grid;
+    gap: 2px;
+    padding-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--line);
+}
+.platform-facts > div:last-child { padding-bottom: 0; border-bottom: 0; }
+
+/* The metadata tier. --ink-3, never --ink-4: this is small text, and --ink-4
+   is rated for large display only. */
+.platform-facts dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.platform-facts dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--ink);
+}
+
+.platform-panel-foot {
+    margin: 0 0 var(--sp-5);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-body);
+    color: var(--ink-2);
+}
+
+@media (max-width: 960px) {
+    .platform-list-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
+    .platform-panel { position: static; }
+}
+
 
 .platform-head { text-align: center; max-width: 39rem; margin: 0 auto; }
 .platform-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
@@ -646,14 +719,14 @@
        the deck pinned range — it released a screen early and left blank paper
        where the deck had been. The height IS the range here; the breathing
        room comes from the sticky centring its own content. */
-    .platform { height: 180vh; padding-block: 0; }
+    .platform { height: 150vh; padding-block: 0; }
     .platform-sticky {
         position: sticky; top: 0;
         height: 100vh;
         display: flex; flex-direction: column;
         align-items: center; justify-content: center;
     }
-    .apps { height: 170vh; padding-block: 0; }
+    .apps { height: 150vh; padding-block: 0; }
     .apps-sticky {
         position: sticky; top: 0;
         height: 100vh;
@@ -674,4 +747,131 @@
        section to say what it says. */
     .platform, .apps { height: auto; padding-block: var(--section-y); }
     .platform-sticky, .apps-sticky { position: static; height: auto; }
+}
+
+/* ==========================================================================
+   THE HEAD FIELD — every inner page's hero ground
+
+   Rendered by partials/head-object.php, which twelve pages include. Four
+   layers, all CSS, no JavaScript:
+
+     grid    the 42px module js/field.js uses on the homepage, so an inner
+             page reads as the same system framed tighter rather than as a
+             second visual language
+     sweep   a soft band crossing it on a 9s loop — the one thing here that
+             reads as instrumentation rather than as decoration
+     orbs    two blurred accent pools, which is what stops a flat grid from
+             looking like graph paper
+
+   IT TAKES THE PAGE ACCENT FOR FREE. Everything reads --accent-fg, which
+   css/00-tokens.css remaps per body.svc-*, so each service page's head is in
+   that service's own colour with no per-page rule.
+
+   CONTRAST. Every layer is under .page-head content, which css/08-ground.css
+   already raises with `.page-head > * { position: relative; z-index: 1 }`.
+   The heaviest layer here is the orb at 14% of an accent over paper-02, which
+   moves measured luminance by under a hundredth of a ratio point — but
+   inc/tools/shoot.mjs re-measures all sixteen routes anyway, because that is
+   the whole reason it exists.
+   ========================================================================== */
+
+.head-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+
+    /* Faded top and bottom so the band has no hard edge against the sections
+       either side of it. A page head is a passage, not a panel. */
+    mask-image: linear-gradient(180deg, transparent, #000 22%, #000 74%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 74%, transparent);
+}
+
+.head-field > * { position: absolute; display: block; }
+
+/* --- the grid ---------------------------------------------------------
+   Two layers: hairlines for the module, and a dot at every intersection.
+   The dots are what make it read as a NETWORK — a plain ruled grid is
+   stationery, and points that could be connected are infrastructure. */
+.head-field-grid {
+    inset: -1px;
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--accent-fg) 11%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--accent-fg) 11%, transparent) 1px, transparent 1px),
+        radial-gradient(color-mix(in srgb, var(--accent-fg) 30%, transparent) 1.5px, transparent 1.5px);
+    background-size: 42px 42px, 42px 42px, 42px 42px;
+    background-position: 0 0, 0 0, 0 0;
+
+    /* Perspective without a transform: the grid fades toward the top, so the
+       band reads as a surface receding rather than as wallpaper. A real
+       rotateX here would need a 3-D context on every page head and would put
+       the hairlines on a sub-pixel grid, which is where a crisp 1px line
+       turns into a grey smear. */
+    mask-image: linear-gradient(180deg, transparent 8%, #000 58%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 8%, #000 58%);
+}
+
+/* --- the sweep --------------------------------------------------------
+   One soft band travelling left to right. It is deliberately WIDER and
+   FAINTER than it wants to be: a tight bright sweep reads as a loading bar,
+   which is the one thing a page header must not look like. */
+.head-field-sweep {
+    top: 0; bottom: 0;
+    left: -40%;
+    width: 40%;
+    background: linear-gradient(90deg,
+        transparent,
+        color-mix(in srgb, var(--accent-fg) 13%, transparent) 45%,
+        color-mix(in srgb, var(--accent-fg) 19%, transparent) 55%,
+        transparent);
+    filter: blur(22px);
+    animation: head-sweep 9s var(--ease-in-out) infinite;
+}
+
+@keyframes head-sweep {
+    0%        { transform: translateX(0); opacity: 0; }
+    12%       { opacity: 1; }
+    88%       { opacity: 1; }
+    100%      { transform: translateX(350%); opacity: 0; }
+}
+
+/* --- the orbs ---------------------------------------------------------
+   Two, at different sizes and drifting at different rates, because two pools
+   moving in step read as one shape with a seam down the middle. */
+.head-field-orb {
+    border-radius: 50%;
+    filter: blur(58px);
+}
+.head-field-orb-a {
+    width: 520px; height: 520px;
+    left: -6%; top: -40%;
+    background: radial-gradient(circle,
+        color-mix(in srgb, var(--accent-fg) 18%, transparent), transparent 66%);
+    animation: head-orb-a 22s var(--ease-in-out) infinite alternate;
+}
+.head-field-orb-b {
+    width: 420px; height: 420px;
+    right: 2%; bottom: -46%;
+    background: radial-gradient(circle,
+        color-mix(in srgb, var(--blue-deep) 12%, transparent), transparent 66%);
+    animation: head-orb-b 27s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes head-orb-a { to { transform: translate3d(90px, 26px, 0) scale(1.12); } }
+@keyframes head-orb-b { to { transform: translate3d(-70px, -20px, 0) scale(1.08); } }
+
+/* On a phone the head is short and the orbs are most of it, which turns the
+   band into a coloured blur behind the h1. The grid stays; the pools go. */
+@media (max-width: 700px) {
+    .head-field-orb { display: none; }
+    .head-field-sweep { animation-duration: 13s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* The grid IS the design; the sweep and the drift are emphasis on it.
+       The sweep is parked mid-band rather than hidden, so the composition
+       keeps its highlight and simply stops moving. */
+    .head-field-sweep { animation: none; left: 30%; opacity: 1; }
+    .head-field-orb   { animation: none; }
 }

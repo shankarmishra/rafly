@@ -182,7 +182,26 @@ const PROBE = `(() => {
     //    table is how #ff6b35 ends up as 3:1 body copy.
     const srgb = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
     const lum = ([r, g, b]) => 0.2126 * srgb(r) + 0.7152 * srgb(g) + 0.0722 * srgb(b);
-    const parse = (v) => (v.match(/[\\d.]+/g) || []).slice(0, 4).map(Number);
+    /* TWO COMPUTED COLOUR FORMATS, AND THEY USE DIFFERENT SCALES.
+
+       A plain declaration computes to rgb(5, 15, 51) — channels 0-255. But
+       anything built with color-mix() computes to color(srgb 1 1 1 / 0.76) —
+       channels 0-1. Reading the second with the first scale turns white into
+       rgb(1, 1, 1), which is black.
+
+       That is not hypothetical: it reported a white glass panel as near-black
+       and failed three real elements on it at 1.12:1, 2.19:1 and 3.19:1 — a
+       heading, a paragraph and an eyebrow that are all comfortably legible.
+       An hour was spent looking for the CSS bug before the harness turned out
+       to be the thing that was wrong. color-mix is now used throughout
+       css/09-scenes.css, so this would have kept happening. */
+    const parse = (v) => {
+        const n = (String(v).match(/[\\d.]+/g) || []).slice(0, 4).map(Number);
+        if (/^color\\(/.test(String(v).trim())) {
+            return [n[0] * 255, n[1] * 255, n[2] * 255, n[3] ?? 1];
+        }
+        return n;
+    };
     const ratio = (fg, bg) => {
         const a = lum(fg), b = lum(bg);
         return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);

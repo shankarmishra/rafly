@@ -357,15 +357,12 @@ async function main() {
         const r = await cdp.send('Runtime.evaluate', {
             returnByValue: true,
             expression: `(() => {
-                /* The one exclusion is the WebGL stage. Its canvas sits at
-                   opacity 0 until js/stage3d.js has painted a first frame and
-                   added .is-live to .stage — that is the fallback CONTRACT, not
-                   a failure. Underneath it is a pre-rendered still
-                   (.stage-still), which is what a visitor without JS, without
-                   WebGL2, on a phone or under reduced motion actually sees, and
-                   which is asserted separately below. */
+                /* Canvases are excluded, and that is the fallback CONTRACT
+                   rather than an exemption. A canvas with nothing painted on
+                   it sits at opacity 0 by design; what shows through is the
+                   CSS underneath it, and THAT is what is asserted below. */
                 const els = [...document.querySelectorAll('[data-r], [data-r] > *, [data-fx]')]
-                    .filter(el => !el.closest('.stage-sticky'))
+                    .filter(el => !el.matches('canvas'))
                     /* Skip anything with no layout box. A display:none element is
                        not hidden-but-present, it is ABSENT by design — the arc
                        sheds its outer tiles below 900px, and a CSS animation on a
@@ -380,21 +377,45 @@ async function main() {
                     invisible: hidden.length,
                     which: hidden.slice(0, 5).map(el => el.tagName.toLowerCase()
                         + '.' + (typeof el.className === 'string' ? el.className.trim().split(/\\s+/)[0] : '')),
-                    /* Not just present — VISIBLE and pointing at a real file.
-                       A still that exists in the DOM at opacity 0, or with an
-                       empty src, is the same blank frame to a visitor as no
-                       still at all, and that blank frame is exactly what the
-                       previous build shipped. */
-                    still: (() => {
-                        const img = document.querySelector('.stage-still img');
-                        if (!img) return 'missing';
-                        const op = +getComputedStyle(img.closest('.stage-still')).opacity;
-                        if (op < 0.2) return 'transparent (opacity ' + op + ')';
-                        if (!img.getAttribute('src')) return 'no src';
-                        if (!img.getClientRects().length) return 'no layout box';
+                    /* WHAT THE NO-JS CONTRACT IS NOW.
+
+                       It used to be a pre-rendered WebP still of a 3-D object,
+                       under a canvas that faded in over it. That object, its
+                       stills and three.js are all deleted, so this checked for
+                       a file that no longer exists and failed every run.
+
+                       What replaced it is a stronger contract, because nothing
+                       has to be FETCHED for it to hold: the hero carries the
+                       aurora shader's four blobs as CSS radial-gradients at
+                       their t=0 positions, and the deck's five cards are real
+                       markup with a static per-slot fan transform. The shader
+                       and js/decks.js override those; neither creates them. */
+                    heroStill: (() => {
+                        const hero = document.querySelector('[data-hero]');
+                        if (!hero) return 'no hero';
+                        if (hero.classList.contains('is-live')) return 'is-live without JS';
+                        const bg = getComputedStyle(hero).backgroundImage;
+                        if (!bg || bg === 'none') return 'no CSS fallback painted';
+                        /* Checking for a GRADIENT, not just for "a background".
+                           A plain --paper fill would pass a truthiness test and
+                           would be a different, flatter hero than the designed
+                           one — which is exactly the kind of silent downgrade
+                           this file exists to catch. */
+                        if (!/gradient/.test(bg)) return 'fallback is not the designed gradient';
                         return 'ok';
                     })(),
-                    canvasLive: !!document.querySelector('.stage.is-live'),
+                    /* Five cards, all laid out, and FANNED rather than stacked:
+                       five cards sharing one transform read as one card. */
+                    deckStill: (() => {
+                        const deck = document.querySelector('[data-deck]');
+                        if (!deck) return 'no deck';
+                        const mocks = [...deck.children].filter(el => el.getClientRects().length > 0);
+                        if (mocks.length < 2) return 'only ' + mocks.length + ' card(s) laid out';
+                        const xs = new Set(mocks.map(el => Math.round(el.getBoundingClientRect().left)));
+                        if (xs.size < 2) return 'all ' + mocks.length + ' cards stacked at one x';
+                        return 'ok';
+                    })(),
+                    canvasLive: !!document.querySelector('.is-live'),
                     words: (document.body.innerText || '').trim().split(/\\s+/).length,
                     jsMotion: document.documentElement.classList.contains('js-motion'),
                 };
@@ -403,9 +424,10 @@ async function main() {
         const v = r.result.value;
         check('nothing stays hidden without JS, once scrolled', v.invisible === 0,
             v.invisible ? v.which.join(', ') : `${v.total} revealed elements, all visible after a full scroll`);
-        check('the pre-rendered still is what shows without JS', v.still === 'ok', v.still);
-        check('the live canvas never activates without JS', v.canvasLive === false,
-            '.stage must not carry .is-live when scripts are disabled');
+        check('the hero paints its designed fallback without JS', v.heroStill === 'ok', v.heroStill);
+        check('the deck is a readable fan without JS', v.deckStill === 'ok', v.deckStill);
+        check('no canvas ever activates without JS', v.canvasLive === false,
+            'nothing may carry .is-live when scripts are disabled');
         check('.js-motion is absent, so nothing opts into hiding', v.jsMotion === false);
         check('the page still has its content', v.words > 800, `${v.words} words readable`);
 
