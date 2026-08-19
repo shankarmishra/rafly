@@ -1,0 +1,25 @@
+# Line endings are LF everywhere — in the repository AND in the working tree.
+#
+# This is not a style preference. The working tree on the machine this is
+# developed on is already LF, but core.autocrlf is true there, so every commit
+# printed "LF will be replaced by CRLF the next time Git touches it" for two
+# dozen files. Left alone, the next checkout rewrites all of them and the
+# following diff is whole-file line-ending churn with the real change buried
+# somewhere inside it. eol=lf overrides core.autocrlf per repository, so the
+# setting on any one developer's machine stops mattering.
+#
+# It also matters at runtime, not only in diffs: inc/tools/*.mjs and the PHP
+# CLI tools are read on a Linux host, and `php -l` on a file whose heredoc
+# terminator carries a CR is a syntax error that reads as nonsense.
+* text=auto eol=lf
+
+# Binary. Never touched, never diffed as text, never line-ending converted.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.pdf   binary
