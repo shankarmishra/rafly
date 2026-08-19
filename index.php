@@ -108,16 +108,22 @@ $COMPARE = [
 ];
 
 /**
- * The five modules of the object, in stack order, matched to the five real
- * services. Index, label and slug all come from one place, so a label on the
- * 3-D scene can never drift from the page it links to.
+ * The five services. Index, label and slug all come from one place, so the
+ * hero's spec list and the bento below it can never drift from each other or
+ * from the page they link to.
+ *
+ * The last two columns are the card's accent TOKEN NAME and its glyph. A token
+ * name rather than a hex, because --svc-security and --svc-ecom are fill-only
+ * values and writing them here as literals is how a fill colour eventually
+ * ends up on type. The card uses --sc as a background and a border only; every
+ * word in it is --ink or --ink-3.
  */
 $MODULES = [
-    ['01', 'web-development',         'Web',       'Sites and web apps that load fast and do not fall over as you grow.'],
-    ['02', 'web-security',            'Security',  'A practical look at what someone probing your site would find first.'],
-    ['03', 'marketing-advertisement', 'Marketing', 'Campaigns built around who is actually buying, reported in plain language.'],
-    ['04', 'content-creation',        'Content',   'Copy that says what you do, in your words, without the filler.'],
-    ['05', 'ecommerce-support',       'Commerce',  'The unglamorous side of selling online, kept in order.'],
+    ['01', 'web-development',         'Web',       'Sites and web apps that load fast and do not fall over as you grow.',            '--svc-web',       'code'],
+    ['02', 'web-security',            'Security',  'A practical look at what someone probing your site would find first.',           '--svc-security',  'shield'],
+    ['03', 'marketing-advertisement', 'Marketing', 'Campaigns built around who is actually buying, reported in plain language.',     '--svc-marketing', 'megaphone'],
+    ['04', 'content-creation',        'Content',   'Copy that says what you do, in your words, without the filler.',                 '--svc-content',   'pencil'],
+    ['05', 'ecommerce-support',       'Commerce',  'The unglamorous side of selling online, kept in order.',                         '--svc-ecom',      'shopping-cart'],
 ];
 
 /**
@@ -380,6 +386,27 @@ require __DIR__ . '/partials/social-rail.php';
         </div>
     </section>
 
+    <?php /* The capability strip. A rhythm between the statement and the deck,
+             and the first thing on the site to use the marquee that has been
+             sitting complete in css/03-components.css and js/motion.js since
+             the first build.
+
+             aria-hidden, and every word in it is real copy somewhere else on
+             the page. Nothing here is a claim; it is a beat between two heavy
+             sections. js/motion.js clones the track once so the -50% loop is
+             seamless, and css/06-motion.css already stops it under reduced
+             motion. */ ?>
+    <div class="strip" aria-hidden="true">
+        <div class="marquee">
+            <div class="marquee-track">
+<?php foreach (['Web development', 'Web security', 'Marketing', 'Content', 'E-commerce support',
+                'Mobile apps', 'One scope', 'One invoice', 'One person accountable'] as $word): ?>
+                <span><?= e($word) ?></span><i></i>
+<?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
     <?php /* ==========================================================
        03 — THE PLATFORM
 
@@ -464,25 +491,35 @@ require __DIR__ . '/partials/social-rail.php';
              sharing that parent ate the deck pinned range from the bottom and
              left a screen of nothing where the deck had been.
 
-             TWO COLUMNS, because one was the other half of the same problem.
-             A single left-hand list on a full-width ground is a column of text
-             beside an empty half-page, which reads as the section having run
-             out rather than having finished. The panel on the right is what the
-             deck was illustrating, said in words. */ ?>
+             A BENTO, NOT A LIST. They were a column of rows beside a panel,
+             which is a column of text beside an empty half-page and reads as
+             the section having run out rather than having finished. Six tiles
+             on three columns close it with nothing left over: the lead service
+             across two, the other four filling the rest, and the panel across
+             all three as the last word.
+
+             The cards are the ones Naveen has picked out at every round — glass
+             over the paper ground, a gradient border that arrives on hover, and
+             a sheen that follows the cursor. The sheen needs js/sheen.js for
+             the follow; without it --mx/--my resolve to the card's centre and
+             hover is a centred glow, which is a designed state rather than a
+             missing one. */ ?>
     <section class="section platform-list">
         <div class="tex-hatch" aria-hidden="true"></div>
-        <div class="container platform-list-grid">
-            <ol class="assembly-list">
-<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
-                <li class="assembly-item" data-fx="in-up">
-                    <a href="<?= e(site_path('/' . $slug)) ?>">
-                        <span class="assembly-idx"><?= e($idx) ?></span>
-                        <span class="assembly-name"><?= e($label) ?></span>
-                        <span class="assembly-desc"><?= e($blurb) ?></span>
-                    </a>
-                </li>
+        <div class="container svc-bento">
+<?php foreach ($MODULES as [$idx, $slug, $label, $blurb, $token, $glyph]): ?>
+            <a class="svc-card" data-sheen data-r="lift"
+               href="<?= e(site_path('/' . $slug)) ?>"
+               style="--sc: var(<?= e($token) ?>);">
+                <span class="svc-card-top">
+                    <span class="svc-card-glyph"><?= icon($glyph) ?></span>
+                    <span class="svc-card-idx"><?= e($idx) ?></span>
+                </span>
+                <h3 class="svc-card-name"><?= e($label) ?></h3>
+                <p class="svc-card-desc"><?= e($blurb) ?></p>
+                <span class="svc-card-go">Explore <?= icon('arrow-up-right') ?></span>
+            </a>
 <?php endforeach; ?>
-            </ol>
 
             <aside class="platform-panel" data-r="lift">
                 <p class="eyebrow">What one platform means</p>
@@ -596,7 +633,10 @@ require __DIR__ . '/partials/social-rail.php';
        spine, real stage names, real durations. No 3-D, no WebGL, no
        particles.
        ========================================================== */ ?>
-    <section class="section ground-2 grain" id="delivery">
+    <section class="section ground-2 grain has-tex" id="delivery">
+        <div class="tex-hatch" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:620px; height:620px; left:-10%; bottom:-14%;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 13%, transparent), transparent 66%);"></div>
         <div class="container">
             <div class="sec-head">
                 <p class="eyebrow">Delivery</p>
@@ -624,7 +664,8 @@ require __DIR__ . '/partials/social-rail.php';
        Typographic, and deliberately static. Nearly zero animation: after the
        exploded sequence and before the dark chapter, this is a rest.
        ========================================================== */ ?>
-    <section class="section ground-3" id="stack">
+    <section class="section ground-3 has-tex" id="stack">
+        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
         <div class="container">
             <div class="sec-head">
                 <p class="eyebrow">Built on</p>
@@ -686,7 +727,10 @@ require __DIR__ . '/partials/social-rail.php';
        service, so what the homepage refuses and what the service page
        refuses are the same file.
        ========================================================== */ ?>
-    <section class="section" id="limits">
+    <section class="section has-tex" id="limits">
+        <div class="tex-hatch" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:700px; height:700px; right:-12%; top:-8%;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue-deep) 12%, transparent), transparent 66%);"></div>
         <div class="container">
             <div class="sec-head">
                 <p class="eyebrow">Honest limits</p>
@@ -697,7 +741,7 @@ require __DIR__ . '/partials/social-rail.php';
                 </p>
             </div>
 
-            <div class="limits">
+            <div class="limits" data-r="group">
 <?php foreach ($limits as [$svc, $title, $desc]): ?>
                 <div class="limit">
                     <p class="limit-svc"><?= e($svc) ?></p>
@@ -707,7 +751,7 @@ require __DIR__ . '/partials/social-rail.php';
 <?php endforeach; ?>
             </div>
 
-            <div class="compare-wrap">
+            <div class="compare-wrap" data-r="lift">
                 <table class="compare">
                     <caption class="sr-only">Rafly compared with a traditional agency and with hiring separate freelancers</caption>
                     <thead>
@@ -736,7 +780,10 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        08 — PRICING AND FAQ
        ========================================================== */ ?>
-    <section class="section ground-2 grain" id="pricing">
+    <section class="section ground-2 grain has-tex" id="pricing">
+        <div class="tex-hatch" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:760px; height:760px; left:-14%; top:34%;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 12%, transparent), transparent 66%);"></div>
         <div class="container">
             <div class="sec-head">
                 <p class="eyebrow">Bundles</p>
@@ -786,7 +833,10 @@ require __DIR__ . '/partials/social-rail.php';
        assembled and at rest — the same render as the hero, because that is
        exactly what it is: the thing, put back together.
        ========================================================== */ ?>
-    <section class="section close" id="start">
+    <section class="section close has-tex" id="start">
+        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
+        <div class="orb" aria-hidden="true" style="width:820px; height:820px; right:-16%; bottom:-24%;
+             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 15%, transparent), transparent 64%);"></div>
         <div class="container">
             <div class="close-grid">
                 <div class="close-copy">

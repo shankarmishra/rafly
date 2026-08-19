@@ -24,7 +24,7 @@
  * form it already had on screen. No effect here carries meaning.
  */
 
-import { allowCanvas, allowShader, whenIdle, token, rgb } from './gates.js';
+import { allowCanvas, allowShader, finePointer, whenIdle, token, rgb } from './gates.js';
 
 /* ------------------------------------------------------- the background */
 
@@ -78,6 +78,21 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
     import('./decks.js')
         .then((m) => m.initDecks())
         .catch(() => { /* the CSS stack is a complete, readable fallback */ });
+}
+
+/* ------------------------------------------------------- the bento sheen */
+
+/* A highlight that follows the cursor is nothing without a cursor, so this is
+   the one effect on the page gated on the POINTER rather than on the canvas
+   ladder — a phone never fetches it. Reduced motion keeps it: the sheen is a
+   hover state, not an animation, and the CSS turns off only the card's travel.
+   Without this module --mx/--my resolve to 50% and hover is a centred glow. */
+if (finePointer() && document.querySelector('[data-sheen]')) {
+    whenIdle(() => {
+        import('./sheen.js')
+            .then((m) => m.initSheen())
+            .catch(() => { /* the centred fallback glow is already the design */ });
+    });
 }
 
 /* ------------------------------------------------ interaction polish */

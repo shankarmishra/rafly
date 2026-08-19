@@ -181,114 +181,6 @@
 .js-motion [data-split].is-in .split-word { opacity: 1; transform: none; }
 
 /* ==========================================================================
-   4. Sticky storytelling — the layout IS the feature, so this sits outside
-      the @supports blocks and works everywhere.
-   ========================================================================== */
-.st-scroller {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(2rem, 1rem + 4vw, 5rem);
-    align-items: start;
-}
-.st-stage {
-    position: sticky;
-    top: calc(var(--header-h) + var(--sp-6));
-    align-self: start;
-}
-.st-steps { display: grid; }
-.st-steps.has-rail { position: relative; padding-left: var(--sp-7); }
-.st-steps.has-rail::before {
-    content: '';
-    position: absolute;
-    left: 13px;
-    top: 12px;
-    bottom: 12px;
-    width: 2px;
-    background: var(--line);
-    border-radius: 2px;
-}
-.st-steps.has-rail::after {
-    content: '';
-    position: absolute;
-    left: 13px;
-    top: 12px;
-    width: 2px;
-    height: var(--st-progress, 0%);
-    background: var(--blue);
-    border-radius: 2px;
-    transition: height var(--dur-3) var(--ease);
-}
-
-.st-step {
-    position: relative;
-    padding-block: var(--sp-6);
-    /* Enough scroll distance for the pinned stage to feel driven, without the
-       column becoming mostly air. */
-    min-height: 30vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: var(--sp-3);
-    opacity: .42;
-    transition: opacity var(--dur-3) var(--ease);
-}
-.st-step.is-active { opacity: 1; }
-
-.st-step-num {
-    position: absolute;
-    left: calc(var(--sp-7) * -1);
-    top: 50%;
-    translate: 0 -50%;
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 2px solid var(--line);
-    font-family: var(--font-display);
-    font-size: var(--fs-2xs);
-    font-weight: var(--fw-bold);
-    color: var(--ink-3);
-    transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
-                color var(--dur-2) var(--ease);
-}
-/* The label reads --pill-fg, not #fff. On paper --blue is #1652e0 and the
-   label is white at 6.33:1; on ink --blue remaps to mint and a white label
-   lands at 1.6:1, which inc/tools/shoot.mjs failed this rule on. Same
-   inversion the primary button makes, for the same reason. */
-.st-step.is-active .st-step-num {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: var(--pill-fg, #fff);
-}
-.st-step-title {
-    font-size: var(--fs-h4);
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: var(--sp-3);
-}
-/* The step's own mark. Sized to the cap height rather than to the line box, so
-   it reads as part of the heading and not as a bullet stuck in front of it. */
-.st-step-ico {
-    flex: none;
-    width: 1.05em;
-    height: 1.05em;
-    color: var(--accent-fg);
-    opacity: .55;
-    transition: opacity var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
-}
-.st-step.is-active .st-step-ico { opacity: 1; color: var(--accent-fg); }
-.st-step-text  { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; max-width: 46ch; }
-
-@media (max-width: 940px) {
-    .st-scroller { grid-template-columns: 1fr; }
-    .st-stage { position: static; margin-bottom: var(--sp-6); }
-    .st-step { min-height: 0; opacity: 1; padding-block: var(--sp-4); }
-}
-
-/* ==========================================================================
    4b. data-fx — CONTINUOUS scroll-linked motion
 
    `data-r` is an entrance: it plays once and ends at a finished state. Most of
@@ -485,7 +377,6 @@
     }
     [data-r="draw"] path, [data-r="draw"] line { stroke-dashoffset: 0 !important; }
     [data-r="mark"] { background-size: 100% var(--mark-h, 100%) !important; }
-    .st-step { opacity: 1 !important; }
     .marquee-track { animation: none !important; }
     .scroll-progress { display: none; }
 }

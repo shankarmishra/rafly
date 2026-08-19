@@ -40,8 +40,18 @@ require __DIR__ . '/footer.php';
  * cannot use a single line of it. Until that module lands, the file is
  * tracked and dormant; grep data-magnetic, data-cursor and data-spotlight to
  * see what it wants.
+ *
+ * scroll.js LEFT THIS LIST TOO, and it is worth saying why rather than just
+ * deleting a line. It drove a sticky scrollyteller — .st-scroller, .st-stage,
+ * .st-steps — and it also published data-st-step for js/gl.js and
+ * js/stage3d.js to read. All three of those are gone, and no template on the
+ * site has ever rendered .st-scroller, so the module was 4.2 KB shipped to
+ * every page to watch for markup that does not exist. Its 3.3 KB of CSS went
+ * with it. Found by inc/tools/deadcss.mjs when the per-type CSS budget failed
+ * by 2 KB: the rule is that the line only moves after everything dead behind
+ * it has been deleted.
  */
-$tailScripts = ['smooth', 'motion', 'ui', 'forms', 'scroll'];
+$tailScripts = ['smooth', 'motion', 'ui', 'forms'];
 foreach ($tailScripts as $s):
 ?>
 <script src="<?= e(asset("js/{$s}.js")) ?>" defer></script>

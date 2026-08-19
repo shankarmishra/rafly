@@ -104,6 +104,53 @@
     z-index: 0;
 }
 
+/* WHAT A DECORATED SECTION NEEDS, ONCE, INSTEAD OF SIX TIMES.
+
+   A texture layer is inset:0 absolute and an orb is deliberately larger than
+   the box it sits in, so its parent has to establish a containing block, clip,
+   and its own stacking context — or the orb bleeds into the section above and
+   the texture lands behind the page background.
+
+   overflow: CLIP, never hidden. hidden makes the box a scroll container, and
+   any sticky child inside it silently stops pinning. That bug shipped once
+   already on .platform; this rule is where it does not come back. */
+.has-tex {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+}
+/* Content above the decoration, without a z-index on every child. */
+.has-tex > .container { position: relative; z-index: 1; }
+
+/* --- the capability strip ---------------------------------------------
+   Between the statement and the platform. css/03-components.css has carried a
+   complete marquee since the first build and js/motion.js has cloned its
+   track for just as long, and until now nothing on the site used either.
+
+   It is aria-hidden and every word in it appears somewhere else as real copy —
+   it is a rhythm between two heavy sections, not a list of claims. */
+.strip {
+    padding-block: var(--sp-6);
+    border-block: 1px solid var(--line);
+    background: var(--paper-2);
+}
+.strip .marquee-track > span {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, .8rem + .7vw, 1.4rem);
+    font-weight: var(--fw-semi);
+    letter-spacing: -.01em;
+    color: var(--ink-2);
+    white-space: nowrap;
+}
+/* The separator is the logo blue as a FILL — a 6px dot carries no text and is
+   the one place --blue is right at this size. */
+.strip .marquee-track > i {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex: none;
+}
+
 /* ==========================================================================
    THE HERO
    ========================================================================== */
@@ -403,23 +450,192 @@
     padding-block: var(--sp-8) var(--section-y);
     overflow: hidden;
 }
-/* --- the list block under the deck ------------------------------------
-   Two columns. One was the other half of the dead-space problem: a single
-   left-hand list on a full-width ground is a column of text beside an empty
-   half-page, which reads as the section having run out rather than having
-   finished. */
-.platform-list-grid {
+/* --- THE BENTO ---------------------------------------------------------
+
+   The five services were a list of rows in a left-hand column with a panel
+   beside them, and before that a single column on a full-width ground. Both
+   read as the section having run out rather than having finished.
+
+   Six tiles on a three-column grid, and the spans are chosen so there is no
+   hole to fill:
+
+       row 1   [ Web — spans 2 ]              [ Security ]
+       row 2   [ Marketing ]  [ Content ]     [ Commerce ]
+       row 3   [ the panel — spans 3 ]
+
+   The cards themselves are the thing Naveen has asked for at every round —
+   glass, a gradient border that arrives on hover, a sheen that follows the
+   cursor. Every one of those is a compositor-only property; nothing here
+   animates a layout value. */
+.svc-bento {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 24rem);
-    gap: var(--sp-9);
-    align-items: start;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
     position: relative;
     z-index: 1;
 }
 
+.svc-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    min-height: 13rem;
+    padding: var(--sp-5);
+    border-radius: var(--r-xl);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+
+    background: color-mix(in srgb, #ffffff 76%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid color-mix(in srgb, #ffffff 88%, transparent);
+    box-shadow:
+        0 24px 60px -34px color-mix(in srgb, var(--ink) 34%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 5%, transparent);
+
+    transition:
+        transform var(--dur-2) var(--ease-out),
+        box-shadow var(--dur-2) var(--ease-out);
+}
+
+/* THE LEAD CARD takes two columns. Same padding and the same parts — a bento
+   works because one tile has more room, not because one tile is a different
+   component.
+
+   Two columns of room is also two columns of EMPTY room if nothing fills it,
+   so the lead card carries a pool of its own accent on the right and gives its
+   copy a measure to stop against. Nothing is invented to fill the space: the
+   pool is light, and the words are the same words. */
+.svc-card:first-child {
+    grid-column: span 2;
+    background-image: radial-gradient(circle at 88% 30%,
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 14%, transparent), transparent 58%);
+}
+.svc-card:first-child .svc-card-name { font-size: var(--fs-h3); }
+.svc-card:first-child .svc-card-desc { max-width: 38ch; }
+
+/* THE GRADIENT BORDER. A 1px ring painted as a gradient, achieved by drawing
+   the gradient over the whole box and then masking out everything inside the
+   padding box — the two masks are composited with `exclude`, which leaves
+   exactly the border ring. A gradient `border-image` cannot do this and keep
+   a radius; a second absolutely-positioned element could, at the cost of a
+   layer per card. */
+.svc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+        var(--sc, var(--accent-fg)),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 20%, transparent) 58%,
+        transparent 78%);
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* THE SHEEN. --mx/--my are written by js/sheen.js on pointermove. They fall
+   back to the card's centre, so with no JS at all the hover state is a
+   centred glow rather than nothing — a designed state either way. */
+.svc-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 16%, transparent),
+        transparent 62%);
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.svc-card:hover,
+.svc-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow:
+        0 34px 70px -32px color-mix(in srgb, var(--ink) 42%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.svc-card:hover::before,
+.svc-card:focus-visible::before,
+.svc-card:focus-within::before { opacity: 1; }
+.svc-card:hover::after,
+.svc-card:focus-visible::after,
+.svc-card:focus-within::after { opacity: 1; }
+
+/* Everything inside sits above the sheen. */
+.svc-card > * { position: relative; z-index: 1; }
+
+.svc-card-top { display: flex; align-items: center; justify-content: space-between; }
+
+/* The glyph tile. --sc is a FILL here and never a text colour — two of the
+   five service accents (--svc-security, --svc-ecom) are rated for fill only,
+   which is the whole reason css/00-tokens.css splits --accent from
+   --accent-fg. The glyph on top is white. */
+.svc-card-glyph {
+    width: 40px; height: 40px;
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg,
+        var(--sc, var(--accent-fg)),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 62%, #ffffff));
+    box-shadow: 0 8px 20px -10px var(--sc, var(--accent-fg));
+}
+.svc-card-glyph svg { width: 19px; height: 19px; }
+
+.svc-card-idx {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    color: var(--ink-3);
+}
+
+.svc-card-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-semi);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+}
+.svc-card-desc {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-body);
+    color: var(--ink-3);
+}
+
+.svc-card-go {
+    margin-top: auto;
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--accent-fg);
+}
+.svc-card-go svg { width: 15px; height: 15px; transition: transform var(--dur-2) var(--ease-out); }
+.svc-card:hover .svc-card-go svg { transform: translate(3px, -3px); }
+
+/* The panel closes the grid rather than standing beside it. Across all three
+   columns its facts lie in a row, which is what stops a full-width block from
+   becoming a wide paragraph. */
 .platform-panel {
-    position: sticky;
-    top: calc(var(--header-h) + var(--sp-5));
+    grid-column: 1 / -1;
     padding: var(--sp-6);
     border-radius: var(--r-xl);
     background: color-mix(in srgb, #ffffff 76%, transparent);
@@ -438,14 +654,19 @@
     color: var(--ink);
 }
 
-.platform-facts { margin: 0 0 var(--sp-5); display: grid; gap: var(--sp-4); }
+.platform-facts {
+    margin: 0 0 var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
 .platform-facts > div {
     display: grid;
     gap: 2px;
-    padding-bottom: var(--sp-4);
-    border-bottom: 1px solid var(--line);
+    padding-left: var(--sp-4);
+    border-left: 1px solid var(--line);
 }
-.platform-facts > div:last-child { padding-bottom: 0; border-bottom: 0; }
+.platform-facts > div:first-child { padding-left: 0; border-left: 0; }
 
 /* The metadata tier. --ink-3, never --ink-4: this is small text, and --ink-4
    is rated for large display only. */
@@ -465,14 +686,36 @@
 
 .platform-panel-foot {
     margin: 0 0 var(--sp-5);
+    max-width: 62ch;
     font-size: var(--fs-sm);
     line-height: var(--lh-body);
     color: var(--ink-2);
 }
 
-@media (max-width: 960px) {
-    .platform-list-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
-    .platform-panel { position: static; }
+/* Two columns before one. Five cards at 1fr on a phone is five squares of
+   nothing; five cards at full width is a readable stack, and the tablet step
+   between them keeps the lead card's span meaningful. */
+@media (max-width: 1100px) {
+    .svc-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .svc-card:first-child { grid-column: span 2; }
+    .platform-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+    .svc-bento { grid-template-columns: 1fr; gap: var(--sp-3); }
+    .svc-card:first-child { grid-column: auto; }
+    .svc-card { min-height: 0; }
+    .platform-facts { grid-template-columns: 1fr; gap: var(--sp-4); }
+    .platform-facts > div { padding-left: 0; border-left: 0; }
+}
+
+/* A card that lifts and glows on hover has nothing to say to a visitor who
+   asked for less movement. The border and the sheen stay — they are state,
+   not motion — and only the travel goes. */
+@media (prefers-reduced-motion: reduce) {
+    .svc-card { transition: none; }
+    .svc-card:hover, .svc-card:focus-visible { transform: none; }
+    .svc-card:hover .svc-card-go svg { transform: none; }
 }
 
 
