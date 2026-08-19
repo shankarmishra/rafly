@@ -1,7 +1,30 @@
 # Digiplus-premium redesign — design
 
+> ## ⚠ SUPERSEDED — do not build from this document
+>
+> **Superseded on 2026-08-19** by the direction Naveen approved against a
+> running prototype (`preview.html`), which he scrolled through and accepted
+> rather than reading a description of. That is the locked design; this is not.
+>
+> It is kept, not deleted, because it carries an "Approved by Naveen" stamp and
+> because the reference research below (digiplus, stripe, cuberto, and the
+> gradient-masked-text technique) is still the research the approved direction
+> was chosen against. Delete it and the next person re-runs that work and
+> re-proposes an option that has already been rejected.
+>
+> **Where it is wrong, specifically:**
+>
+> | This document says | The approved design says |
+> |---|---|
+> | Keep the orange accent | One accent, and it is the logo blue `#0a63ff`. `--svc-marketing #a8430f` is the last orange left in `css/00-tokens.css` and is going. |
+> | Light/white ground throughout | Paper ground with a dark pinned chapter — the mirror pair in `css/08-ground.css`, not one ground. |
+> | 3-D device renders and mockup illustrations as the hero | **No 3-D primitive in the hero.** A torus knot and a dot-globe were both built and both rejected as generic. The hero is a WebGL aurora plus floating glass UI cards. |
+> | Gradient-masked display text as a signature treatment | Still wanted, but it is unmeasurable by `inc/tools/shoot.mjs` (`color: transparent` reports "on a gradient, not checkable" — 48 elements per service page today). It needs a `@supports` fallback before it is used anywhere new. |
+>
+> The current plan of record is `~/.claude/plans/keen-wondering-locket.md`.
+
 **Date:** 2026-08-19
-**Status:** Approved by Naveen, ready for implementation planning.
+**Status:** SUPERSEDED. Was: approved by Naveen, ready for implementation planning.
 **Builds on:** the light edition (`C:\Users\xshan\Desktop\rafly`, first commit `19ffbaa`), NOT the dark/paper
 redesign in `dev.rafly` (that direction was rejected — see `[[paper-edition-direction]]` in project memory).
 
