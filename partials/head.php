@@ -47,7 +47,11 @@ $page = ($page ?? []) + [
 /**
  * Core stylesheet stack, in cascade order. 00-tokens must always be first.
  *
- * Eight files, down from twenty. The previous build carried two competing
+ * Nine files. The ninth, 08-ground.css, carries the two-ground token remap
+ * and must load after every component sheet, because it wins by being last
+ * rather than by being more specific.
+ *
+ * The previous build carried two competing
  * animation systems and roughly 1,800 superseded lines in one page stylesheet;
  * none of that survived the rebuild, so there is nothing here to keep in sync.
  */
@@ -60,11 +64,27 @@ $coreStyles = [
     'css/05-footer.css',
     'css/06-motion.css',
     'css/07-fx.css',
+    'css/08-ground.css',
 ];
+
+/**
+ * Fallback path when a page sets no explicit 'canonical': the request path
+ * with the query string stripped AND, for anything but the root, a trailing
+ * slash stripped too. .htaccess (and router.php in dev) already 301 a
+ * trailing-slash request to its slash-less form — but that redirect is a
+ * second file, kept in sync by hand, and this is what stops the two from
+ * ever being able to disagree: even if a rewrite rule is ever missed, this
+ * page still declares the slash-less URL as canonical rather than
+ * self-canonicalising the duplicate.
+ */
+$fallbackPath = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+if ($fallbackPath !== '/' && str_ends_with($fallbackPath, '/')) {
+    $fallbackPath = rtrim($fallbackPath, '/');
+}
 
 $canonical = $page['canonical'] !== null
     ? SITE_ORIGIN . '/' . ltrim($page['canonical'], '/')
-    : SITE_ORIGIN . strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+    : SITE_ORIGIN . $fallbackPath;
 
 $ogImageUrl = SITE_ORIGIN . '/' . ltrim(asset($page['ogImage']), '/');
 
@@ -131,6 +151,18 @@ $pixelId = !$page['noindex']
     <?php /* twitter:site / twitter:creator omitted — no verified @handle exists in SOCIAL_LINKS/config
              to attribute this to; adding one would be fabricated metadata. */ ?>
     <meta name="theme-color" content="#0d47a1">
+
+<?php /* Search Console / Bing Webmaster "HTML tag" verification. Both
+         constants (inc/config.php) default to '' and are unset on every
+         environment until a real value is pasted into inc/config.local.php —
+         so this renders nothing today, on any host, rather than a verification
+         tag with an empty content attribute. */ ?>
+<?php if (GOOGLE_SITE_VERIFICATION !== ''): ?>
+    <meta name="google-site-verification" content="<?= e(GOOGLE_SITE_VERIFICATION) ?>">
+<?php endif; ?>
+<?php if (BING_SITE_VERIFICATION !== ''): ?>
+    <meta name="msvalidate.01" content="<?= e(BING_SITE_VERIFICATION) ?>">
+<?php endif; ?>
 
     <!-- SVG favicon first; the 32px PNG is the fallback for browsers without
          SVG favicon support. Both icons and the touch icon are resampled from

@@ -42,6 +42,12 @@ $crumbs = [
     ['name' => $data['title'], 'url' => '/' . $service],
 ];
 
+// inc/repo/links.php — the inverse of blog-post.php's related-service link,
+// and case studies whose admin-entered tags name this service. Both degrade
+// to [] with no database, same contract as everything else on this page.
+$relatedArticles    = related_articles_for_service($service, 3);
+$relatedCaseStudies = related_case_studies_for_service($data['title'], 2);
+
 $page = [
     'id'        => 'services',
     'title'     => $data['title'] . ' | Rafly Digital Growth',
@@ -56,7 +62,9 @@ $page = [
     'canonical' => $service,
 
     'schema'    => [
-        schema_service($data['title'], $data['intro'], $data['highlights']),
+        // Same @id schema_organization()'s makesOffer references this service
+        // by, so the two resolve to one Service entity instead of two.
+        schema_service($data['title'], $data['intro'], $data['highlights'], schema_id('service-' . $service)),
 
         // Same array that renders the accordion below, so the rich result can
         // never claim an answer the visible page does not give.
@@ -97,6 +105,11 @@ require __DIR__ . '/partials/social-rail.php';
                     </div>
 
                     <p class="svc-note">Available as a standalone engagement, or bundled with our other services into a single package.</p>
+                    <p class="svc-note">
+                        Rafly is based in <?= e(BUSINESS_GEO_LOCALITY) ?>, <?= e(BUSINESS_GEO_REGION) ?>,
+                        and works with businesses there and across <?= e(BUSINESS_GEO_COUNTRY) ?> &mdash;
+                        delivery is remote-first, so location is rarely a blocker.
+                    </p>
                 </div>
 
                 <?php /* THE SERVICE MARK.
@@ -236,7 +249,7 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="grid grid-3" data-r="group">
                 <?php foreach ($data['boundaries'] as $limit): ?>
                     <div class="limit-card">
-                        <span class="icon-box icon-box-orange"><?= icon('alert-triangle') ?></span>
+                        <span class="icon-box icon-box-note"><?= icon('alert-triangle') ?></span>
                         <h3><?= e($limit['title']) ?></h3>
                         <p><?= e($limit['desc']) ?></p>
                     </div>
@@ -252,7 +265,7 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="faq-card" data-r="rise">
                 <div class="faq-aside">
                     <p class="eyebrow">FAQ</p>
-                    <h2><?= e($data['title']) ?>, <span class="scribble">answered<svg viewBox="0 0 300 24" aria-hidden="true" preserveAspectRatio="none"><path d="M4 17C58 6 120 4 178 8c38 3 74 6 118 3"/></svg></span></h2>
+                    <h2><?= e($data['title']) ?>, <span class="mark">answered</span></h2>
                     <p class="muted">Something else on your mind? A person replies, usually the same working day.</p>
                     <div class="faq-aside-actions">
                         <a class="btn btn-pill" href="/contact">Ask us directly <?= icon('arrow-right') ?></a>
@@ -276,6 +289,56 @@ require __DIR__ . '/partials/social-rail.php';
             </div>
         </div>
     </section>
+
+    <?php /* ==================== 8b. FURTHER READING =====================
+       Articles whose category maps to this service (inc/repo/links.php) and
+       case studies whose tags name it. Either list may be empty — with no
+       database, both are — so the whole section is skipped rather than
+       rendering an empty head. */ ?>
+    <?php if ($relatedArticles || $relatedCaseStudies): ?>
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head-split">
+                <div>
+                    <p class="eyebrow">Further reading</p>
+                    <h2>More on <span class="soft"><?= e($data['title']) ?></span></h2>
+                </div>
+            </div>
+
+            <div class="grid grid-3" data-r="group">
+                <?php foreach ($relatedArticles as $a): ?>
+                    <article class="card card-hover">
+                        <div class="card-body card-body-sm">
+                            <span class="badge badge-soft">Article</span>
+                            <h3 class="card-title"><?= e((string)$a['title']) ?></h3>
+                            <p class="card-text"><?= e(str_cut((string)$a['excerpt'], 110)) ?></p>
+                            <div class="card-foot">
+                                <span class="blog-meta"><?= (int)$a['read_minutes'] ?> min read</span>
+                                <?= icon('arrow-up-right') ?>
+                            </div>
+                        </div>
+                        <a class="card-link" href="<?= e(site_path('/blog/' . rawurlencode((string)$a['slug']))) ?>" aria-label="<?= e((string)$a['title']) ?>"></a>
+                    </article>
+                <?php endforeach; ?>
+                <?php foreach ($relatedCaseStudies as $cs): ?>
+                    <article class="card card-hover">
+                        <div class="card-body card-body-sm">
+                            <span class="badge badge-soft">Case study</span>
+                            <h3 class="card-title"><?= e((string)$cs['client_name']) ?></h3>
+<?php if (trim((string)$cs['metric_value']) !== '' && trim((string)$cs['metric_label']) !== ''): ?>
+                            <p class="card-text"><strong><?= e((string)$cs['metric_value']) ?></strong> &mdash; <?= e((string)$cs['metric_label']) ?></p>
+<?php endif; ?>
+                            <div class="card-foot">
+                                <span class="link-arrow">Read the write-up <?= icon('arrow-right') ?></span>
+                            </div>
+                        </div>
+                        <a class="card-link" href="/case-studies#case-study-<?= (int)$cs['index'] ?>" aria-label="<?= e((string)$cs['client_name']) ?> case study"></a>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <?php /* ========================== 9. OTHER SERVICES =======================
        From the same repository this page is built on. This once read a

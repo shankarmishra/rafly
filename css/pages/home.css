@@ -1,379 +1,629 @@
 /* ==========================================================================
-   Homepage.
+   HOME — Machined Paper
+   ==========================================================================
 
-   Only the sections that exist nowhere else live here. Anything reused by a
-   second template belongs in 03-components.css instead — the previous build's
-   home stylesheet reached 82 KB precisely because that rule was not kept.
+   Nine sections. Two calls to action. One object.
+
+   THE STAGE (sections 01-03)
+   --------------------------
+   .stage-sticky is pinned to the viewport and carries margin-bottom equal to
+   minus its own height, so it takes NO space in the flow. The hero, the
+   statement and the assembly scroll over it. The statement is opaque paper,
+   which is how the object disappears for section 02 without anything being
+   turned off — it is simply covered.
+
+   THE COMPOSITION IS DONE HERE, NOT IN THE CAMERA
+   -----------------------------------------------
+   From 1041px up, the stage occupies the right 54% of the viewport and the
+   type is ranged left beside it. The pre-rendered still and the live canvas
+   share that box exactly, so the cross-fade from one to the other has nothing
+   to reveal. Composing with the camera instead would move the live object and
+   not the still, and the seam would show at the precise moment the upgrade
+   arrives.
    ========================================================================== */
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
-.hero {
-    /* The 3-D object is inset NEGATIVELY past the right edge of its column so
-       the panels reach beyond the stage rather than stopping at a visible
-       border; clipping here keeps that overhang from widening the document. */
-    padding-top: calc(var(--header-h) + clamp(1.5rem, .5rem + 3vw, 3.25rem));
-    padding-bottom: clamp(2rem, 1rem + 3vw, 4rem);
-    overflow: clip;
+.page-home main { overflow-x: clip; }
+
+/* --------------------------------------------------------------- the stage */
+
+.stage { position: relative; }
+
+.stage-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    margin-bottom: -100svh;   /* occupies no flow space */
+    z-index: 0;
+    pointer-events: none;
 }
 
-/* The ring overhangs its container on both sides in exactly the same way, and
-   for exactly the same reason. */
-.cap-sec { overflow: clip; }
-/* CENTRED, with the models around it.
-
-   This was briefly a two-column split — words left, object right — and it was
-   rejected: "text center me chahiya". Centred is also the composition of the
-   reference Naveen sent in the first place, a block of type with objects
-   arranged around it.
-
-   What makes it work this time is that the object leaves the middle empty, so
-   the words need no mask, no bloom and no scrim to stay readable. */
-.hero-head {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    max-width: 48rem;
-    margin-inline: auto;
-}
-.hero-head .eyebrow { justify-content: center; }
-.hero .display > span { display: block; }
-.hero-lead {
-    margin: var(--sp-5) auto 0;
-    max-width: 52ch;
-    color: var(--ink-3);
-}
-.hero-actions { justify-content: center; margin-top: var(--sp-7); }
-
-/* ==========================================================================
-   Marquee strip
-   ========================================================================== */
-.hero-strip { padding-block: var(--sp-6); }
-.hero-strip-label { text-align: center; margin-bottom: var(--sp-5); }
-.marquee-item {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-3);
-    font-family: var(--font-display);
-    font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.625rem);
-    font-weight: var(--fw-semi);
-    letter-spacing: var(--tr-heading);
-    color: var(--ink);
-    white-space: nowrap;
-}
-.marquee-item .icon { color: var(--blue); width: 1.1em; height: 1.1em; }
-/* A painted dot rather than a bullet character. Decorative separators carry no
-   information, and #ff6b35 as a glyph on white is 2.84:1. */
-.marquee-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--orange);
-    flex: none;
+.stage-still,
+.stage-canvas,
+.stage-labels {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
 }
 
-/* ==========================================================================
-   Trust bar
-   ========================================================================== */
-.trust-bar {
-    border-block: 1px solid var(--line);
-    padding-block: clamp(2rem, 1.4rem + 2vw, 3rem);
-}
-.trust-grid { gap: var(--sp-6); }
-.trust-grid .stat { align-items: flex-start; }
-@media (max-width: 620px) {
-    .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-/* ==========================================================================
-   Challenges
-   ========================================================================== */
-.challenge-card .card-media { aspect-ratio: 16 / 9; }
-/* Without a photograph the media band would be a flat grey slab; a soft brand
-   wash keeps the card looking finished either way. */
-.challenge-card .card-media:empty {
-    background:
-        radial-gradient(90% 120% at 20% 0%, var(--blue-tint-2) 0%, var(--paper-3) 70%);
-}
-.challenge-num {
-    font-size: var(--fs-h3);
-    line-height: 1;
+.stage-still { display: block; }
+.stage-still img,
+.stage-canvas {
+    width: 100%;
+    height: 100%;
     display: block;
 }
+.stage-still img { object-fit: contain; object-position: center 58%; }
+
+/* The hand-off. Both layers show the identical frame at the moment of the
+   swap, so this is a cross-fade with nothing to see — which is the point. */
+.stage-canvas { opacity: 0; transition: opacity var(--dur-4) var(--ease-out); }
+.stage.is-live .stage-canvas { opacity: 1; }
+.stage.is-live .stage-still  { opacity: 0; transition: opacity var(--dur-4) var(--ease-out); }
+
+/* Labels on the exploded assembly. DOM, not sprites: they have to be
+   selectable, translatable and reachable by a screen reader. Positioned from
+   projected world anchors by js/stage3d.js. */
+.stage-labels { opacity: 0; transition: opacity var(--dur-3) var(--ease-out); }
+.stage-labels.is-on { opacity: 1; }
+
+.stage-label {
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    translate: 14px -50%;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    padding: 5px 11px 6px;
+    /* Opaque, not translucent. A translucent chip over a bright machined
+       highlight is unreadable at exactly the moment it has something to say,
+       and the whole point of a DOM label over a canvas is that it is type on
+       paper rather than pixels in a render. */
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-xs);
+    box-shadow: var(--sh-1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-2);
+    white-space: nowrap;
+}
+.stage-label i { font-style: normal; color: var(--accent-fg); font-weight: 600; }
+.stage-label.is-behind { opacity: 0; }
 
 /* ==========================================================================
-   Who we are
+   01 — HERO
    ========================================================================== */
-.mini-stats {
-    margin-top: var(--sp-7);
-    padding-top: var(--sp-6);
-    border-top: 1px solid var(--line);
-    gap: var(--sp-4);
+
+.hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-block: calc(var(--header-h) + var(--sp-8)) var(--sp-9);
 }
-.mini-stats .stat-value { font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.25rem); }
 
-/* ==========================================================================
-   Services
-   ========================================================================== */
-/* A cell with no photograph in it falls back to its brand tint, so the
-   carousel is complete on day one.
+.hero-copy { max-width: 32rem; }
 
-   All five are DARK and saturated. The label is white, and there is a scrim
-   under it, but the scrim is a gradient — its effect cannot be verified by
-   computed style, so the cell colour alone has to carry white at 4.5:1. The
-   lightest of these is 5.4:1 before the scrim is counted. */
-.carousel-cell.t-blue   { background: #1652e0; }   /* 6.3:1 */
-.carousel-cell.t-deep   { background: #0d47a1; }   /* 8.6:1 */
-.carousel-cell.t-ink    { background: #0a0e1a; }   /* 19.3:1 */
-.carousel-cell.t-orange { background: #0e7490; }   /* 5.4:1 */
-.carousel-cell.t-tint   { background: #123f8f; }   /* 9.8:1 */
-
-.carousel-cell-link { color: #fff; margin-top: var(--sp-3); }
-.carousel-cell-link:hover { color: #fff; }
-
-.svc-index { margin-top: clamp(2rem, 1.2rem + 3vw, 3.5rem); }
-.svc-index-item {
-    color: inherit;
-    padding: var(--sp-2) 0;
-    border-radius: var(--r);
-    transition: transform var(--dur-2) var(--ease);
-}
-.svc-index-item:hover { transform: translateY(-3px); color: inherit; }
-.svc-index-item:hover .step-title { color: var(--blue); }
-
-.services-note {
-    margin: var(--sp-7) auto 0;
-    max-width: 62ch;
-    text-align: center;
-    font-size: var(--fs-sm);
+/* The metadata tier. Specification-sheet voice: monospaced, uppercase,
+   wide-tracked. It carries no number the site cannot back. */
+.meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-6);
+    margin-bottom: var(--sp-6);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
     color: var(--ink-3);
 }
+.meta-row b { font-weight: 500; color: var(--ink); margin-right: .5em; }
 
-/* ==========================================================================
-   P.E.A.C.E.
-   ========================================================================== */
-.peace-letter {
-    display: inline-grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    margin-right: var(--sp-2);
-    border-radius: var(--r-xs);
-    background: var(--blue-tint);
-    color: var(--blue);
+.hero-title {
     font-family: var(--font-display);
-    font-size: var(--fs-sm);
+    font-size: var(--fs-display-xl);
+    line-height: var(--lh-display);
+    letter-spacing: var(--tr-display);
     font-weight: var(--fw-bold);
-    vertical-align: -4px;
+    color: var(--ink);
+    text-wrap: balance;
+    margin: 0;
 }
-.st-step.is-active .peace-letter { background: var(--blue); color: #fff; }
+/* The two-tone display line. --ink-4 is 3.81:1 on paper-01 and is rated for
+   exactly this: large display type, never body, never a caption. */
+.hero-title-2 { color: var(--ink-4); }
+
+.hero-lead {
+    margin-top: var(--sp-5);
+    max-width: 38ch;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-body);
+    color: var(--ink-2);
+}
+
+.hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin-top: var(--sp-7);
+}
+
+/* The specification list — the five modules, as a parts list. It is the
+   accessible, no-JS, no-WebGL version of the labels that appear on the
+   object itself, and it is a real navigation. */
+.spec {
+    margin: var(--sp-8) 0 0;
+    border-top: 1px solid var(--line);
+    max-width: 24rem;
+}
+.spec-row {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    align-items: baseline;
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--line);
+}
+.spec dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    color: var(--ink-3);
+}
+.spec dd { margin: 0; }
+.spec dd a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: var(--fw-medium);
+}
+.spec dd a:hover { color: var(--accent-fg); }
 
 /* ==========================================================================
-   Delivery flow (the dark band)
+   02 — THE STATEMENT
+
+   The rest. Opaque, so it covers the stage; one sentence at display scale;
+   nothing else on screen.
    ========================================================================== */
-.flow-row { margin-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); }
-.band-ink .gl-host {
-    background: radial-gradient(70% 70% at 50% 40%, rgba(255, 255, 255, .09) 0%, rgba(255, 255, 255, .02) 62%, transparent 100%);
-    box-shadow: none;
-    border: 1px solid var(--on-dark-line);
+
+.statement {
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+    min-height: 76svh;
+    display: flex;
+    align-items: center;
 }
-.band-ink .gl-still::after { background: var(--ink); box-shadow: none; }
+.statement-meta {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: var(--sp-6);
+}
+.statement-line {
+    font-family: var(--font-display);
+    font-size: var(--fs-display);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tr-display);
+    font-weight: var(--fw-bold);
+    color: var(--ink);
+    margin: 0;
+    max-width: 18ch;
+}
+.statement-sub {
+    margin-top: var(--sp-7);
+    max-width: 52ch;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-body);
+    color: var(--ink-2);
+}
 
 /* ==========================================================================
-   Why choose
-   ========================================================================== */
-.why-list { margin-top: var(--sp-6); }
-.why-list li { font-size: var(--fs-base); }
+   03 — THE ASSEMBLY
 
-.delivery-panel { display: flex; flex-direction: column; gap: var(--sp-4); }
-.delivery-panel-title {
+   Three viewport-heights of scroll, with the copy pinned beside the object
+   while it comes apart.
+   ========================================================================== */
+
+/* THE HEIGHT IS CONDITIONAL, and this is the important part.
+
+   Three viewport-heights of scroll only makes sense if something is moving
+   through them. Making 300svh the default meant that anyone the live scene
+   never reaches — WebGL off, Save-Data, reduced motion, a dead driver, any
+   phone — scrolled past three screens of empty paper to read a five-item
+   list. So the tall, pinned version is opt-IN, applied only once js/stage3d.js
+   has a running canvas to put in it.
+
+   The expansion happens at idle after load, far below the fold, so it costs
+   no layout shift the visitor can see; and the failure mode is a normal
+   section rather than a void. */
+.assembly {
+    position: relative;
+    z-index: 1;
+    padding-block: var(--section-y);
+}
+.stage.is-live .assembly {
+    min-height: 300svh;
+    padding-block: 0;
+}
+.stage.is-live .assembly > .container {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* The exploded still. Present until the live scene takes over, then gone. */
+.assembly-still {
+    margin: var(--sp-8) 0 0;
+    display: flex;
+    justify-content: flex-end;
+}
+.assembly-still img {
+    width: min(100%, 30rem);
+    height: auto;
+    display: block;
+}
+.stage.is-live .assembly-still { display: none; }
+.assembly-head { max-width: 30rem; }
+.assembly-head h2 { margin: var(--sp-3) 0 0; }
+
+.assembly-list {
+    list-style: none;
+    margin: var(--sp-7) 0 0;
+    padding: 0;
+    max-width: 30rem;
+    border-top: 1px solid var(--line);
+}
+.assembly-item { border-bottom: 1px solid var(--line); }
+.assembly-item a {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 0 var(--sp-2);
+    padding: var(--sp-4) 0;
+    text-decoration: none;
+    color: inherit;
+    transition: background var(--dur-1) var(--ease);
+}
+.assembly-item a:hover { background: var(--wash); }
+.assembly-idx {
+    grid-row: 1 / span 2;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    color: var(--ink-3);
+    padding-top: .35em;
+}
+.assembly-name {
     font-family: var(--font-display);
     font-size: var(--fs-h4);
     font-weight: var(--fw-semi);
     color: var(--ink);
-    letter-spacing: var(--tr-heading);
-    margin: 0;
 }
-.delivery-list { display: grid; gap: var(--sp-2); }
-.delivery-list li {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-3);
-    padding: var(--sp-3);
-    background: var(--paper);
-    border-radius: var(--r);
-    box-shadow: var(--sh-1);
-}
-.delivery-list strong { display: block; font-size: var(--fs-sm); }
-.delivery-list-sub { font-size: var(--fs-2xs); color: var(--ink-3); }
-.delivery-list li > span:nth-child(2) { flex: 1; min-width: 0; }
-.delivery-tick { color: var(--success); }
-.delivery-foot {
-    margin: 0;
-    padding-top: var(--sp-3);
-    border-top: 1px solid var(--line-strong);
-    font-size: var(--fs-xs);
-    color: var(--ink-3);
-    text-align: center;
-}
-
-.stack-strip {
-    margin-top: clamp(2.5rem, 1.5rem + 4vw, 4rem);
-    padding-top: var(--sp-6);
-    border-top: 1px solid var(--line);
-    display: grid;
-    gap: var(--sp-4);
-}
-
-/* ==========================================================================
-   Selected work
-   ========================================================================== */
-.work-card .card-body { gap: var(--sp-2); }
-.work-metric {
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
-    font-weight: var(--fw-bold);
-    line-height: 1.15;
-    letter-spacing: var(--tr-heading);
-    color: var(--ink);
-    margin: var(--sp-3) 0 0;
-}
-.work-metric-label { font-size: var(--fs-xs); color: var(--blue); font-weight: var(--fw-semi); margin: 0 0 var(--sp-2); }
-.work-card .card-foot .icon { color: var(--ink-3); transition: transform var(--dur-2) var(--ease); }
-.work-card:hover .card-foot .icon { transform: translate(3px, -3px); color: var(--blue); }
-
-/* ==========================================================================
-   Pricing
-   ========================================================================== */
-.price-grid { gap: var(--sp-6); align-items: stretch; }
-.price-note {
-    margin: var(--sp-7) auto 0;
-    max-width: 58ch;
-    text-align: center;
+.assembly-desc {
     font-size: var(--fs-sm);
+    line-height: 1.5;
     color: var(--ink-3);
 }
+.assembly-item a:hover .assembly-name { color: var(--accent-fg); }
+
+/* The phone sequence. Hidden wherever the live stage runs. */
+.assembly-seq { display: none; }
 
 /* ==========================================================================
-   FAQ — the split card from reference 1
+   04 — DELIVERY
    ========================================================================== */
-.faq-card {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(2rem, 1rem + 4vw, 5rem);
-    padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
-    background: var(--paper);
-    border-radius: var(--r-2xl);
-    box-shadow: var(--sh-3);
+
+.flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
 }
-.faq-aside h2 { margin-bottom: var(--sp-4); }
-.faq-aside-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+.flow-step {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) 9rem;
     gap: var(--sp-5);
-    margin-top: var(--sp-6);
+    align-items: start;
+    padding: var(--sp-6) 0;
+    border-bottom: 1px solid var(--line);
 }
-.faq-list .accordion { border-top: 0; }
-.faq-list .accordion-item:first-child .accordion-trigger { padding-top: 0; }
-
-@media (max-width: 900px) {
-    .faq-card { grid-template-columns: 1fr; }
-}
-
-/* ==========================================================================
-   Contact — on the blue band
-   ========================================================================== */
-.contact-assurances { margin-top: var(--sp-6); }
-.contact-assurances li { color: #fff; }
-
-.contact-details {
-    margin-top: var(--sp-7);
-    padding-top: var(--sp-6);
-    border-top: 1px solid var(--on-dark-line);
-}
-.band-blue .deflist-row .icon, .band-ink .deflist-row .icon { color: rgba(255, 255, 255, .7); margin-top: 0.35em; }
-.band-blue .deflist-label, .band-ink .deflist-label { color: rgba(255, 255, 255, .62); }
-.band-blue .deflist-value, .band-ink .deflist-value { color: #fff; }
-.band-blue a.deflist-value:hover, .band-ink a.deflist-value:hover { text-decoration: underline; }
-
-.contact-card {
-    background: var(--paper);
-    border-radius: var(--r-xl);
-    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-    box-shadow: var(--sh-4);
-    color: var(--ink-2);
-}
-.contact-card-title { font-size: var(--fs-h3); margin-bottom: var(--sp-5); }
-/* The card is a light island inside a blue band, so every inherited on-dark
-   rule has to be put back to its light-ground value inside it. */
-.band-blue .contact-card h3, .band-ink .contact-card h3,
-.band-blue .contact-card label, .band-ink .contact-card label,
-.band-blue .contact-card strong, .band-ink .contact-card strong { color: var(--ink); }
-.band-blue .contact-card .check, .band-ink .contact-card .check { color: var(--ink-3); }
-.band-blue .contact-card .field-hint, .band-ink .contact-card .field-hint { color: var(--ink-3); }
-.band-blue .contact-card :focus-visible, .band-ink .contact-card :focus-visible { outline-color: var(--blue); }
-
-/* --- The scroll cue ------------------------------------------------------ */
-/* A link, not a decoration: it goes to the first section, so a keyboard user
-   gets the same shortcut the scroll gives. */
-.hero-cue {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    display: grid;
-    justify-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-2) var(--sp-3) 0;
-    font-size: var(--fs-2xs);
-    font-weight: var(--fw-semi);
-    letter-spacing: var(--tr-eyebrow);
+.flow-idx,
+.flow-when {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
     text-transform: uppercase;
     color: var(--ink-3);
-    text-decoration: none;
-    z-index: 2;
+    padding-top: .55em;
 }
-.hero-cue:hover { color: var(--ink); }
-.hero-cue-rail {
-    width: 1px;
-    height: clamp(28px, 4vw, 52px);
-    background: linear-gradient(var(--line-strong), transparent);
-    overflow: hidden;
-}
-.hero-cue-rail::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 40%;
-    background: var(--blue);
-}
-@media (prefers-reduced-motion: no-preference) {
-    .hero-cue-rail::after { animation: cue-run 2.2s var(--ease-in-out) infinite; }
-}
-@keyframes cue-run {
-    0%       { transform: translateY(-100%); }
-    60%, 100% { transform: translateY(250%); }
-}
+.flow-when { text-align: right; color: var(--accent-fg); }
+.flow-body h3 { margin: 0 0 var(--sp-2); font-size: var(--fs-h3); }
+.flow-body p  { margin: 0; max-width: 58ch; color: var(--ink-2); }
 
-/* The cue belongs under the words, not centred under a two-column stage —
-   centred, it lands between the two columns and points at nothing. */
-/* Centred under the words. */
-.hero-cue {
-    position: static;
-    transform: none;
-    justify-items: center;
-    margin: clamp(1.5rem, 3vw, 2.75rem) auto 0;
-    padding-inline: 0;
+/* ==========================================================================
+   05 — THE STACK
+
+   Deliberately static. No logo wall — a logo implies a partnership.
+   ========================================================================== */
+
+.stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--sp-7) var(--sp-6);
+}
+.stack-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-3);
+    margin: 0 0 var(--sp-4);
+    padding-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--line-strong);
+}
+.stack-col ul { list-style: none; margin: 0; padding: 0; }
+.stack-col li {
+    padding: var(--sp-2) 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
 }
 
 /* ==========================================================================
-   App stage section
+   06 — SELECTED WORK — the one dark chapter
    ========================================================================== */
-/* The stage deliberately overhangs its container — that is the composition,
-   not a bug. Clipping here is what stops the overhang widening the document,
-   the same bargain .hero and .cap-sec make. */
-.app-show { overflow: clip; }
-.app-show .sec-head { margin-bottom: clamp(1.5rem, 1rem + 2vw, 3rem); }
-.app-points { margin-top: clamp(2rem, 1rem + 3vw, 3.5rem); }
+
+.work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: var(--sp-6);
+}
+.work-card {
+    padding: var(--sp-6);
+    background: var(--surface-2);
+    border: 1px solid var(--surface-line);
+    border-radius: var(--r);
+}
+.work-idx {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    color: var(--on-surface-3);
+}
+.work-card h3 { margin: var(--sp-3) 0 var(--sp-2); font-size: var(--fs-h3); }
+.work-card p  { color: var(--on-surface-2); margin: 0 0 var(--sp-4); }
+
+/* ==========================================================================
+   07 — HONEST LIMITS
+   ========================================================================== */
+
+.limits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+}
+.limit {
+    background: var(--paper);
+    padding: var(--sp-5);
+}
+.limit-svc {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 var(--sp-3);
+}
+.limit h3 { margin: 0 0 var(--sp-2); font-size: var(--fs-h4); }
+.limit p  { margin: 0; font-size: var(--fs-sm); line-height: 1.55; color: var(--ink-2); }
+
+/* The comparison table. Wide content scrolls inside its own container so the
+   page body never scrolls sideways. */
+.compare-wrap {
+    margin-top: var(--sp-9);
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+}
+.compare {
+    width: 100%;
+    min-width: 46rem;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+}
+.compare th,
+.compare td {
+    padding: var(--sp-4);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+}
+.compare thead th {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-3);
+    background: var(--paper-3);
+    white-space: nowrap;
+}
+.compare tbody th { font-weight: var(--fw-semi); color: var(--ink); width: 12rem; }
+.compare td { color: var(--ink-2); }
+.compare .is-us { background: var(--blue-tint); color: var(--ink); }
+.compare tbody tr:last-child th,
+.compare tbody tr:last-child td { border-bottom: 0; }
+
+/* ==========================================================================
+   08 — PRICING AND FAQ
+   ========================================================================== */
+
+.faq {
+    margin-top: var(--sp-10);
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: var(--sp-8);
+    align-items: start;
+}
+.faq-head h3 { margin: 0 0 var(--sp-3); font-size: var(--fs-h2); }
+.faq-head p  { margin: 0; color: var(--ink-2); }
+
+/* ==========================================================================
+   09 — THE CLOSE
+   ========================================================================== */
+
+.close-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    gap: var(--sp-9);
+    align-items: start;
+}
+.close-copy h2 { margin: var(--sp-3) 0 0; font-size: var(--fs-display); line-height: var(--lh-tight); }
+.close-copy .lead { margin-top: var(--sp-5); max-width: 44ch; }
+.close-copy .meta-row { margin-top: var(--sp-6); }
+
+.close-object {
+    margin: var(--sp-7) 0 0;
+    max-width: 22rem;
+}
+.close-object img { width: 100%; height: auto; display: block; }
+
+/* ==========================================================================
+   THE HERO ENTRANCE
+
+   Under one second, once. Ground, then shadow, then object, then headline,
+   then supporting copy, then the call to action. The sequence is the whole
+   reason it reads as staged rather than as "everything fades up".
+
+   The still fades in behind the type rather than the type waiting for it, so
+   a slow image never delays the headline — which is the LCP element.
+   ========================================================================== */
+
+@keyframes riseIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes settleIn {
+    from { opacity: 0; transform: translateY(-10px) scale(.995); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes groundIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.page-home .stage-ground { animation: groundIn 520ms var(--ease-out) backwards; }
+.page-home .stage-still  { animation: settleIn 760ms var(--ease-out) 180ms backwards; }
+
+.page-home .hero-copy > * { animation: riseIn var(--dur-4) var(--ease-out) backwards; }
+.page-home .hero-copy .meta-row { animation-delay: 500ms; }
+.page-home .hero-title          { animation-delay: 320ms; }
+.page-home .hero-lead           { animation-delay: 650ms; }
+.page-home .hero-cta            { animation-delay: 780ms; }
+.page-home .spec                { animation-delay: 860ms; }
+
+/* ==========================================================================
+   RESPONSIVE
+
+   Three real layouts, not one layout squeezed twice.
+   ========================================================================== */
+
+/* --- 1041px and up: the asymmetric composition ---------------------------- */
+@media (min-width: 1041px) {
+    .stage-still,
+    .stage-canvas,
+    .stage-labels { width: 54%; }
+}
+
+/* --- 761px to 1040px: WebGL still runs, but the object goes behind ---------
+   There is not enough width for type and object side by side, so the object
+   returns to full width and sits BEHIND the copy at low contrast rather than
+   beside it. Still one object, still one scene. */
+@media (min-width: 761px) and (max-width: 1040px) {
+    .stage-still { opacity: .5; }
+    .stage.is-live .stage-canvas { opacity: .55; }
+    .hero-copy { max-width: 30rem; }
+    .assembly > .container { justify-content: flex-end; padding-bottom: var(--sp-9); }
+    .assembly-head, .assembly-list { max-width: 34rem; }
+}
+
+/* --- 760px and down: no WebGL, ever -------------------------------------
+   The sticky layer stops being sticky and becomes a plain block at the top of
+   the hero: object above copy. The exploded story becomes a vertical sequence
+   of three pre-rendered stills, which is a designed experience rather than a
+   shrunken desktop one — and it costs about a tenth of the desktop scene. */
+@media (max-width: 760px) {
+    .stage-sticky {
+        position: static;
+        height: auto;
+        margin-bottom: 0;
+    }
+    .stage-still,
+    .stage-canvas,
+    .stage-labels { position: static; width: 100%; }
+    .stage-canvas,
+    .stage-labels { display: none; }
+    .stage-ground { display: none; }
+    .stage-still img { height: auto; aspect-ratio: 7 / 8; }
+
+    .hero {
+        min-height: 0;
+        padding-top: var(--sp-6);
+        padding-bottom: var(--sp-8);
+    }
+    .hero-copy { max-width: none; }
+
+    .statement { min-height: 0; padding-block: var(--section-y); }
+    .statement-line { max-width: none; }
+
+    .assembly, .stage.is-live .assembly { min-height: 0; padding-block: var(--section-y); }
+    .assembly > .container,
+    .stage.is-live .assembly > .container { position: static; height: auto; display: block; }
+    .assembly-still { display: none; }   /* the sequence below says it better */
+    .assembly-head, .assembly-list { max-width: none; }
+
+    .assembly-seq {
+        display: grid;
+        gap: var(--sp-6);
+        margin-top: var(--sp-8);
+        padding-inline: var(--gutter);
+    }
+    .assembly-seq img { width: 100%; height: auto; display: block; }
+
+    .flow-step { grid-template-columns: 3rem minmax(0, 1fr); gap: var(--sp-3); }
+    .flow-when { grid-column: 2; text-align: left; padding-top: var(--sp-2); }
+
+    .faq { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
+    .close-grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-8); }
+    .close-object { display: none; }   /* the hero still already showed it */
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+
+   Everything staged, scrubbed or drifting is switched off. The content is
+   identical: the object is still there, assembled and at rest, because it is
+   an image. Nothing is left stuck at an entrance state.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-home .stage-ground,
+    .page-home .stage-still,
+    .page-home .hero-copy > * {
+        animation: none !important;
+    }
+    .stage-canvas,
+    .stage-still,
+    .stage-labels { transition: none !important; }
+}

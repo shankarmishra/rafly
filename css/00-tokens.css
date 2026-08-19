@@ -1,72 +1,115 @@
 /* ==========================================================================
-   Design tokens — the single source of truth.
+   MACHINED PAPER — design tokens. The single source of truth.
+   ==========================================================================
 
-   The palette is derived from the three reference screenshots and reconciled
-   with Rafly's existing brand blue (#0d47a1), which stays as the deep/brand
-   colour and as <meta name="theme-color">. The brighter #1652E0 is the new
-   interactive colour and the colour of the full-bleed band.
+   The site has ONE ground language: warm paper. Not white. #ffffff is a
+   screen default; a warm off-white is a decision, and it is the difference
+   between a page that looks unstyled and one that looks printed.
 
-   Contrast note, because this is where light designs usually fail. Every
-   value below was MEASURED against its real ground, not chosen by eye:
+   Three paper tones exist so a long page can have CHAPTERS without hard
+   section edges — the eye reads a half-step of tone as "new part" far more
+   quietly than a rule or a colour block does.
 
-     --orange      2.84:1 on white. Decorative only — a scribble, a dot, a
-                   glow. It must never carry text or an icon.
-     --orange-mid  3.76:1. Fills that hold a white icon or a large numeral.
-     --orange-ink  4.93:1. Orange as small text.
+   ONE ACCENT. The previous palette ran an orange ladder (decorative 2.84:1 /
+   fill 3.76:1 / text 4.93:1) plus a brand blue plus gold stars. Three accents
+   is no accent: the CTA could never be the loudest thing on screen because
+   two other colours were already shouting. Orange and gold are RETIRED —
+   not aliased, removed, and every call site migrated — so the retirement
+   cannot quietly undo itself.
 
-   Swapping them is the exact mistake that put 2.15:1 white-on-amber on the
-   previous build.
+   MEASURED, NOT CHOSEN BY EYE
+   ---------------------------
+   Every ratio below is computed per WCAG relative luminance,
+   (L1 + .05) / (L2 + .05), against the real ground it sits on. The four
+   grounds are paper-01, paper-02, paper-03 and ink-chapter. A colour that
+   passes on one is not assumed to pass on the next — that assumption is what
+   put 2.15:1 white-on-amber on the build before last.
+
+   THE ONE RULE MOST LIKELY TO BE BROKEN LATER
+   -------------------------------------------
+   --blue is 6.15:1 on paper and 2.68:1 on the chapter ground.
+   --accent-chapter is 6.90:1 on the chapter ground and 2.39:1 on paper.
+
+   They are mirror images and each is dangerous where the other is safe. A
+   component that hardcodes --blue will pass on paper and fail inside the
+   dark chapter, which is the hardest class of bug to see because the page
+   still looks fine on the screen you were designing at. Read --accent-fg
+   (css/08-ground.css remaps it per ground) rather than either literal.
    ========================================================================== */
 
 :root {
-    /* --- Ground --------------------------------------------------------- */
-    --paper:        #ffffff;
-    --paper-2:      #f4f6fa;   /* section ground */
-    --paper-3:      #eaeef6;   /* wells, nav pill fill, inputs */
-    --paper-4:      #dfe5f0;   /* pressed / active well */
+    /* --- Paper: the three grounds ---------------------------------------
+       01 is the page. 02 marks a chapter. 03 is a recess — a well, an input,
+       a table stripe. Anything below 03 stops reading as paper and starts
+       reading as a grey box, which is why there is no 04 in the type scale
+       of grounds; --paper-4 exists only as a pressed state. */
+    --paper:        #f7f6f2;   /* paper-01 — the page ground                */
+    --paper-2:      #efede7;   /* paper-02 — chapter ground                 */
+    --paper-3:      #e4e2da;   /* paper-03 — wells, inputs, stripes         */
+    --paper-4:      #d8d5cc;   /* pressed / active well                     */
 
-    /* --- Ink ------------------------------------------------------------ */
-    --ink:          #0a0e1a;   /* display, headings          19.4:1 on white */
-    --ink-2:        #3f4a5f;   /* body                        9.3:1          */
-    --ink-3:        #656f81;   /* captions, muted             5.1:1 / 4.7 on soft */
-    --ink-4:        #79839a;   /* the grey half of a two-tone display line   */
-                               /* 3.8:1 — LARGE text only, never body copy   */
-    --line:         #e3e8f0;
-    --line-strong:  #cdd6e4;
+    /* --- Ink ------------------------------------------------------------
+       Ratios read: paper-01 / paper-02 / paper-03. */
+    --ink:          #14161a;   /* display, headings   16.75 / 15.47 / 13.96 */
+    --ink-2:        #43494f;   /* body                 8.43 /  7.78 /  7.03 */
+    --ink-3:        #5d6469;   /* captions, metadata   5.56 /  5.14 /  4.64 */
+    --ink-4:        #767e85;   /* the grey half of a two-tone display line  */
+                               /* 3.81 / 3.52 / 3.18 — LARGE TEXT ONLY.     */
+                               /* Never body, never a caption, never an icon */
+                               /* that must be seen. It was #8a9299 for one  */
+                               /* render and inc/tools/shoot.mjs failed it   */
+                               /* at 2.92:1 against the 3:1 large-text       */
+                               /* minimum on all three papers — which is the */
+                               /* entire reason the harness measures the     */
+                               /* rendered page and not this file.           */
+    --line:         #e2dfd6;   /* hairline — warm, so it belongs to paper   */
+    --line-strong:  #cfccc2;
 
-    /* --- Blue ----------------------------------------------------------- */
-    --blue:         #1652e0;   /* primary, links, the band    6.4:1 on white */
-    --blue-hover:   #1141bb;
-    --blue-deep:    #0d47a1;   /* brand, gradients, dark bands               */
-    --blue-tint:    #eef3ff;
-    --blue-tint-2:  #dde8ff;
+    /* --- The accent ------------------------------------------------------
+       One colour. It is the CTA, the link, the active state, and the single
+       anodised component in the 3-D assembly — the same blue in the render
+       and in the interface, which is what makes the object read as part of
+       the brand rather than as an illustration dropped onto it.
 
-    /* --- Accents -------------------------------------------------------- */
-    --orange:       #ff6b35;   /* decorative fills only — 2.84:1             */
-    --orange-mid:   #e8500f;   /* fills holding a white icon — 3.76:1        */
-    --orange-ink:   #c7440e;   /* orange as text — 4.93:1                    */
-    --orange-tint:  #fff1ea;
-    --gold:         #ffb800;   /* star ratings only                          */
+       The name stays --blue because ~200 call sites across nine stylesheets
+       already read it. Renaming the variable and renaming the colour in the
+       same pass is how a redesign acquires a week of unrelated diff noise. */
+    --blue:         #1b4fd8;   /* 6.15 / 5.68 / 5.13 on paper — 2.68 on chapter */
+    --blue-hover:   #1740b0;   /* 8.10 / 7.48 / 6.75                        */
+    --blue-deep:    #123aa8;   /* gradient / deep end only                  */
+    --blue-tint:    #edf0fb;   /* pale accent wash — a GROUND, never a text colour */
+    --blue-tint-2:  #dde4f8;
 
-    /* --- Semantic ------------------------------------------------------- */
-    --pill:         #0f1115;   /* the black pill CTA */
-    --pill-hover:   #23262e;
+    /* --- Semantic -------------------------------------------------------- */
+    --pill:         #14161a;   /* the ink pill CTA — the same ink as display */
+    --pill-fg:      #f7f6f2;   /* the pill LABEL — inverts inside a chapter  */
+    --pill-hover:   #26292f;
+    --wash:         rgba(20, 22, 26, .035); /* hover wash, flips light in a chapter */
+    --sheen-face:   rgba(255, 255, 255, .78);
+    --sheen-edge:   rgba(255, 255, 255, .90);
     --success:      #15803d;
     --danger:       #c62828;
-    --warning:      #b45309;
+    --warning:      #a45309;
     --whatsapp:     #128c4a;
 
-    /* --- On dark -------------------------------------------------------- */
+    /* --- On a coloured (accent) band ------------------------------------- */
     --on-dark-1:    #ffffff;
-    --on-dark-2:    #d3dffb;   /* 4.7:1 on --blue, 14.4:1 on --ink          */
-    --on-dark-3:    #94a9d4;
-    --on-dark-line: rgba(255, 255, 255, .16);
+    --on-dark-2:    #d7e0fa;   /* 4.6:1 on --blue                            */
+    --on-dark-3:    #a9bbec;
+    --on-dark-line: rgba(255, 255, 255, .18);
 
-    /* --- Type ----------------------------------------------------------- */
+    /* --- Type -----------------------------------------------------------
+       No new font files. Space Grotesk and Inter are already self-hosted
+       variable faces and cover the whole scale; the monospaced tier below is
+       a system stack, so the technical voice this design leans on costs zero
+       additional bytes. */
     --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
     --font-body:    'Inter', 'Segoe UI', system-ui, sans-serif;
     --font-mono:    ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
 
+    /* DISPLAY XL is the hero and only the hero. If a second element ever
+       needs this size, the hero has stopped being the loudest thing here. */
+    --fs-display-xl: clamp(3rem, 0.85rem + 9vw, 7rem);
     --fs-display: clamp(2.75rem, 1.05rem + 7.1vw, 5.75rem);
     --fs-h1:      clamp(2.125rem, 1.30rem + 3.45vw, 3.75rem);
     --fs-h2:      clamp(1.75rem,  1.20rem + 2.30vw, 3rem);
@@ -78,13 +121,21 @@
     --fs-xs:      0.8125rem;
     --fs-2xs:     0.75rem;
 
-    --lh-display: 0.95;
-    --lh-tight:   1.08;
-    --lh-heading: 1.18;
+    /* The METADATA tier. Small, uppercase, wide-tracked, monospaced — the
+       voice of a specification sheet. It carries part numbers, durations and
+       section indices, and it is a large part of why the page reads as
+       engineering rather than as marketing. It must never carry a sentence,
+       and it must never carry a number the site cannot back. */
+    --fs-meta:    0.6875rem;
+    --tr-meta:    0.18em;
+
+    --lh-display: 0.94;
+    --lh-tight:   1.06;
+    --lh-heading: 1.16;
     --lh-body:    1.65;
 
-    --tr-display: -0.035em;
-    --tr-heading: -0.022em;
+    --tr-display: -0.038em;
+    --tr-heading: -0.024em;
     --tr-eyebrow:  0.14em;
 
     --fw-body:    400;
@@ -92,62 +143,82 @@
     --fw-semi:    600;
     --fw-bold:    700;
 
-    /* --- Space ---------------------------------------------------------- */
+    /* --- Space ----------------------------------------------------------- */
     --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
     --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 2.5rem;   --sp-8: 3rem;
     --sp-9: 4rem;     --sp-10: 5rem;    --sp-11: 6.5rem;  --sp-12: 8rem;
 
-    --section-y:   clamp(4rem, 2.2rem + 7.4vw, 8rem);
-    --section-y-s: clamp(2.75rem, 1.8rem + 4vw, 5rem);
+    --section-y:   clamp(4.5rem, 2.4rem + 8vw, 9rem);
+    --section-y-s: clamp(3rem, 1.9rem + 4.4vw, 5.5rem);
 
-    /* --- Measure -------------------------------------------------------- */
+    /* --- Measure --------------------------------------------------------- */
     --container:   1240px;
-    --container-w: 1400px;   /* wide — carousels, full bleeds */
-    --container-n: 900px;    /* narrow — reading */
+    --container-w: 1400px;
+    --container-n: 860px;
     --gutter:      clamp(1.125rem, 0.6rem + 2.2vw, 2.5rem);
-    --measure:     68ch;
+    --measure:     66ch;
 
-    /* --- Radius --------------------------------------------------------- */
-    --r-xs:   6px;
-    --r-sm:   10px;
-    --r:      14px;
-    --r-lg:   22px;
-    --r-xl:   30px;
-    --r-2xl:  40px;
+    /* --- Radius ---------------------------------------------------------
+       Reduced from the previous set. A machined part has a controlled bevel,
+       not a 30px corner; the interface follows the object. */
+    --r-xs:   4px;
+    --r-sm:   8px;
+    --r:      12px;
+    --r-lg:   18px;
+    --r-xl:   24px;
+    --r-2xl:  32px;
     --r-pill: 999px;
 
-    /* --- Elevation — soft and wide, the reference card material --------- */
-    --sh-1: 0 1px 2px rgba(10, 14, 26, .04),
-            0 2px 6px rgba(10, 14, 26, .04);
-    --sh-2: 0 1px 2px rgba(10, 14, 26, .04),
-            0 6px 18px rgba(10, 14, 26, .06);
-    --sh-3: 0 2px 4px rgba(10, 14, 26, .04),
-            0 14px 36px rgba(10, 14, 26, .09);
-    --sh-4: 0 4px 8px rgba(10, 14, 26, .05),
-            0 30px 70px rgba(10, 14, 26, .13);
-    --sh-pill: 0 1px 2px rgba(10, 14, 26, .16),
-               0 8px 20px rgba(10, 14, 26, .18);
-    --sh-blue: 0 8px 24px rgba(22, 82, 224, .28);
+    /* --- Elevation ------------------------------------------------------
+       Warm-tinted, because a neutral-black shadow on warm paper reads as
+       dirt. Two-part: a tight contact term and a wide ambient term, which is
+       how a real shadow behaves and why these do not look like a preset. */
+    --sh-1: 0 1px 1px rgba(38, 32, 20, .05),
+            0 2px 6px rgba(38, 32, 20, .045);
+    --sh-2: 0 1px 2px rgba(38, 32, 20, .06),
+            0 8px 20px rgba(38, 32, 20, .06);
+    --sh-3: 0 2px 4px rgba(38, 32, 20, .06),
+            0 18px 40px rgba(38, 32, 20, .09);
+    --sh-4: 0 4px 8px rgba(38, 32, 20, .07),
+            0 36px 80px rgba(38, 32, 20, .13);
+    --sh-pill: 0 1px 2px rgba(20, 22, 26, .18),
+               0 8px 20px rgba(20, 22, 26, .16);
+    --sh-blue: 0 8px 24px rgba(27, 79, 216, .26);
 
-    /* --- Motion --------------------------------------------------------- */
-    --ease:      cubic-bezier(.22, .61, .36, 1);
-    --ease-out:  cubic-bezier(.16, 1, .3, 1);
-    --ease-in-out: cubic-bezier(.65, 0, .35, 1);
-    --dur-1: 140ms;
-    --dur-2: 240ms;
+    /* --- Motion ---------------------------------------------------------
+       Four tiers, and the tier IS the meaning:
+         1  micro    160ms   a state change on one property
+         2  ui       280ms   a control responding
+         3  section  420-700ms  content arriving
+         4  cine     1100-1400ms a scene changing
+       There is deliberately no tier above 4. "Cinematic" is a budget, not a
+       licence, and the budget is spent in exactly three places on the
+       homepage: hero entrance, exploded assembly, final reassembly. */
+    --dur-1: 160ms;
+    --dur-2: 280ms;
     --dur-3: 420ms;
     --dur-4: 700ms;
+    --dur-5: 1100ms;
+    --dur-6: 1400ms;
     --stagger: 70ms;
 
-    /* --- Chrome --------------------------------------------------------- */
-    --header-h:  74px;
+    /* One easing family. Entrances decelerate hard (they arrive and settle);
+       scene changes ease at both ends (they are camera moves). Nothing here
+       overshoots — a machined part does not bounce. */
+    --ease:        cubic-bezier(.22, .61, .36, 1);
+    --ease-out:    cubic-bezier(.16, 1, .3, 1);
+    --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+    --ease-cine:   cubic-bezier(.65, .02, .22, 1);
+
+    /* --- Chrome ---------------------------------------------------------- */
+    --header-h:   74px;
     --nav-pill-h: 56px;
 
-    /* --- Focus ---------------------------------------------------------- */
-    --focus:       var(--blue);
-    --focus-ring:  0 0 0 3px var(--paper), 0 0 0 6px var(--blue);
+    /* --- Focus ----------------------------------------------------------- */
+    --focus:      var(--blue);
+    --focus-ring: 0 0 0 3px var(--paper), 0 0 0 6px var(--blue);
 
-    /* --- Layers --------------------------------------------------------- */
+    /* --- Layers ---------------------------------------------------------- */
     --z-base: 1;
     --z-raised: 10;
     --z-sticky: 100;
@@ -156,49 +227,93 @@
     --z-modal: 900;
     --z-toast: 1000;
 
-    /* --- Service accents (svc-* body class) ----------------------------- */
-    --svc-web:       #1652e0;
-    --svc-security:  #0e7490;
-    --svc-marketing: #c7440e;
-    --svc-content:   #7c3aed;
-    --svc-ecom:      #15803d;
-
-    --accent: var(--blue);
+    /* --- Ground-neutral aliases -----------------------------------------
+       The contract every component holds to. These default to paper; a
+       .ground-chapter ancestor remaps them (css/08-ground.css). A component
+       that reads these instead of --paper / --ink / --blue works on both
+       grounds for free, and that is the entire reason the dark chapter is
+       not a second copy of 03-components.css. */
+    --surface:      var(--paper);
+    --surface-2:    var(--paper-2);
+    --surface-3:    var(--paper-3);
+    --surface-line: var(--line);
+    --on-surface:   var(--ink);
+    --on-surface-2: var(--ink-2);
+    --on-surface-3: var(--ink-3);
+    --accent:       var(--blue);
+    --accent-fg:    var(--blue);   /* the accent AS TEXT on the current ground */
+    --elevate-1:    var(--sh-1);
+    --elevate-2:    var(--sh-2);
+    --elevate-3:    var(--sh-3);
 }
 
-/* One accent variable, remapped per service page, so a service template
-   never has to hardcode a colour. */
-body.svc-web       { --accent: var(--svc-web); }
-body.svc-security  { --accent: var(--svc-security); }
-body.svc-marketing { --accent: var(--svc-marketing); }
-body.svc-content   { --accent: var(--svc-content); }
-body.svc-ecom      { --accent: var(--svc-ecom); }
+/* ==========================================================================
+   THE CHAPTER GROUND
+
+   Exactly one section of the site is dark: selected work. It is punctuation,
+   not an identity — the visual equivalent of walking into another room and
+   back out again. Everything below is measured against #15181c.
+   ========================================================================== */
+:root {
+    --ink-chapter:    #15181c;   /* the chapter ground                      */
+    --ink-chapter-2:  #1c2026;   /* raised — a panel inside the chapter     */
+    --ink-chapter-3:  #23282f;   /* well inside the chapter                 */
+
+    --on-chapter-1:   #f7f6f2;   /* display, headings          16.47:1      */
+    --on-chapter-2:   #c9cdd2;   /* body                       11.15:1      */
+    --on-chapter-3:   #8a9299;   /* captions, metadata          5.64:1      */
+    --chapter-line:        rgba(247, 246, 242, .11);
+    --chapter-line-strong: rgba(247, 246, 242, .20);
+
+    /* The accent, lifted so it survives the dark ground. 6.90:1 here and
+       2.39:1 on paper — the mirror of --blue, and the reason --accent-fg
+       exists rather than a literal at the call site. */
+    --accent-chapter: #6ea0ff;
+
+    /* Depth on a dark ground comes from a lighter surface and a lit top
+       edge, never from a darker shadow. */
+    --sh-chapter-1: 0 1px 0 0 rgba(255, 255, 255, .05) inset, 0 2px 8px rgba(0, 0, 0, .40);
+    --sh-chapter-2: 0 1px 0 0 rgba(255, 255, 255, .06) inset, 0 12px 32px rgba(0, 0, 0, .46);
+    --sh-chapter-3: 0 1px 0 0 rgba(255, 255, 255, .07) inset, 0 28px 64px rgba(0, 0, 0, .52);
+}
+
+/* One accent variable, remapped per service page, so a service template never
+   has to hardcode a colour. All five are measured on paper-01 and clear 4.5:1
+   as small text: the hue moves, the weight does not. */
+:root {
+    --svc-web:       #1b4fd8;
+    --svc-security:  #0b6b7d;
+    --svc-marketing: #a8430f;
+    --svc-content:   #6d3ad4;
+    --svc-ecom:      #126d38;
+}
+body.svc-web       { --blue: var(--svc-web);       --accent: var(--svc-web);       --accent-fg: var(--svc-web); }
+body.svc-security  { --blue: var(--svc-security);  --accent: var(--svc-security);  --accent-fg: var(--svc-security); }
+body.svc-marketing { --blue: var(--svc-marketing); --accent: var(--svc-marketing); --accent-fg: var(--svc-marketing); }
+body.svc-content   { --blue: var(--svc-content);   --accent: var(--svc-content);   --accent-fg: var(--svc-content); }
+body.svc-ecom      { --blue: var(--svc-ecom);      --accent: var(--svc-ecom);      --accent-fg: var(--svc-ecom); }
 
 /* ==========================================================================
    Paper grain
 
    One fractalNoise filter, rendered by the browser into a 140px tile that
-   repeats seamlessly (stitchTiles). It is a few hundred bytes of markup inside
-   a CSS value: no request, no binary, no licence, and it resolves at whatever
-   pixel ratio the screen has rather than at the one a PNG was exported for.
+   repeats seamlessly (stitchTiles). It is a few hundred bytes of markup
+   inside a CSS value: no request, no binary, no licence, and it resolves at
+   whatever pixel ratio the screen has rather than at the one a PNG was
+   exported for.
 
-   Three strengths, because the same noise over ink, over paper and inside a
-   letterform needs three different amounts to read as the same surface:
+   It matters more on this design than on the last one. Warm paper with no
+   texture reads as a flat beige fill; the grain is what makes it read as a
+   SURFACE, and a surface is what the object's shadow needs to fall on.
 
-     --grain-fine   the page ground and section bands. Barely there by design —
-                    a texture you can SEE on a business site reads as a
-                    pattern; one you can only see when it is removed reads as
-                    stock.
-     --grain-card   panels and cards. Slightly stronger, because a card is
-                    small and sits on a ground that already has --grain-fine.
-     --grain-text   inside display letterforms. The highest of the three and
-                    still only a tenth: this one is multiplied against ink and
-                    lands directly on measured contrast, so it is the one
-                    number in this file that inc/tools/audit.mjs will fail us
-                    over if it grows.
+   Three strengths, because the same noise over paper, over a panel and
+   inside a letterform needs three different amounts to read as one material.
+   --grain-text is the only one that lands on measured contrast, so it is the
+   one number in this file that inc/tools/audit.mjs will fail us over if it
+   grows.
    ========================================================================== */
 :root {
-    --grain-fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+    --grain-fine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.038'/%3E%3C/svg%3E");
     --grain-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.05'/%3E%3C/svg%3E");
     --grain-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.98' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.10'/%3E%3C/svg%3E");
 }

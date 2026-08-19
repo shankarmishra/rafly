@@ -2,11 +2,53 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 /**
- * Single source for the FAQ: renders the accordion further down AND the
- * FAQPage structured data below. Keeping one array means the rich result can
- * never claim something the page does not actually say.
+ * THE HOMEPAGE — nine sections.
  *
- * Trimmed to 8 from an earlier 12 — a long FAQ signals an unclear offer.
+ * It was seventeen, with the primary call to action repeated five times and a
+ * documented height of about 15,000px. Seventeen sections is not thoroughness;
+ * it is an offer that has not been decided on. Every section below answers a
+ * question a buyer actually asks, in the order they ask it:
+ *
+ *   1  what is this              hero
+ *   2  what do you believe       the statement
+ *   3  what do I get             the assembly, opened
+ *   4  how does it run           delivery
+ *   5  what is it built on       the stack
+ *   6  who have you done it for  selected work   (conditional — see below)
+ *   7  what will you NOT do      honest limits
+ *   8  what does it cost         pricing and FAQ
+ *   9  how do I start            the close
+ *
+ * TWO calls to action, not five: the hero and the close.
+ *
+ * THE OBJECT
+ * ----------
+ * Sections 1-3 share one sticky WebGL stage (js/stage3d.js). The object is
+ * assembled in the hero, hidden behind the statement — which is opaque paper
+ * and simply covers it — and comes apart across section 3. It is the same
+ * object throughout; it never disappears and re-appears, it transforms.
+ *
+ * Everything that stage does is an upgrade. assets/render/core-*.webp is
+ * rendered offline from the same scene (inc/tools/render-stills.mjs) and is
+ * what phones, crawlers, printers, reduced-motion and no-WebGL visitors get.
+ *
+ * WHAT IS NOT HERE ANY MORE, AND WHY
+ * ----------------------------------
+ *   the 13-tile rotating capability ring   a fourth focal device
+ *   the 3-D perspective carousel           a fifth
+ *   the point-cloud band                   shipped a visibly empty frame
+ *   the device-mockup "app stage"          carried unverified LCP figures
+ *   the marquee                            motion with nothing to say
+ *   the trust bar                          "120+ projects / 98% satisfaction"
+ *                                          were seeded sample values
+ *   24 stock photographs                   other companies' premises,
+ *                                          standing in for our work
+ */
+
+/**
+ * Single source for the FAQ: renders the accordion below AND the FAQPage
+ * structured data, so the rich result can never claim something the page does
+ * not actually say.
  */
 $FAQS = [
     ['q' => 'How quickly can you start?',
@@ -28,111 +70,84 @@ $FAQS = [
 ];
 
 /**
- * The P.E.A.C.E. framework and the delivery flow. One array each — previously
- * five near-identical blocks of markup where only three strings differed, which
- * is how the fourth one ends up with a stale icon nobody notices.
+ * Delivery. Real stage names and the same timeframe vocabulary the service
+ * pages use (inc/data/services.php), so the two can never disagree.
  */
-$PEACE = [
-    ['P', 'compass',        'Planning',     'We map your goals, current setup, and where the gaps are — before any code, content, or campaign work begins.'],
-    ['E', 'terminal',       'Execution',    'Our web, content, marketing, and security specialists build and ship inside one coordinated workflow.'],
-    ['A', 'search',         'Analysis',     'We track traffic, engagement, and conversion data so decisions are based on evidence, not guesswork.'],
-    ['C', 'message-circle', 'Consultation', 'Plain-language updates and recommendations — no technical jargon, no hiding behind reports.'],
-    ['E', 'gauge',          'Enhancement',  'Ongoing improvements to your site, campaigns, and security posture as your business grows.'],
-];
-
 $FLOW = [
-    ['Discovery',       '2-3 Days',  'A call to understand your goals, your current setup, and which parts of your growth need the most help. No pitch deck until we know what is actually broken.'],
-    ['Package & Plan',  '3-5 Days',  'We scope a bundled package — web, content, marketing, security, e-commerce — matched to what you actually need, and price it up front. One scope, one number.'],
-    ['Build & Execute', '2-6 Weeks', 'Development, content and campaign work run in parallel inside one coordinated team, against one plan. Nothing waits on a handoff between vendors who have never spoken.'],
-    ['Launch',          '1 Week',    'Your site, store or campaign goes live with a baseline security review already done — forms, sessions and access handling — because it was part of the build, not a phase after it.'],
-    ['Ongoing Support', 'Ongoing',   'Monitoring, updates and continuous improvement, so growth does not stall the day after launch. The same team that built it is the team that keeps it running.'],
+    ['Discovery',       '2-3 days',   'A call to understand your goals, your current setup, and which parts need the most help. No pitch deck until we know what is actually broken.'],
+    ['Package and plan','3-5 days',   'We scope a bundled package matched to what you need, and price it up front. One scope, one number.'],
+    ['Build and execute','2-6 weeks', 'Development, content and campaign work run in parallel inside one team against one plan. Nothing waits on a handoff between vendors who have never spoken.'],
+    ['Launch',          '1 week',     'Your site, store or campaign goes live with the baseline security review already done, because it was part of the build rather than a phase after it.'],
+    ['Ongoing',         'Continuous', 'Monitoring, updates and improvement. The team that built it is the team that keeps it running.'],
 ];
 
-/** The three problems the offer exists to solve. */
-$CHALLENGES = [
-    ['cables',    'Five vendors, no shared context',
-     'Juggling separate vendors for your website, ads, content, automation and store — and none of them are talking to each other?'],
-    ['hourglass', 'Launches that slip, every time',
-     'Watching launches slip because the designer is waiting on the developer who is waiting on the marketer?'],
-    ['lock',      'Security you have assumed, not checked',
-     'Not sure if your site, checkout, and customer data are actually secure — or just assumed to be?'],
+/**
+ * The stack. Named tools only — every one appears in the `tools` array of a
+ * real service in inc/data/services.php. No logo wall: a logo implies a
+ * partnership, and Rafly has none to claim.
+ */
+$STACK = [
+    ['Build',      ['PHP', 'Laravel', 'WordPress', 'JavaScript', 'MySQL']],
+    ['Commerce',   ['Shopify', 'Payment gateways', 'Catalogue data', 'Order reconciliation']],
+    ['Security',   ['SSL &amp; TLS config', 'WAF rules', 'Dependency updates', 'Access &amp; roles', 'Backup checks']],
+    ['Growth',     ['Google Ads', 'Meta Ads', 'Analytics 4', 'Tag Manager', 'Search Console', 'Email campaigns']],
+    ['Operations', ['Staging &amp; deploys', 'Core Web Vitals', 'Log review', 'Editorial calendar']],
 ];
 
-/** The comparison table — Rafly against the two real alternatives. */
+/** The comparison — Rafly against the two real alternatives. */
 $COMPARE = [
-    ['Service coverage', 'Web, content, marketing, security & e-commerce in one team', 'Usually just one specialty', 'No shared context between people'],
-    ['Accountability',   'One point of contact, accountable for outcomes',             'Account manager, execution outsourced further', 'You coordinate everyone yourself'],
-    ['Security',         'Baseline review included in every package',                  'Usually a separate paid add-on', 'Rarely considered at all'],
-    ['Delivery speed',   'Parallel execution across one coordinated team',             'Sequential handoffs between departments', 'Depends entirely on individual availability'],
-    ['Pricing structure','Clear, bundled packages',                                    'Custom retainers, scope creep', 'Paid per task, costs add up'],
-    ['Communication',    'Plain-language updates, no jargon',                          'Layered reporting, slower answers', 'Manual coordination on your end'],
+    ['Service coverage',  'Web, content, marketing, security and e-commerce in one team', 'Usually one specialty',                         'No shared context between people'],
+    ['Accountability',    'One point of contact, accountable for outcomes',               'Account manager, execution outsourced further', 'You coordinate everyone yourself'],
+    ['Security',          'Baseline review included in every package',                    'Usually a separate paid add-on',                'Rarely considered at all'],
+    ['Delivery speed',    'Parallel execution across one coordinated team',               'Sequential handoffs between departments',       'Depends on individual availability'],
+    ['Pricing structure', 'Clear, bundled packages',                                      'Custom retainers, scope creep',                 'Paid per task, costs add up'],
+    ['Communication',     'Plain-language updates, no jargon',                            'Layered reporting, slower answers',             'Manual coordination on your end'],
 ];
 
-/** What the work is actually built on. Named tools, no invented partnerships. */
-$STACK = ['PHP &amp; Laravel', 'WordPress', 'Shopify', 'JavaScript', 'MySQL', 'Google Ads', 'Analytics 4', 'SSL &amp; WAF'];
-
 /**
- * Homepage content that the admin owns: case studies and testimonials.
- *
- * Both are read here, before any output, so a slow or failed query cannot leave
- * a half-rendered page. db_available() never throws — with the database down
- * each section renders empty and the rest of the homepage is unaffected, which
- * matters because everything else on this page is static and still sells.
+ * The five modules of the object, in stack order, matched to the five real
+ * services. Index, label and slug all come from one place, so a label on the
+ * 3-D scene can never drift from the page it links to.
  */
-/* array_values(): services_all() is keyed by SLUG, so an unguarded
-   `foreach ($services as $i => $s)` hands back a string where the numbered
-   markers need an integer. Re-indexing once here is safer than remembering it
-   at every loop. */
-$services     = array_values(services_all());
-$trustStats   = metrics_trust_bar();
-$caseStudies  = case_studies_all(3);
-$testimonials = testimonials_all(3);
-$bundles      = bundles_all();
-
-/** Deterministic tint per service, so the carousel reads as a set. */
-$svcTint = ['web' => 't-deep', 'security' => 't-ink', 'marketing' => 't-orange', 'content' => 't-blue', 'ecom' => 't-tint'];
-
-/**
- * The hero arc: thirteen tiles on a 240-degree ring, n running -6..+6 so the
- * bottom of the circle stays clear for the call to action.
- *
- * Each row is [icon, label, tint]. The tiles are DRAWN, not photographed, and
- * that is a decision with two reasons behind it.
- *
- * Photography failed twice here. A CC0 search for digital-agency subjects
- * returns a gas mask, a Twitch logo and a Burger King sign — the free-licence
- * pools are not deep enough to curate a coherent ring, and every near miss puts
- * somebody else's trademark in our hero. Screenshots of our own pages failed
- * differently: this site is light and text-heavy, so a 760px square of it
- * shrinks to grey mush in a 124px tile.
- *
- * A drawn tile has neither problem. It is on-topic by construction, it is sharp
- * at any size and any pixel ratio, it costs no bytes and no licence, and it
- * recolours with the tokens. The ring says what we do, in twelve words.
- */
-$ARC = [
-    ['code',          'Web',        't-deep'],
-    ['shield',        'Security',   't-ink'],
-    ['megaphone',     'Marketing',  't-orange'],
-    ['pencil',        'Content',    't-blue'],
-    ['shopping-cart', 'Commerce',   't-tint'],
-    ['search',        'SEO',        't-ink'],
-    ['gauge',         'Speed',      't-blue'],
-    ['bot',           'Automation','t-deep'],
-    ['pie-chart',     'Analytics',  't-orange'],
-    ['layers',        'Design',     't-tint'],
-    ['database',      'Hosting',    't-ink'],
-    ['message-circle','Support',    't-blue'],
-    ['rocket',        'Launch',     't-deep'],
+$MODULES = [
+    ['01', 'web-development',         'Web',       'Sites and web apps that load fast and do not fall over as you grow.'],
+    ['02', 'web-security',            'Security',  'A practical look at what someone probing your site would find first.'],
+    ['03', 'marketing-advertisement', 'Marketing', 'Campaigns built around who is actually buying, reported in plain language.'],
+    ['04', 'content-creation',        'Content',   'Copy that says what you do, in your words, without the filler.'],
+    ['05', 'ecommerce-support',       'Commerce',  'The unglamorous side of selling online, kept in order.'],
 ];
+
+/**
+ * Admin-owned content, read before any output so a slow or failed query
+ * cannot leave a half-rendered page. db_available() never throws; with the
+ * database down these sections render empty and the rest of the page is
+ * unaffected.
+ *
+ * #work stays CONDITIONAL. Every case study in the database matched
+ * inc/data/seed-preview.php verbatim and had been flagged as real; those flags
+ * were reset by inc/tools/unflag-seed.php. The section is designed and waiting
+ * for work Rafly can actually name. An empty section is better than a
+ * fabricated one.
+ */
+$caseStudies = case_studies_all(3);
+$bundles     = bundles_all();
+
+/** Every honest limit the five services declare, in one list. */
+$limits = [];
+foreach (services_all() as $svc) {
+    foreach (($svc['boundaries'] ?? []) as $b) {
+        $limits[] = [$svc['title'], $b['title'], $b['desc']];
+    }
+}
 
 $page = [
     'id'        => 'home',
-    'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
-    'desc'      => 'One partner, one bundled package — web development, AI automation, content creation, digital marketing, web security and e-commerce support, working together instead of stitched together from multiple vendors.',
+    'title'     => 'Rafly | One Core, Five Branches — Web, Security, Marketing, Content & Commerce',
+    'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
     'styles'    => ['home'],
     'module'    => 'stage3d',
+    'ogImage'   => 'assets/render/core-og-1200.webp',
     'schema'    => [
         schema_faq($FAQS),
     ],
@@ -143,756 +158,382 @@ require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
 
+<?php /* ==============================================================
+   THE STAGE — sections 01 to 03 share one sticky scene.
+
+   .stage-sticky carries a negative bottom margin equal to its own height, so
+   it takes no space in the flow: the three sections below scroll over it. The
+   statement is opaque paper and therefore hides the object completely, which
+   is what gives section 02 its rest.
+   ============================================================== */ ?>
+<div class="stage" data-stage>
+
+    <div class="stage-sticky" aria-hidden="true">
+        <div class="stage-ground"></div>
+        <picture class="stage-still">
+            <source media="(max-width: 760px)" srcset="<?= e(asset('assets/render/core-hero-560.webp')) ?>">
+            <source media="(max-width: 1180px)" srcset="<?= e(asset('assets/render/core-hero-900.webp')) ?>">
+            <img src="<?= e(asset('assets/render/core-hero-1400.webp')) ?>"
+                 width="1400" height="1560" decoding="async" alt="">
+        </picture>
+        <canvas class="stage-canvas"></canvas>
+        <div class="stage-labels">
+<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
+            <span class="stage-label"><i><?= e($idx) ?></i><?= e($label) ?></span>
+<?php endforeach; ?>
+        </div>
+    </div>
+
     <?php /* ==========================================================
-       HERO — a cloud of points that changes shape as you leave it.
+       01 — HERO
 
-       The ring of service tiles used to live here. It moved to #capabilities
-       below: it is a statement about the range of the work, and a statement
-       reads better in a section of its own than wrapped around the one line
-       a visitor has to get past first.
+       Editorial and asymmetric: type ranged left, object on the right third,
+       cropped by the frame edge. The LCP element is the headline, never the
+       canvas and never the still.
 
-       What replaces it is js/gl.js, which is already on this page. Two of its
-       capabilities had never been switched on:
-
-         data-ink="dark"   draws DARK points on a LIGHT ground — premultiplied
-                           "over" instead of additive, and a damped bloom pass.
-                           Written for the paper edition and never wired up.
-         data-morph="scroll"  new this pass. Hero mode dissolves; story mode
-                           changes form. Here it does both off one 0..1, so the
-                           object becomes a knot, a helix, a lattice and a core
-                           on the way out rather than only blowing apart.
-
-       Five forms, one viewport of scroll. No three.js — that is 730 KB gated to
-       load only near the P.E.A.C.E. section, and pulling it above the fold would
-       undo the entire weight argument for a hero nobody has scrolled to yet.
+       This reverses an instruction recorded on the previous build — "text
+       center me chahiya", said about a centred hero. That hero was centred
+       because the object had to be pushed out of the middle to keep the words
+       readable, so centring was the only arrangement left. This object stands
+       on paper with its own shadow and does not compete with type, which
+       makes the asymmetric composition available again.
        ========================================================== */ ?>
     <section class="section hero" id="home">
         <div class="container">
-            <div class="hero-stage">
-                <div class="hero-glow" aria-hidden="true"></div>
+            <div class="hero-copy">
+                <p class="meta-row">
+                    <span><b>Built for</b> owner-operated businesses</span>
+                    <span><b>Model</b> one scope, one price</span>
+                </p>
 
-                <div class="hero-head">
-                    <p class="eyebrow">One partner &middot; Every service</p>
-                    <h1 class="display" data-r="lines">
-                        <span>Build fast.</span>
-                        <span>Grow faster.</span>
-                        <span><u class="ul-draw is-orange">Scale smarter.</u></span>
-                    </h1>
-                    <p class="lead hero-lead">
-                        Web development, AI automation, content, marketing, security and e-commerce
-                        support &mdash; one team, one bundled package, instead of five vendors who
-                        have never met.
-                    </p>
-                    <div class="cluster cluster-4 hero-actions">
-                        <button type="button" class="btn btn-pill btn-lg" data-modal-open="consultationModal">
-                            Get a free quote <?= icon('arrow-up-right') ?>
-                        </button>
-                        <a class="btn btn-line btn-lg" href="#services">See what we ship</a>
+                <h1 class="hero-title">
+                    One core.<br><span class="hero-title-2">Five branches.</span>
+                </h1>
+
+                <p class="hero-lead">
+                    Web, security, marketing, content and commerce — built by one team,
+                    on one plan, with one person accountable. Not five vendors who have
+                    never spoken to each other.
+                </p>
+
+                <div class="hero-cta">
+                    <a class="btn btn-pill" href="#start">Book a free consultation</a>
+                    <a class="btn btn-line" href="#delivery">See how delivery runs</a>
+                </div>
+
+                <dl class="spec">
+<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
+                    <div class="spec-row">
+                        <dt><?= e($idx) ?></dt>
+                        <dd><a href="<?= e(site_path('/' . $slug)) ?>"><?= e($label) ?></a></dd>
                     </div>
-                </div>
-
-                <?php /* THE OBJECT.
-
-                   This was a point cloud for one pass and Naveen threw it out:
-                   "ye 3d design bilkul pasand nahi". Fair — a cloud of dots has
-                   no surface, and with no surface there is nothing for the
-                   environment to reflect, so it can never look manufactured.
-                   What he did like was the P.E.A.C.E. object, and the reason is
-                   that that one is made of MATERIAL.
-
-                   So this is the same engine as P.E.A.C.E., at hero scale and
-                   with its own geometry: a refractive glass knot inside two
-                   crossed chrome rings, with twenty-two small metal solids
-                   scattered on a golden-angle sphere around it. Scrolling spins
-                   it up, tips it, pushes it back, and pulls the satellites out
-                   along their own vectors.
-
-                   THE COST, STATED PLAINLY. three.js is ~730 KB raw / ~190 KB
-                   gzipped, and above the fold it is no longer deferred behind a
-                   scroll the way the P.E.A.C.E. object is. Every other gate
-                   still holds: WebGL2 or nothing, never under reduced motion,
-                   never on Save-Data or 2G, and any failure at all leaves the
-                   designed still in place. It is a real price for the first
-                   impression, and it is being paid on purpose. */ ?>
-                <div class="hero-3d three-stage" data-stage3d="hero" aria-hidden="true">
-                    <div class="three-stage-still" aria-hidden="true"></div>
-                </div>
-
-                <a class="hero-cue" href="#challenges">
-                    <span>Scroll</span>
-                    <span class="hero-cue-rail" aria-hidden="true"></span>
-                </a>
+<?php endforeach; ?>
+                </dl>
             </div>
         </div>
     </section>
 
-    <?php /* ========================= MARQUEE ========================= */ ?>
-    <section class="section-sm hero-strip">
+    <?php /* ==========================================================
+       02 — THE STATEMENT
+
+       A rest. One sentence, no object, no cards, no motion beyond the line
+       reveal. Opaque paper, which is what hides the stage behind it.
+       ========================================================== */ ?>
+    <section class="section statement grain" id="approach">
         <div class="container">
-            <p class="tag hero-strip-label">Five services &middot; one package &middot; one invoice</p>
-        </div>
-        <div class="marquee" aria-hidden="true">
-            <div class="marquee-track">
-                <?php foreach ($services as $s): ?>
-                    <span class="marquee-item"><?= icon($s['icon']) ?> <?= e($s['title']) ?></span>
-                    <span class="marquee-dot"></span>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ======================== TRUST BAR ========================= */ ?>
-    <section class="section-sm trust-bar">
-        <div class="container">
-            <div class="grid grid-4 trust-grid" data-r="group">
-                <?php foreach ($trustStats as $stat): ?>
-                    <?php /* The REAL number ships in the markup, not the "0" the
-                       count-up starts from. A visitor whose JS is blocked, slow or
-                       broken by an extension must never read "0 Projects Delivered" —
-                       not merely un-animated but actively false. runCounter's first
-                       frame writes ~0, so the count-up still starts from zero. */ ?>
-                    <div class="stat">
-                        <span class="stat-value"
-                              data-count="<?= (int)$stat['value'] ?>"<?= $stat['suffix'] !== '' ? ' data-suffix="' . e($stat['suffix']) . '"' : '' ?>><?= (int)$stat['value'] . e($stat['suffix']) ?></span>
-                        <span class="stat-label"><?= e($stat['label']) ?></span>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ======================== CHALLENGES ======================== */ ?>
-    <section class="section band-soft" id="challenges">
-        <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Are you facing these challenges?</p>
-                    <h2>Still managing growth through multiple vendors?</h2>
-                </div>
-                <p class="lead">Endless handoffs, mismatched timelines, and no single team accountable for the outcome &mdash; sound familiar?</p>
-            </div>
-
-            <div class="grid grid-3" data-r="group">
-                <?php foreach ($CHALLENGES as $i => [$img, $title, $copy]): ?>
-                    <article class="card card-hover challenge-card">
-                        <div class="card-media">
-                            <?= photo("assets/photos/challenge-{$img}.jpg", '') ?>
-                        </div>
-                        <div class="card-body">
-                            <span class="numeral challenge-num"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                            <h3 class="card-title"><?= e($title) ?></h3>
-                            <p class="card-text"><?= e($copy) ?></p>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= WHO WE ARE ======================== */ ?>
-    <section class="section" id="about">
-        <div class="container">
-            <div class="split split-wide-r">
-                <div class="figure figure-tall glow-blue" data-r="left">
-                    <?= photo('assets/photos/about-desk.jpg', 'A Rafly working desk — laptop, notes and a phone') ?>
-                    <span class="badge badge-ink figure-badge">Since day one, one team</span>
-                </div>
-
-                <div data-r="right">
-                    <p class="eyebrow">Who we are</p>
-                    <h2>One team instead of <span class="soft">multiple vendors</span></h2>
-                    <p class="lead">
-                        Rafly is a digital growth partner built around one idea: your website,
-                        content, marketing, security, and store operations shouldn't come from
-                        five different places.
-                    </p>
-                    <p>
-                        We package web development, content creation, digital marketing, web
-                        security, and e-commerce support into one coordinated team &mdash; and
-                        we're actively building out AI automation and app development
-                        capabilities to round out the offering.
-                    </p>
-
-                    <div class="grid grid-3 mini-stats">
-                        <div class="stat"><span class="stat-value">5</span><span class="stat-label">Services bundled</span></div>
-                        <div class="stat"><span class="stat-value">1</span><span class="stat-label">Point of contact</span></div>
-                        <div class="stat"><span class="stat-value">0</span><span class="stat-label">Handoff gaps</span></div>
-                    </div>
-
-                    <p class="cluster" style="margin-top:2rem">
-                        <a class="btn btn-pill" href="/about">More about Rafly <?= icon('arrow-right') ?></a>
-                        <a class="link-arrow" href="/team">Meet the team <?= icon('arrow-right') ?></a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ================== SERVICES — 3D CAROUSEL ================== */ ?>
-    <section class="section" id="services">
-        <div class="container container-wide">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">What we do</p>
-                <h2>Five services. <span class="soft">One package.</span></h2>
-                <p class="lead">Everything below is delivered by the same team, under one point of contact &mdash; not stitched together from five separate invoices.</p>
-            </div>
-
-            <div class="carousel" data-r="lift">
-                <div class="carousel-scene">
-                    <div class="carousel-ring">
-                        <?php foreach ($services as $i => $s): ?>
-                            <article class="carousel-cell <?= e($svcTint[$s['key']] ?? '') ?>">
-                                <?= photo("assets/photos/service-{$s['key']}.jpg", '') ?>
-                                <div class="carousel-cell-label">
-                                    <span class="tag"><?= e($s['badge']) ?></span>
-                                    <h3><?= e($s['title']) ?></h3>
-                                    <a class="link-arrow carousel-cell-link" href="/<?= e($s['slug']) ?>">
-                                        Explore <?= icon('arrow-right') ?>
-                                    </a>
-                                </div>
-                            </article>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-
-                <div class="carousel-controls">
-                    <button type="button" class="carousel-nav" data-carousel="prev" aria-label="Previous service"><?= icon('chevron-right') ?></button>
-                    <div class="carousel-dots"></div>
-                    <button type="button" class="carousel-nav" data-carousel="next" aria-label="Next service"><?= icon('chevron-right') ?></button>
-                </div>
-                <p class="visually-hidden" data-carousel-status aria-live="polite"></p>
-            </div>
-
-            <div class="steps-row svc-index" data-r="group">
-                <?php foreach ($services as $i => $s): ?>
-                    <a class="step-item svc-index-item" href="/<?= e($s['slug']) ?>">
-                        <span class="step-num">+<?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        <span class="step-title"><?= e($s['title']) ?></span>
-                        <span class="step-text"><?= e($s['card']) ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <p class="services-note">
-                We're also actively building out AI automation and app development capabilities
-                &mdash; <button type="button" class="link-inline" data-modal-open="consultationModal">reach out</button>
-                if you'd like to be among the first to try them.
+            <p class="statement-meta">The difference</p>
+            <p class="statement-line" data-r="lines">
+                We build digital&nbsp;systems,<br>not deliverables.
+            </p>
+            <p class="statement-sub">
+                Five separate vendors produce five separate deliverables and no system.
+                The website does not know what the campaign promised; the campaign does
+                not know what the store can actually ship. We build the parts that have
+                to agree, together, so that they do.
             </p>
         </div>
     </section>
 
-    <?php /* ====================== CAPABILITIES ========================
+    <?php /* ==========================================================
+       03 — THE FIVE, EXPLODED
 
-       The ring, in the place it belongs. It spent one pass wrapped around the
-       hero headline, where it competed with the one line a visitor has to read
-       first; here it IS the point of its own section, so it closes into a full
-       circle and the middle carries the statement instead of a call to action.
+       The signature interaction, and the only expensive one on the page. As
+       you scroll, the assembly separates and the core is revealed running
+       through all five modules.
 
-       Thirteen tiles at 360/13 = 27.7deg, which is why the geometry needs no
-       gap reserved at the bottom any more. Placement is still one transform per
-       tile in css/07-fx.css section 2 and still needs no JavaScript.
+       Below 761px there is no WebGL at all. The section becomes a vertical
+       sequence of three pre-rendered stills carrying the same five labels —
+       the same story in the same visual language, at about a tenth of the
+       cost. See .assembly-seq below and css/pages/home.css.
        ========================================================== */ ?>
-    <section class="section cap-sec" id="capabilities">
+    <section class="section assembly" id="services" data-stage-open>
         <div class="container">
-            <div class="cap-stage">
-                <div class="cap-glow" aria-hidden="true"></div>
-
-                <?php /* --turn is large on purpose. At the 7deg the hero used,
-                   the ring technically rotated and nobody could tell; a quarter
-                   of a tile's spacing across the section is the point at which
-                   the movement becomes legible as movement. */ ?>
-                <div class="arc" aria-hidden="true" data-fx="spin" style="--turn: 26deg;">
-                    <?php foreach ($ARC as $i => [$ico, $label, $tint]):
-                        $n    = $i - 6;              // -6 .. +6, thirteen evenly spaced
-                        $out  = abs($n);             // steps from the top of the ring
-                        /* Which tiles survive a narrower ring. Hiding by distance
-                           from the top keeps what is left EVENLY spaced, which is
-                           the only thing that lets --step widen to 40deg and then
-                           72deg and still close a full circle at each width. */
-                        $tier = $out >= 5 ? ' is-wide-only' : ($out >= 3 ? ' is-tablet-up' : '');
-                    ?>
-                        <div class="arc-cell<?= $tier ?>" style="--n: <?= $n ?>;">
-                            <span class="arc-tile <?= e($tint) ?>" style="--i: <?= $out ?>;">
-                                <?php /* Counter-rotated as one unit. The tile stays
-                                   tangent to the ring — that is what makes it read
-                                   as a ring rather than a bent row — but its
-                                   contents come back upright, or the labels on the
-                                   flanks are printed sideways. */ ?>
-                                <span class="arc-inner">
-                                    <?= icon($ico, 'arc-ico') ?>
-                                    <span class="arc-label"><?= e($label) ?></span>
-                                </span>
-                            </span>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="cap-head">
-                    <p class="eyebrow">Everything in one place</p>
-                    <h2><?= count($ARC) ?> capabilities.<br><span class="ul-draw">One team.</span></h2>
-                    <p class="lead">
-                        Not a list of things we could subcontract &mdash; the work we do
-                        in-house, on one contract, with one person to call when any of
-                        it needs attention.
-                    </p>
-                    <a class="btn btn-line" href="#pricing">See how it is packaged</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= APP STAGE =========================
-       The laptop and the phone arrive from the two sides and settle
-       overlapping in the middle, with a panel of live numbers rising in
-       front. All three are placed with the `translate` property and moved
-       with `transform`, which is what lets the arrival be animated without
-       the resting composition depending on the animation having run — see the
-       note at css/07-fx.css section 2b.
-
-       The screens are real captures of /pricing and /blog taken by
-       inc/tools/capture-mockups.mjs, so they cost nothing, need no licence,
-       and update with the design the next time the tool is run.
-       ========================================================== */ ?>
-    <section class="section app-show" id="work-on-every-screen">
-        <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">Built once &middot; Right everywhere</p>
-                <h2>Your business, <span class="ul-mark is-gold" data-r="mark">on every screen</span></h2>
+            <div class="assembly-head">
+                <p class="eyebrow">The five</p>
+                <h2>One assembly.<br>Five modules.<br><span class="soft">One core.</span></h2>
                 <p class="lead">
-                    Every site we ship is designed on the phone first and proven on the
-                    desktop &mdash; the same content, the same speed, the same checkout,
-                    whichever screen your customer happens to be holding.
+                    Not five services sold from one invoice. Five parts of one system,
+                    built to fit each other, on one shaft.
                 </p>
             </div>
 
-            <div class="app-stage">
-                <div class="app-glow" aria-hidden="true"></div>
+            <ol class="assembly-list">
+<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
+                <li class="assembly-item">
+                    <a href="<?= e(site_path('/' . $slug)) ?>">
+                        <span class="assembly-idx"><?= e($idx) ?></span>
+                        <span class="assembly-name"><?= e($label) ?></span>
+                        <span class="assembly-desc"><?= e($blurb) ?></span>
+                    </a>
+                </li>
+<?php endforeach; ?>
+            </ol>
+        </div>
 
-                <div class="device device-laptop" data-fx="in-left" style="--travel: 30%; --turn: 4deg;">
-                    <div class="device-lid">
-                        <div class="device-screen">
-                            <?= photo('assets/mockups/laptop-screen.jpg', 'The Rafly pricing page open on a laptop', ['loading' => 'eager']) ?>
-                        </div>
-                    </div>
-                    <div class="device-base"></div>
-                </div>
+        <?php /* The exploded state for everyone the live scene never reaches:
+                 desktop with WebGL off, Save-Data, reduced motion, a dead
+                 driver. One render, beside the list, section at normal
+                 height. Hidden the moment .stage gains .is-live. */ ?>
+        <figure class="assembly-still" aria-hidden="true">
+            <img src="<?= e(asset('assets/render/core-open-1400.webp')) ?>"
+                 width="1400" height="1560" loading="lazy" decoding="async" alt="">
+        </figure>
 
-                <div class="device device-phone" data-fx="in-right" style="--travel: 46%; --turn: 6deg;">
-                    <div class="device-body">
-                        <div class="device-screen">
-                            <?= photo('assets/mockups/phone-screen.jpg', 'The Rafly blog open on a phone', ['loading' => 'eager']) ?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="app-panel" data-fx="in-up" style="--travel: 54px;">
-                    <p class="app-panel-label">Largest Contentful Paint</p>
-                    <p class="app-panel-value">1.2s</p>
-                    <p class="app-panel-bar"><span style="--w: 88%;"></span></p>
-                    <p class="app-panel-foot">Core Web Vitals &mdash; passing on mobile</p>
-                </div>
-            </div>
-
-            <div class="steps-row app-points" data-r="group">
-                <div class="step-item">
-                    <span class="step-num">+01</span>
-                    <h3 class="step-title">One codebase</h3>
-                    <p class="step-text">No separate mobile site to fall out of date, and no second bill to keep it alive.</p>
-                </div>
-                <div class="step-item">
-                    <span class="step-num">+02</span>
-                    <h3 class="step-title">Real devices</h3>
-                    <p class="step-text">Tested on the phones your customers actually own, not only in a browser window resized by hand.</p>
-                </div>
-                <div class="step-item">
-                    <span class="step-num">+03</span>
-                    <h3 class="step-title">Measured, not claimed</h3>
-                    <p class="step-text">Every build is scored against Core Web Vitals before it ships, and the numbers go in your report.</p>
-                </div>
-            </div>
+        <?php /* The phone experience. Designed, not degraded: three states of
+                 the same render, lazily loaded, at 640px. */ ?>
+        <div class="assembly-seq" aria-hidden="true">
+            <img src="<?= e(asset('assets/render/core-seq-1-640.webp')) ?>" width="640" height="760" loading="lazy" decoding="async" alt="">
+            <img src="<?= e(asset('assets/render/core-seq-2-640.webp')) ?>" width="640" height="760" loading="lazy" decoding="async" alt="">
+            <img src="<?= e(asset('assets/render/core-seq-3-640.webp')) ?>" width="640" height="860" loading="lazy" decoding="async" alt="">
         </div>
     </section>
 
-    <?php /* ============ P.E.A.C.E. — sticky, with the 3-D object ============ */ ?>
-    <section class="section band-soft" id="method">
+</div><?php /* /.stage */ ?>
+
+    <?php /* ==========================================================
+       04 — DELIVERY
+
+       Calm on purpose, straight after the expensive section. A hairline
+       spine, real stage names, real durations. No 3-D, no WebGL, no
+       particles.
+       ========================================================== */ ?>
+    <section class="section ground-2 grain" id="delivery">
         <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Our baseline methodology</p>
-                    <h2>The P.E.A.C.E. framework <span class="soft">behind every package</span></h2>
-                </div>
-                <p class="lead">One coordinated method behind every bundled package we deliver &mdash; not five different vendors running five different processes.</p>
+            <div class="sec-head">
+                <p class="eyebrow">Delivery</p>
+                <h2>How the work <span class="soft">actually runs</span></h2>
             </div>
 
-            <div class="st-scroller">
-                <div class="st-stage">
-                    <?php
-                    /* The 3-D object. js/stage3d.js loads three.js only when this
-                       section is close to the viewport, WebGL2 exists, and motion
-                       is not reduced. The still underneath is a designed object in
-                       its own right, so a device that cannot run it still gets a
-                       finished page rather than an empty box. */
-                    ?>
-                    <div class="three-stage" data-stage3d="peace" data-steps="5">
-                        <div class="three-stage-still">
-                            <svg viewBox="0 0 240 240" role="img" aria-label="A layered object representing the five stages of the P.E.A.C.E. framework">
-                                <defs>
-                                    <linearGradient id="pg1" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0" stop-color="#1652e0"/><stop offset="1" stop-color="#0d47a1"/>
-                                    </linearGradient>
-                                </defs>
-                                <g fill="none" stroke-width="2">
-                                    <ellipse cx="120" cy="168" rx="86" ry="30" fill="url(#pg1)" opacity=".16"/>
-                                    <ellipse cx="120" cy="146" rx="72" ry="25" fill="url(#pg1)" opacity=".28"/>
-                                    <ellipse cx="120" cy="124" rx="58" ry="20" fill="url(#pg1)" opacity=".45"/>
-                                    <ellipse cx="120" cy="102" rx="44" ry="15" fill="url(#pg1)" opacity=".68"/>
-                                    <ellipse cx="120" cy="80"  rx="30" ry="10" fill="url(#pg1)"/>
-                                    <circle cx="120" cy="52" r="9" fill="#ff6b35"/>
-                                </g>
-                            </svg>
-                        </div>
+            <ol class="flow">
+<?php foreach ($FLOW as $i => [$name, $when, $desc]): ?>
+                <li class="flow-step" data-r="rise">
+                    <span class="flow-idx"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                    <div class="flow-body">
+                        <h3><?= e($name) ?></h3>
+                        <p><?= e($desc) ?></p>
                     </div>
-                </div>
-
-                <div class="st-steps has-rail">
-                    <?php foreach ($PEACE as $i => [$letter, $ico, $title, $copy]): ?>
-                        <div class="st-step" data-letter="<?= e($letter) ?>">
-                            <span class="st-step-num"><?= (int)($i + 1) ?></span>
-                            <?php /* $ico was destructured out of $PEACE and then never
-                               used — five icons defined and none drawn. It marks the
-                               step, beside the letter that names it. */ ?>
-                            <h3 class="st-step-title">
-                                <?= icon($ico, 'st-step-ico') ?>
-                                <span class="peace-letter"><?= e($letter) ?></span> <?= e($title) ?>
-                            </h3>
-                            <p class="st-step-text"><?= e($copy) ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+                    <span class="flow-when"><?= e($when) ?></span>
+                </li>
+<?php endforeach; ?>
+            </ol>
         </div>
     </section>
 
-    <?php /* ============= DELIVERY FLOW — the dark rhythm break ============= */ ?>
-    <section class="section band-ink band-round-t" id="process">
-        <div class="container">
-            <div class="split split-wide-r">
-                <div data-r="left">
-                    <p class="eyebrow on-dark">How we work</p>
-                    <h2>A process built for <span class="soft">predictable delivery</span></h2>
-                    <p class="lead">No mystery timelines. You always know exactly which stage your package is in &mdash; and so do we.</p>
-                    <p class="cluster" style="margin-top:2rem">
-                        <button type="button" class="btn btn-white" data-modal-open="consultationModal">
-                            Start with discovery <?= icon('arrow-right') ?>
-                        </button>
-                    </p>
-                </div>
+    <?php /* ==========================================================
+       05 — THE STACK
 
-                <div class="gl-host" data-gl-host data-r="right">
-                    <div class="gl-still" aria-hidden="true"></div>
-                    <canvas data-gl="sphere,knot,helix,grid" data-mode="hero" data-density="0.9"
-                            data-col-a="#1652e0" data-col-b="#0d47a1" data-col-hot="#ff6b35"
-                            aria-hidden="true"></canvas>
-                </div>
+       Typographic, and deliberately static. Nearly zero animation: after the
+       exploded sequence and before the dark chapter, this is a rest.
+       ========================================================== */ ?>
+    <section class="section ground-3" id="stack">
+        <div class="container">
+            <div class="sec-head">
+                <p class="eyebrow">Built on</p>
+                <h2>Named tools, <span class="soft">no logo wall</span></h2>
             </div>
 
-            <div class="steps-row flow-row" data-r="group">
-                <?php foreach ($FLOW as $i => [$title, $when, $copy]): ?>
-                    <div class="step-item">
-                        <span class="step-num">+<?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        <span class="step-title"><?= e($title) ?></span>
-                        <span class="step-time"><?= e($when) ?></span>
-                        <p class="step-text"><?= e($copy) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= WHY CHOOSE ======================== */ ?>
-    <section class="section" id="why">
-        <div class="container">
-            <div class="split split-wide-l">
-                <div data-r="left">
-                    <p class="eyebrow">Why choose</p>
-                    <h2>Rafly for your <span class="soft">business growth?</span></h2>
-                    <p class="lead">
-                        Managing web development, marketing, content, security, and e-commerce
-                        operations separately slows growth down. Rafly bundles them into a single
-                        package with one point of contact, so you spend less time coordinating
-                        vendors and more time running your business.
-                    </p>
-                    <ul class="list-check why-list">
-                        <li><?= icon('check') ?><span>Faster turnaround timelines</span></li>
-                        <li><?= icon('check') ?><span>One team, one point of contact</span></li>
-                        <li><?= icon('check') ?><span>Professional, hands-on delivery</span></li>
-                        <li><?= icon('check') ?><span>Proven, repeatable process</span></li>
-                        <li><?= icon('check') ?><span>Transparent bundled packages</span></li>
+            <div class="stack">
+<?php foreach ($STACK as [$group, $items]): ?>
+                <div class="stack-col">
+                    <h3 class="stack-label"><?= e($group) ?></h3>
+                    <ul>
+<?php foreach ($items as $item): ?>
+                        <li><?= $item ?></li>
+<?php endforeach; ?>
                     </ul>
-                    <p style="margin-top:2rem"><a class="btn btn-pill" href="/pricing">See the packages <?= icon('arrow-right') ?></a></p>
                 </div>
-
-                <div class="panel delivery-panel" data-r="right">
-                    <p class="tag">One engagement</p>
-                    <p class="delivery-panel-title">Everything below is delivered by the same team, under one point of contact.</p>
-                    <ul class="plain delivery-list">
-                        <?php foreach ($services as $s): ?>
-                            <li>
-                                <span class="icon-box"><?= icon($s['icon']) ?></span>
-                                <span>
-                                    <strong><?= e($s['title']) ?></strong>
-                                    <span class="delivery-list-sub"><?= e($s['badge']) ?></span>
-                                </span>
-                                <?= icon('check', 'delivery-tick') ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <p class="delivery-foot"><?= count($services) ?> services &middot; one team &middot; one invoice</p>
-                </div>
-            </div>
-
-            <div class="stack-strip" data-r="rise">
-                <p class="tag">Built on</p>
-                <div class="cluster">
-                    <?php foreach ($STACK as $tool): ?>
-                        <span class="chip"><?= $tool ?></span>
-                    <?php endforeach; ?>
-                </div>
+<?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <?php /* ======================== SELECTED WORK ======================= */
-    /* The section exists only when there is something real to put in it.
-       case_studies_all() filters out placeholders in SQL, so a card that
-       reaches this loop describes work that was actually done. */
-    if ($caseStudies): ?>
-    <section class="section band-soft" id="work">
+    <?php /* ==========================================================
+       06 — SELECTED WORK — THE ONE DARK CHAPTER
+
+       Conditional. Renders only when there is real, published,
+       non-placeholder work to show. Nothing here is generated to fill space.
+       ========================================================== */ ?>
+<?php if ($caseStudies): ?>
+    <section class="section ground-chapter grain seam-top seam-bottom" id="work">
         <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Selected work</p>
-                    <h2>Results, not just <span class="soft">deliverables</span></h2>
-                </div>
-                <div>
-                    <p class="lead">A snapshot of what bundled delivery looks like in practice.</p>
-                    <a class="link-arrow" href="/case-studies">See all case studies <?= icon('arrow-right') ?></a>
-                </div>
+            <div class="sec-head">
+                <p class="eyebrow">Selected work</p>
+                <h2>What it looked like <span class="soft">in practice</span></h2>
             </div>
 
-            <div class="grid grid-3" data-r="group">
-                <?php foreach ($caseStudies as $wi => $c): ?>
-                    <article class="card card-hover work-card">
-                        <?php /* Cycled by position rather than stored per case study:
-                           these are illustrative covers for the sector, not
-                           photographs of the client's premises, and nothing on the
-                           card claims otherwise. photo() returns '' for a missing
-                           file, so the card degrades to its text form. */ ?>
-                        <div class="card-media" data-fx="zoom" style="--grow: .05;">
-                            <?= photo('assets/photos/work-' . (($wi % 3) + 1) . '.jpg', '') ?>
-                        </div>
-                        <div class="card-body">
-                            <span class="badge badge-soft"><?= e($c['sector']) ?></span>
-                            <p class="work-metric"><?= e($c['metric_value']) ?></p>
-                            <p class="work-metric-label"><?= e($c['metric_label']) ?></p>
-                            <p class="card-text"><?= e(str_trunc((string)$c['problem'], 140)) ?></p>
-                            <div class="card-foot">
-                                <span class="tag"><?= e($c['client_name']) ?></span>
-                                <?= icon('arrow-up-right') ?>
-                            </div>
-                        </div>
-                        <a class="card-link" href="/case-studies" aria-label="Read the <?= e($c['client_name']) ?> case study"></a>
-                    </article>
-                <?php endforeach; ?>
+            <div class="work-grid" data-r="group">
+<?php foreach ($caseStudies as $i => $cs): ?>
+                <article class="work-card">
+                    <span class="work-idx"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                    <h3><?= e($cs['client_name'] ?? '') ?></h3>
+<?php if (!empty($cs['summary'])): ?>
+                    <p><?= e($cs['summary']) ?></p>
+<?php endif; ?>
+<?php if (!empty($cs['slug'])): ?>
+                    <a class="link-arrow" href="<?= e(site_path('/case-studies#' . $cs['slug'])) ?>">Read the detail</a>
+<?php endif; ?>
+                </article>
+<?php endforeach; ?>
             </div>
         </div>
     </section>
-    <?php endif; ?>
+<?php endif; ?>
 
-    <?php /* =========================== PRICING ========================== */ ?>
-    <section class="section" id="pricing">
+    <?php /* ==========================================================
+       07 — HONEST LIMITS
+
+       The strongest section on the page, and the one no competitor
+       publishes. Every line is lifted from the `boundaries` array of a real
+       service, so what the homepage refuses and what the service page
+       refuses are the same file.
+       ========================================================== */ ?>
+    <section class="section" id="limits">
         <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">Bundle packages</p>
-                <h2>One package, <span class="soft">every service included</span></h2>
-                <p class="lead">Pick a starting point &mdash; every package is tailored to you during a free consultation.</p>
+            <div class="sec-head">
+                <p class="eyebrow">Honest limits</p>
+                <h2>What we will <span class="soft">not</span> take on</h2>
+                <p class="lead">
+                    Fifteen of them, in writing, before you ask. A studio that will not
+                    name its edges has not found them yet.
+                </p>
             </div>
 
-            <div class="grid grid-3 price-grid" data-r="group">
-                <?php foreach ($bundles as $i => $t) { require __DIR__ . '/partials/price-card.php'; } ?>
+            <div class="limits">
+<?php foreach ($limits as [$svc, $title, $desc]): ?>
+                <div class="limit">
+                    <p class="limit-svc"><?= e($svc) ?></p>
+                    <h3><?= e($title) ?></h3>
+                    <p><?= e($desc) ?></p>
+                </div>
+<?php endforeach; ?>
             </div>
 
-            <p class="price-note">
-                Every package is scoped in a free consultation before anything is agreed.
-                Nothing starts until the scope and the number are both in writing.
-            </p>
-        </div>
-    </section>
-
-    <?php /* ========================= COMPARISON ========================= */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">Why growing businesses choose Rafly</p>
-                <h2>Rafly vs. agencies <span class="soft">vs. freelancers</span></h2>
-                <p class="lead">Compare how a bundled Rafly package stacks up against hiring separately.</p>
-            </div>
-
-            <div class="table-wrap" data-r="rise">
-                <table class="table-compare">
-                    <caption class="visually-hidden">A comparison of Rafly, traditional agencies and freelancers across six criteria</caption>
+            <div class="compare-wrap">
+                <table class="compare">
+                    <caption class="sr-only">Rafly compared with a traditional agency and with hiring separate freelancers</caption>
                     <thead>
                         <tr>
-                            <th scope="col"><span class="visually-hidden">Criterion</span></th>
-                            <th scope="col" class="is-us">Rafly</th>
-                            <th scope="col">Traditional agencies</th>
-                            <th scope="col">Freelancers &amp; DIY tools</th>
+                            <th scope="col"><span class="sr-only">Aspect</span></th>
+                            <th scope="col">Rafly</th>
+                            <th scope="col">Traditional agency</th>
+                            <th scope="col">Separate freelancers</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($COMPARE as [$label, $us, $agency, $free]): ?>
-                            <tr>
-                                <th scope="row"><?= e($label) ?></th>
-                                <td class="is-us"><?= icon('circle-check', 'yes') ?> <?= e($us) ?></td>
-                                <td><?= icon('alert-triangle', 'no') ?> <?= e($agency) ?></td>
-                                <td><?= icon('circle-x', 'no') ?> <?= e($free) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+<?php foreach ($COMPARE as [$aspect, $us, $agency, $free]): ?>
+                        <tr>
+                            <th scope="row"><?= e($aspect) ?></th>
+                            <td class="is-us"><?= e($us) ?></td>
+                            <td><?= e($agency) ?></td>
+                            <td><?= e($free) ?></td>
+                        </tr>
+<?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
 
-    <?php /* ======================== TESTIMONIALS ========================
-       An earlier version of this section opened with a "video testimonial": a
-       play button over an empty black box with no video behind it. A control
-       that plays nothing costs more trust than it earns, so the format is a
-       written quote.
-
-       testimonials_all() applies both gates in SQL — not a seeded example, and
-       the client has recorded consent to be named — so a card that reaches this
-       loop is a quote somebody actually said and agreed to have published. */
-    if ($testimonials): ?>
-    <section class="section" id="stories">
+    <?php /* ==========================================================
+       08 — PRICING AND FAQ
+       ========================================================== */ ?>
+    <section class="section ground-2 grain" id="pricing">
         <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">What our clients say</p>
-                    <h2>Real stories, <span class="soft">real success</span></h2>
-                </div>
-                <p class="lead">Businesses that replaced a handful of scattered vendors with one bundled Rafly package.</p>
+            <div class="sec-head">
+                <p class="eyebrow">Bundles</p>
+                <h2>Three bundles. <span class="soft">One scope, one price.</span></h2>
+                <p class="lead">
+                    Every package is scoped in a free consultation first — you get a
+                    number before any work starts, not an hourly rate that moves.
+                </p>
             </div>
 
             <div class="grid grid-3" data-r="group">
-                <?php foreach ($testimonials as $i => $t): ?>
-                    <figure class="quote">
-                        <?php /* Five filled stars would be a rating nobody recorded.
-                           The quote is the evidence; the stars mark that a rating
-                           exists at all only once one is actually stored. */ ?>
-                        <blockquote class="quote-text">&ldquo;<?= e($t['quote']) ?>&rdquo;</blockquote>
-                        <figcaption class="person">
-                            <span class="avatar avatar-t<?= (int)(($i % 6) + 1) ?>" aria-hidden="true"><?= e(mb_substr((string)$t['author_name'], 0, 1)) ?></span>
-                            <span>
-                                <span class="person-name"><?= e($t['author_name']) ?></span><br>
-                                <span class="person-role"><?= e($t['author_role']) ?><?= $t['author_company'] ? ', ' . e($t['author_company']) : '' ?></span>
-                            </span>
-                        </figcaption>
-                    </figure>
-                <?php endforeach; ?>
+<?php foreach ($bundles as $i => $t): require __DIR__ . '/partials/price-card.php'; endforeach; ?>
             </div>
-        </div>
-    </section>
-    <?php endif; ?>
 
-    <?php /* ============================ FAQ ============================= */ ?>
-    <section class="section band-soft" id="faq">
-        <div class="container">
-            <div class="faq-card" data-r="rise">
-                <div class="faq-aside">
-                    <p class="eyebrow">FAQ</p>
-                    <h2>Got a question <span class="scribble">for Rafly?<svg viewBox="0 0 300 24" aria-hidden="true" preserveAspectRatio="none"><path d="M4 17C58 6 120 4 178 8c38 3 74 6 118 3"/></svg></span></h2>
-                    <p class="muted">If there is something you want to ask that is not answered here, ask us directly &mdash; a person replies, not a form letter.</p>
-
-                    <div class="faq-aside-actions">
-                        <a class="btn btn-pill" href="#contact">Ask us directly <?= icon('arrow-right') ?></a>
-                        <a class="link-arrow" target="_blank" rel="noopener"
-                           href="<?= e(whatsapp_link('Hi Rafly, I have a question about your bundled packages.')) ?>">
-                            <?= icon('whatsapp', 'icon-fill') ?> WhatsApp
-                        </a>
-                    </div>
+            <div class="faq" id="faq">
+                <div class="faq-head">
+                    <h3>Before you get in touch</h3>
+                    <p>
+                        Anything not covered here,
+                        <a href="<?= e(whatsapp_link('Hi Rafly, I have a question.')) ?>" target="_blank" rel="noopener">ask on WhatsApp</a>
+                        — a person replies within one working day.
+                    </p>
                 </div>
 
-                <div class="faq-list">
-                    <div class="accordion" data-accordion="single">
-                        <?php foreach ($FAQS as $i => $f): ?>
-                            <div class="accordion-item">
-                                <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="faq-panel-<?= $i ?>" id="faq-trigger-<?= $i ?>">
-                                    <span><?= e($f['q']) ?></span>
-                                    <span class="accordion-icon" aria-hidden="true"><?= icon('chevron-down') ?></span>
-                                </button>
-                                <div class="accordion-panel" id="faq-panel-<?= $i ?>" role="region" aria-labelledby="faq-trigger-<?= $i ?>">
-                                    <div><p><?= e($f['a']) ?></p></div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                <div class="accordion" data-accordion="single">
+<?php foreach ($FAQS as $i => $f): ?>
+                    <div class="accordion-item">
+                        <button class="accordion-trigger" type="button"
+                                id="faq-t-<?= $i ?>" aria-expanded="false" aria-controls="faq-p-<?= $i ?>">
+                            <span><?= e($f['q']) ?></span>
+                            <span class="accordion-icon" aria-hidden="true"></span>
+                        </button>
+                        <div class="accordion-panel" id="faq-p-<?= $i ?>" role="region" aria-labelledby="faq-t-<?= $i ?>" hidden>
+                            <p><?= e($f['a']) ?></p>
+                        </div>
                     </div>
+<?php endforeach; ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php /* ==================== CONTACT — the blue band ==================
-       The full-bleed colour band from the reference, doing real work rather
-       than repeating a CTA the page has already made three times. */ ?>
-    <section class="section band-ink" id="contact">
+    <?php /* ==========================================================
+       09 — THE CLOSE
+
+       The second and last call to action on the page. The object returns,
+       assembled and at rest — the same render as the hero, because that is
+       exactly what it is: the thing, put back together.
+       ========================================================== */ ?>
+    <section class="section close" id="start">
         <div class="container">
-            <div class="split split-wide-l split-top">
-                <div data-r="left">
-                    <p class="eyebrow on-dark">Ready to stop juggling vendors?</p>
-                    <h2>Tell us what's <span class="soft">slowing you down</span></h2>
+            <div class="close-grid">
+                <div class="close-copy">
+                    <p class="eyebrow">Start here</p>
+                    <h2>Let's build <span class="soft">what's next.</span></h2>
                     <p class="lead">
-                        One team, one package, one point of contact &mdash; for your website,
-                        content, marketing, security, and e-commerce operations. Tell us what is
-                        in the way and we'll put together a package that covers it.
+                        Tell us what is in front of you. We will come back with a scope and
+                        a number, or tell you plainly that it is not a job for us.
+                    </p>
+                    <p class="meta-row">
+                        <span><b>First step</b> a call, not a pitch deck</span>
+                        <span><b>Reply</b> within one working day</span>
                     </p>
 
-                    <ul class="list-check contact-assurances">
-                        <li><?= icon('check') ?><span>A person replies within one working day</span></li>
-                        <li><?= icon('check') ?><span>No obligation, and no sales sequence</span></li>
-                        <li><?= icon('check') ?><span>NDA on request; full IP transfers to you</span></li>
-                    </ul>
-
-                    <div class="deflist contact-details">
-                        <?php $addr = setting('contact.address', 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, 201306'); ?>
-                        <div class="deflist-row">
-                            <?= icon('map-pin') ?>
-                            <span><span class="deflist-label">Office</span><span class="deflist-value"><?= e($addr) ?></span></span>
-                        </div>
-                        <div class="deflist-row">
-                            <?= icon('mail') ?>
-                            <span><span class="deflist-label">Email</span><a class="deflist-value" href="mailto:<?= e(CONTACT_EMAIL) ?>"><?= e(CONTACT_EMAIL) ?></a></span>
-                        </div>
-                        <div class="deflist-row">
-                            <?= icon('phone') ?>
-                            <span><span class="deflist-label">Phone</span><a class="deflist-value" href="tel:<?= e(preg_replace('/[^0-9+]/', '', CONTACT_PHONE)) ?>"><?= e(CONTACT_PHONE) ?></a></span>
-                        </div>
-                        <?php $hours = setting('contact.hours', 'Mon - Fri, 09:00 - 18:00 IST'); if ($hours !== ''): ?>
-                        <div class="deflist-row">
-                            <?= icon('hourglass') ?>
-                            <span><span class="deflist-label">Hours</span><span class="deflist-value"><?= e($hours) ?></span></span>
-                        </div>
-                        <?php endif; ?>
-                    </div>
+                    <figure class="close-object" aria-hidden="true">
+                        <img src="<?= e(asset('assets/render/core-hero-900.webp')) ?>"
+                             width="900" height="1000" loading="lazy" decoding="async" alt="">
+                    </figure>
                 </div>
 
-                <div class="contact-card" data-r="right">
-                    <h3 class="contact-card-title">Start a conversation</h3>
-                    <?php
-                    $formId      = 'homeLeadForm';
-                    $submitLabel = 'Submit requirements';
-                    require __DIR__ . '/partials/lead-form.php';
-                    ?>
+                <div class="close-form">
+<?php
+    $formId      = 'homeLeadForm';
+    $submitLabel = 'Send requirements';
+    require __DIR__ . '/partials/lead-form.php';
+?>
                 </div>
             </div>
         </div>

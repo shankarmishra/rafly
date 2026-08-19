@@ -98,7 +98,7 @@ $navServices = services_all();
            tablet and phone range — which is what happened before. */ ?>
         <div class="drawer-social">
             <?php foreach (SOCIAL_LINKS as $s): ?>
-                <a href="<?= e($s['url']) ?>" target="_blank" rel="noopener noreferrer"
+                <a href="<?= e($s['href']) ?>" target="_blank" rel="noopener noreferrer"
                    aria-label="Rafly on <?= e($s['label']) ?>">
                     <?= icon($s['icon'], 'icon-fill') ?>
                 </a>

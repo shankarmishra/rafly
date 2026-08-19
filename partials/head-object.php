@@ -1,24 +1,18 @@
 <?php
 /**
- * A 3-D object for a secondary page's head.
+ * The inner-page head object — DELIBERATELY EMPTY.
  *
- * The homepage hero got the big one. Naveen asked for the rest of the site to
- * carry the same language rather than falling back to flat pages, so this is
- * the same object at a third of the presence: nine satellites instead of
- * twenty-two, a tighter frame, held to one side, and gone by the time the first
- * real section arrives.
+ * Seven pages include this partial. It used to render a decorative object
+ * floating behind every page header: first a three.js stage (which is what
+ * put ~190KB of WebGL on /about, /pricing, /contact and every blog post for
+ * a piece of decoration), then an SVG redraw of it.
  *
- * This WAS a js/gl.js point cloud, and it was replaced for the same reason the
- * hero's was: "ye 3d design bilkul pasand nahi". Dots have no surface, so they
- * cannot catch an environment, so they cannot look manufactured. The knot can.
+ * The Machined Paper rule is that three-dimensional work appears in exactly
+ * three places on this site — the hero, the exploded assembly and the close —
+ * and a page header is not one of them. A header is two columns of prose; an
+ * object behind it is noise competing with the only thing the reader came for.
  *
- * WHAT IT COSTS, PLAINLY. three.js is ~730 KB raw / ~190 KB gzipped, and this
- * puts it on seven secondary pages that previously did not load it at all. The
- * gates all still hold — WebGL2 or nothing, never under reduced motion, never
- * on Save-Data or 2G, loaded only when the head is within 300px of the
- * viewport, and any failure at all leaves the designed still in place.
+ * The file stays rather than the seven include lines being deleted, because
+ * this is where the decision is recorded. If a head ornament is ever wanted
+ * again, it goes here and it goes here only.
  */
-?>
-<div class="head-3d three-stage" data-stage3d="head" aria-hidden="true">
-    <div class="three-stage-still" aria-hidden="true"></div>
-</div>

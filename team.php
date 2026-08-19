@@ -35,15 +35,12 @@ $page = [
     'module'    => 'stage3d',
     'scripts'   => ['team'],
     'schema'    => [
-        [
-            '@type'       => 'AboutPage',
-            '@id'         => schema_id('team'),
-            'url'         => SITE_ORIGIN . '/team',
-            'name'        => 'Our Team | Rafly Digital Growth',
-            'description' => 'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
-            'isPartOf'    => ['@id' => schema_id('website')],
-            'about'       => ['@id' => schema_id('organization')],
-        ],
+        schema_webpage(
+            'team',
+            'Our Team | Rafly Digital Growth',
+            'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
+            'AboutPage'
+        ),
         schema_breadcrumbs($crumbs),
     ],
 ];

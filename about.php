@@ -14,15 +14,12 @@ $page = [
     'styles'    => ['home', 'about'],
     'module'    => 'stage3d',
     'schema'    => [
-        [
-            '@type'       => 'AboutPage',
-            '@id'         => schema_id('about'),
-            'url'         => SITE_ORIGIN . '/about',
-            'name'        => 'About Rafly | Digital Growth',
-            'description' => 'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
-            'isPartOf'    => ['@id' => schema_id('website')],
-            'about'       => ['@id' => schema_id('organization')],
-        ],
+        schema_webpage(
+            'about',
+            'About Rafly | Digital Growth',
+            'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
+            'AboutPage'
+        ),
         schema_breadcrumbs($crumbs),
     ],
 ];
@@ -45,10 +42,11 @@ require __DIR__ . '/partials/social-rail.php';
                 </div>
                 <div>
                     <p class="lead">
-                        Rafly is a digital growth partner that bundles web development, content
+                        Rafly is a digital growth partner based in <?= e(BUSINESS_GEO_LOCALITY) ?>,
+                        <?= e(BUSINESS_GEO_REGION) ?>, that bundles web development, content
                         creation, digital marketing, web security, and e-commerce support into one
-                        coordinated team &mdash; so you get one accountable point of contact
-                        instead of five separate vendors.
+                        coordinated team &mdash; so growing businesses get one accountable point of
+                        contact instead of five separate vendors.
                     </p>
                     <p style="margin-top:1.5rem">
                         <a class="btn btn-pill" href="/case-studies">See our work <?= icon('arrow-right') ?></a>

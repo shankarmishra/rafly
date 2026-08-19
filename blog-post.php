@@ -162,6 +162,12 @@ if ($seeded) {
     $more = [];
 }
 
+// The one service this article is actually about, if its categories map to
+// one — inc/repo/links.php. $cats carries 'slug' in both branches above (the
+// DB query selects c.slug; seed_preview_posts() sets category_slug the same
+// way), so this resolves identically whether the database is up or not.
+$relatedService = $cats ? related_service_for_categories($cats) : null;
+
 if (!$more && !$seeded) {
     $more = all(
         "SELECT p.slug, p.title, p.tag, p.excerpt, p.read_minutes,
@@ -273,9 +279,15 @@ if (!$more && !$seeded) {
             <aside class="post-cta">
                 <h2>Want this handled for you?</h2>
                 <p>
+<?php if ($relatedService !== null): ?>
+                    This is exactly what our <a href="/<?= e($relatedService['slug']) ?>"><?= e($relatedService['title']) ?></a>
+                    service covers &mdash; or get it as part of a bundled package with web, content,
+                    marketing and e-commerce support under one team.
+<?php else: ?>
                     Every Rafly package bundles web, content, marketing, security and
                     e-commerce support under one team &mdash; so the things in this article
                     actually get done rather than added to a list.
+<?php endif; ?>
                 </p>
                 <div class="cluster">
                     <button type="button" class="btn btn-pill" data-modal-open="consultationModal">

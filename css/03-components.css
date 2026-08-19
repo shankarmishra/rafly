@@ -35,7 +35,7 @@
     color: var(--blue);
     flex: none;
 }
-.icon-box-orange { background: var(--orange-tint); color: var(--orange-ink); }
+.icon-box-note { background: var(--paper-3); color: var(--ink-2); }
 .icon-box-ink    { background: var(--ink); color: #fff; }
 .icon-box-lg     { width: 56px; height: 56px; border-radius: var(--r-lg); }
 
@@ -44,7 +44,7 @@
    ========================================================================== */
 .btn {
     --_bg: var(--pill);
-    --_fg: #fff;
+    --_fg: var(--pill-fg, #fff);
     --_bd: transparent;
     display: inline-flex;
     align-items: center;
@@ -87,7 +87,7 @@
     --_fg: var(--ink);
     --_bd: var(--line-strong);
 }
-.btn-line:hover { --_bd: var(--ink); --_bg: rgba(10, 14, 26, .03); }
+.btn-line:hover { --_bd: var(--ink); --_bg: var(--wash); }
 
 /* Quiet */
 .btn-ghost { --_bg: transparent; --_fg: var(--ink-2); }
@@ -127,7 +127,7 @@
     border-radius: 50%;
     /* --orange-mid, not --orange: a white arrow on #ff6b35 measures 2.84:1
        and a non-text control needs 3:1. */
-    background: var(--orange-mid);
+    background: var(--blue);
     color: #fff;
     flex: none;
     transition: transform var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
@@ -186,7 +186,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     font-weight: var(--fw-semi);
     letter-spacing: 0.02em;
 }
-.badge-orange { background: var(--orange-tint); color: var(--orange-ink); }
+.badge-accent { background: var(--blue-tint); color: var(--blue); }
 .badge-ink    { background: var(--ink); color: #fff; }
 .badge-soft   { background: var(--paper-3); color: var(--ink-2); }
 
@@ -318,7 +318,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
 .avatar-stack { display: flex; }
 .avatar-stack .avatar + .avatar { margin-left: -12px; }
 
-.stars { display: inline-flex; gap: 2px; color: var(--gold); }
+.stars { display: inline-flex; gap: 2px; color: var(--ink-3); }
 .stars .icon { width: 14px; height: 14px; fill: currentColor; stroke: none; }
 .stars .is-empty { color: var(--line-strong); }
 
@@ -435,7 +435,7 @@ a.chip:hover { border-color: var(--ink); color: var(--ink); }
     font-weight: var(--fw-semi);
     color: var(--ink-2);
 }
-.field label .req { color: var(--orange-ink); }
+.field label .req { color: var(--blue); }
 
 .form-control {
     width: 100%;
@@ -786,7 +786,7 @@ body.modal-open { overflow: hidden; }
     left: var(--sp-6);
     padding: 0.375rem 0.75rem;
     border-radius: var(--r-pill);
-    background: var(--orange-ink);
+    background: var(--blue);
     color: #fff;
     font-size: var(--fs-2xs);
     font-weight: var(--fw-semi);
@@ -965,9 +965,9 @@ body.modal-open { overflow: hidden; }
 }
 @keyframes ul-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-.ul-draw.is-orange { --ul-colour: var(--orange); }        /* 3.4:1 as a rule on white */
+.ul-draw.is-accent { --ul-colour: var(--accent-fg); }     /* a RULE, not text — ground-aware */
 .band-ink .ul-draw,
-.band-blue .ul-draw { --ul-colour: var(--orange); }       /* 6.8:1 on ink */
+.band-blue .ul-draw { --ul-colour: var(--on-dark-1); }    /* on the accent band the rule is white */
 
 /* --- A highlighter swipe behind the word -------------------------------- */
 /* --mark-h is read by the r-mark keyframes in css/06-motion.css, so the band
@@ -984,13 +984,13 @@ body.modal-open { overflow: hidden; }
     -webkit-box-decoration-break: clone;
 }
 .ul-mark.is-gold   { --mark-tint: rgba(255, 184, 0, .45); }
-.ul-mark.is-orange { --mark-tint: var(--orange-tint); }
+.ul-mark.is-accent { --mark-tint: var(--blue-tint); }
 .band-ink .ul-mark,
 .band-blue .ul-mark { --mark-tint: rgba(255, 107, 53, .32); }
 
 /* --- Orange as actual text: the only token that may, at 4.93:1 ---------- */
-.ul-ink { color: var(--orange-ink); }
-.band-ink .ul-ink, .band-blue .ul-ink { color: var(--orange); }
+.ul-ink { color: var(--accent-fg); }
+.band-blue .ul-ink { color: var(--on-dark-1); }
 
 
 /* .ul-ink recolours the TEXT, where .ul-draw and .ul-mark paint behind it. A
@@ -1003,8 +1003,8 @@ body.modal-open { overflow: hidden; }
 .sec-head-split h2 .ul-ink,
 .sec-head-center h2 .ul-ink,
 .cap-head h2 .ul-ink {
-    -webkit-text-fill-color: var(--orange-ink);
-    color: var(--orange-ink);
+    -webkit-text-fill-color: var(--accent-fg);
+    color: var(--accent-fg);
 }
 
 /* ==========================================================================
@@ -1097,9 +1097,14 @@ body.modal-open { overflow: hidden; }
         inset 0 1px 0 rgba(255, 255, 255, .3),
         0 14px 30px -12px rgba(10, 14, 26, .6);
 }
+/* The sheen is a LIGHT-GROUND effect: a white top-light on a white button so
+   it reads as a raised surface. Left hardcoded it becomes a grey slab on
+   obsidian, because 80% white over a near-black ground is just grey. Both
+   stops are therefore tokens, and 08-ground.css drops them to a tenth on ink
+   where the same gesture only has to suggest an edge. */
 .btn-line {
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, 0));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 2px 8px -4px rgba(10, 14, 26, .18);
+    background-image: linear-gradient(180deg, var(--sheen-face), rgba(255, 255, 255, 0));
+    box-shadow: inset 0 1px 0 var(--sheen-edge), 0 2px 8px -4px rgba(10, 14, 26, .18);
 }
 
 /* --- Media frames ---------------------------------------------------------

@@ -253,10 +253,14 @@
     transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
                 color var(--dur-2) var(--ease);
 }
+/* The label reads --pill-fg, not #fff. On paper --blue is #1652e0 and the
+   label is white at 6.33:1; on ink --blue remaps to mint and a white label
+   lands at 1.6:1, which inc/tools/shoot.mjs failed this rule on. Same
+   inversion the primary button makes, for the same reason. */
 .st-step.is-active .st-step-num {
     background: var(--blue);
     border-color: var(--blue);
-    color: #fff;
+    color: var(--pill-fg, #fff);
 }
 .st-step-title {
     font-size: var(--fs-h4);
@@ -275,7 +279,7 @@
     opacity: .55;
     transition: opacity var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
 }
-.st-step.is-active .st-step-ico { opacity: 1; color: var(--orange-mid); }
+.st-step.is-active .st-step-ico { opacity: 1; color: var(--accent-fg); }
 .st-step-text  { font-size: var(--fs-sm); color: var(--ink-3); margin: 0; max-width: 46ch; }
 
 @media (max-width: 940px) {

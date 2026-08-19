@@ -56,6 +56,8 @@ require __DIR__ . '/partials/social-rail.php';
                 <p class="lead">
                     No call centre, no ticket queue, no account manager relaying messages to
                     someone you never meet. You get one point of contact who knows your project.
+                    We're based in <?= e(BUSINESS_GEO_LOCALITY) ?>, <?= e(BUSINESS_GEO_REGION) ?>,
+                    and work with businesses there and across <?= e(BUSINESS_GEO_COUNTRY) ?>.
                 </p>
             </div>
         </div>

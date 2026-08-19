@@ -1,588 +1,50 @@
 /* ==========================================================================
-   Signature effects — the pieces the three references are actually made of.
+   EFFECTS — what is left of them.
+   ==========================================================================
 
-     1. Device mockups, drawn in CSS (weightless, sharp at any DPR)
-     2. The fanned card grid that sits behind them, masked radially
-     3. The 3-D perspective carousel
-     4. The +01 numbered process row
-     5. The hand-drawn scribble accent
-     6. The WebGL canvas and its fallback contract
+   This file was 892 lines. It is now about a tenth of that, and the deletion
+   is the point rather than a side effect.
+
+   WHAT WENT, AND WHY
+   ------------------
+   .arc / .arc-tile        a 13-tile ring rotating around the hero. A fourth
+                           focal device on a page that should have one.
+   .carousel*              a 3-D perspective carousel. A fifth.
+   .app-stage / .app-panel a device mockup carrying an "LCP 1.2s / 88%" panel
+                           that was hardcoded and unverified.
+   .device-laptop/-phone   mockup chrome for that stage.
+   .three-stage / .hero-3d / .gl-host / .gl-still
+                           the previous build ran a three.js stage AND a WebGL
+                           point cloud AND the ring AND the carousel. There is
+                           now one object, one canvas, one still, and its
+                           styling lives in css/pages/home.css where the
+                           composition it belongs to lives.
+   .head-3d                a decorative object floating in every inner page's
+                           header. Three-dimensional work is allowed in three
+                           places on this site — the hero, the exploded
+                           assembly and the close — and a page head is not one
+                           of them.
+   .scribble / .spark      hand-drawn marks in the retired orange. A firm
+                           asking a business owner to trust it with their
+                           checkout does not underline its headings by hand.
+   .t-blue/.t-deep/.t-ink/.t-orange/.t-tint
+                           tints for the ring tiles.
+   .glow-blue, .badge-glass, .cap-*
+                           glow and glass. Both retired with the dark edition.
+
+   Grep before restoring any of them: data-carousel, data-gl and data-cursor
+   have no handlers left either.
    ========================================================================== */
 
 /* ==========================================================================
-   1. Devices
+   The numbered process row (+01 … +05)
+
+   Used by service.php and case-studies.php. It reads --accent-fg rather than
+   a literal, so it is correct on paper AND inside a chapter with no override
+   at all — which is what the two hardcoded orange rules underneath it used to
+   be doing by hand, one of them duplicated.
    ========================================================================== */
-.device { position: relative; flex: none; }
 
-/* --- Laptop ------------------------------------------------------------- */
-.device-laptop { width: min(100%, 720px); }
-.device-laptop .device-lid {
-    position: relative;
-    border-radius: 14px 14px 4px 4px;
-    background: linear-gradient(160deg, #2b3040 0%, #14171f 60%);
-    padding: 13px 13px 16px;
-    box-shadow: var(--sh-4);
-}
-.device-laptop .device-screen {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    border-radius: 6px;
-    overflow: hidden;
-    /* A soft brand wash rather than flat grey, so the mockup reads as a screen
-       even before a capture is dropped into it. */
-    background:
-        radial-gradient(120% 90% at 20% 0%, #ffffff 0%, var(--paper-2) 55%, var(--paper-3) 100%);
-}
-.device-laptop .device-screen img,
-.device-laptop .device-screen video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-}
-/* The camera dot */
-.device-laptop .device-lid::before {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 50%;
-    translate: -50% 0;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #3d4356;
-}
-.device-laptop .device-base {
-    height: 13px;
-    /* The base is wider than the lid, as a real laptop is. Kept small enough
-       that the bleed stays inside the hero's clip at 390px. */
-    margin-inline: -4%;
-    border-radius: 0 0 12px 12px;
-    background: linear-gradient(180deg, #d5dae5 0%, #a9b1c2 55%, #8d95a8 100%);
-    box-shadow: 0 14px 26px rgba(10, 14, 26, .22);
-    position: relative;
-}
-/* The notch on the front edge */
-.device-laptop .device-base::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    translate: -50% 0;
-    width: 14%;
-    height: 5px;
-    border-radius: 0 0 6px 6px;
-    background: rgba(10, 14, 26, .22);
-}
-
-/* --- Phone -------------------------------------------------------------- */
-.device-phone { width: min(100%, 250px); }
-.device-phone .device-body {
-    position: relative;
-    border-radius: 38px;
-    padding: 9px;
-    background: linear-gradient(160deg, #33394a 0%, #12151d 55%, #232835 100%);
-    box-shadow: var(--sh-4), 0 0 0 1px rgba(255, 255, 255, .06) inset;
-}
-.device-phone .device-screen {
-    position: relative;
-    aspect-ratio: 9 / 19.5;
-    border-radius: 30px;
-    overflow: hidden;
-    background:
-        radial-gradient(120% 60% at 50% 0%, #ffffff 0%, var(--paper-2) 60%, var(--paper-3) 100%);
-}
-.device-phone .device-screen img,
-.device-phone .device-screen video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-}
-/* Dynamic-island style pill */
-.device-phone .device-body::before {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    top: 20px;
-    left: 50%;
-    translate: -50% 0;
-    width: 62px;
-    height: 18px;
-    border-radius: var(--r-pill);
-    background: #0b0d12;
-}
-/* Side button */
-.device-phone .device-body::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 27%;
-    width: 2px;
-    height: 52px;
-    border-radius: 2px;
-    background: #3a4152;
-}
-
-/* ==========================================================================
-   2. The capabilities ring, and the app stage
-
-   THE RING
-   It began life wrapped around the hero headline and only covered 240 degrees,
-   because the bottom third had to stay clear for the call to action. It now has
-   a section of its own, so it closes: thirteen tiles at 360/13 = 27.7deg.
-
-   Placement is one transform per tile and needs no JavaScript at all:
-
-       translate(rx*sin(a), -ry*cos(a)) rotate(a)      a = n * step
-
-   with `n` running -6..+6 from PHP. Tiles are NOT counter-rotated — they tilt
-   with the ring, which is what makes it read as a ring rather than as a row
-   bent into a curve. Only their CONTENTS come back upright.
-
-   Two moves, on different elements on purpose. The ring carries data-fx="spin"
-   so the whole thing turns as the section passes. Each TILE deals itself in on
-   its own view timeline: because the parent has already applied the placement
-   transform, an equal and opposite offset in the keyframe lands the tile back
-   on the pivot, so the tiles fly out of the middle along their own spokes
-   without one hard-coded coordinate.
-   ========================================================================== */
-.hero-stage {
-    position: relative;
-    display: grid;
-    place-items: center;
-    isolation: isolate;
-    /* Tall enough to hold the ring of objects around the words. The two-column
-       split this replaces put the object beside the text; Naveen asked for the
-       text back in the CENTRE with the models around it, which needs height on
-       both sides of the type rather than width next to it. */
-    min-height: clamp(480px, 30vw + 260px, 700px);
-}
-
-.cap-stage {
-    position: relative;
-    display: grid;
-    place-items: center;
-    isolation: isolate;
-    /* Tall enough for the ring's vertical diameter (2 x --ry) plus one tile, so
-       the top and bottom of the circle are never clipped by the section. */
-    min-height: clamp(520px, 46vw + 240px, 920px);
-}
-.cap-glow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        radial-gradient(ellipse 40% 34% at 50% 50%, rgba(22, 82, 224, .11), transparent 70%),
-        radial-gradient(ellipse 24% 22% at 22% 24%, rgba(255, 107, 53, .09), transparent 72%);
-}
-.cap-head {
-    position: relative;
-    z-index: 1;
-    max-width: 34rem;
-    text-align: center;
-}
-/* The underline on the last word of the h2 is drawn BELOW the baseline, so the
-   heading's own box does not account for it and the lead's first line lands on
-   the stroke. The gap is set here rather than by growing the h2's margin, which
-   would also push the ring's centre off the type. */
-.cap-head .lead { margin: var(--sp-5) auto 0; }
-.cap-head .btn { margin-top: var(--sp-5); }
-
-.arc {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    /* An ELLIPSE, not a circle. A circle wide enough to clear the statement in
-       the middle is also tall enough to make the section a screen and a half of
-       mostly empty paper; the reference ring is markedly wider than it is tall. */
-    --rx: clamp(230px, 36vw, 620px);
-    --ry: clamp(190px, 24vw, 400px);
-    /* 360 / 13. The one number in this file that is not a taste decision. */
-    --step: 27.7deg;
-    --tile: clamp(64px, 3.8vw + 44px, 128px);
-    --pivot-y: 50%;
-    transform-origin: 50% 50%;
-}
-.arc-cell {
-    position: absolute;
-    left: 50%;
-    top: var(--pivot-y);
-    width: var(--tile);
-    aspect-ratio: 1;
-    margin: calc(var(--tile) / -2);
-    --a: calc(var(--n) * var(--step));
-    transform:
-        translate(calc(var(--rx) * sin(var(--a))), calc(var(--ry) * cos(var(--a)) * -1))
-        rotate(var(--a));
-}
-/* trigonometric functions are CSS Values 4 — Chrome 111, Safari 15.4,
-   Firefox 118, so 2023 everywhere. Older engines drop the whole declaration
-   and would stack all thirteen tiles on the pivot, which is why the circular
-   form is spelled out rather than left to chance. */
-@supports not (width: calc(1px * sin(90deg))) {
-    .arc-cell {
-        transform: rotate(var(--a)) translateY(calc(var(--ry) * -1));
-    }
-}
-.arc-tile {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 8%;
-    border-radius: clamp(14px, 22%, 30px);
-    overflow: hidden;
-    background: var(--paper-3);
-    color: #fff;
-    box-shadow: 0 12px 30px -14px rgba(10, 14, 26, .40), 0 2px 6px rgba(10, 14, 26, .07);
-}
-.arc-inner {
-    display: grid;
-    justify-items: center;
-    gap: 8%;
-    width: 100%;
-    /* --a is set on .arc-cell and custom properties inherit, so the exact
-       counter-angle is available here without repeating the arithmetic. */
-    transform: rotate(calc(var(--a) * -1));
-}
-.arc-ico {
-    width: 34%;
-    height: auto;
-    aspect-ratio: 1;
-    stroke-width: 1.7;
-    opacity: .95;
-}
-.arc-label {
-    font-size: clamp(8px, 9.5%, 13px);
-    font-weight: var(--fw-semi);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    line-height: 1;
-    text-align: center;
-    opacity: .88;
-}
-/* Kept for the day a tile carries a photograph again. */
-.arc-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-/* The ring's colour rhythm. t-tint is the one light tile, so it carries ink
-   rather than white — 16:1 instead of the 1.1:1 white-on-pale it would be
-   otherwise, which is the whole reason it is spelled out separately. */
-.arc-tile.t-blue   { background: linear-gradient(150deg, #2a6bf0, var(--blue-deep)); }
-.arc-tile.t-deep   { background: linear-gradient(150deg, var(--blue-deep), #0a1f4d); }
-.arc-tile.t-ink    { background: linear-gradient(150deg, #2b3448, var(--ink)); }
-.arc-tile.t-orange { background: linear-gradient(150deg, #ff8a5c, var(--orange-mid)); }
-.arc-tile.t-tint   { background: linear-gradient(150deg, #ffffff, var(--blue-tint-2)); color: var(--ink); }
-.arc-tile.t-tint .arc-ico { opacity: .8; }
-
-/* The deal. It USED to be time-based, because the ring was above the fold and
-   scrubbing an entrance against a scroll position nobody had moved yet would
-   simply mean it never played. Below the fold that inverts, and the scroll
-   timeline is now the right driver.
-
-   Each tile runs on its OWN view(), not on a shared named timeline. That is
-   deliberate twice over: the stagger then comes from the ring's own geometry —
-   the tiles at the top of the circle enter the viewport before the ones at the
-   bottom, so it unrolls without a single delay being written — and, more
-   importantly, an unresolved timeline reference with fill-mode:both pins an
-   element at its FROM state forever. FROM here is scale(.2) at opacity 0. A
-   self-contained view() cannot fail to resolve; a --named one can. */
-@supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-        .arc-tile {
-            animation: arc-deal 1ms linear both;
-            animation-timeline: view();
-            animation-range: entry 0% cover 26%;
-        }
-    }
-}
-@keyframes arc-deal {
-    /* The parent has already carried the tile out along its spoke, so an equal
-       and opposite offset here lands it back on the pivot — the tiles fly out
-       of the middle of the headline without one hard-coded coordinate. */
-    from {
-        opacity: 0;
-        transform: translate(calc(var(--rx) * sin(var(--a)) * -1), calc(var(--ry) * cos(var(--a)))) scale(.2);
-    }
-    to { opacity: 1; transform: none; }
-}
-
-/* Behind the ring: a soft bloom that gives the white ground some depth and
-   keeps the headline sitting on light rather than on nothing. */
-.hero-glow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        radial-gradient(ellipse 46% 40% at 50% 44%, rgba(22, 82, 224, .13), transparent 68%),
-        radial-gradient(ellipse 30% 26% at 74% 30%, rgba(255, 107, 53, .10), transparent 70%);
-}
-
-/* The hero once carried three small drawn objects — a wireframe cube, a </>
-   pair and a terminal caret — on the continuous drift. They were there to give
-   a flat point cloud some depth. The cloud is now a lit glass knot orbited by
-   twenty-two real solids, and the drawn ones read as clip art stuck on top of
-   it, so they are gone rather than retuned. Two languages competing in one
-   frame is worse than either alone.
-   -------------------------------------------------------------------------- */
-
-/* ==========================================================================
-   2b. App stage — the laptop and the phone arriving from the two sides
-
-   Position is set with the `translate` property and motion with `transform`,
-   which is not a stylistic split. css/06-motion.css animates `transform`, and
-   the freeze stylesheets in inc/tools/*.mjs reset `transform` to none. If the
-   resting offsets lived in `transform` too, both the animation and the
-   screenshot freeze would erase them and the three objects would stack dead
-   centre on top of each other.
-   ========================================================================== */
-.app-stage {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: min(100%, 940px);
-    margin-inline: auto;
-    min-height: clamp(300px, 16rem + 20vw, 520px);
-    isolation: isolate;
-}
-.app-stage > * { grid-area: 1 / 1; }
-
-.app-glow {
-    width: min(100%, 720px);
-    aspect-ratio: 16 / 9;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at center, rgba(22, 82, 224, .16), transparent 66%);
-    z-index: -1;
-}
-
-.app-stage .device-laptop {
-    width: min(78%, 660px);
-    translate: -6% 0;
-    z-index: 1;
-}
-.app-stage .device-phone {
-    width: clamp(112px, 8rem + 6vw, 194px);
-    translate: 62% 16%;
-    z-index: 3;
-}
-/* A real fragment of the pricing table, floating in front of the laptop lid —
-   the thing that makes the composition read as software rather than as a photo
-   of hardware. */
-.app-panel {
-    z-index: 2;
-    translate: -68% 26%;
-    width: clamp(180px, 12rem + 6vw, 268px);
-    padding: var(--sp-4) var(--sp-5);
-    background: rgba(255, 255, 255, .86);
-    -webkit-backdrop-filter: blur(14px) saturate(1.3);
-    backdrop-filter: blur(14px) saturate(1.3);
-    border: 1px solid rgba(255, 255, 255, .9);
-    border-radius: var(--r-lg);
-    box-shadow: var(--sh-3);
-    text-align: left;
-}
-.app-panel-label {
-    font-size: var(--fs-2xs);
-    letter-spacing: var(--tr-eyebrow);
-    text-transform: uppercase;
-    font-weight: var(--fw-semi);
-    color: var(--ink-3);
-}
-.app-panel-value {
-    font-family: var(--font-display);
-    font-size: var(--fs-h3);
-    line-height: 1;
-    letter-spacing: var(--tr-display);
-    color: var(--ink);
-    margin-top: 2px;
-}
-.app-panel-bar {
-    height: 6px;
-    border-radius: var(--r-pill);
-    background: var(--paper-3);
-    margin-top: var(--sp-3);
-    overflow: hidden;
-}
-.app-panel-bar > span {
-    display: block;
-    height: 100%;
-    width: var(--w, 68%);
-    border-radius: inherit;
-    background: linear-gradient(90deg, var(--blue), var(--blue-deep));
-}
-.app-panel-foot {
-    margin-top: var(--sp-3);
-    font-size: var(--fs-2xs);
-    color: var(--ink-3);
-}
-
-@media (max-width: 760px) {
-    /* Stacked, and no horizontal travel: on a 390px screen an object arriving
-       from 34% off-canvas is off-screen for most of its journey, so it reads as
-       a pop-in rather than as an arrival. */
-    .app-stage { min-height: 0; }
-    .app-stage .device-laptop { width: 100%; translate: 0 -12%; }
-    .app-stage .device-phone  { translate: 34% 34%; }
-    .app-panel { translate: -34% 40%; padding: var(--sp-3) var(--sp-4); }
-    .app-stage [data-fx="in-left"],
-    .app-stage [data-fx="in-right"] { --travel: 12%; --turn: 2deg; }
-}
-
-/* ==========================================================================
-   3. The 3-D perspective carousel
-   ========================================================================== */
-.carousel {
-    position: relative;
-    --radius: 760px;
-    --step: 40deg;
-    --rot: 0deg;
-}
-
-.carousel-scene {
-    position: relative;
-    height: clamp(360px, 21rem + 16vw, 580px);
-    perspective: 1800px;
-    perspective-origin: 50% 46%;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-.carousel-ring {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-    transform: translateZ(calc(var(--radius) * -1)) rotateY(var(--rot));
-    transition: transform 700ms var(--ease-out);
-}
-.carousel.is-dragging .carousel-ring { transition: none; }
-
-.carousel-cell {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: clamp(210px, 12rem + 8vw, 340px);
-    aspect-ratio: 3 / 4;
-    margin: 0;
-    translate: -50% -50%;
-    transform: rotateY(calc(var(--n) * var(--step))) translateZ(var(--radius));
-    border-radius: var(--r-lg);
-    overflow: hidden;
-    background: var(--paper-3);
-    box-shadow: var(--sh-3);
-    backface-visibility: hidden;
-}
-.carousel-cell img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-/* The scrim. Sized so the label always sits on ink rather than on whatever
-   photograph or brand tint the cell happens to carry — white on --orange
-   alone would be 2.84:1. */
-.carousel-cell::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg,
-        rgba(10, 14, 26, 0) 30%,
-        rgba(10, 14, 26, .55) 62%,
-        rgba(10, 14, 26, .92) 100%);
-}
-.carousel-cell-label {
-    position: absolute;
-    z-index: 2;
-    left: var(--sp-5);
-    right: var(--sp-5);
-    bottom: var(--sp-5);
-    color: #fff;
-}
-.carousel-cell-label .tag { color: rgba(255, 255, 255, .86); }
-.carousel-cell-label h3 { color: #fff; font-size: var(--fs-h4); margin-top: 4px; }
-
-/* Only the cell facing the viewer is interactive, so hidden cells cannot be
-   clicked or tabbed to through the ring. */
-.carousel-cell[aria-hidden="true"] { pointer-events: none; }
-
-.carousel-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--sp-4);
-    margin-top: var(--sp-6);
-}
-.carousel-nav {
-    display: grid;
-    /* The sprite has one chevron; prev is the same glyph turned around, so the
-       icon set does not need a mirrored twin. */
-    place-items: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 1px solid var(--line-strong);
-    color: var(--ink);
-    transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
-                transform var(--dur-2) var(--ease);
-}
-.carousel-nav:hover { background: var(--ink); border-color: var(--ink); color: #fff; transform: translateY(-2px); }
-.carousel-nav[data-carousel="prev"] .icon { transform: rotate(180deg); }
-.carousel-dots { display: flex; gap: var(--sp-2); }
-.carousel-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--line-strong);
-    transition: background var(--dur-2) var(--ease), width var(--dur-2) var(--ease);
-}
-.carousel-dot.is-on { background: var(--ink); width: 26px; border-radius: var(--r-pill); }
-
-/* No 3-D on phones — it becomes an honest snap strip, which is what a thumb
-   expects anyway. */
-@media (max-width: 760px), (prefers-reduced-motion: reduce) {
-    .carousel-scene {
-        height: auto;
-        perspective: none;
-        display: flex;
-        gap: var(--sp-4);
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        padding-bottom: var(--sp-3);
-        -webkit-mask-image: none;
-        mask-image: none;
-        scrollbar-width: none;
-    }
-    .carousel-scene::-webkit-scrollbar { display: none; }
-    .carousel-ring {
-        position: static;
-        display: flex;
-        gap: var(--sp-4);
-        transform: none;
-        transform-style: flat;
-    }
-    .carousel-cell {
-        /* relative, NOT static: .carousel-cell-label is absolute, so a static
-           cell sends every label to the .carousel ancestor and all five stack
-           on top of each other. */
-        position: relative;
-        translate: none;
-        transform: none;
-        width: min(74vw, 300px);
-        flex: none;
-        scroll-snap-align: center;
-        backface-visibility: visible;
-    }
-    .carousel-cell[aria-hidden="true"] { pointer-events: auto; }
-    /* The ring's padding copies exist to close a circle. There is no circle in
-       the flat strip, so they would just be duplicate cards to swipe past. */
-    .carousel-cell[data-clone] { display: none; }
-    .carousel-controls { display: none; }
-}
-
-/* ==========================================================================
-   4. Numbered process row (+01 … +05)
-   ========================================================================== */
 .steps-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
@@ -590,303 +52,104 @@
     border-top: 1px solid var(--line);
     padding-top: var(--sp-6);
 }
-.step-item { display: flex; flex-direction: column; gap: var(--sp-2); position: relative; }
+.step-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    position: relative;
+}
 .step-num {
-    font-family: var(--font-display);
-    font-size: var(--fs-sm);
-    font-weight: var(--fw-bold);
-    /* --orange-ink on light (4.9:1); the bright --orange is 2.8:1 here and is
-       restored on the dark bands below, where it measures 6.8:1. */
-    color: var(--orange-ink);
-    letter-spacing: 0.02em;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    font-weight: 500;
+    color: var(--accent-fg);
     font-variant-numeric: tabular-nums;
 }
-.step-title { font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-base); }
-.step-text  { font-size: var(--fs-xs); color: var(--ink-3); margin: 0; line-height: 1.6; }
-.step-time {
-    font-size: var(--fs-2xs);
+.step-title {
+    font-family: var(--font-display);
     font-weight: var(--fw-semi);
-    letter-spacing: var(--tr-eyebrow);
-    text-transform: uppercase;
-    color: var(--ink-3);
+    color: var(--on-surface);
+    font-size: var(--fs-base);
 }
-.band-blue .steps-row, .band-ink .steps-row { border-color: var(--on-dark-line); }
-.band-blue .step-title, .band-ink .step-title { color: #fff; }
-.band-blue .step-text, .band-ink .step-text,
-.band-blue .step-time, .band-ink .step-time { color: var(--on-dark-2); }
-.band-blue .step-num { color: #fff; }
-.band-ink .step-num { color: var(--orange); }   /* 6.8:1 on ink */
-.band-ink  .step-num { color: var(--orange); }
+.step-text {
+    font-size: var(--fs-xs);
+    color: var(--on-surface-3);
+    margin: 0;
+    line-height: 1.6;
+}
+.step-time {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--on-surface-3);
+}
+.band-ink .steps-row { border-color: var(--chapter-line); }
 
 /* ==========================================================================
-   5. Scribble + underline accents
+   The emphasis mark
+
+   Replaces .scribble. A single hairline rule under the phrase, in the one
+   accent, drawn on scroll where the browser supports a view timeline and
+   simply present where it does not.
+
+   It is a RULE, not a drawing: the previous mark was a hand-sketched curve,
+   which is a register that belongs to an illustrator's portfolio rather than
+   to an engineering practice.
    ========================================================================== */
-.scribble { position: relative; display: inline-block; }
-.scribble > svg {
+
+.mark {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+}
+.mark::after {
+    content: '';
     position: absolute;
-    left: -6%;
-    right: -6%;
-    bottom: -0.28em;
-    width: 112%;
-    height: 0.42em;
-    color: var(--orange);
-    overflow: visible;
-    pointer-events: none;
+    left: 0;
+    right: 0;
+    bottom: -0.12em;
+    height: 2px;
+    background: var(--accent-fg);
+    transform-origin: left center;
 }
-.scribble > svg path {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 7;
-    stroke-linecap: round;
-    stroke-dasharray: var(--len, 400);
-    stroke-dashoffset: 0;
-}
+
 @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-        .scribble > svg path {
-            animation: scribble-draw 1ms linear both;
+        .mark::after {
+            animation: markDraw 1ms linear both;
             animation-timeline: view();
-            animation-range: entry 20% cover 42%;
+            animation-range: entry 20% cover 40%;
         }
     }
 }
-@keyframes scribble-draw {
-    from { stroke-dashoffset: var(--len, 400); }
-    to   { stroke-dashoffset: 0; }
-}
-
-/* A small hand-drawn spark, the kind sitting beside the reference headline */
-.spark {
-    position: absolute;
-    width: 34px;
-    height: 34px;
-    color: var(--orange);
-    pointer-events: none;
+@keyframes markDraw {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
 }
 
 /* ==========================================================================
-   6. WebGL canvas — and the fallback that the previous build promised in JS
-      but never actually styled.
+   Media frames
+
+   photo() returns an empty string when a file is missing, so a figure with no
+   picture in it has to stand on its own rather than showing a grey slab.
    ========================================================================== */
-.gl-host {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-width: 520px;
-    margin-inline: auto;
-    border-radius: var(--r-2xl);
-    overflow: hidden;
-    background:
-        radial-gradient(70% 70% at 50% 40%, #ffffff 0%, var(--paper-2) 62%, var(--paper-3) 100%);
-    box-shadow: var(--sh-2);
-}
-.gl-host canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 600ms var(--ease);
-}
-/* Only once a frame has actually painted does the canvas take over. */
-.gl-host.is-gl-live canvas { opacity: 1; }
 
-/* The still that sits underneath: a designed object in its own right, so a
-   device without WebGL2 gets a finished page rather than an empty box. */
-.gl-still {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    transition: opacity 600ms var(--ease);
-}
-/* WebGL2 missing, context refused, or a shader that would not compile. gl.js
-   has written this class since it was first authored and nothing consumed it,
-   so the "flat gradient fallback" its docblock promises was never actually
-   reachable. The still is already the fallback; this makes it explicit, and
-   removes the canvas from the box so it cannot eat pointer events. */
-.gl-host.is-gl-off canvas { display: none; }
-.gl-host.is-gl-off .gl-still { opacity: 1; }
-
-.gl-host.is-gl-live .gl-still { opacity: 0; }
-
-/* ==========================================================================
-   7. Three.js stage
-   ========================================================================== */
-.three-stage {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    width: 100%;
-    border-radius: var(--r-2xl);
-    overflow: hidden;
-    background:
-        radial-gradient(80% 80% at 50% 22%, #ffffff 0%, var(--paper-2) 58%, var(--paper-3) 100%);
-    box-shadow: var(--sh-2);
-}
-.three-stage canvas {
-    position: absolute;
-    inset: 0;
-    width: 100% !important;
-    height: 100% !important;
-    opacity: 0;
-    transition: opacity 700ms var(--ease);
-}
-.three-stage.is-3d-live canvas { opacity: 1; }
-.three-stage-still {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: var(--sp-7);
-    transition: opacity 700ms var(--ease);
-}
-.three-stage.is-3d-live .three-stage-still { opacity: 0; }
-.three-stage-still img { width: 100%; height: 100%; object-fit: contain; }
-
-/* --------------------------------------------------------------------------
-   7a. THE HERO'S 3-D STAGE — and why it lives after the base rule
-
-   .three-stage is a CARD on the P.E.A.C.E. section: 4:3, rounded, on its own
-   gradient, with a shadow. In the hero it has to be none of those things.
-
-   These are single-class selectors, the same specificity as the rules above,
-   so they only win by coming LATER IN THE FILE. Written up beside the rest of
-   the hero they lose silently, and the failure is not subtle — the base rule
-   sets aspect-ratio, so the stage takes a row of the grid and pushes the
-   headline most of a screen down the page. That exact bug shipped once
-   already this pass. Do not move this block up.
-   -------------------------------------------------------------------------- */
-.hero-3d {
-    /* An overlay again, and this time it needs NO mask and no paper bloom
-       behind the words. That was the flaw in every previous attempt: one object
-       centred behind the type meant each fix for legibility was also a fix
-       against the object. The composition now has an EMPTY MIDDLE by
-       construction — every model is placed outside the headline's rectangle in
-       js/stage3d.js — so the two simply do not overlap. */
-    position: absolute;
-    inset: -10% -6% -6%;
-    z-index: 0;
-    aspect-ratio: auto;
-    width: auto;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    overflow: visible;
-    pointer-events: none;
-}
-.hero-3d .three-stage-still { padding: 10% 22%; opacity: .8; }
-
-@media (max-width: 980px) {
-    .hero-3d { inset: -6% -10% -4%; }
-}
-@media (max-width: 760px) {
-    /* GONE on a phone, and that is the right answer rather than a compromise.
-
-       The camera frames the scene by HEIGHT, so a tall narrow canvas crops the
-       sides away — the scatter is 13.5 units wide and a 390px viewport shows
-       maybe four of them, all clipped. A phone was therefore downloading
-       ~730 KB of three.js to render a few specks in the margins.
-
-       display:none also stops the download rather than merely hiding it: the
-       IntersectionObserver in js/stage3d.js never fires for an element with no
-       layout box, so the dynamic import is never reached. .head-3d has done
-       the same below 560px since it was written.
-
-       What is left is a centred headline on textured paper, which is a good
-       phone hero on its own terms and not a gap where something should be. */
-    .hero-3d { display: none; }
-}
-
-/* ==========================================================================
-   8. Media frames
-   ========================================================================== */
 .figure {
     position: relative;
-    border-radius: var(--r-xl);
+    border-radius: var(--r-lg);
     overflow: hidden;
     background: var(--paper-3);
-    box-shadow: var(--sh-3);
+    box-shadow: var(--elevate-2);
 }
-.figure img { width: 100%; height: 100%; object-fit: cover; }
-/* photo() returns an empty string when the file is missing, so a figure with
-   no picture in it has to stand on its own rather than showing a grey slab. */
+.figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .figure:not(:has(img)) {
-    background:
-        radial-gradient(100% 90% at 20% 0%, var(--blue-tint-2) 0%, var(--paper-3) 55%, var(--paper-2) 100%);
+    background: linear-gradient(160deg, var(--paper-2), var(--paper-3));
 }
-.figure-tall { aspect-ratio: 3 / 4; }
 .figure-wide { aspect-ratio: 16 / 10; }
-.figure-square { aspect-ratio: 1; }
 
-/* Positional only. It used to set a white background too, which overrode
-   .badge-ink further up the cascade and produced white text on a white pill. */
-.figure-badge {
-    position: absolute;
-    left: var(--sp-4);
-    bottom: var(--sp-4);
-    z-index: 2;
-    box-shadow: var(--sh-2);
-}
-.badge-glass {
-    background: rgba(255, 255, 255, .94);
-    color: var(--ink);
-    backdrop-filter: blur(10px);
-}
-
-/* A soft blue glow behind a floated visual */
-.glow-blue { position: relative; }
-.glow-blue::before {
-    content: '';
-    position: absolute;
-    inset: 12% -10% -14% -10%;
-    z-index: -1;
-    border-radius: 50%;
-    background: radial-gradient(50% 50% at 50% 50%, rgba(22, 82, 224, .22), rgba(22, 82, 224, 0) 70%);
-    filter: blur(30px);
-}
-
-/* ==========================================================================
-   9. The secondary pages' head object
-
-   Same overrides .hero-3d needs, and for the same reason: .three-stage is a
-   card on the P.E.A.C.E. section and these only beat it by sitting later in
-   the file. See the note at section 7a.
-
-   Held to the right and kept off the type entirely rather than faded through
-   it. A page head is two columns of prose with no empty middle to open a hole
-   in, so the object takes the margin instead of the centre.
-   ========================================================================== */
-.head-3d {
-    position: absolute;
-    top: calc(var(--header-h) * -0.35);
-    right: -12%;
-    bottom: -26%;
-    left: auto;
-    z-index: 0;
-    width: min(44%, 560px);
-    aspect-ratio: auto;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    overflow: visible;
-    pointer-events: none;
-    opacity: .62;
-    /* Falls away towards the text side, so the object never reaches the column
-       it sits beside however long that column's lines run. */
-    mask: linear-gradient(to left, #000 46%, transparent 98%);
-}
-.head-3d .three-stage-still { padding: 22%; opacity: .7; }
-
-/* The head's own content has to sit in front of it. .page-head is already
-   position:relative, so this is a stacking order fix and nothing else. */
+/* The page head's own content sits in front of whatever the head paints.
+   .page-head is already position:relative (css/08-ground.css), so this is a
+   stacking-order guarantee and nothing else. */
 .page-head > .container { position: relative; z-index: 1; }
-
-@media (max-width: 900px) {
-    /* At this width the head is one column that uses the full measure, so
-       there is no margin left for the object to occupy. It becomes a presence
-       behind the top of the page rather than a shape beside it. */
-    .head-3d { width: 82%; right: -26%; opacity: .42; }
-}
-@media (max-width: 560px) {
-    .head-3d { display: none; }
-}

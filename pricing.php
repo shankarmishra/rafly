@@ -80,6 +80,13 @@ require __DIR__ . '/partials/social-rail.php';
 
     <section class="section-bot">
         <div class="container">
+            <?php /* Visually nothing changes — "Pricing" is already the page's
+               own eyebrow above the h1, so a second visible heading here would
+               be redundant to a sighted reader. But the three price-name h3s
+               below it were landing directly under the page h1 with nothing
+               in between, an h1 -> h3 skip that both a screen-reader outline
+               and inc/tools/seo-audit.mjs flag as broken structure. */ ?>
+            <h2 class="visually-hidden">Bundle packages</h2>
             <div class="grid grid-3 price-grid" data-r="group">
                 <?php foreach ($bundles as $i => $t) { require __DIR__ . '/partials/price-card.php'; } ?>
             </div>
@@ -96,7 +103,7 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="faq-card" data-r="rise">
                 <div class="faq-aside">
                     <p class="eyebrow">Before you ask</p>
-                    <h2>What a bundle <span class="scribble">actually covers<svg viewBox="0 0 300 24" aria-hidden="true" preserveAspectRatio="none"><path d="M4 17C58 6 120 4 178 8c38 3 74 6 118 3"/></svg></span></h2>
+                    <h2>What a bundle <span class="mark">actually covers</span></h2>
                     <p class="muted">The four questions that come up on almost every first call.</p>
                     <div class="faq-aside-actions">
                         <button type="button" class="btn btn-pill" data-modal-open="consultationModal">

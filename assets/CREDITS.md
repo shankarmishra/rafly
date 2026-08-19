@@ -17,22 +17,37 @@ written and dependency-free:
 | File | What it does |
 |---|---|
 | `js/smooth.js` | Inertial wheel scrolling. Stands down on `prefers-reduced-motion` and on coarse pointers. |
-| `js/motion.js` | Counters, word splitting, marquee duplication, and the IntersectionObserver reveal fallback. |
+| `js/motion.js` | Counters, word splitting, and the IntersectionObserver reveal fallback. |
 | `js/ui.js` | Header, dropdowns, drawer, modals, accordions, back-to-top, toasts, scroll spy. |
 | `js/forms.js` | Client-side validation, AJAX submission, CSRF rotation, anti-spam re-seeding. |
-| `js/carousel.js` | The 3-D perspective carousel. |
 | `js/scroll.js` | Active-step tracking for the sticky storytelling sections. |
-| `js/gl.js` | WebGL2 point-cloud renderer — the delivery-flow object. |
-| `js/stage3d.js` | The only file that touches three.js, and only if it is vendored. |
+| `js/assembly.js` | The signature object: geometry, materials, the exploded transform. Imports nothing. |
+| `js/studio.js` | The lighting rig, the ground and the camera path. Imports nothing. |
+| `js/stage3d.js` | The gates, the still hand-off and the scroll choreography. The only file that touches three.js. |
+| `js/interactions.js` | Magnetic buttons and the custom cursor. Gated on `pointer: fine` and stands down under `prefers-reduced-motion`. |
 | `js/pixel.js` | The Meta Pixel bootstrap (the one third-party origin on the site). |
+
+Two files were **deleted** in the Machined Paper rebuild, not merely unhooked:
+`js/gl.js` (a 959-line WebGL2 point-cloud renderer, whose one host element
+shipped a visibly empty 400px frame in full-page capture) and `js/carousel.js`
+(the 3-D perspective carousel). Both were competent and neither earned its
+place once the page had one object instead of several.
+
+`js/interactions.js` was deleted alongside them and has been **reinstated**. The
+argument for removing it — that a firm asking a business owner to trust it with
+their checkout does not need the pointer to behave unusually — lost to a direct
+design decision: the approved direction calls for magnetic buttons and a custom
+cursor, and both are in it. The file is recorded here rather than left untracked
+so the reversal is on the record instead of being quietly contradicted by a file
+sitting in the working tree.
 
 > **Technique references, not vendored code.** Open-source projects studied for
 > *how* an effect is built and then re-implemented here from scratch:
 > [Lenis](https://github.com/darkroomengineering/lenis) (MIT) for the
 > smooth-scroll integration rules in `js/smooth.js`, and the classic CSS 3-D
 > carousel (David DeSandro's *Intro to CSS 3D transforms*) for the ring geometry
-> in `css/07-fx.css` and `js/carousel.js`. No source from either ships; nothing
-> is loaded from a CDN.
+> that survives in `css/07-fx.css` after `js/carousel.js` itself was deleted. No
+> source from either ships; nothing is loaded from a CDN.
 
 **three.js IS vendored**, self-hosted so `script-src 'self'` needs no change:
 
@@ -42,56 +57,54 @@ written and dependency-free:
 | `vendor/three/three.core.min.js` | three.js r185.1 | MIT | 376 KB |
 | `vendor/three/RoomEnvironment.js` | three.js addon | MIT | 5 KB |
 
-`js/stage3d.js` is the only file that touches it, and it dynamic-imports only
-when a `[data-stage3d]` host comes within 300px of the viewport, WebGL2 exists,
-motion is not reduced, and the connection is neither Save-Data nor 2G. Any
-failure at all falls back silently to the designed still.
+**One host, on one page.** `[data-stage]` in `index.php` — the homepage hero and
+the exploded assembly, which are the same scene. Nothing else on the site loads
+three.js at all. It used to load on seven more pages, for a decorative object
+behind the page header; `partials/head-object.php` is now deliberately empty and
+records why.
 
-**Where it loads, and what that costs.** There are three hosts:
+`vendor/three/RoomEnvironment.js` was **deleted**. `js/studio.js` builds its own
+studio instead — a key softbox upper left, a broad fill opposite at about a
+quarter strength, a narrow rim behind, a wide overhead and a warm bounce card
+standing in for the page itself — as emissive rectangles in a small scene, which
+`PMREMGenerator` then prefilters into the environment map. RoomEnvironment is a
+generic room, and a generic room lighting a subject on a light ground is exactly
+what made the previous object resolve to flat grey plastic.
 
-| Host | Where | Object |
-|---|---|---|
-| `data-stage3d="hero"` | the homepage hero | browser window, phone, analytics card, shield, parcel, `< />`, chat bubble, database stack, plus connecting nodes — scattered around the centred headline |
-| `data-stage3d="head"` | seven secondary page heads | the same object, fewer parts, framed tighter |
-| `data-stage3d="peace"` | the P.E.A.C.E. section | five stacked rings and a glass core |
+**No HDRI was downloaded, and no RectAreaLight was vendored.** A physical
+material is mostly a mirror, and a mirror with nothing to reflect is flat grey
+however many lamps you add. The usual answers are a 1k `.hdr` from Poly Haven
+(two to three megabytes of float data, a loader and a licence row) or three.js's
+`RectAreaLight`, which renders nothing without `RectAreaLightUniformsLib` —
+roughly 150 KB of look-up-table data from the examples tree. An emissive
+rectangle inside a PMREM'd scene *is* a softbox: it gives area-lit diffuse
+shaping and a correctly shaped reflection in the brushed aluminium, which is the
+part you can actually see, for zero additional bytes.
 
-The hero object took four attempts. A ring of flat tiles was right but belonged
-elsewhere, and moved to `#capabilities`. A `js/gl.js` point cloud was rejected —
-dots have no surface, so nothing reflects, so it cannot look manufactured. A
-glass torus knot was rejected as generic, correctly: a knot is the default
-object of every 3-D demo and said nothing about this company. What is there now
-is built from the subject instead of from a geometry library — the things Rafly
-actually sells, arranged around the words rather than behind them, so the
-composition has an empty middle and the type needs no mask to stay readable.
-
-Three gates decide whether any of it is fetched:
+Four gates decide whether any of it is fetched:
 
 - **WebGL2 or nothing**, never under `prefers-reduced-motion`, never on
   Save-Data or an effectiveType at or below 2G.
-- **Never on a phone.** `.hero-3d` is `display: none` below 760px and
-  `.head-3d` below 560px. That is not merely hidden — an element with no layout
-  box never intersects, so the IntersectionObserver never fires and the dynamic
-  import is never reached. Measured: a 390px viewport requests **0** files from
-  `vendor/three/`; a 1440px one requests 3.
-- **Never during first paint.** The P.E.A.C.E. object is below the fold, so its
-  observer is the whole gate. The hero and the page heads are above it, so they
-  would otherwise land in the middle of the initial render; they wait for
-  `load` and then an idle callback (1200ms backstop). Both cross-fade in over a
-  designed still that is already on screen, so arriving a beat later costs
-  nothing visible.
+- **Never on a phone.** `js/stage3d.js` tests `matchMedia('(min-width: 761px)')`
+  explicitly and returns before the dynamic `import()`. It is deliberately NOT a
+  CSS `display: none`: a hidden canvas still costs the full download, and that
+  is precisely the regression the previous build shipped when a class got
+  renamed. Measured by `inc/tools/audit.mjs` — a 390px viewport requests **0**
+  files from `vendor/three/`, and the phone homepage totals 480 KB uncompressed
+  against a 600 KB budget.
+- **Never during first paint.** It waits for `load` and then an idle callback,
+  with a 1500ms backstop. The LCP element is the hero headline; the canvas must
+  never compete with it.
+- **Never as the visible asset.** The canvas cross-fades in over a pre-rendered
+  still already on screen showing the identical frame, so there is nothing to
+  see at the moment of the swap. Any failure — a caught import, a lost context —
+  removes `.is-live` and the still comes straight back.
 
-On a desktop that passes all three, the homepage is about **1.5 MB
-uncompressed**, of which roughly 1 MB is JavaScript and most of that is
-three.js. That is a real price and it is paid deliberately, for the first
-impression, on the devices that can afford it.
-
-**No HDRI was downloaded, deliberately.** A physical material is mostly a mirror,
-and a mirror with nothing to reflect is flat grey however many lamps you add — so
-the object needs an environment map. The usual answer is a 1k `.hdr` from Poly
-Haven: two to three megabytes of float data, plus a loader, plus a licence row.
-`RoomEnvironment` builds an equivalent studio lightbox out of emissive boxes at
-runtime and `PMREMGenerator` prefilters it into the same cube map, for 5 KB and
-no licence at all.
+On a desktop that passes all four, the homepage is about **1.54 MB
+uncompressed**, of which roughly 1 MB is JavaScript and most of that is three.js.
+Over the wire, with `mod_deflate` / `mod_brotli` from `.htaccess`, that is closer
+to 400 KB. It is a real price, paid deliberately, for one first impression, on
+the devices that can afford it.
 
 ## Fonts
 
@@ -115,88 +128,71 @@ carried attribution requirements.
 
 ## Imagery
 
-There are now twelve third-party photographs, all CC0, each listed below with
-its photographer and source. Everything else visual is drawn in CSS, generated
-by a tool in `inc/tools/`, or a screenshot of this site taken from this site.
+**There are no photographs on this site.**
 
-**The capabilities ring is drawn, not photographed, and that took two attempts
-to settle.** (It spent one pass in the hero before moving to its own section.) A CC0 search for digital-agency subjects returns a gas mask, a Twitch
-logo and a Burger King sign — the free-licence pools are not deep enough to
-curate thirteen coherent tiles from, and every near miss puts somebody else's
-trademark in the first thing a visitor sees. Screenshots of our own pages failed
-differently: this site is light and text-heavy, so a 760px square of it shrinks
-to grey mush inside a 124px tile. The tiles are now an icon and a word on a
-brand gradient — on-topic by construction, sharp at any pixel ratio, and neither
-bytes nor licence.
+That is a decision, not a gap. The build this replaces carried twenty-four CC0
+stock photographs — a conference room, a server rack, a warehouse, a cafe, a
+clothes rail — 6.1 MB, and they were the strongest images on the page. Every one
+of them showed some other company's premises, sitting under headings beginning
+with "Our", and five were declared in `sitemap.xml` with rich captions and
+submitted to Google Images under Rafly's own URLs. A reader assumes those are
+Rafly's clients. They were a search result.
+
+`assets/photos/` and `inc/tools/fetch-photos.mjs`'s output are gone. `photo()`
+still returns an empty string for a missing file, so every slot that referenced
+one degrades to its designed fallback rather than to a broken image.
+
+### What replaced them
 
 | Asset | Source | Licence | Notes |
 |---|---|---|---|
-| `assets/mockups/laptop-screen.*`, `phone-screen.*` | Original | Owned by Rafly | Real captures of `/pricing` and `/blog`, taken by `inc/tools/capture-mockups.mjs`. They sit inside the hero's CSS-drawn device frames. Re-run the tool and they update with the design. |
-| `uploads/seed-cover-*.png`, `uploads/seed-team-*.png` | Original | Owned by Rafly | Preview-seed art — brand gradient plates and monogram discs, generated by `inc/tools/build-seed-art.php`. Preview content only; see CONTENT-CHECKLIST.md. |
-| Device frames, the branching figure, the P.E.A.C.E. orbit, the service marks, the WebGL still | Original | Owned by Rafly | Pure CSS and the icon sprite. No image files at all. |
-| Delivery-flow object | Original | Owned by Rafly | WebGL2 point-cloud forms in `js/gl.js` (sphere, knot, helix, grid) |
-| `favicon.svg` | Original | Owned by Rafly | **Stopgap** — a plain "R" monogram, NOT the real Rafly mark. See below. |
+| `assets/render/core-hero-{560,900,1400}.webp` | Original | Owned by Rafly | The signature object, assembled. Rendered offline by `node inc/tools/render-stills.mjs` from the same `js/assembly.js` + `js/studio.js` the live scene uses. |
+| `assets/render/core-open-{900,1400}.webp` | Original | Owned by Rafly | The same object, exploded. Shown wherever the live scene never arrives. |
+| `assets/render/core-seq-{1,2,3}-640.webp` | Original | Owned by Rafly | The phone sequence: assembled, opening, open. This is the mobile experience, designed rather than degraded. |
+| `assets/render/core-og-1200.webp` | Original | Owned by Rafly | The homepage `og:image`, at the 1200x630 the meta tags promise. |
+| `uploads/seed-cover-*.png`, `uploads/seed-team-*.png` | Original | Owned by Rafly | Preview-seed art — gradient plates and monogram discs from `inc/tools/build-seed-art.php`. Preview content only. |
+| Service marks, the delivery spine, the comparison table | Original | Owned by Rafly | Pure CSS and the icon sprite. No image files at all. |
+| `favicon.svg` | Original | Owned by Rafly | **Stopgap** — a drawn "R" monogram, NOT the real Rafly mark. See below. |
 
-The previous build printed every picture as a two-colour halftone "plate" on a
-cream ground. That treatment, its source photographs and the tool that made them
-(`build-paper.php`) are all gone — the direction it belonged to was rejected.
+Every render carries `alt=""`. They illustrate the proposition; they do not
+document anything, and a decorative image with an invented caption is the same
+dishonesty as a stock photograph with one. `SITEMAP_SERVICE_IMAGES` in
+`inc/sitemap.php` is empty for the same reason, and its comment says so.
+
+The renders are regenerated, not hand-retouched:
+
+```
+php -S 127.0.0.1:8899 router.php
+node inc/tools/render-stills.mjs --base http://127.0.0.1:8899
+```
+
+The tool drives headless Chrome over the DevTools Protocol, imports the live
+scene modules, and lets Chrome itself encode the WebP through
+`canvas.toDataURL`. No image library, no build step, and no second copy of the
+scene that could drift from the one visitors see.
 
 ### If photographs are added later
 
-`assets/photos/` exists and is empty. Every slot that would hold a photograph
-already has a designed fallback, so the site is complete without them:
-`photo()` returns an empty string for a missing file, and the challenge cards,
-the carousel cells, the blog covers and the About figure all fall back to brand
-tints or drawn objects.
+Real ones only: Rafly's own team, its own premises, or a client's store that
+Rafly actually built and that the client has agreed to have shown. Those go in
+`assets/photos/`, credited in the table above, and `SITEMAP_SERVICE_IMAGES`
+becomes non-empty again — nothing downstream has to change.
 
-### The photographs
+**No stock portraits as people.** Testimonial and team avatars are monogram
+discs. Putting a stranger's face beside a sample quote presents an invented
+client as a real one.
 
-Every row below is generated by `node inc/tools/fetch-photos.mjs --list` from
-`assets/photos/credits.json`, which that tool writes from the same API response
-that chose the file — so the credit cannot drift from what was downloaded.
-
-| File | Photographer | Source | Licence |
-|---|---|---|---|
-| `assets/photos/about-desk.jpg` | [Green Chameleon](https://stocksnap.io/author/6745) | [stocksnap](https://stocksnap.io/photo/writing-drawing-8Y0EDX4VP9) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-cables.jpg` | [roland](https://www.flickr.com/photos/35034347371@N01) | [flickr](https://www.flickr.com/photos/35034347371@N01/84136) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-hourglass.jpg` | [Negative Space](https://stocksnap.io/author/4440) | [stocksnap](https://stocksnap.io/photo/clock-time-72R81VRMM0) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/challenge-lock.jpg` | [Jennifer Bourn](https://jenniferbourn.com) | [wordpress](https://wordpress.org/photos/photo/93624f06d0/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/service-content.jpg` | [Kristin Hardwick](https://www.kristinhardwick.com) | [stocksnap](https://stocksnap.io/photo/camera-tripod-LAYS8FQZWO) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/service-ecom.jpg` | U.S. Department of Agriculture | [rawpixel](https://www.rawpixel.com/image/3306152/free-photo-image-warehouse-logistics-delivery) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/service-marketing.jpg` | [Serpstat](https://serpstat.com/ru) | [stocksnap](https://stocksnap.io/photo/seo-ppc-9699Y6WKLD) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/service-security.jpg` | [D Coetzee](https://www.flickr.com/photos/29507259@N02) | [flickr](https://www.flickr.com/photos/29507259@N02/6271241131) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/service-web.jpg` | [Matthew Henry](https://stocksnap.io/author/200) | [stocksnap](https://stocksnap.io/photo/laptop-code-0KAT80KW5F) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/work-1.jpg` | [Wonderlane](https://www.flickr.com/photos/71401718@N00) | [flickr](https://www.flickr.com/photos/71401718@N00/5526839767) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/work-2.jpg` | [Artem Beliaikin](https://www.flickr.com/photos/157635012@N07) | [flickr](https://www.flickr.com/photos/157635012@N07/49174901528) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `assets/photos/work-3.jpg` | [donterase](https://georgeyanakiev.com/donterase) | [stocksnap](https://stocksnap.io/photo/cafe-restaurant-HOHJK6B7TD) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-
-**Source: Openverse** (`api.openverse.org`), queried with `license=cc0`.
-Openverse is Creative Commons' own index, which is why it was chosen over
-Unsplash and Pexels: both of those need an API key and neither is CC0 — their
-licences permit site use but restrict redistributing the asset, a condition this
-repository would then carry forever.
-
-To change one: edit its query in `inc/tools/fetch-photos.mjs`, delete the file,
-re-run the tool, then `php inc/tools/build-photos.php` for the WebP twins.
-
-**Approved sources.** Photography: Pexels, Unsplash (read each licence — neither
-is CC0, and both restrict redistributing the asset itself as a competing
-service; site imagery is fine). 3D models: Poly Pizza, Poly Haven, Khronos
-glTF-Sample-Assets, Quaternius, Kenney — all CC0. Textures/HDRI: Poly Haven,
-ambientCG (CC0). Illustrations: unDraw, Storyset (check attribution terms).
+**Approved sources**, if third-party assets are ever needed. Photography: Pexels,
+Unsplash — read each licence, neither is CC0 and both restrict redistributing
+the asset itself. 3D: Poly Pizza, Poly Haven, Khronos glTF-Sample-Assets,
+Quaternius, Kenney (all CC0). Textures/HDRI: Poly Haven, ambientCG (CC0).
+Illustrations: unDraw, Storyset (check attribution terms).
 
 **Do not use** anything CC-BY-NC, CC-BY-SA (viral for a commercial site), "free
 for personal use", or with no stated licence. For a registered company pitching
 clients on professionalism, an unlicensed asset is a genuine liability — and
-"found on Google Images" is not a licence.
-
-If an asset requires attribution (CC-BY), it must be credited visibly on the
-site, not only in this file.
-
-**No stock portraits as people.** Testimonial and team avatars are monogram
-discs. The testimonials in the preview seed are anonymised samples, and putting
-a stranger's face beside a sample quote presents an invented client as a real
-one. Real photographs go in only when the real person supplies them.
+"found on Google Images" is not a licence. If an asset requires attribution
+(CC-BY), it must be credited visibly on the site, not only in this file.
 
 ---
 
@@ -245,11 +241,29 @@ lockup is only 99px tall.
 ## Colour
 
 Every colour in `css/00-tokens.css` carries its **measured** WCAG ratio in a
-comment beside it, and `inc/tools/shoot.mjs` re-measures the rendered pages on
-every run. The one that most needs stating: `--orange #ff6b35` is **2.84:1 on
-white** and is decorative only. Orange that carries an icon uses `--orange-mid`
-(3.76:1) and orange that carries text uses `--orange-ink` (4.93:1). Swapping
-them is the exact mistake that put 2.15:1 white-on-amber into a previous build.
+comment beside it, computed against the real ground it sits on, and
+`inc/tools/shoot.mjs` re-measures the rendered pages on every run. That harness
+is not ceremony: it caught `--ink-4` at 2.92:1 against the 3:1 large-text
+minimum during this rebuild, on a value that had been reasoned about and written
+down as safe.
+
+**One accent.** The orange ladder (`--orange` 2.84:1 decorative, `--orange-mid`
+3.76:1, `--orange-ink` 4.93:1) and the gold used for star ratings are retired —
+removed, not aliased, with every call site migrated, so the retirement cannot
+quietly undo itself. Three accents is no accent: the call to action could never
+be the loudest thing on a screen where two other colours were already shouting.
+
+**The rule most likely to be broken later** is now a mirror pair rather than a
+ladder:
+
+| Token | On paper | In the dark chapter |
+|---|---|---|
+| `--blue` `#1b4fd8` | **6.15:1** — text, links, CTA | 2.68:1 — fills only |
+| `--accent-chapter` `#6ea0ff` | 2.39:1 — decoration only | **6.90:1** — text, links |
+
+Each is dangerous exactly where the other is safe, and a component that
+hardcodes either will look completely correct on the ground it was written on.
+Components read `--accent-fg`, which `css/08-ground.css` remaps per ground.
 
 ---
 

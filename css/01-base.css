@@ -28,8 +28,14 @@ body {
     overflow-x: clip;
 }
 
-/* The ground is not flat white everywhere — a very soft cool wash sits behind
-   the top of the page so the hero mockup has something to lift off. */
+/* A very soft warm wash behind the top of the page: the light in the render
+   comes from upper left, so the paper it stands on is brightest there and
+   falls away to the right. It is a lighting decision, not decoration, and it
+   is what makes the object's shadow agree with the page it lies on.
+
+   The previous pair of gradients was COOL — #eef2fb and a blue bloom at 88%/4%
+   — which put a blue cast under a warm-neutral render and made the ceramic
+   read grey. Four percent of tone, and it was fighting the entire palette. */
 body::before {
     content: '';
     position: fixed;
@@ -38,8 +44,8 @@ body::before {
     pointer-events: none;
     z-index: -1;
     background:
-        radial-gradient(120% 70% at 50% -10%, #eef2fb 0%, rgba(238, 242, 251, 0) 62%),
-        radial-gradient(60% 40% at 88% 4%, rgba(22, 82, 224, .05) 0%, rgba(22, 82, 224, 0) 70%);
+        radial-gradient(90% 60% at 18% -6%, rgba(255, 252, 244, .85) 0%, rgba(255, 252, 244, 0) 64%),
+        radial-gradient(80% 50% at 92% 10%, rgba(226, 221, 208, .38) 0%, rgba(226, 221, 208, 0) 72%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -177,7 +183,7 @@ blockquote { margin: 0; }
     font-weight: var(--fw-semi);
     letter-spacing: var(--tr-eyebrow);
     text-transform: uppercase;
-    color: var(--orange-ink);
+    color: var(--accent-fg);
     margin: 0 0 var(--sp-4);
 }
 .eyebrow::before {
@@ -185,7 +191,7 @@ blockquote { margin: 0; }
     width: 18px;
     height: 2px;
     border-radius: 2px;
-    background: var(--orange);
+    background: var(--blue-tint-2);
     flex: none;
 }
 .eyebrow.is-blue { color: var(--blue); }
@@ -202,7 +208,7 @@ blockquote { margin: 0; }
     font-family: var(--font-display);
     font-weight: var(--fw-bold);
     letter-spacing: -0.02em;
-    color: var(--orange-ink);
+    color: var(--accent-fg);
     font-variant-numeric: tabular-nums;
 }
 
@@ -216,13 +222,12 @@ blockquote { margin: 0; }
 /* ==========================================================================
    Page texture
 
-   A fixed dot lattice with a soft colour wash over it. Fixed rather than
-   scrolled on purpose: the content then slides across a stationary field, so
-   every section gets parallax against the ground for one element and no
-   script. It sits behind everything at z-index -1 and never takes a click.
+   One fixed grain layer, and nothing else. Fixed rather than scrolled on
+   purpose: the content slides across a stationary surface, which is how paper
+   behaves. It sits behind everything at z-index -1 and never takes a click.
 
-   Kept faint — 4% ink on white. A visible grid on a business site reads as a
-   template; this reads as paper having a surface.
+   Kept faint — a texture you can SEE on a business site reads as a pattern;
+   one you only notice when it is removed reads as stock.
    ========================================================================== */
 .bg-field {
     position: fixed;
@@ -230,21 +235,25 @@ blockquote { margin: 0; }
     z-index: -1;
     pointer-events: none;
     background-color: var(--paper);
-    /* Grain FIRST, so it sits over the blooms and the lattice rather than under
-       them — noise beneath a colour wash is invisible, which is how it ends up
-       being described as added and not seen. */
-    background-image:
-        var(--grain-fine),
-        radial-gradient(circle at 18% 12%, rgba(22, 82, 224, .09), transparent 42%),
-        radial-gradient(circle at 84% 8%,  rgba(255, 107, 53, .07), transparent 40%),
-        radial-gradient(circle at 62% 88%, rgba(13, 71, 161, .07), transparent 46%),
-        radial-gradient(circle, rgba(10, 14, 26, .055) 1px, transparent 1.4px);
-    background-size: 140px 140px, 100% 100%, 100% 100%, 100% 100%, 26px 26px;
+    /* Paper grain, and nothing else.
+
+       This used to carry three coloured radial blooms — blue at 18%/12%,
+       orange at 84%/8%, deep blue at 62%/88% — over a 26px dot lattice. It is
+       the most heavily used SaaS background of the last five years, the orange
+       bloom muddied every warm neutral near it, and the lattice put a repeating
+       pattern behind an object whose entire job is to look like a photograph
+       of a real thing on real paper. All four layers are gone.
+
+       What is left is the one thing a warm paper ground genuinely needs:
+       texture. Without grain, #f7f6f2 reads as a flat beige fill; with it, it
+       reads as a surface — and a surface is what the object's contact shadow
+       has to land on for the object to have any weight at all. */
+    background-image: var(--grain-fine);
+    background-size: 140px 140px;
 }
 
 /* Sections that paint their own ground sit on top of the field; the ones that
-   do not let it show through. .band-paper is deliberately transparent here so
-   the lattice is visible on the site's default ground. */
+   do not let it show through. */
 .band-paper { background: transparent; }
 
 @media (prefers-reduced-motion: reduce) {

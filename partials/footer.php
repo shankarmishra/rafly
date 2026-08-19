@@ -36,6 +36,7 @@ $footHours = setting('contact.hours', '');
                         <li><a href="/case-studies">Case Studies</a></li>
                         <li><a href="/blog">Blog</a></li>
                         <li><a href="/contact">Contact</a></li>
+                        <li><a href="/locations/greater-noida">Serving <?= e(BUSINESS_GEO_LOCALITY) ?></a></li>
                     </ul>
                 </div>
 
