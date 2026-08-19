@@ -235,5 +235,5 @@ if (!$page['noindex']) {
          Save-Data. The canvas is EMPTY until then and css/09-scenes.css gives
          .field a dot-grid background so the still form is the network's own
          geometry standing still — a design, not a placeholder. */ ?>
-<canvas id="field" class="field" aria-hidden="true"></canvas>
+<canvas id="field" class="field-canvas" aria-hidden="true"></canvas>
 <div class="scroll-progress" aria-hidden="true"></div>

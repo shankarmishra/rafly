@@ -1,0 +1,1288 @@
+/* ==========================================================================
+   HOME SCENES — the homepage's own compositions
+   ==========================================================================
+
+   Split out of css/09-scenes.css, and the reason is a measurement rather than
+   a preference. 09-scenes is a CORE stylesheet: every one of the sixteen
+   routes downloads it. The hero and its floor, the glass cluster, the product
+   deck, the service bento, the phones and the coverflow gallery are rendered
+   by index.php and by nothing else — eleven pages were carrying roughly 30 KB
+   of rules for markup they do not contain, and the per-route CSS budget in
+   inc/tools/perf-budget.json failed at 215 KB because of it.
+
+   WHAT STAYED IN 09-scenes: the page-wide field canvas, the three textures,
+   the orb, the .has-tex rule and the head field — everything that more than
+   one route actually uses.
+
+   The one hard rule is inherited unchanged: THIS FILE MAY NEVER DEFINE A
+   GROUND TOKEN. Not --surface, not --accent-fg, not --paper, not --ink. It
+   may read any of them. Grounds are css/08-ground.css's job.
+
+   Loaded via $page['styles'] in index.php, which means it arrives AFTER
+   09-scenes and after css/pages/home.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   THE HERO
+   ========================================================================== */
+
+.hero-scene {
+    position: relative;
+    min-height: min(100vh, 900px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+
+    /* THE FALLBACK IS THE SAME DESIGN, FROZEN. These four radial gradients
+       are the aurora shader's four blobs at t=0, in the same colours and the
+       same places. A visitor with no WebGL2 gets the hero as designed and
+       still — not a plain ground, and not a different composition. */
+    background-color: var(--paper);
+    background-image:
+        radial-gradient(closest-side circle at 30% 70%, color-mix(in srgb, var(--blue) 28%, transparent), transparent),
+        radial-gradient(closest-side circle at 78% 34%, color-mix(in srgb, var(--blue-deep) 24%, transparent), transparent),
+        radial-gradient(closest-side circle at 55% 52%, color-mix(in srgb, #5c9eff 20%, transparent), transparent),
+        radial-gradient(closest-side circle at 14% 18%, color-mix(in srgb, var(--blue-abyss) 13%, transparent), transparent);
+    background-size: 116% 116%, 104% 104%, 88% 88%, 76% 76%;
+    background-repeat: no-repeat;
+}
+
+/* When the shader is live it paints the identical thing, animated, so the
+   static copy underneath is redundant. Removing it rather than covering it
+   means one fewer layer for the compositor to blend every frame. */
+.hero-scene.is-live { background-image: none; }
+
+.hero-aurora {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity var(--dur-5) var(--ease-out);
+}
+.hero-scene.is-live .hero-aurora { opacity: 1; }
+
+/* ==========================================================================
+   THE HERO FLOOR — a perspective grid receding to a horizon
+
+   Naveen sent OriginKit's hero gallery and asked for this family: the ones
+   that put a lit, converging grid behind the words. The aurora gives the hero
+   its colour, and colour tells you the mood of a page — a converging grid
+   tells you there is a SPACE behind it, which is the thing our hero did not
+   have.
+
+   IT IS CSS, AND THAT IS THE POINT. rotateX on a plane of two repeating
+   gradients is a real 3-D projection performed by the compositor. It costs no
+   JavaScript, no WebGL and no bytes, so it is there for a visitor with scripts
+   off, with a refused GL context, and on a phone — where js/gates.js
+   deliberately never fetches the shader. The reference does it with geometry;
+   this does it with a transform, and at the size it is drawn nothing separates
+   them.
+
+   THE LINES TRAVEL by animating background-position on the plane, which reads
+   as the ground moving toward you. One property, compositor-only, no rAF.
+
+   CONTRAST. The floor is masked off the left half, because that is where the
+   headline is and no line may ever cross a letter. Everything in it is --blue
+   as a FILL at 10-22% over paper; inc/tools/shoot.mjs re-measures the hero on
+   both viewports, which is the check that keeps that honest.
+   ========================================================================== */
+
+.hero-floor {
+    position: absolute;
+    left: -10%; right: -10%;
+    bottom: -4%;
+    height: 96%;
+    z-index: 1;
+    pointer-events: none;
+    perspective: 460px;
+    perspective-origin: 50% 0%;
+
+    /* Two masks intersected: fade out toward the horizon, and clear the left
+       half where the copy lives. A single gradient cannot do both. */
+    mask-image:
+        linear-gradient(to top, #000 8%, transparent 74%),
+        linear-gradient(to right, transparent 4%, #000 38%);
+    -webkit-mask-image:
+        linear-gradient(to top, #000 8%, transparent 74%),
+        linear-gradient(to right, transparent 4%, #000 38%);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
+}
+
+.hero-floor > * {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-origin: 50% 100%;
+    transform: rotateX(77deg);
+    backface-visibility: hidden;
+}
+
+/* The grid itself. 64px cells: the same order of magnitude as the 42px module
+   js/field.js uses, opened up because these lines are being viewed at a raking
+   angle and a tighter grid turns to moire at the horizon. */
+.hero-floor-plane {
+    background-image:
+        linear-gradient(90deg, color-mix(in srgb, var(--blue) 30%, transparent) 1px, transparent 1px),
+        linear-gradient(color-mix(in srgb, var(--blue) 30%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+    animation: floor-run 7s linear infinite;
+}
+
+/* A brighter point at every intersection, on a slower loop than the lines, so
+   the two never march in step. A grid is stationery; points that could be
+   connected are infrastructure — the same argument as the page-head field. */
+.hero-floor-nodes {
+    background-image: radial-gradient(
+        color-mix(in srgb, var(--blue) 58%, transparent) 2px, transparent 2px);
+    background-size: 64px 64px;
+    opacity: .75;
+    animation: floor-run 7s linear infinite;
+}
+
+@keyframes floor-run { to { background-position: 0 64px; } }
+
+/* The lit horizon. Without it the grid stops at a hard edge and reads as a
+   texture that has been cut off; with it, it reads as distance. */
+.hero-horizon {
+    position: absolute;
+    left: 24%; right: -6%;
+    bottom: 24%;
+    height: 300px;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(to top,
+            color-mix(in srgb, var(--blue) 30%, transparent), transparent 42%),
+        radial-gradient(ellipse 56% 100% at 52% 100%,
+            color-mix(in srgb, var(--blue) 40%, transparent), transparent 68%);
+    filter: blur(38px);
+}
+
+@media (max-width: 900px) {
+    /* On a phone the copy uses the full width, so a floor masked to the right
+       half has nowhere to be. It stays, at half strength, under everything. */
+    .hero-floor {
+        mask-image: linear-gradient(to top, #000 4%, transparent 78%);
+        -webkit-mask-image: linear-gradient(to top, #000 4%, transparent 78%);
+        opacity: .5;
+        height: 46%;
+    }
+    .hero-horizon { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* The grid IS the design; the travel is emphasis on it. */
+    .hero-floor-plane,
+    .hero-floor-nodes { animation: none; }
+}
+
+.hero-scene > .container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-8);
+    align-items: center;
+}
+
+/* The copy column ignores the pointer so the cards behind it stay reachable;
+   the controls inside it opt back in. */
+.hero-copy { pointer-events: none; }
+.hero-copy a,
+.hero-copy button,
+.hero-cta { pointer-events: auto; }
+
+/* --- the line-mask reveal ---------------------------------------------
+   Each line sits in its own overflow-hidden box and slides up from below it.
+   The mask is the point: the line arrives from behind an edge rather than
+   fading in, which is what makes it read as typeset instead of animated. */
+.line-mask { display: block; overflow: hidden; }
+.line-mask > span {
+    display: block;
+    transform: translateY(110%);
+    transition: transform var(--dur-5) var(--ease-out);
+}
+.is-in .line-mask > span,
+.no-js .line-mask > span { transform: none; }
+
+/* --- the gradient word -------------------------------------------------
+   THE FALLBACK IS DECLARED FIRST AND OUTSIDE THE @supports, deliberately.
+   An engine that cannot clip a background to text ignores the whole block
+   and keeps this colour. Declared the other way round, that engine paints
+   `color: transparent` and the headline disappears — total content loss from
+   a decorative effect.
+
+   --accent-fg, not --blue: this is text. */
+.grad-word { color: var(--accent-fg); }
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+    .grad-word {
+        background-image: linear-gradient(104deg,
+            var(--blue) 0%, #4b8bff 30%, var(--blue-deep) 62%, var(--blue-abyss) 100%);
+        background-size: 230% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: grad-shift 9s var(--ease-in-out) infinite;
+    }
+}
+
+@keyframes grad-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+/* ==========================================================================
+   THE FLOATING CARD CLUSTER
+
+   Real elements, rendered by index.php. js/cluster.js only adds transforms,
+   so with no JS the cards are simply there, static, in their final positions.
+   ========================================================================== */
+
+.cluster {
+    position: relative;
+    height: 560px;
+    perspective: 1500px;
+    transform-style: preserve-3d;
+}
+
+.fcard {
+    position: absolute;
+    border-radius: var(--r-lg);
+    padding: var(--sp-4);
+    background: color-mix(in srgb, #ffffff 86%, transparent);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border: 1px solid color-mix(in srgb, #ffffff 90%, transparent);
+    box-shadow:
+        0 30px 70px -28px color-mix(in srgb, var(--ink) 44%, transparent),
+        0 2px 10px color-mix(in srgb, var(--ink) 6%, transparent);
+    will-change: transform;
+
+    /* The staggered entrance. js/cluster.js sets transition-delay per card;
+       without JS .is-live never arrives and the cards are simply visible,
+       which is why the opacity is on .cluster.is-live and not on .fcard. */
+    opacity: 1;
+    transition: opacity var(--dur-4) var(--ease-out);
+}
+.cluster.is-live .fcard { opacity: 0; animation: fcard-in var(--dur-4) var(--ease-out) forwards; }
+@keyframes fcard-in { to { opacity: 1; } }
+
+.fcard-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--sp-3);
+}
+.fcard-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semi);
+    color: var(--ink);
+}
+/* The metadata tier. --ink-3, never --ink-4: this is small text. */
+.fcard-meta {
+    font-size: 10px;
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: var(--fw-semi);
+}
+
+/* A status pill. The logo green is 2.43:1 on paper and can never be text, so
+   the label is --success-ink and the green appears only as the 12% fill. */
+.fcard-pill {
+    font-size: 10px;
+    font-weight: var(--fw-semi);
+    padding: 4px 9px;
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, var(--green) 12%, transparent);
+    color: var(--success-ink);
+}
+
+.fcard-row { display: flex; align-items: center; gap: var(--sp-2); padding: 7px 0; }
+.fcard-av {
+    width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+}
+.fcard-av.is-green { background: linear-gradient(135deg, var(--green), var(--success-ink)); }
+.fcard-line { height: 7px; border-radius: 4px; background: var(--paper-3); }
+
+.fcard-bars { display: flex; align-items: flex-end; gap: 6px; height: 62px; }
+.fcard-bars i {
+    flex: 1; border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--blue), #7fb0ff);
+}
+
+.fcard-ring {
+    width: 60px; height: 60px; border-radius: 50%; position: relative; flex: none;
+    background: conic-gradient(var(--blue) var(--p, 72%), var(--paper-3) 0);
+}
+.fcard-ring::after {
+    content: ''; position: absolute; inset: 8px; border-radius: 50%; background: #fff;
+}
+
+.fcard-strip { display: flex; gap: 3px; }
+.fcard-strip i { flex: 1; height: 18px; border-radius: 2px; background: var(--green); opacity: .85; }
+.fcard-strip i.is-warn { background: var(--warning); }
+
+/* ==========================================================================
+   THE SCROLL CUE
+   ========================================================================== */
+
+.scroll-cue {
+    position: absolute;
+    bottom: var(--sp-7);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-3);
+    pointer-events: none;
+}
+.scroll-cue .rail {
+    width: 1px; height: 56px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, transparent, var(--ink-3));
+}
+.scroll-cue .rail i {
+    position: absolute; top: -56px; left: 0; width: 100%; height: 56px;
+    background: var(--blue);
+    animation: cue-run 2.1s var(--ease-in-out) infinite;
+}
+@keyframes cue-run { 0% { top: -56px; } 60%, 100% { top: 56px; } }
+
+/* ==========================================================================
+   RESPONSIVE
+
+   The cluster is the first thing to go. On a phone it would either shrink to
+   illegibility or push the headline off the fold, and the hero's job there is
+   the headline and the CTA. The aurora and the field are already gated off in
+   JS at this width, so what remains is the frozen fallback — which is the
+   design, standing still.
+   ========================================================================== */
+
+@media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .cluster { display: none; }
+    .scroll-cue { display: none; }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+
+   Everything above stops. Nothing here says anything the markup does not
+   already say, so the correct amount of it to keep is none.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .field-canvas { background-image: none; }
+    .grad-word { animation: none; }
+    .scroll-cue .rail i { animation: none; top: 0; opacity: .5; }
+    .line-mask > span { transform: none; transition: none; }
+    .cluster.is-live .fcard { opacity: 1; animation: none; }
+    .hero-aurora { display: none; }
+    .hero-scene.is-live { background-image: var(--hero-still, none); }
+}
+
+/* ==========================================================================
+   THE PLATFORM — five product surfaces, fanned
+
+   A pinned section: the deck holds still in the middle of the screen while
+   the page scrolls past it, and the fan opens across that scroll. 180vh, not
+   the prototype's 320 — same choreography, resolved faster, because nobody
+   should have to scroll three screens to watch five cards move apart.
+   ========================================================================== */
+
+/* OVERFLOW: CLIP, NOT HIDDEN, AND IT IS THE WHOLE SECTION.
+
+   `overflow: hidden` makes the box a SCROLL CONTAINER, and a sticky child
+   sticks to its nearest scrolling ancestor. This section does not scroll, so
+   the child had nothing to stick to and never pinned — the deck simply drifted
+   past with the page while decks.js scrubbed the fan against a viewport it was
+   no longer holding still in. It looked almost right, which is why it survived
+   a byte-budget pass and a contrast pass: nothing measures whether a thing
+   that should be still is moving.
+
+   `overflow: clip` clips identically and creates NO scroll container, so the
+   pin works. Where it is unsupported the orbs bleed past the section edge and
+   nothing else changes. */
+.platform {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 42%, var(--paper) 100%);
+}
+
+.platform-sticky { position: relative; z-index: 2; }
+
+/* The five services as links, in their own block. It is a sibling of the
+   pinned section rather than a child, because a child sharing the sticky
+   parent consumes the deck pinned range from the bottom — the deck scrolled
+   away a screen early and left blank paper behind it. */
+.platform-list {
+    position: relative;
+    background: var(--paper);
+    padding-block: var(--sp-8) var(--section-y);
+    overflow: hidden;
+}
+/* --- THE BENTO ---------------------------------------------------------
+
+   The five services were a list of rows in a left-hand column with a panel
+   beside them, and before that a single column on a full-width ground. Both
+   read as the section having run out rather than having finished.
+
+   Six tiles on a three-column grid, and the spans are chosen so there is no
+   hole to fill:
+
+       row 1   [ Web — spans 2 ]              [ Security ]
+       row 2   [ Marketing ]  [ Content ]     [ Commerce ]
+       row 3   [ the panel — spans 3 ]
+
+   The cards themselves are the thing Naveen has asked for at every round —
+   glass, a gradient border that arrives on hover, a sheen that follows the
+   cursor. Every one of those is a compositor-only property; nothing here
+   animates a layout value. */
+.svc-bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+    position: relative;
+    z-index: 1;
+}
+
+.svc-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    min-height: 13rem;
+    padding: var(--sp-5);
+    border-radius: var(--r-xl);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+
+    background: color-mix(in srgb, #ffffff 76%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid color-mix(in srgb, #ffffff 88%, transparent);
+    box-shadow:
+        0 24px 60px -34px color-mix(in srgb, var(--ink) 34%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 5%, transparent);
+
+    transition:
+        transform var(--dur-2) var(--ease-out),
+        box-shadow var(--dur-2) var(--ease-out);
+}
+
+/* THE LEAD CARD takes two columns. Same padding and the same parts — a bento
+   works because one tile has more room, not because one tile is a different
+   component.
+
+   Two columns of room is also two columns of EMPTY room if nothing fills it,
+   so the lead card carries a pool of its own accent on the right and gives its
+   copy a measure to stop against. Nothing is invented to fill the space: the
+   pool is light, and the words are the same words. */
+.svc-card:first-child {
+    grid-column: span 2;
+    background-image: radial-gradient(circle at 88% 30%,
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 14%, transparent), transparent 58%);
+}
+.svc-card:first-child .svc-card-name { font-size: var(--fs-h3); }
+.svc-card:first-child .svc-card-desc { max-width: 38ch; }
+
+/* THE GRADIENT BORDER. A 1px ring painted as a gradient, achieved by drawing
+   the gradient over the whole box and then masking out everything inside the
+   padding box — the two masks are composited with `exclude`, which leaves
+   exactly the border ring. A gradient `border-image` cannot do this and keep
+   a radius; a second absolutely-positioned element could, at the cost of a
+   layer per card. */
+.svc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+        var(--sc, var(--accent-fg)),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 20%, transparent) 58%,
+        transparent 78%);
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* THE SHEEN. --mx/--my are written by js/sheen.js on pointermove. They fall
+   back to the card's centre, so with no JS at all the hover state is a
+   centred glow rather than nothing — a designed state either way. */
+.svc-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 16%, transparent),
+        transparent 62%);
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-out);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.svc-card:hover,
+.svc-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow:
+        0 34px 70px -32px color-mix(in srgb, var(--ink) 42%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.svc-card:hover::before,
+.svc-card:focus-visible::before,
+.svc-card:focus-within::before { opacity: 1; }
+.svc-card:hover::after,
+.svc-card:focus-visible::after,
+.svc-card:focus-within::after { opacity: 1; }
+
+/* Everything inside sits above the sheen. */
+.svc-card > * { position: relative; z-index: 1; }
+
+.svc-card-top { display: flex; align-items: center; justify-content: space-between; }
+
+/* The glyph tile. --sc is a FILL here and never a text colour — two of the
+   five service accents (--svc-security, --svc-ecom) are rated for fill only,
+   which is the whole reason css/00-tokens.css splits --accent from
+   --accent-fg. The glyph on top is white. */
+.svc-card-glyph {
+    width: 40px; height: 40px;
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg,
+        var(--sc, var(--accent-fg)),
+        color-mix(in srgb, var(--sc, var(--accent-fg)) 62%, #ffffff));
+    box-shadow: 0 8px 20px -10px var(--sc, var(--accent-fg));
+}
+.svc-card-glyph svg { width: 19px; height: 19px; }
+
+.svc-card-idx {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    color: var(--ink-3);
+}
+
+.svc-card-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-semi);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+}
+.svc-card-desc {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-body);
+    color: var(--ink-3);
+}
+
+.svc-card-go {
+    margin-top: auto;
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--accent-fg);
+}
+.svc-card-go svg { width: 15px; height: 15px; transition: transform var(--dur-2) var(--ease-out); }
+.svc-card:hover .svc-card-go svg { transform: translate(3px, -3px); }
+
+/* The panel closes the grid rather than standing beside it. Across all three
+   columns its facts lie in a row, which is what stops a full-width block from
+   becoming a wide paragraph. */
+.platform-panel {
+    grid-column: 1 / -1;
+    padding: var(--sp-6);
+    border-radius: var(--r-xl);
+    background: color-mix(in srgb, #ffffff 76%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid color-mix(in srgb, #ffffff 88%, transparent);
+    box-shadow:
+        0 24px 60px -30px color-mix(in srgb, var(--ink) 36%, transparent),
+        0 2px 6px color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+.platform-panel h3 {
+    margin: var(--sp-3) 0 var(--sp-5);
+    font-size: var(--fs-h3);
+    line-height: var(--lh-heading);
+    color: var(--ink);
+}
+
+.platform-facts {
+    margin: 0 0 var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
+.platform-facts > div {
+    display: grid;
+    gap: 2px;
+    padding-left: var(--sp-4);
+    border-left: 1px solid var(--line);
+}
+.platform-facts > div:first-child { padding-left: 0; border-left: 0; }
+
+/* The metadata tier. --ink-3, never --ink-4: this is small text, and --ink-4
+   is rated for large display only. */
+.platform-facts dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tr-meta);
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.platform-facts dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--ink);
+}
+
+.platform-panel-foot {
+    margin: 0 0 var(--sp-5);
+    max-width: 62ch;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-body);
+    color: var(--ink-2);
+}
+
+/* Two columns before one. Five cards at 1fr on a phone is five squares of
+   nothing; five cards at full width is a readable stack, and the tablet step
+   between them keeps the lead card's span meaningful. */
+@media (max-width: 1100px) {
+    .svc-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .svc-card:first-child { grid-column: span 2; }
+    .platform-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+    .svc-bento { grid-template-columns: 1fr; gap: var(--sp-3); }
+    .svc-card:first-child { grid-column: auto; }
+    .svc-card { min-height: 0; }
+    .platform-facts { grid-template-columns: 1fr; gap: var(--sp-4); }
+    .platform-facts > div { padding-left: 0; border-left: 0; }
+}
+
+/* A card that lifts and glows on hover has nothing to say to a visitor who
+   asked for less movement. The border and the sheen stay — they are state,
+   not motion — and only the travel goes. */
+@media (prefers-reduced-motion: reduce) {
+    .svc-card { transition: none; }
+    .svc-card:hover, .svc-card:focus-visible { transform: none; }
+    .svc-card:hover .svc-card-go svg { transform: none; }
+}
+
+
+.platform-head { text-align: center; max-width: 39rem; margin: 0 auto; }
+.platform-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.platform-head .lead { margin: var(--sp-4) auto 0; max-width: 34rem; }
+
+/* --- the deck -----------------------------------------------------------
+   perspective on the CONTAINER, not on the cards. One shared vanishing point
+   is what makes five separately-transformed elements read as one scene
+   photographed from one place; per-card perspective makes five drawings. */
+.deck {
+    position: relative;
+    width: 100%;
+    height: 430px;
+    margin-top: var(--sp-6);
+    perspective: 1700px;
+    transform-style: preserve-3d;
+}
+
+.mock {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 430px; height: 300px;
+    margin: -150px 0 0 -215px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    box-shadow:
+        0 34px 76px -28px color-mix(in srgb, var(--ink) 46%, transparent),
+        0 2px 8px color-mix(in srgb, var(--ink) 6%, transparent);
+    will-change: transform;
+
+    /* THE COVERFLOW DIM. js/decks.js writes --slot-dim as the fan collapses;
+       the side cards fall to 0.60 so the centre one has somewhere to be read.
+       It is a custom property rather than an inline opacity precisely so the
+       reduced-motion rule at the foot of this file can pin it back to 1 — an
+       inline style.opacity would beat any stylesheet trying to undo it. */
+    opacity: var(--slot-dim, 1);
+
+    /* THE STILL FORM, and it is a design rather than a fallback shrug. With
+       no JS all five cards would sit exactly on top of each other and read as
+       one card. This fans them at a third of their full spread, so the deck
+       is legible as five. js/decks.js overrides the transform the moment it
+       runs, which is why the two use the same slot variables. */
+    transform:
+        translate3d(calc(var(--slot-x, 0) * 0.34px), 0, 0)
+        rotateY(calc(var(--slot-r, 0) * 0.34deg))
+        scale(.9);
+}
+.mock[data-slot="0"] { --slot-x: 0;    --slot-r: 0;   z-index: 6; }
+.mock[data-slot="1"] { --slot-x: -250; --slot-r: 15;  z-index: 5; }
+.mock[data-slot="2"] { --slot-x: 250;  --slot-r: -15; z-index: 5; }
+.mock[data-slot="3"] { --slot-x: -448; --slot-r: 24;  z-index: 4; }
+.mock[data-slot="4"] { --slot-x: 448;  --slot-r: -24; z-index: 4; }
+
+/* --- browser chrome --- */
+.mock-bar {
+    height: 28px;
+    background: var(--paper-2);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+    display: flex; align-items: center; gap: 5px;
+    padding: 0 11px;
+}
+.mock-bar i { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-4); }
+.mock-bar span {
+    margin-left: 9px;
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    color: var(--ink-3);
+    background: #fff;
+    padding: 3px 9px;
+    border-radius: var(--r-pill);
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.mock-app { display: flex; height: calc(100% - 28px); }
+
+.mock-side {
+    width: 52px;
+    background: var(--paper);
+    border-right: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    padding: 11px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+}
+.mock-logo {
+    width: 20px; height: 20px; border-radius: 6px; display: block;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+.mock-side b { width: 20px; height: 6px; border-radius: 3px; background: var(--paper-3); display: block; }
+.mock-side b.is-on { background: color-mix(in srgb, var(--c) 34%, var(--paper-3)); }
+
+.mock-body { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+.mock-top { display: flex; align-items: center; justify-content: space-between; }
+.mock-top .h { height: 9px; width: 96px; border-radius: 5px; background: var(--paper-4); }
+.mock-top .c {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+
+.mock-kpis { display: flex; gap: 8px; }
+.mock-kpi {
+    flex: 1;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    padding: 8px;
+    background: var(--paper);
+}
+.mock-kpi u { display: block; height: 5px; width: 60%; border-radius: 3px; background: var(--paper-4); margin-bottom: 6px; }
+.mock-kpi s { display: block; height: 11px; width: 78%; border-radius: 3px; text-decoration: none; background: var(--paper-4); }
+
+.mock-chart {
+    flex: 1;
+    border: 1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    padding: 9px;
+    display: flex; align-items: flex-end; gap: 5px;
+}
+.mock-chart i { flex: 1; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--c2), var(--c)); }
+
+.mock-tag {
+    position: absolute; left: 64px; bottom: 11px;
+    font-family: var(--font-display);
+    font-size: 10px; font-weight: var(--fw-semi);
+    letter-spacing: .07em; text-transform: uppercase;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    background: linear-gradient(115deg, var(--c), var(--c2));
+}
+
+/* ==========================================================================
+   APPS — three phones, ON PAPER
+
+   Naveen asked for this section on the light ground, against the prototype,
+   which put it on dark ink. He is right: a dark band three quarters of the
+   way down read as a different site rather than as the next paragraph.
+
+   The depth the dark ground used to provide comes from perspective and a lit
+   top edge instead. The SCREENS stay dark, because a phone screen is dark —
+   and that contrast against paper is exactly what makes the shells read as
+   objects sitting on the page rather than as drawings of phones.
+   ========================================================================== */
+
+/* clip, not hidden — see the note on .platform. The same bug was here. */
+.apps {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--paper);
+}
+
+.apps-sticky { position: relative; z-index: 2; }
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) 1fr;
+    gap: var(--sp-9);
+    align-items: center;
+}
+
+.apps-copy h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.apps-copy .lead { margin-top: var(--sp-4); }
+
+.apps-feat { list-style: none; margin: var(--sp-6) 0; padding: 0; display: grid; gap: var(--sp-3); }
+.apps-feat li {
+    display: flex; align-items: center; gap: var(--sp-3);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+}
+.apps-feat li > span {
+    width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
+    background: linear-gradient(135deg, var(--blue), #5c93ff);
+    display: grid; place-items: center;
+    color: #fff;
+}
+.apps-feat li > span svg { width: 13px; height: 13px; }
+.apps-cta { margin: 0; }
+
+/* --- the phones --- */
+.phones {
+    position: relative;
+    height: 560px;
+    perspective: 1600px;
+    transform-style: preserve-3d;
+}
+
+/* THE SHELL. overflow:hidden lives on .phone-screen, NOT here — a phone with
+   its buttons clipped off at the bezel is a drawing of a phone. The screen
+   carries the clip and its own inner radius; the frame is free to have
+   something on its edge. */
+.phone {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 236px; height: 482px;
+    margin: -241px 0 0 -118px;
+    border-radius: 34px;
+    background: var(--ink-chapter-2);
+    border: 6px solid var(--ink-chapter-3);
+    will-change: transform;
+    box-shadow:
+        0 40px 90px -30px color-mix(in srgb, var(--ink) 55%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--blue) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, #fff 22%, transparent);
+
+    /* The still form, at a third of the full spread, including the height
+       stagger and the tilt — the no-JS arrangement is the same composition
+       held closer, not a different one. */
+    transform:
+        translate3d(calc(var(--slot-x, 0) * 0.34px), calc(var(--slot-y, 0) * 0.34px), 0)
+        rotateY(calc(var(--slot-r, 0) * 0.34deg))
+        rotateZ(calc(var(--slot-rz, 0) * 0.34deg))
+        scale(.9);
+}
+.phone[data-slot="0"] { --slot-x: 0;    --slot-y: 30;  --slot-r: 0;   --slot-rz: 0;  z-index: 6; }
+.phone[data-slot="1"] { --slot-x: -248; --slot-y: -44; --slot-r: 20;  --slot-rz: 5;  z-index: 5; }
+.phone[data-slot="2"] { --slot-x: 248;  --slot-y: -44; --slot-r: -20; --slot-rz: -5; z-index: 5; }
+
+/* The side buttons. Two pseudo-elements rather than two more spans in twelve
+   lines of PHP — nothing here is content, and the shells are aria-hidden. */
+.phone::after,
+.phone::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--ink-chapter-3);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 16%, transparent);
+}
+.phone::after  { right: -3px; top: 22%; height: 56px; }   /* power  */
+.phone::before { left:  -3px; top: 17%; height: 34px; }   /* volume */
+
+.phone-notch {
+    position: absolute; left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 88px; height: 20px;
+    background: var(--ink-chapter-3);
+    border-radius: 0 0 12px 12px;
+    z-index: 3;
+}
+.phone-screen {
+    height: 100%;
+    border-radius: 28px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--ink-chapter-2), var(--ink-chapter));
+    padding: 32px 14px 14px;
+    display: flex; flex-direction: column; gap: 11px;
+}
+.phone-screen .ttl { height: 11px; width: 64%; border-radius: 5px; background: color-mix(in srgb, #fff 22%, transparent); }
+.phone-screen .sub { height: 7px;  width: 44%; border-radius: 4px; background: color-mix(in srgb, #fff 11%, transparent); }
+.phone-hero {
+    height: 92px; border-radius: 14px; margin-top: 4px;
+    background: linear-gradient(135deg, var(--c), var(--c2));
+}
+.phone-list { display: flex; flex-direction: column; gap: 8px; }
+.phone-list .it {
+    display: flex; align-items: center; gap: 9px;
+    background: color-mix(in srgb, #fff 5%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 6%, transparent);
+    border-radius: 11px;
+    padding: 9px;
+}
+.phone-list u { width: 26px; height: 26px; border-radius: var(--r-sm); flex: none;
+                background: linear-gradient(135deg, var(--c), var(--c2)); }
+.phone-list u.is-dim { background: color-mix(in srgb, #fff 14%, transparent); }
+.phone-list b { flex: 1; height: 6px; border-radius: 3px; background: color-mix(in srgb, #fff 16%, transparent); }
+.phone-nav {
+    margin-top: auto;
+    display: flex; justify-content: space-around;
+    padding: 11px 0 4px;
+    border-top: 1px solid color-mix(in srgb, #fff 8%, transparent);
+}
+.phone-nav i { width: 20px; height: 20px; border-radius: 6px; background: color-mix(in srgb, #fff 13%, transparent); }
+.phone-nav i.on { background: linear-gradient(135deg, var(--c), var(--c2)); }
+
+/* ==========================================================================
+   PINNING
+
+   Only above 960px, and only where there is room. Below that both sections
+   are ordinary blocks and both decks are static fans — the same composition,
+   just not scrubbed.
+   ========================================================================== */
+
+@media (min-width: 961px) {
+    /* padding-block: 0 is load-bearing. A sticky child can only stick inside
+       its parent CONTENT box, so .section padding at both ends took 288px off
+       the deck pinned range — it released a screen early and left blank paper
+       where the deck had been. The height IS the range here; the breathing
+       room comes from the sticky centring its own content. */
+    .platform { height: 150vh; padding-block: 0; }
+    .platform-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+    }
+    .apps { height: 150vh; padding-block: 0; }
+    .apps-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; align-items: center;
+    }
+}
+
+@media (max-width: 960px) {
+    .platform, .apps { padding-block: var(--section-y); }
+    .deck   { height: 300px; }
+    .mock   { width: 300px; height: 210px; margin: -105px 0 0 -150px; }
+    .phones { height: 430px; }
+    .apps-grid { grid-template-columns: 1fr; gap: var(--sp-7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* The still fan IS the design at rest. Nothing has to move for either
+       section to say what it says.
+
+       AND IT RESOLVES TO THE FAN, NOT THE COVERFLOW. Five separated cards are
+       legible standing still; five overlapping ones with three of them at 60%
+       are a pile. The coverflow is the reward for scrolling, so when there is
+       no scrolling there is no coverflow. */
+    .platform, .apps { height: auto; padding-block: var(--section-y); }
+    .platform-sticky, .apps-sticky { position: static; height: auto; }
+    .mock { --slot-dim: 1; }
+}
+
+/* ==========================================================================
+   THE GALLERY — OriginKit's coverflow, at its own numbers
+
+   Naveen sent the component's source, so this is not an impression of it. The
+   geometry below is lifted from COMPONENT_DEFAULTS and the fixed internals in
+   that file, value for value:
+
+       perspective   1600      DEPTH        240 per step back
+       tilt          12deg     rotateY, away from centre
+       sideTilt       8deg     rotateZ, the thing that makes it a lean
+       gap            8   ->   240px of travel per step (gap * 30)
+       SCALE_STEP     0.16     per step
+       radius         3   ->   30px  (radius/20 * min(w,h)/2)
+       opacity       60%       inactive, as a black veil over the art
+       transition    0.6s cubic-bezier(0.22, 1, 0.36, 1)
+
+   WHAT IS NOT LIFTED IS THE PICTURES. The component ships photographs, and
+   this site deleted 24 stock photographs on the argument that they were other
+   companies' premises standing in for our work. So every cover here is drawn:
+   a gradient ground and an abstract of the thing that kind of build produces.
+   Nothing is fetched, nothing is a photograph of somebody else's business, and
+   the moment there are real screenshots of real work they drop straight into
+   the same slot.
+
+   THE MATHS LIVES IN CSS, NOT IN JS. js/gallery.js writes two numbers per card
+   — --rel (signed offset from centre) and --az (its absolute value) — and
+   every transform below is a calc() on those. That is what lets the still form
+   be real: css sets --rel per data-slot, so with no JavaScript at all the
+   coverflow is laid out exactly as it would be with card one active.
+   ========================================================================== */
+
+.gallery {
+    position: relative;
+    overflow: clip;               /* clip, never hidden — see .platform */
+    isolation: isolate;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 46%, var(--paper) 100%);
+}
+
+.gallery-sticky { position: relative; z-index: 2; }
+
+.gallery-head { text-align: center; max-width: 40rem; margin: 0 auto var(--sp-7); }
+.gallery-head h2 { font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3rem); line-height: var(--lh-tight); }
+.gallery-head .lead { margin: var(--sp-4) auto 0; max-width: 36rem; }
+
+.cf {
+    position: relative;
+    height: 400px;
+    display: grid;
+    place-items: center;
+    perspective: 1600px;
+}
+
+.cf-track {
+    position: relative;
+    width: 400px; height: 400px;
+    transform-style: preserve-3d;
+}
+
+.cf-card {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 400px; height: 400px;
+    border-radius: 30px;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transform-origin: center center;
+    background: var(--ink-chapter);
+    box-shadow: 0 40px 90px -34px color-mix(in srgb, var(--ink) 58%, transparent);
+    cursor: pointer;
+
+    transform:
+        translate(-50%, -50%)
+        translateX(calc(var(--rel, 0) * 240px))
+        translateZ(calc(var(--az, 0) * -240px))
+        rotateY(calc(var(--rel, 0) * -12deg))
+        rotateZ(calc(var(--rel, 0) * 8deg))
+        scale(calc(1 - var(--az, 0) * 0.16));
+
+    transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+.cf-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+
+/* THE STILL FORM. Five cards, card one active, exactly where JS would put
+   them. min(--az, 1) is what turns 0/1/2 into "is this one dimmed" without a
+   conditional — CSS has no ternary and this is the arithmetic that replaces
+   one. */
+.cf-card[data-slot="0"] { --rel:  0; --az: 0; }
+.cf-card[data-slot="1"] { --rel:  1; --az: 1; }
+.cf-card[data-slot="2"] { --rel:  2; --az: 2; }
+.cf-card[data-slot="3"] { --rel: -2; --az: 2; }
+.cf-card[data-slot="4"] { --rel: -1; --az: 1; }
+
+/* The veil. 60% inactive opacity in the reference is a black overlay at 40%,
+   not a transparency on the card — which matters, because a transparent card
+   would let the one behind it show through and the stack would turn to mud. */
+.cf-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: calc(min(var(--az, 0), 1) * .4);
+    transition: opacity .6s cubic-bezier(.22, 1, .36, 1);
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* --- the drawn covers --------------------------------------------------
+   One ground and one glass sheet per card; the arrangement inside the sheet
+   is what differs, and it is the shape of the thing that build produces. */
+.cf-art {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(152deg, var(--c), var(--c2));
+    display: grid;
+    place-items: center;
+}
+/* A plotting grid over the ground, so a flat gradient reads as a surface. */
+.cf-art::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(color-mix(in srgb, #fff 12%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, #fff 12%, transparent) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000, transparent 78%);
+}
+
+.cf-sheet {
+    position: relative;
+    width: 68%;
+    padding: 16px;
+    border-radius: 16px;
+    background: color-mix(in srgb, #fff 18%, transparent);
+    border: 1px solid color-mix(in srgb, #fff 26%, transparent);
+    /* NO backdrop-filter, deliberately. A backdrop-filtered element moves the
+       BACKDROP ROOT, and this site has already shipped that bug once: a fixed
+       canvas at z-index 0 made Chrome sample the hidden consultation modal
+       into the header's blur and the modal's form labels ghosted through on
+       every page. Inside a preserve-3d coverflow it did the same thing again,
+       painting the lead form across the top of this section. The sheet sits on
+       a flat gradient it owns, so a blur of that gradient looks identical to a
+       plain translucent white — there is nothing to gain and a whole class of
+       compositing bug to lose. */
+    display: grid;
+    gap: 8px;
+}
+.cf-sheet i { display: block; border-radius: 6px; background: color-mix(in srgb, #fff 62%, transparent); }
+.cf-sheet i.is-dim { background: color-mix(in srgb, #fff 28%, transparent); }
+
+/* Six shapes are rendered and each layout uses as many as it needs. One
+   markup shape for five covers is worth four hidden elements; five different
+   loops in index.php to save them would not be. */
+.cf-sheet.is-grid  i:nth-child(n+5),
+.cf-sheet.is-rows  i:nth-child(n+5),
+.cf-sheet.is-copy  i:nth-child(n+5),
+.cf-sheet.is-phone i:nth-child(n+4) { display: none; }
+
+/* store — a catalogue: four tiles */
+.cf-sheet.is-grid  { grid-template-columns: 1fr 1fr; }
+.cf-sheet.is-grid i { height: 54px; }
+/* booking — a week: four bars of different lengths */
+.cf-sheet.is-rows  i { height: 16px; }
+.cf-sheet.is-rows  i:nth-child(2) { width: 74%; }
+.cf-sheet.is-rows  i:nth-child(3) { width: 52%; }
+.cf-sheet.is-rows  i:nth-child(4) { width: 86%; }
+/* brand — a headline and its paragraph */
+.cf-sheet.is-copy  i:first-child { height: 34px; width: 78%; }
+.cf-sheet.is-copy  i { height: 10px; }
+.cf-sheet.is-copy  i:last-child { width: 46%; }
+/* dashboard — a chart */
+.cf-sheet.is-chart { grid-template-columns: repeat(6, 1fr); align-items: end; height: 118px; }
+.cf-sheet.is-chart i:nth-child(1) { height: 42%; }
+.cf-sheet.is-chart i:nth-child(2) { height: 66%; }
+.cf-sheet.is-chart i:nth-child(3) { height: 51%; }
+.cf-sheet.is-chart i:nth-child(4) { height: 82%; }
+.cf-sheet.is-chart i:nth-child(5) { height: 64%; }
+.cf-sheet.is-chart i:nth-child(6) { height: 96%; }
+/* mobile — a shell */
+.cf-sheet.is-phone { width: 40%; padding: 22px 14px; border-radius: 26px; }
+.cf-sheet.is-phone i { height: 12px; }
+.cf-sheet.is-phone i:first-child { height: 62px; }
+
+/* The label. A scrim under it because it is white type over artwork, and the
+   artwork is a gradient that gets light at one corner. */
+.cf-card-label {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 22px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, .72), transparent 88%);
+    color: #fff;
+}
+.cf-card-label b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: var(--fw-bold);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+}
+.cf-card-label span {
+    display: block;
+    margin-top: 6px;
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+    color: color-mix(in srgb, #fff 82%, transparent);
+}
+
+/* The dots are the only part of this a keyboard needs: five real buttons that
+   move the page to the scroll depth where that card is centred, which keeps
+   ONE source of truth for which card is active. */
+.cf-dots { display: flex; justify-content: center; gap: var(--sp-2); margin-top: var(--sp-6); }
+.cf-dot {
+    width: 34px; height: 4px;
+    border: 0; padding: 0;
+    border-radius: var(--r-pill);
+    background: var(--paper-4);
+    cursor: pointer;
+    transition: background var(--dur-2) var(--ease);
+}
+.cf-dot[aria-current="true"] { background: var(--accent); }
+.cf-dot:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+@media (min-width: 961px) {
+    .gallery { height: 260vh; padding-block: 0; }
+    .gallery-sticky {
+        position: sticky; top: 0;
+        height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+    }
+}
+
+@media (max-width: 960px) {
+    .gallery { padding-block: var(--section-y); }
+    .cf, .cf-track, .cf-card { width: 300px; height: 300px; }
+    .cf { width: auto; }
+    .cf-card {
+        transform:
+            translate(-50%, -50%)
+            translateX(calc(var(--rel, 0) * 170px))
+            translateZ(calc(var(--az, 0) * -200px))
+            rotateY(calc(var(--rel, 0) * -12deg))
+            rotateZ(calc(var(--rel, 0) * 8deg))
+            scale(calc(1 - var(--az, 0) * 0.16));
+    }
+    .cf-card-label b { font-size: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gallery { height: auto; padding-block: var(--section-y); }
+    .gallery-sticky { position: static; height: auto; }
+    .cf-card, .cf-card::after { transition: none; }
+}

@@ -669,12 +669,32 @@ select.form-control {
     place-items: center;
     padding: var(--sp-4);
     background: rgba(10, 14, 26, .55);
-    backdrop-filter: blur(6px);
     opacity: 0;
     visibility: hidden;
+
+    /* A CLOSED MODAL SHOULD COST NOTHING.
+
+       backdrop-filter used to be declared here unconditionally, and a
+       backdrop-filtered element is its own backdrop root and owns a
+       compositing layer whether or not anyone can see it — a full-viewport
+       fixed layer, blurring the page behind it, permanently, on every route.
+       It is only ever needed while the modal is open, so that is where it now
+       lives, and content-visibility skips rendering the subtree until then.
+
+       (This was found while chasing form labels that appeared to ghost across
+       the top of the page. It was NOT the cause — that was a class-name
+       collision, recorded on .field-canvas in css/09-scenes.css — but it is
+       worth keeping on its own merits.) */
+    content-visibility: hidden;
     transition: opacity var(--dur-2) var(--ease), visibility var(--dur-2);
 }
-.modal.is-open { opacity: 1; visibility: visible; }
+.modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    content-visibility: visible;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
 .modal-card {
     position: relative;
     width: min(560px, 100%);

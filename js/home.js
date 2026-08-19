@@ -80,6 +80,19 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
         .catch(() => { /* the CSS stack is a complete, readable fallback */ });
 }
 
+/* ----------------------------------------------------------- the gallery */
+
+/* Transforms and two custom properties per card, so it is gated on motion
+   preference rather than on the canvas ladder — a phone should get this, it is
+   the section's whole point. Under reduced motion css/09-scenes.css lays the
+   five cards out in the same coverflow with the transitions off. */
+if (document.querySelector('[data-gallery]')
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    import('./gallery.js')
+        .then((m) => m.initGallery(document.querySelector('[data-gallery]')))
+        .catch(() => { /* the CSS coverflow is already the complete design */ });
+}
+
 /* ------------------------------------------------------- the bento sheen */
 
 /* A highlight that follows the cursor is nothing without a cursor, so this is

@@ -154,6 +154,32 @@ $APP_POINTS = [
     'One backend behind the app and the website, never two',
 ];
 
+/**
+ * THE GALLERY — what a client actually commissions, as five covers.
+ *
+ * Naveen sent OriginKit's coverflow component and asked for the same thing
+ * with our own pictures. WE HAVE NO PICTURES, and that is a decision rather
+ * than a gap: 24 stock photographs were deleted from this site because they
+ * were other companies' premises standing in for our work, and swapping them
+ * back in under a nicer component would be the same lie in a better frame.
+ *
+ * So every cover here is DRAWN — a gradient ground and an abstract of the
+ * screen that kind of build produces. Nothing is fetched, nothing is a
+ * photograph of somebody else's business, and the day there are screenshots of
+ * real Rafly work they drop into the same slot with no other change.
+ *
+ * Columns: title, what it is, the two gradient stops, and which cover layout.
+ * The stops are the service accents as light/dark pairs — fills, on artwork,
+ * never text.
+ */
+$GALLERY = [
+    ['Online stores',        'Catalogue, checkout, and the operations behind them.',        '#0d6b34', '#2fa35e', 'grid'],
+    ['Booking sites',        'Enquiries and appointments that land where your team works.', '#0a63ff', '#5c93ff', 'rows'],
+    ['Brand and content',    'The pages that say what you do, written in your words.',      '#6134c9', '#9a6ff0', 'copy'],
+    ['Dashboards and apps',  'The internal screens that run the business day to day.',      '#0230c6', '#3d6ee8', 'chart'],
+    ['Mobile apps',          'iOS and Android, on the same backend as the site.',           '#046070', '#0a97ad', 'phone'],
+];
+
 /** Three phone shells. Centre, then left, then right. */
 $PHONES = [
     ['#0a63ff', '#5c93ff'],
@@ -189,7 +215,7 @@ $page = [
     'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
     'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
-    'styles'    => ['home'],
+    'styles'    => ['home', 'home-scenes'],
     'module'    => 'home',
     /* Was assets/render/core-og-1200.webp, a render of the deleted object.
        assets/og-cover.png is generated from logo.png by inc/tools/build-assets.php
@@ -240,6 +266,28 @@ require __DIR__ . '/partials/social-rail.php';
                  and material system to draw a single full-screen quad is not
                  defensible. aria-hidden because it is the room's lighting. */ ?>
         <canvas class="hero-aurora" data-aurora aria-hidden="true"></canvas>
+
+        <?php /* THE FLOOR. A real perspective grid receding to a horizon, which
+                 is the one thing the aurora could not give the hero: depth.
+                 Colour tells you the mood of a page; a converging grid tells
+                 you there is a space behind the words.
+
+                 IT IS CSS, NOT SHADER. rotateX on a plane of two repeating
+                 gradients is a genuine 3-D projection done by the compositor,
+                 and it costs no JavaScript, no WebGL and no bytes — so it is
+                 there for a visitor with scripts off, with a dead GPU, and on
+                 a phone, where the shader is gated away. The lines travel by
+                 animating background-position, which is the same convergence
+                 the reference does with geometry.
+
+                 It is masked away from the left so the headline never sits on
+                 a grid line, and everything in it is --blue as a FILL at low
+                 alpha, never as a mark. */ ?>
+        <div class="hero-floor" aria-hidden="true">
+            <span class="hero-floor-plane"></span>
+            <span class="hero-floor-nodes"></span>
+        </div>
+        <span class="hero-horizon" aria-hidden="true"></span>
 
         <div class="container">
             <div class="hero-grid">
@@ -627,6 +675,77 @@ require __DIR__ . '/partials/social-rail.php';
     </section>
 
     <?php /* ==========================================================
+       03c — THE GALLERY
+
+       OriginKit's coverflow, at its own numbers — Naveen sent the component
+       source, so the geometry in css/09-scenes.css is lifted value for value
+       rather than eyeballed: 1600 perspective, 240px of travel and 240px of
+       depth per step, 12 degrees of turn, 8 of lean, 0.16 of scale, a 40%
+       veil on everything that is not the centre.
+
+       WHAT CHANGED IS THE PICTURES AND THE INPUT. The reference ships
+       photographs and advances on a timer; this draws its own covers and
+       advances on scroll depth, because a section is not a carousel and a
+       carousel that runs whether or not anyone is looking at it is a thing to
+       ignore rather than to read.
+
+       Clicking a card does NOT set an index. It scrolls the page to the depth
+       at which that card is centred, so the scroll position stays the only
+       thing that decides what is active and the two can never disagree. The
+       dots underneath do the same and are the keyboard path.
+
+       Without JavaScript every card is laid out exactly where it would be with
+       the first one active — the stylesheet sets the same custom properties
+       js/gallery.js writes. It is the same design, holding still.
+       ========================================================== */ ?>
+    <section class="section gallery" id="build">
+        <div class="tex-hatch" aria-hidden="true"></div>
+
+        <div class="gallery-sticky">
+            <div class="container">
+                <div class="gallery-head">
+                    <p class="eyebrow" data-r="lift">What we build</p>
+                    <h2 data-r="lift">Five kinds of build,<br>one team behind them.</h2>
+                    <p class="lead" data-r="lift">
+                        Most work is one of these five. Scroll through them &mdash; or pick one,
+                        and the deck comes to it.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cf">
+                <div class="cf-track" data-gallery>
+<?php foreach ($GALLERY as $i => [$title, $what, $c1, $c2, $art]): ?>
+                    <div class="cf-card" data-slot="<?= (int)$i ?>" style="--c: <?= e($c1) ?>; --c2: <?= e($c2) ?>;">
+                        <span class="cf-art" aria-hidden="true">
+                            <span class="cf-sheet is-<?= e($art) ?>">
+                                <i></i><i></i><i class="is-dim"></i><i></i><i class="is-dim"></i><i></i>
+                            </span>
+                        </span>
+                        <span class="cf-card-label">
+                            <b><?= e($title) ?></b>
+                            <span><?= e($what) ?></span>
+                        </span>
+                    </div>
+<?php endforeach; ?>
+                </div>
+            </div>
+
+            <?php /* Real buttons, and the only part of this a keyboard needs.
+                     They move the PAGE, which is the same thing a click on a
+                     card does — one input, one source of truth. */ ?>
+            <div class="cf-dots">
+<?php foreach ($GALLERY as $i => [$title]): ?>
+                <button class="cf-dot" type="button" data-cf-dot
+                        aria-current="<?= $i === 0 ? 'true' : 'false' ?>">
+                    <span class="visually-hidden">Show <?= e($title) ?></span>
+                </button>
+<?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <?php /* ==========================================================
        04 — DELIVERY
 
        Calm on purpose, straight after the expensive section. A hairline
@@ -753,10 +872,10 @@ require __DIR__ . '/partials/social-rail.php';
 
             <div class="compare-wrap" data-r="lift">
                 <table class="compare">
-                    <caption class="sr-only">Rafly compared with a traditional agency and with hiring separate freelancers</caption>
+                    <caption class="visually-hidden">Rafly compared with a traditional agency and with hiring separate freelancers</caption>
                     <thead>
                         <tr>
-                            <th scope="col"><span class="sr-only">Aspect</span></th>
+                            <th scope="col"><span class="visually-hidden">Aspect</span></th>
                             <th scope="col">Rafly</th>
                             <th scope="col">Traditional agency</th>
                             <th scope="col">Separate freelancers</th>
