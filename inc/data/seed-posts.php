@@ -266,5 +266,60 @@ $posts[] = [
 HTML,
 ];
 
+// ---------------------------------------------------------------------------
+$posts[] = [
+    'slug'      => 'choosing-a-web-development-partner-delhi-ncr',
+    'title'     => 'How to Choose a Web Development Partner in Delhi NCR',
+    'tag'       => 'Digital Growth',
+    'excerpt'   => "A rebuild is expensive to get wrong twice. The questions worth asking before you sign — wherever the agency you're evaluating is based.",
+    'meta_desc' => 'What to actually ask a web development agency in Delhi NCR before you commit — ownership, scope, timelines, and who shows up after launch.',
+    'read'      => 6,
+    'body'      => <<<'HTML'
+<p>Delhi NCR has no shortage of web development agencies — Noida and Greater Noida alone have a dense cluster of them, ranging from one-person operations to large outsourcing shops. That makes the decision harder, not easier, because the pitch decks tend to converge on the same three words — "fast", "affordable", "quality" — regardless of what actually happens after you sign.</p>
+
+<p>This is the list of things worth checking before you do, in the order we think they matter.</p>
+
+<h2 id="ownership">Who owns the code when it is finished</h2>
+
+<p>Ask this first, in writing, before discussing anything else. Some agencies build on a platform or a codebase they control, and "handover" means a set of login credentials to something you cannot move without them. Others hand over the actual repository and full intellectual property on final payment — you can walk away, take the code to anyone else, and lose nothing.</p>
+
+<p>There is no universally correct answer here — a managed platform can be the right trade-off for the right business — but you want to know which one you are agreeing to, not discover it the day you want to switch developers.</p>
+
+<h2 id="scope">Whether the scope is written down before work starts</h2>
+
+<p>A verbal understanding of "a website with a few pages and a contact form" is not a scope. It is an invitation for both sides to remember the conversation differently three weeks in. A written scope should say how many pages, which integrations, what is explicitly excluded, and what happens to a request that falls outside it — a change order, or a quiet assumption that it was always included.</p>
+
+<blockquote><p>The agencies worth working with will write the boundaries down without being asked, because they have been burned by not doing it at least once. The ones who resist a written scope are usually not being difficult — they are keeping the door open to renegotiate later, on their terms.</p></blockquote>
+
+<h2 id="timeline">Whether the timeline survives contact with reality</h2>
+
+<p>"Two weeks" for a real business website with content, integrations and a review cycle is rarely true, and an agency that promises it either has not thought it through or is planning to blow past it quietly. A credible timeline breaks into stages — discovery, scope and plan, build, launch — each with its own estimate, because that is what lets you see where a delay is actually happening instead of just hearing "we're a bit behind" in week five.</p>
+
+<h2 id="security">Whether security is part of the build or an afterthought</h2>
+
+<p>Ask directly: is a security review part of the standard build, or a separate line item you have to request? Form handling, session management and basic access control are not exotic — they are baseline work — but plenty of builds ship without them because nobody asked and nobody offered. Retrofitting security onto a live site with real customer data is a worse position than building it in from day one.</p>
+
+<h2 id="local">Why local presence still matters, even for remote-friendly work</h2>
+
+<p>Most of what a web build actually requires — a call, a shared document, a staging link to review — works perfectly well over a video call with an agency anywhere. But being based in the same city or region removes friction at specific moments: a launch that benefits from someone in the room, a stakeholder who would rather meet than call, a timezone that never has to be negotiated. For a business operating in Greater Noida or the wider Delhi NCR area, that is a genuine, if secondary, advantage worth weighing — not a requirement, but a tiebreaker.</p>
+
+<h2 id="after-launch">What happens the week after launch</h2>
+
+<p>The build is the visible part. What decides whether the relationship was worth it is what happens after: is there a support window included, or does every question after handover generate a new invoice? Is there a named person who answers when something breaks on a Saturday, or a ticket queue that resolves eventually? Ask for this in writing too — it is the part most often left to a vague verbal assurance.</p>
+
+<h2 id="the-checklist">The short version</h2>
+
+<ul>
+    <li>Who owns the code and the repository when the project ends?</li>
+    <li>Is the scope written down, including what is explicitly excluded?</li>
+    <li>Does the timeline break into stages you can actually check progress against?</li>
+    <li>Is a security review included, or a separate ask?</li>
+    <li>What support exists after launch, and who is it from?</li>
+</ul>
+
+<p>These questions work regardless of which agency you are evaluating, in Delhi NCR or anywhere else. We answer all five plainly on our own <a href="/web-development">web development</a> page and our <a href="/locations/greater-noida">Greater Noida</a> page, including the specific things we do not take on — because a published limit is easier to trust than a verbal promise to do everything.</p>
+HTML,
+];
+
     return $posts;
 })();

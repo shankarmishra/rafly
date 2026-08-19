@@ -106,7 +106,18 @@ function metrics_trust_bar(): array
     $structural = [
         metric_structural(count(services_all()), '',    'Services Under One Roof'),
         metric_structural(1,                     '',    'Point Of Contact'),
-        metric_structural(24,                    '/7',  'Support Availability'),
+        /* "24/7 Support Availability" was here and has been removed. It was
+           classed as STRUCTURAL — true by construction, needing no verified
+           flag — but it is not structural, it is a claim, and the site
+           contradicts it twice on the same page: contact hours are published
+           as "Mon - Fri, 09:00 - 18:00 IST" and the assurance beside the form
+           says "a person replies within one working day".
+
+           metric_structural() is for facts derived from how the company is
+           organised, like the number of services. Anything a customer could
+           hold us to belongs in metric_claim(), behind a verified flag that
+           someone has to actively set. */
+        metric_structural(0,                     '',    'Handoff Gaps'),
         metric_structural(100,                   '%',   'IP Ownership Transferred'),
     ];
 
