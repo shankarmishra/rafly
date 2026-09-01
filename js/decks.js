@@ -119,18 +119,24 @@ function makeDeck(section, host, geo, order, cover) {
 
     function frame() {
         const r = section.getBoundingClientRect();
-        const span = r.height - window.innerHeight;
+        const vh = window.innerHeight || 800;
+        const span = r.height - vh;
 
-        // A section shorter than the viewport has no scroll range of its own;
-        // treat it as fully open rather than dividing by zero.
-        const raw = span > 0 ? clamp01(-r.top / span) : 1;
+        const raw = span > 0 ? clamp01(-r.top / span) : clamp01((vh * 0.85 - r.top) / (vh * 0.70 + r.height));
         eased = lerp(eased, raw, 0.09);
+
+        // Synchronize dots progress indicator
+        const dots = [...section.querySelectorAll('.pd-dot')];
+        if (dots.length) {
+            const activeIdx = Math.min(dots.length - 1, Math.floor(eased * dots.length));
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('is-active', idx === activeIdx);
+            });
+        }
 
         // Two overlapping stages. The fan is complete at 55% and the collapse
         // runs from there to 90%, which leaves a tenth of the range as a hold
-        // on the finished arrangement before the sticky releases. Earlier this
-        // was a single stage completing at 78% and the last fifth was a deck
-        // standing still — correct as choreography, wrong as layout.
+        // on the finished arrangement before the sticky releases.
         const openT  = easeInOut(clamp01((eased - 0.02) / 0.53));
         const coverT = cover ? easeInOut(clamp01((eased - 0.55) / 0.35)) : 0;
 
@@ -141,10 +147,6 @@ function makeDeck(section, host, geo, order, cover) {
             // 0.07, not 0: the deck opens FROM a visible tight stack.
             const k = 0.07 + 0.93 * e;
 
-            // Where this card is in the fan RIGHT NOW — the collapse
-            // interpolates away from the live fan value, not from the fan's
-            // finished value, so the two stages can overlap without a jump if
-            // the section is ever shortened.
             const fx  = g.x * k;
             const fy  = lerp(26, 0, e) + g.y * k - i * 4 * (1 - e);
             const fz  = g.z * k;
@@ -152,9 +154,6 @@ function makeDeck(section, host, geo, order, cover) {
             const frz = g.rz * k;
             const fs  = lerp(0.86, g.s, e);
 
-            // The idle bob and the forward lean both die out as the deck locks
-            // into the coverflow. A settled arrangement that is still breathing
-            // reads as unfinished.
             const bob = Math.sin(eased * 3 + i) * 9 * (1 - coverT);
 
             const x  = c ? lerp(fx,  c.x,  coverT) : fx;
@@ -170,21 +169,40 @@ function makeDeck(section, host, geo, order, cover) {
                 `rotateX(${(1 - e) * 6 * (1 - coverT)}deg) ` +
                 `scale(${s})`;
 
-            /* A CUSTOM PROPERTY, NOT style.opacity. The dim has to be
-               overridable by a media query — css/09-scenes.css pins
-               --slot-dim to 1 under prefers-reduced-motion — and an inline
-               opacity would win against any stylesheet rule that tried. */
             if (c) el.style.setProperty('--slot-dim', String(lerp(1, c.dim, coverT)));
         }
 
         raf = requestAnimationFrame(frame);
     }
 
+    // Interactive Click-to-Pick Deck Navigation
+    const dots = [...section.querySelectorAll('.pd-dot')];
+    dots.forEach((dot, idx) => {
+        dot.style.cursor = 'pointer';
+        dot.addEventListener('click', () => {
+            const targetRatio = (idx + 0.5) / dots.length;
+            const secTop = section.getBoundingClientRect().top + window.scrollY;
+            const span = section.offsetHeight - window.innerHeight;
+            const scrollDistance = span > 0 ? span * targetRatio : (section.offsetHeight * targetRatio);
+            window.scrollTo({ top: secTop + scrollDistance, behavior: 'smooth' });
+        });
+    });
+
+    items.forEach(({ el }, idx) => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+            const targetRatio = (idx + 0.5) / items.length;
+            const secTop = section.getBoundingClientRect().top + window.scrollY;
+            const span = section.offsetHeight - window.innerHeight;
+            const scrollDistance = span > 0 ? span * targetRatio : (section.offsetHeight * targetRatio);
+            window.scrollTo({ top: secTop + scrollDistance, behavior: 'smooth' });
+        });
+    });
+
     const start = () => { if (!running) { running = true; raf = requestAnimationFrame(frame); } };
     const stop = () => { running = false; cancelAnimationFrame(raf); };
 
-    /* Only run while the section is anywhere near the viewport. A deck five
-       screens below the fold does not need a frame budget. */
+    /* Only run while the section is anywhere near the viewport. */
     const io = new IntersectionObserver(
         ([entry]) => (entry.isIntersecting ? start() : stop()),
         { rootMargin: '20% 0px' }

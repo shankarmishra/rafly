@@ -152,41 +152,125 @@ $DECK = [
 ];
 
 /**
- * The app section, and it is deliberately CAPABILITY rather than claim. Not
- * "we shipped N apps" and not a store rating: those are numbers, and the site
- * does not publish a number it cannot back. These say what the work is.
+ * VIRAL REELS & SHORT-FORM CONTENT CAPABILITIES (5-PHASE CONTENT ENGINE)
+ * IDEA → SCRIPTING → PRODUCTION → DISTRIBUTION → CONVERSION
  */
-$APP_POINTS = [
-    'iOS and Android, native or cross-platform',
-    'Store submission, review responses, and the release after that',
-    'One backend behind the app and the website, never two',
+$REELS_CAPABILITIES = [
+    [
+        'idx'   => '01',
+        'phase' => 'STRATEGY',
+        'title' => 'Algorithmic Hook Strategy',
+        'desc'  => 'Audience intent profiling & 3-second hook formulas.',
+        'tag'   => 'Retention Engine',
+        'icon'  => 'crosshair',
+    ],
+    [
+        'idx'   => '02',
+        'phase' => 'SCRIPTING',
+        'title' => 'Direct-Response Scripting',
+        'desc'  => 'Zero-filler copy calibrated for viral binge-watch velocity.',
+        'tag'   => 'High-Intent Copy',
+        'icon'  => 'pencil',
+    ],
+    [
+        'idx'   => '03',
+        'phase' => 'PRODUCTION',
+        'title' => '4K Motion & Sound Design',
+        'desc'  => 'Cinematic punch-ins, bespoke mixing & 60FPS precision.',
+        'tag'   => 'Studio Polish',
+        'icon'  => 'play',
+    ],
+    [
+        'idx'   => '04',
+        'phase' => 'DISTRIBUTION',
+        'title' => 'Multi-Format Social Matrix',
+        'desc'  => 'Synchronized rollout across Reels, Shorts & TikTok Ads.',
+        'tag'   => 'Omnichannel Reach',
+        'icon'  => 'share-2',
+    ],
+    [
+        'idx'   => '05',
+        'phase' => 'CONVERSION',
+        'title' => 'Revenue & ROAS Pipeline',
+        'desc'  => 'Frictionless DM funnels & 100% attributed store checkout.',
+        'tag'   => 'Attributed ROAS',
+        'icon'  => 'trending-up',
+    ],
+];
+$CONTENT_REELS_POINTS = array_column($REELS_CAPABILITIES, 'title');
+$APP_POINTS = &$CONTENT_REELS_POINTS;
+
+$MODULES = [
+    ['01', 'web-development',         'Web',       'Sites and web apps that load fast and do not fall over as you grow.',            '--svc-web',       'code'],
+    ['02', 'web-security',            'Security',  'A practical look at what someone probing your site would find first.',           '--svc-security',  'shield'],
+    ['03', 'marketing-advertisement', 'Marketing', 'Campaigns built around who is actually buying, reported in plain language.',     '--svc-marketing', 'megaphone'],
+    ['04', 'content-creation',        'Content',   'Copy that says what you do, in your words, without the filler.',                 '--svc-content',   'pencil'],
+    ['05', 'ecommerce-support',       'Commerce',  'The unglamorous side of selling online, kept in order.',                         '--svc-ecom',      'shopping-cart'],
+];
+
+$DECK = [
+    ['web',       'Web Development', '#0a63ff', '#4b8bff'],
+    ['security',  'Web Security',    '#0230c6', '#3d6ee8'],
+    ['marketing', 'Marketing',       '#1b6bff', '#6aa4ff'],
+    ['content',   'Content',         '#001a7a', '#3a63d8'],
+    ['commerce',  'Commerce',        '#0847d6', '#5c93ff'],
 ];
 
 /**
- * THE GALLERY — what a client actually commissions, as five covers.
- *
- * Naveen sent OriginKit's coverflow component and asked for the same thing
- * with our own pictures. WE HAVE NO PICTURES, and that is a decision rather
- * than a gap: 24 stock photographs were deleted from this site because they
- * were other companies' premises standing in for our work, and swapping them
- * back in under a nicer component would be the same lie in a better frame.
- *
- * So every cover here is DRAWN — a gradient ground and an abstract of the
- * screen that kind of build produces. Nothing is fetched, nothing is a
- * photograph of somebody else's business, and the day there are screenshots of
- * real Rafly work they drop into the same slot with no other change.
- *
- * Columns: title, what it is, the two gradient stops, and which cover layout.
- * The stops are the service accents as light/dark pairs — fills, on artwork,
- * never text.
+ * WHAT WE BUILD — FOUR KINDS OF BUILD, ONE CONNECTED TEAM
+ * ONE TEAM // FOUR CAPABILITIES // ONE UNIFIED DIGITAL SYSTEM
  */
-$GALLERY = [
-    ['Online stores',        'Catalogue, checkout, and the operations behind them.',        '#0d6b34', '#2fa35e', 'grid'],
-    ['Booking sites',        'Enquiries and appointments that land where your team works.', '#0a63ff', '#5c93ff', 'rows'],
-    ['Brand and content',    'The pages that say what you do, written in your words.',      '#6134c9', '#9a6ff0', 'copy'],
-    ['Dashboards and apps',  'The internal screens that run the business day to day.',      '#0230c6', '#3d6ee8', 'chart'],
-    ['Mobile apps',          'iOS and Android, on the same backend as the site.',           '#046070', '#0a97ad', 'phone'],
+$BUILD_SERVICES = [
+    [
+        'idx'       => '01',
+        'key'       => 'strategy',
+        'title'     => 'Brand & Digital Strategy',
+        'sub'       => 'Research-driven strategy that aligns brand, audience and growth.',
+        'keywords'  => ['STRATEGY', 'DISCOVERY', 'POSITIONING'],
+        'accent'    => '#0a63ff',
+        'tag'       => 'FOUNDATION & POSITIONING',
+        'kpi'       => 'Market Alignment',
+        'metric'    => '+180% Signal Velocity',
+        'desc_long' => 'Deep audience intent discovery, market positioning vectors, and unified brand architecture designed to convert high-intent demand.',
+    ],
+    [
+        'idx'       => '02',
+        'key'       => 'experience',
+        'title'     => 'UX & UI Experience Design',
+        'sub'       => 'Interfaces that feel simple, intuitive and distinctly human.',
+        'keywords'  => ['UX RESEARCH', 'UI SYSTEMS', 'PROTOTYPING'],
+        'accent'    => '#2563eb',
+        'tag'       => 'HUMAN-CENTERED SYSTEMS',
+        'kpi'       => 'Design Token Scalability',
+        'metric'    => '60FPS Native Micro-Flows',
+        'desc_long' => 'High-end design systems, component libraries, and interactive prototypes calibrated for effortless cognitive clarity.',
+    ],
+    [
+        'idx'       => '03',
+        'key'       => 'development',
+        'title'     => 'Web & App Development',
+        'sub'       => 'Fast, secure and scalable digital experiences built to grow.',
+        'keywords'  => ['FRONTEND', 'BACKEND', 'APIs'],
+        'accent'    => '#0230c6',
+        'tag'       => 'ZERO-BLOAT ARCHITECTURE',
+        'kpi'       => 'Sub-50ms Response Time',
+        'metric'    => '100% Type-Safe Full-Stack',
+        'desc_long' => 'Modern performant web applications, custom APIs, and native mobile surfaces engineered with zero unnecessary dependencies.',
+    ],
+    [
+        'idx'       => '04',
+        'key'       => 'growth',
+        'title'     => 'Growth & Performance Marketing',
+        'sub'       => 'Data-led campaigns designed to create measurable growth.',
+        'keywords'  => ['PERFORMANCE', 'ACQUISITION', 'ROAS'],
+        'accent'    => '#6134c9',
+        'tag'       => 'ATTRIBUTED CONVERSION',
+        'kpi'       => 'Full-Funnel Attribution',
+        'metric'    => '4.8x Performance ROAS',
+        'desc_long' => 'High-velocity acquisition engines, precision creative iteration, and attribution funnels directly tied to customer checkout.',
+    ],
 ];
+$GALLERY = $BUILD_SERVICES; // Backward compatibility alias
 
 /**
  * Three phone shells, and the screen each one renders. Centre, then left, then
@@ -217,11 +301,100 @@ $PHONES = [
 $caseStudies = case_studies_all(3);
 $bundles     = bundles_all();
 
-/** Every honest limit the five services declare, in one list. */
+/** Service Tabs for the interactive limits terminal (No 'All' option). */
+$serviceTabs = [
+    [
+        'slug'     => 'web-development',
+        'label'    => 'Web Development',
+        'short'    => 'Web Dev',
+        'icon'     => 'code',
+        'scTok'    => '--svc-web',
+        'count'    => 3,
+        'badge'    => 'Design & Stacks',
+    ],
+    [
+        'slug'     => 'web-security',
+        'label'    => 'Web Security',
+        'short'    => 'Security',
+        'icon'     => 'shield',
+        'scTok'    => '--svc-security',
+        'count'    => 3,
+        'badge'    => 'Hardening & Audit',
+    ],
+    [
+        'slug'     => 'marketing-advertisement',
+        'label'    => 'Marketing & Ads',
+        'short'    => 'Marketing',
+        'icon'     => 'trending-up',
+        'scTok'    => '--svc-marketing',
+        'count'    => 3,
+        'badge'    => 'ROAS & Channels',
+    ],
+    [
+        'slug'     => 'content-creation',
+        'label'    => 'Content & Words',
+        'short'    => 'Content',
+        'icon'     => 'pencil',
+        'scTok'    => '--svc-content',
+        'count'    => 3,
+        'badge'    => 'Copy & Voice',
+    ],
+    [
+        'slug'     => 'ecommerce-support',
+        'label'    => 'E-Commerce Ops',
+        'short'    => 'Commerce',
+        'icon'     => 'shopping-cart',
+        'scTok'    => '--svc-ecom',
+        'count'    => 3,
+        'badge'    => 'Store & Checkout',
+    ],
+];
+
+/** Every honest limit the five services declare, indexed per service. */
 $limits = [];
+$standardsMap = [
+    'Native mobile apps'           => '100% focused on ultra-fast browser apps & PWAs with 99+ Core Web Vitals.',
+    'Brand identity from scratch'  => 'We refine your existing assets for high-converting digital interface systems.',
+    'Enterprise replatforming'     => 'Right-sized scalable architectures with zero multi-year migration risk.',
+    'Formal penetration testing'   => 'Direct security hardening for forms, sessions, and headers included in build.',
+    'Compliance certification'     => 'Pragmatic technical safeguards that protect real customer data day to day.',
+    'Live incident response'       => 'Proactive defensive architecture built up front to prevent security incidents.',
+    'Guaranteed rankings or leads' => 'Transparent conversion tracking, high-intent targeting, and clear ROI reporting.',
+    'Large-scale media buying'     => 'High-intent search & paid social campaigns built for owner-operator returns.',
+    'Influencer and PR management' => 'Direct conversion funnels and ad creative that drive measurable revenue.',
+    'Video production'             => 'High-impact website, funnel, and campaign copy in your genuine brand voice.',
+    'Technical documentation'      => 'Commercial copy that explains your value clearly to paying customers.',
+    'Translation'                  => 'Native English copywriting tailored for clarity, trust, and conversions.',
+    'Warehousing and fulfilment'   => 'Digital storefront architecture, checkout speed, and payment reconciliation.',
+    'Bookkeeping and filing'       => 'Cleanly mapped store and gateway payout records ready for your accountant.',
+    'Staffing your inbox'          => 'Documented operating procedures and automated customer confirmation flows.',
+];
+
+$svcTokenMap = [
+    'web-development'         => '--svc-web',
+    'web-security'            => '--svc-security',
+    'marketing-advertisement' => '--svc-marketing',
+    'content-creation'        => '--svc-content',
+    'ecommerce-support'       => '--svc-ecom',
+];
+
+$catTracker = [];
 foreach (services_all() as $svc) {
+    $slug = $svc['slug'] ?? '';
+    if (!isset($catTracker[$slug])) $catTracker[$slug] = 0;
     foreach (($svc['boundaries'] ?? []) as $b) {
-        $limits[] = [$svc['title'], $b['title'], $b['desc']];
+        $title = $b['title'];
+        $catTracker[$slug]++;
+        $limits[] = [
+            'svc'       => $svc['title'],
+            'slug'      => $slug,
+            'icon'      => $svc['icon'] ?? 'shield',
+            'scTok'     => $svcTokenMap[$slug] ?? '--svc-web',
+            'localIdx'  => $catTracker[$slug],
+            'title'     => $title,
+            'desc'      => $b['desc'],
+            'standard'  => $standardsMap[$title] ?? 'Direct execution with full accountability and transparent scope.',
+        ];
     }
 }
 
@@ -275,177 +448,341 @@ require __DIR__ . '/partials/social-rail.php';
        blobs exist as CSS radial-gradients on .hero-scene at their t=0
        positions. Without JS the hero is the same design, standing still.
        ========================================================== */ ?>
-    <section class="section hero hero-scene" id="home" data-hero>
-        <?php /* Painted by js/aurora.js — raw WebGL2, one fragment shader, one
-                 triangle. Not three.js: loading 365 KB of scene graph, camera
-                 and material system to draw a single full-screen quad is not
-                 defensible. aria-hidden because it is the room's lighting. */ ?>
-        <canvas class="hero-aurora" data-aurora aria-hidden="true"></canvas>
+    <?php /* ==========================================================================
+       THE RAFly GROWTH STUDIO — hero section
 
-        <?php /* THE FLOOR. A real perspective grid receding to a horizon, which
-                 is the one thing the aurora could not give the hero: depth.
-                 Colour tells you the mood of a page; a converging grid tells
-                 you there is a space behind the words.
+       Concept: "Growth Reactor / Growth Lens"
+       A translucent crystalline growth structure sitting inside a luminous studio environment.
+       Five flowing ribbons (Web, Security, Marketing, Content, Commerce) converge
+       into one central translucent crystalline core — communicating:
+       "Five capabilities. One growth system."
 
-                 IT IS CSS, NOT SHADER. rotateX on a plane of two repeating
-                 gradients is a genuine 3-D projection done by the compositor,
-                 and it costs no JavaScript, no WebGL and no bytes — so it is
-                 there for a visitor with scripts off, with a dead GPU, and on
-                 a phone, where the shader is gated away. The lines travel by
-                 animating background-position, which is the same convergence
-                 the reference does with geometry.
+       Composition: Asymmetric editorial layout.
+       Desktop: LEFT ~48-52% editorial content / RIGHT ~48-52% generative visual.
+       The visual is a Canvas2D + SVG hybrid rendered in hero-growth-field.js.
 
-                 It is masked away from the left so the headline never sits on
-                 a grid line, and everything in it is --blue as a FILL at low
-                 alpha, never as a mark. */ ?>
-        <div class="hero-floor" aria-hidden="true">
-            <span class="hero-floor-plane"></span>
-            <span class="hero-floor-nodes"></span>
+       NO fake SaaS metrics. NO orbit rings. NO dashboard cards. NO telemetry.
+       ONE visual idea. ONE material language. ONE motion language.
+       ========================================================== */ ?>
+    <?php /* ==========================================================================
+       THE RAFly SIGNAL FIELD — HERO SECTION
+       
+       Concept: "The RAFly Signal Field"
+       A living generative visual system representing: BUILD → PROTECT → GROW → CREATE → CONVERT
+       All five capabilities converge into one central crystalline 3D sculpture sitting inside
+       a luminous digital studio environment.
+       
+       Composition: Asymmetric 45/55 editorial layout.
+       Left (~44%): Editorial typography with exact 3-line headline & light sweep accent.
+       Right (~56%): Generative Canvas2D + SVG 3D Signal Field sculpture.
+       ========================================================================== */ ?>
+    <section class="section hero sig-hero" id="home" data-hero aria-label="RAFly — Digital Growth Studio">
+
+        <?php /* ── 8-LAYER ENVIRONMENT & TEXTURE SYSTEM ── */ ?>
+        <div class="sig-env" aria-hidden="true">
+            <div class="sig-env__grain"></div>
+            <div class="sig-env__grid"></div>
+            <div class="sig-env__dots"></div>
+            <div class="sig-env__glow glow-primary"></div>
+            <div class="sig-env__glow glow-secondary"></div>
+            <div class="sig-env__scanbeam"></div>
+            <svg class="sig-env__blueprint" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
+                <path class="sig-bp-line line-a" d="M -100,220 Q 380,120 780,440 T 1540,620" stroke="url(#sigBpGrad1)" stroke-width="1.5" />
+                <path class="sig-bp-line line-b" d="M -100,640 Q 420,780 780,440 T 1540,180" stroke="url(#sigBpGrad2)" stroke-width="1.5" />
+                <defs>
+                    <linearGradient id="sigBpGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.45" />
+                        <stop offset="50%" stop-color="#0891b2" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#0a63ff" stop-opacity="0" />
+                    </linearGradient>
+                    <linearGradient id="sigBpGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#0230c6" stop-opacity="0.35" />
+                        <stop offset="50%" stop-color="#6134c9" stop-opacity="0.20" />
+                        <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="sig-env__ghost-words" data-ghost-words>
+                <span class="sig-ghost" data-ghost="build">BUILD</span>
+                <span class="sig-ghost" data-ghost="protect">PROTECT</span>
+                <span class="sig-ghost" data-ghost="create">CREATE</span>
+                <span class="sig-ghost" data-ghost="grow">GROW</span>
+                <span class="sig-ghost" data-ghost="convert">CONVERT</span>
+            </div>
+            <div class="sig-env__light-sweep"></div>
         </div>
-        <span class="hero-horizon" aria-hidden="true"></span>
 
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-copy">
-                    <p class="meta-row" data-r="lift">
-                        <span><b>Built for</b> owner-operated businesses</span>
-                        <span><b>Model</b> one scope, one price</span>
-                    </p>
+        <?php /* ── MAIN CONTAINER ── */ ?>
+        <div class="container sig-container">
+            <div class="sig-grid">
 
-                    <?php /* Each line is masked and slides up from behind its own
-                             edge, which reads as typeset rather than animated. The
-                             mask boxes are inert without JS — css/09-scenes.css
-                             resolves them to translateY(0) under .no-js. */ ?>
-                    <h1 class="hero-title is-in">
-                        <span class="line-mask"><span>Build Fast.</span></span>
-                        <span class="line-mask"><span>Grow Faster.</span></span>
-                        <span class="line-mask"><span class="grad-word">Scale Smarter.</span></span>
+                <?php /* ── LEFT SIDE — EDITORIAL CONTENT (~44%) ── */ ?>
+                <div class="sig-content">
+
+                    <?php /* Eyebrow */ ?>
+                    <div class="sig-eyebrow">
+                        <span class="sig-eyebrow__dot" aria-hidden="true"></span>
+                        <span class="sig-eyebrow__label">DIGITAL GROWTH PARTNER</span>
+                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
+                        <span class="sig-eyebrow__item">WEB</span>
+                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
+                        <span class="sig-eyebrow__item">SECURITY</span>
+                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
+                        <span class="sig-eyebrow__item">GROWTH</span>
+                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
+                        <span class="sig-eyebrow__item">COMMERCE</span>
+                    </div>
+
+                    <?php /* Headline — Exactly 3 lines */ ?>
+                    <h1 class="sig-headline" aria-label="Build fast. Grow faster. Scale smarter.">
+                        <span class="sig-h-line" data-line="1">
+                            <span class="sig-h-mask"><span class="sig-h-inner">Build fast.</span></span>
+                        </span>
+                        <span class="sig-h-line" data-line="2">
+                            <span class="sig-h-mask"><span class="sig-h-inner">Grow faster.</span></span>
+                        </span>
+                        <span class="sig-h-line sig-h-line--accent" data-line="3">
+                            <span class="sig-h-mask">
+                                <span class="sig-h-inner">
+                                    <span class="sig-h-focus" data-light-sweep>Scale smarter.</span>
+                                </span>
+                            </span>
+                        </span>
                     </h1>
 
-                    <p class="hero-lead" data-r="lift">
-                        Web, security, marketing, content and commerce — built by one team,
-                        on one plan, with one person accountable. Not five vendors who have
-                        never spoken to each other.
+                    <?php /* Body copy */ ?>
+                    <p class="sig-body">
+                        One team building the digital systems that turn attention into growth.
                     </p>
 
-                    <div class="hero-cta" data-r="lift">
-                        <a class="btn btn-pill" href="#start" data-magnetic>Book a free consultation</a>
-                        <a class="btn btn-line" href="#delivery" data-magnetic>See how delivery runs</a>
+                    <?php /* CTAs */ ?>
+                    <div class="sig-actions">
+                        <button type="button" class="sig-btn sig-btn--primary" data-modal-open="consultationModal" data-magnetic>
+                            <span class="sig-btn__label">Book a free consultation</span>
+                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            <span class="sig-btn__sheen" aria-hidden="true"></span>
+                        </button>
+                        <a class="sig-btn sig-btn--secondary" href="#approach" data-magnetic>
+                            <span class="sig-btn__label">See our work</span>
+                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-up-right') ?></span>
+                        </a>
                     </div>
 
-                    <dl class="spec">
-<?php foreach ($MODULES as [$idx, $slug, $label, $blurb]): ?>
-                        <div class="spec-row">
-                            <dt><?= e($idx) ?></dt>
-                            <dd><a href="<?= e(site_path('/' . $slug)) ?>"><?= e($label) ?></a></dd>
-                        </div>
-<?php endforeach; ?>
-                    </dl>
-                </div>
+                    <?php /* Compact Editorial Trust Row */ ?>
+                    <div class="sig-trust">
+                        <span class="sig-trust__cell">
+                            <span class="sig-trust__dot" aria-hidden="true">◉</span>
+                            <span>48H DISCOVERY</span>
+                        </span>
+                        <span class="sig-trust__sep" aria-hidden="true">·</span>
+                        <span class="sig-trust__cell">
+                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                            <span>SECURITY INCLUDED</span>
+                        </span>
+                        <span class="sig-trust__sep" aria-hidden="true">·</span>
+                        <span class="sig-trust__cell">
+                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                            <span>100% IP OWNERSHIP</span>
+                        </span>
+                        <span class="sig-trust__sep" aria-hidden="true">·</span>
+                        <span class="sig-trust__cell">
+                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                            <span>ONE UNIFIED TEAM</span>
+                        </span>
+                    </div>
 
-                <?php /* THE CARDS ARE DECORATIVE AND SAY SO. Every number in them
-                         is shape, not data — bar heights, a ring percentage, a
-                         status word. None of it is presented as a measurement of
-                         anything, none of it is a client claim, and the whole
-                         cluster is aria-hidden so a screen reader is never read a
-                         chart that does not exist. That is the same rule
-                         inc/repo/metrics.php enforces for the trust bar: a number
-                         is either backed or it is not shown as fact.
+                </div><!-- /.sig-content -->
 
-                         data-depth is the z translation js/cluster.js gives each
-                         card, and it also scales that card's parallax travel, so
-                         the nearer cards move further. */ ?>
-                <div class="cluster" data-cluster aria-hidden="true">
-                    <div class="fcard" data-depth="0" style="width:290px; left:34px; top:6px;">
-                        <div class="fcard-head">
-                            <div>
-                                <div class="fcard-meta">Delivery</div>
-                                <div class="fcard-title">This week</div>
+                <?php /* ── RIGHT SIDE — SIGNATURE VISUAL: THE RAFly SIGNAL FIELD (~56%) ── */ ?>
+                <div class="sig-visual" aria-label="Interactive RAFly Signal Field Sculpture">
+
+                    <div class="sig-stage" data-signal-stage>
+
+                        <?php /* Multi-depth Canvas2D Signal Field */ ?>
+                        <div class="sig-3d-scene">
+                            <canvas class="sig-canvas" data-signal-canvas width="640" height="640" aria-hidden="true"></canvas>
+
+                            <?php /* SVG leader overlay for sparse capability indicators */ ?>
+                            <svg class="sig-annot-svg" viewBox="0 0 640 640" fill="none" aria-hidden="true">
+                                <path class="sig-leader sig-leader--web" data-leader="web" d="M 90,140 C 140,140 180,180 230,220" />
+                                <path class="sig-leader sig-leader--sec" data-leader="security" d="M 60,320 C 120,320 160,310 210,310" />
+                                <path class="sig-leader sig-leader--mkt" data-leader="marketing" d="M 550,140 C 500,140 460,180 410,220" />
+                                <path class="sig-leader sig-leader--cnt" data-leader="content" d="M 580,320 C 520,320 480,310 430,310" />
+                                <path class="sig-leader sig-leader--cmr" data-leader="commerce" d="M 320,570 C 320,510 320,460 320,410" />
+                            </svg>
+
+                            <?php /* Floating minimalist editorial labels (sparse, no SaaS cards) */ ?>
+                            <div class="sig-tag sig-tag--web" data-sig-tag="web">
+                                <span class="sig-tag__idx">01</span>
+                                <span class="sig-tag__name">WEB</span>
                             </div>
-                            <div class="fcard-pill">On track</div>
-                        </div>
-                        <div class="fcard-row">
-                            <div class="fcard-av"></div>
-                            <div style="flex:1">
-                                <div class="fcard-line" style="width:74%; margin-bottom:6px"></div>
-                                <div class="fcard-line" style="width:46%"></div>
+                            <div class="sig-tag sig-tag--sec" data-sig-tag="security">
+                                <span class="sig-tag__idx">02</span>
+                                <span class="sig-tag__name">SECURITY</span>
                             </div>
-                        </div>
-                        <div class="fcard-row">
-                            <div class="fcard-av is-green"></div>
-                            <div style="flex:1">
-                                <div class="fcard-line" style="width:62%; margin-bottom:6px"></div>
-                                <div class="fcard-line" style="width:38%"></div>
+                            <div class="sig-tag sig-tag--mkt" data-sig-tag="marketing">
+                                <span class="sig-tag__idx">03</span>
+                                <span class="sig-tag__name">MARKETING</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="fcard" data-depth="-90" style="width:216px; left:0; top:236px;">
-                        <div class="fcard-head">
-                            <div class="fcard-title">Traffic</div>
-                            <div class="fcard-meta">30d</div>
-                        </div>
-                        <div class="fcard-bars">
-                            <i style="height:34%"></i><i style="height:52%"></i><i style="height:41%"></i>
-                            <i style="height:68%"></i><i style="height:57%"></i><i style="height:83%"></i>
-                            <i style="height:72%"></i>
-                        </div>
-                    </div>
-
-                    <div class="fcard" data-depth="70" style="width:200px; left:246px; top:300px;">
-                        <div class="fcard-head">
-                            <div class="fcard-title">Security</div>
-                            <div class="fcard-meta">Scan</div>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:14px;">
-                            <div class="fcard-ring" style="--p:86%"></div>
-                            <div style="flex:1">
-                                <div class="fcard-line" style="width:82%; margin-bottom:7px"></div>
-                                <div class="fcard-line" style="width:56%"></div>
+                            <div class="sig-tag sig-tag--cnt" data-sig-tag="content">
+                                <span class="sig-tag__idx">04</span>
+                                <span class="sig-tag__name">CONTENT</span>
                             </div>
-                        </div>
-                    </div>
+                            <div class="sig-tag sig-tag--cmr" data-sig-tag="commerce">
+                                <span class="sig-tag__idx">05</span>
+                                <span class="sig-tag__name">COMMERCE</span>
+                            </div>
 
-                    <div class="fcard" data-depth="-40" style="width:172px; left:118px; top:436px;">
-                        <div class="fcard-head">
-                            <div class="fcard-title">Uptime</div>
-                            <div class="fcard-pill">Healthy</div>
-                        </div>
-                        <div class="fcard-line" style="width:100%; height:5px; margin-bottom:8px"></div>
-                        <div class="fcard-strip">
-<?php for ($i = 0; $i < 14; $i++): ?>
-                            <i<?= $i === 9 ? ' class="is-warn"' : '' ?>></i>
-<?php endfor; ?>
-                        </div>
-                    </div>
-                </div>
+                        </div><!-- /.sig-3d-scene -->
+
+                    </div><!-- /.sig-stage -->
+
+                </div><!-- /.sig-visual -->
+
+            </div><!-- /.sig-grid -->
+        </div><!-- /.container -->
+
+        <?php /* ── Scroll cue ── */ ?>
+        <div class="sig-scroll" aria-hidden="true">
+            <span class="sig-scroll__label">SCROLL TO DISCOVER</span>
+            <span class="sig-scroll__line"><i></i></span>
+        </div>
+
+    </section><!-- /.sig-hero -->
+    <section class="section statement manifesto-scene has-tex" id="approach" data-manifesto aria-label="The difference">
+        <!-- Generative Environment Layers -->
+        <div class="manifesto-bg" aria-hidden="true">
+            <div class="manifesto-ambient">
+                <span class="manifesto-glow glow-tr"></span>
+                <span class="manifesto-glow glow-bl"></span>
+                <span class="manifesto-glow glow-center"></span>
             </div>
+            <div class="manifesto-grid"></div>
+            <div class="manifesto-system" data-manifesto-system>
+                <!-- SVG Network Topology: thin connecting lines, nodes, travelling packets -->
+                <svg class="manifesto-topo-svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" fill="none">
+                    <defs>
+                        <linearGradient id="mTopoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.25" />
+                            <stop offset="50%" stop-color="#4b8bff" stop-opacity="0.10" />
+                            <stop offset="100%" stop-color="#0230c6" stop-opacity="0.22" />
+                        </linearGradient>
+                        <linearGradient id="mTopoGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#5c93ff" stop-opacity="0.18" />
+                            <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.06" />
+                        </linearGradient>
+                        <filter id="mNodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Structural Connection Paths -->
+                    <path class="topo-path path-primary" d="M120,340 C240,280 280,210 400,210 C520,210 560,390 680,390 C800,390 840,230 960,230 C1040,230 1080,300 1140,320" stroke="url(#mTopoGrad1)" stroke-width="1.2" stroke-dasharray="6 6" />
+                    <path class="topo-path path-secondary" d="M180,180 C300,180 340,360 460,360 C580,360 620,180 740,180 C860,180 900,370 1020,370 L1100,380" stroke="url(#mTopoGrad2)" stroke-width="1" />
+                    <path class="topo-path path-tertiary" d="M220,440 L380,440 C480,440 520,260 600,260 C680,260 720,450 820,450 L980,450" stroke="url(#mTopoGrad2)" stroke-width="0.8" stroke-dasharray="3 7" />
+
+                    <!-- Cross Interlinks -->
+                    <line x1="400" y1="210" x2="460" y2="360" stroke="url(#mTopoGrad1)" stroke-width="0.8" stroke-dasharray="2 4" />
+                    <line x1="600" y1="260" x2="680" y2="390" stroke="url(#mTopoGrad1)" stroke-width="0.8" stroke-dasharray="2 4" />
+                    <line x1="740" y1="180" x2="820" y2="450" stroke="url(#mTopoGrad1)" stroke-width="0.8" stroke-dasharray="2 4" />
+                    <line x1="860" y1="230" x2="1020" y2="370" stroke="url(#mTopoGrad2)" stroke-width="0.8" stroke-dasharray="2 4" />
+
+                    <!-- Topological Nodes -->
+                    <g class="topo-nodes">
+                        <circle cx="400" cy="210" r="3.5" class="topo-node node-pulse" />
+                        <circle cx="680" cy="390" r="4.5" class="topo-node node-primary" filter="url(#mNodeGlow)" />
+                        <circle cx="960" cy="230" r="3.5" class="topo-node node-pulse" />
+                        <circle cx="460" cy="360" r="3" class="topo-node" />
+                        <circle cx="600" cy="260" r="3.5" class="topo-node node-pulse" />
+                        <circle cx="740" cy="180" r="3" class="topo-node" />
+                        <circle cx="820" cy="450" r="3" class="topo-node" />
+                        <circle cx="1020" cy="370" r="2.5" class="topo-node" />
+                        <circle cx="180" cy="180" r="2" class="topo-node" />
+                        <circle cx="220" cy="440" r="2" class="topo-node" />
+                    </g>
+
+                    <!-- Travelling Data Packets -->
+                    <circle class="topo-packet packet-1" r="3" fill="#0a63ff" filter="url(#mNodeGlow)" />
+                    <circle class="topo-packet packet-2" r="2.5" fill="#4b8bff" filter="url(#mNodeGlow)" />
+                    <circle class="topo-packet packet-3" r="2" fill="#0230c6" />
+                </svg>
+            </div>
+            <div class="manifesto-particles" data-manifesto-particles>
+                <!-- Delicate floating micro particles -->
+                <span class="m-particle" style="--px:16%; --py:22%; --ps:2px; --pd:19s;"></span>
+                <span class="m-particle" style="--px:78%; --py:18%; --ps:3px; --pd:24s;"></span>
+                <span class="m-particle" style="--px:84%; --py:68%; --ps:2.5px; --pd:22s;"></span>
+                <span class="m-particle" style="--px:14%; --py:72%; --ps:2px; --pd:26s;"></span>
+                <span class="m-particle" style="--px:48%; --py:15%; --ps:1.5px; --pd:18s;"></span>
+                <span class="m-particle" style="--px:32%; --py:82%; --ps:2.5px; --pd:28s;"></span>
+                <span class="m-particle" style="--px:68%; --py:86%; --ps:2px; --pd:21s;"></span>
+                <span class="m-particle" style="--px:25%; --py:40%; --ps:1.5px; --pd:25s;"></span>
+                <span class="m-particle" style="--px:72%; --py:38%; --ps:2px; --pd:27s;"></span>
+                <span class="m-particle" style="--px:55%; --py:64%; --ps:1px; --pd:20s;"></span>
+                <span class="m-particle" style="--px:88%; --py:44%; --ps:2.5px; --pd:23s;"></span>
+                <span class="m-particle" style="--px:10%; --py:46%; --ps:1.5px; --pd:25s;"></span>
+            </div>
+            <div class="manifesto-grain"></div>
         </div>
 
-        <div class="scroll-cue" aria-hidden="true">
-            <span class="meta">Scroll</span>
-            <span class="rail"><i></i></span>
+        <!-- Technical Corner Annotations -->
+        <div class="manifesto-coords top-left" aria-hidden="true">
+            <span class="coord-crosshair">+</span>
+            <span class="coord-tag">02 / 09</span>
         </div>
-    </section>
+        <div class="manifesto-coords top-right" aria-hidden="true">
+            <span class="coord-tag">SYSTEM / ARCHITECTURE</span>
+            <span class="coord-crosshair">+</span>
+        </div>
 
-    <?php /* ==========================================================
-       02 — THE STATEMENT
+        <div class="container manifesto-container">
+            <!-- Eyebrow with technical animated entry line -->
+            <div class="manifesto-eyebrow" data-r="rise">
+                <span class="eyebrow-accent-line"></span>
+                <p class="statement-meta manifesto-meta">The difference</p>
+                <span class="eyebrow-node"></span>
+            </div>
 
-       A rest. One sentence, no object, no cards, no motion beyond the line
-       reveal. Opaque paper, which is what hides the stage behind it.
-       ========================================================== */ ?>
-    <section class="section statement grain" id="approach">
-        <div class="container">
-            <p class="statement-meta">The difference</p>
-            <p class="statement-line" data-r="lines">
-                We build digital&nbsp;systems,<br>not deliverables.
-            </p>
-            <p class="statement-sub">
+            <!-- Main Editorial Headline: Word-by-word reveal -->
+            <h2 class="statement-line manifesto-headline" aria-label="We build digital systems, not deliverables.">
+                <span class="headline-row">
+                    <span class="m-word" style="--w-idx: 0;"><span class="m-word-inner">We</span></span>
+                    <span class="m-word" style="--w-idx: 1;"><span class="m-word-inner">build</span></span>
+                    <span class="m-word m-emp" style="--w-idx: 2;">
+                        <span class="m-word-inner m-emp-inner">
+                            <span class="m-emp-gradient">digital&nbsp;systems,</span>
+                            <span class="m-emp-beam" aria-hidden="true"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="headline-row">
+                    <span class="m-word" style="--w-idx: 3;"><span class="m-word-inner">not</span></span>
+                    <span class="m-word" style="--w-idx: 4;"><span class="m-word-inner">deliverables.</span></span>
+                </span>
+            </h2>
+
+            <!-- Supporting Paragraph: Slower reveal, high legibility -->
+            <p class="statement-sub manifesto-sub" data-r="rise">
                 Five separate vendors produce five separate deliverables and no system.
                 The website does not know what the campaign promised; the campaign does
                 not know what the store can actually ship. We build the parts that have
                 to agree, together, so that they do.
             </p>
+        </div>
+
+        <!-- Technical Bottom Status Indicator -->
+        <div class="manifesto-status-bar" aria-hidden="true">
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">COHERENCE: UNIFIED // PARTS: IN SYNC</span>
+            </div>
+            <div class="status-meter">
+                <span class="status-meter-bar"></span>
+            </div>
         </div>
     </section>
 
@@ -470,387 +807,792 @@ require __DIR__ . '/partials/social-rail.php';
         </div>
     </div>
 
+
+
     <?php /* ==========================================================
-       02b — THE LAPTOP
-
-       Naveen sent Aceternity's MacbookScroll and asked for the same move with
-       our own screen in it. It sits HERE, between the statement and the
-       platform, because that is where it reads as an argument rather than as
-       an ornament: "we build systems, not deliverables" — the lid opens on the
-       system — "five products, one place they all live".
-
-       IT IS A DIFFERENT VERB, which is the only reason a fourth device section
-       is defensible on this page. The deck fans, the gallery slides, the
-       phones stand still; this one OPENS. The hinge is the whole effect and it
-       is CSS: .mb-lid rotates about its own bottom edge inside a perspective
-       container, so the screen swings up out of the base rather than rising
-       off it.
-
-       js/macbook.js writes exactly two numbers, --lid and --rig. The still
-       form is declared in the stylesheet, so with no JavaScript the laptop
-       stands open at its resting angle with the screen readable — not shut,
-       and not missing.
-
-       THE SCREEN IS THE ONE DARK SURFACE ALLOWED BELOW THE HERO, because it is
-       a screen. Everything inside it is a shape: no figure anywhere, only
-       states, the same rule partials/deck-mock.php holds to.
+       03 — THE RAFly SERVICE STUDIO
+       
+       One Large Cinematic Service Stage + Minimal Editorial Service Rail.
+       WEB → SECURITY → MARKETING → CONTENT → COMMERCE
        ========================================================== */ ?>
-    <section class="section macbook" id="portal">
-        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
-        <div class="orb" aria-hidden="true" style="width:820px; height:820px; left:50%; top:46%;
-             transform:translate(-50%,-50%);
-             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 16%, transparent), transparent 64%);"></div>
+    <section class="section service-studio" id="services" data-service-studio aria-label="THE RAFly SERVICE STUDIO — 05 Capabilities">
+        
+        <!-- KINETIC BACKGROUND GHOST TYPOGRAPHY -->
+        <div class="ss-ghost-words" aria-hidden="true">
+            <span class="ss-ghost kw-web">BUILD</span>
+            <span class="ss-ghost kw-security">PROTECT</span>
+            <span class="ss-ghost kw-marketing">CREATE</span>
+            <span class="ss-ghost kw-content">CONVERT</span>
+            <span class="ss-ghost kw-commerce">GROW</span>
+        </div>
 
-        <div class="mb-sticky">
+        <!-- LAYERED ATMOSPHERIC TEXTURE SYSTEM -->
+        <div class="ss-bg-env" aria-hidden="true">
+            <div class="ss-texture-grain"></div>
+            <div class="ss-texture-dotmatrix"></div>
+            <div class="ss-texture-grid"></div>
+            <div class="ss-texture-lines"></div>
+            <div class="ss-glow-primary"></div>
+            <div class="ss-light-dust"></div>
+        </div>
+
+        <div class="container ss-container">
+            <div class="ss-main-grid">
+                
+                <!-- LEFT COLUMN (~36%): EDITORIAL HEADLINE & STATEMENT -->
+                <div class="ss-content">
+                    
+                    <!-- Eyebrow -->
+                    <div class="ss-eyebrow">
+                        <span class="ss-eyebrow__tag">THE RAFly SERVICE STUDIO</span>
+                        <span class="ss-eyebrow__sep">/</span>
+                        <span class="ss-eyebrow__text">05 CAPABILITIES</span>
+                    </div>
+
+                    <!-- Headline (max 3 lines) -->
+                    <h2 class="ss-headline" aria-label="Everything your digital growth needs.">
+                        <span class="ss-h-line">Everything your</span>
+                        <span class="ss-h-line">digital growth</span>
+                        <span class="ss-h-line ss-h-line--accent">needs.</span>
+                    </h2>
+
+                    <!-- Paragraph -->
+                    <p class="ss-body">
+                        Web, security, marketing, content and commerce &mdash; built by one connected team.
+                    </p>
+
+                    <!-- CTA Link -->
+                    <div class="ss-action">
+                        <a href="#approach" class="ss-cta-link" data-magnetic>
+                            <span>Explore our capabilities</span>
+                            <span class="ss-cta-arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                        </a>
+                    </div>
+
+                </div><!-- /.ss-content -->
+
+                <!-- RIGHT COLUMN (~64%): CINEMATIC SERVICE STAGE + EDITORIAL RAIL -->
+                <div class="ss-stage-wrapper">
+                    
+                    <!-- CINEMATIC SERVICE STAGE (680–760px wide, 500–560px tall) -->
+                    <div class="ss-stage" data-service-stage>
+                        
+                        <!-- Stage Environment Canvas2D / SVG hybrid -->
+                        <canvas class="ss-canvas" data-stage-canvas width="740" height="520" aria-hidden="true"></canvas>
+
+                        <!-- Live Vector Geometry & Stage Overlay Layers -->
+                        <div class="ss-stage-overlay" data-stage-overlay>
+                            <div class="ss-stage-header">
+                                <span class="ssh-tag" data-active-tag>01 // WEB ARCHITECTURE</span>
+                                <span class="ssh-status"><i class="ssh-dot"></i> STUDIO RENDER</span>
+                            </div>
+                        </div>
+
+                    </div><!-- /.ss-stage -->
+
+                    <!-- MINIMAL EDITORIAL SERVICE RAIL -->
+                    <nav class="ss-service-rail" aria-label="Capabilities rail" data-service-rail>
+                        <button type="button" class="ss-rail-item is-active" data-service-target="web" aria-selected="true">
+                            <div class="sri-head">
+                                <span class="sri-idx">01</span>
+                                <span class="sri-label">WEB</span>
+                            </div>
+                            <span class="sri-sub">Build the experience.</span>
+                            <span class="sri-indicator"></span>
+                        </button>
+                        
+                        <div class="ss-rail-sep" aria-hidden="true"></div>
+
+                        <button type="button" class="ss-rail-item" data-service-target="security" aria-selected="false">
+                            <div class="sri-head">
+                                <span class="sri-idx">02</span>
+                                <span class="sri-label">SECURITY</span>
+                            </div>
+                            <span class="sri-sub">Protect the foundation.</span>
+                            <span class="sri-indicator"></span>
+                        </button>
+
+                        <div class="ss-rail-sep" aria-hidden="true"></div>
+
+                        <button type="button" class="ss-rail-item" data-service-target="marketing" aria-selected="false">
+                            <div class="sri-head">
+                                <span class="sri-idx">03</span>
+                                <span class="sri-label">MARKETING</span>
+                            </div>
+                            <span class="sri-sub">Create demand.</span>
+                            <span class="sri-indicator"></span>
+                        </button>
+
+                        <div class="ss-rail-sep" aria-hidden="true"></div>
+
+                        <button type="button" class="ss-rail-item" data-service-target="content" aria-selected="false">
+                            <div class="sri-head">
+                                <span class="sri-idx">04</span>
+                                <span class="sri-label">CONTENT</span>
+                            </div>
+                            <span class="sri-sub">Shape the story.</span>
+                            <span class="sri-indicator"></span>
+                        </button>
+
+                        <div class="ss-rail-sep" aria-hidden="true"></div>
+
+                        <button type="button" class="ss-rail-item" data-service-target="commerce" aria-selected="false">
+                            <div class="sri-head">
+                                <span class="sri-idx">05</span>
+                                <span class="sri-label">COMMERCE</span>
+                            </div>
+                            <span class="sri-sub">Turn intent into revenue.</span>
+                            <span class="sri-indicator"></span>
+                        </button>
+                    </nav>
+
+                </div><!-- /.ss-stage-wrapper -->
+
+            </div><!-- /.ss-main-grid -->
+
+            <!-- SUBTLE BOTTOM METADATA FOOTER -->
+            <footer class="ss-footer-meta" aria-hidden="true">
+                <span>05 CAPABILITIES</span>
+                <span class="ss-meta-sep">/</span>
+                <span>ONE CONNECTED TEAM</span>
+                <span class="ss-meta-sep">/</span>
+                <span>BUILT TO WORK TOGETHER</span>
+            </footer>
+
+        </div><!-- /.container -->
+    </section>
+
+    <?php /* ==========================================================
+       03b — THE RAFly FANNED BUILD DECK ("WHAT WE BUILD")
+       
+       "Five kinds of build, one team behind them."
+       5 Fanned Product Surfaces (Dashboards, Mobile apps, Online stores, Marketing, Content)
+       ========================================================== */ ?>
+    <section class="section platform-deck-section" id="platform" data-platform-section>
+        <div class="pd-sticky-viewport">
             <div class="container">
-                <div class="mb-head">
-                    <p class="eyebrow" data-r="lift">One screen</p>
-                    <h2 data-r="lift">Everything you bought,<br>on one screen.</h2>
-                    <p class="lead" data-r="lift">
-                        Scope, work in progress, what was shipped and what is next &mdash; for
-                        every service you have with us, in one place, without a status call.
+                <div class="pd-head">
+                    <p class="pd-eyebrow" data-r="rise">WHAT WE BUILD</p>
+                    <h2 class="pd-heading" data-r="rise">
+                        Five kinds of build,<br>
+                        <span class="pd-accent">one team behind them.</span>
+                    </h2>
+                    <p class="pd-subhead" data-r="rise">
+                        Most work is one of these five. Scroll through them &mdash; or pick one, and the deck comes to it.
                     </p>
                 </div>
+
+                <!-- FANNED 5-CARD DECK -->
+                <div class="pd-deck-wrapper">
+                    <div class="pd-deck" data-deck aria-label="Five kinds of build cards">
+                        <?php 
+                        $CARDS = [
+                            ['ecom',       'Online stores',                  'Catalogue, checkout, and the operations behind them.',              '#0e6f31', '#10b981'],
+                            ['apps',       'Mobile apps',                    'iOS and Android, on the same codebase as your site.',              '#046070', '#0891b2'],
+                            ['marketing',  'Marketing and landers',          'High-converting landers that land where your ads do.',              '#1d4ed8', '#3b82f6'],
+                            ['dashboards', 'Dashboards and internal systems', 'The internal screens that run your business day to day.',          '#0f2b5c', '#1e40af'],
+                            ['content',    'Written and visual content',     'Copy and media that say what you do, written in your voice.',       '#5b21b6', '#7c3aed'],
+                        ];
+                        foreach ($CARDS as $i => [$app, $label, $sub, $accent, $accent2]): 
+                        ?>
+                        <article class="mock pd-card" data-slot="<?= (int)$i ?>" style="--card-bg: <?= e($accent) ?>; --c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
+                            <div class="pd-card-inner">
+                                <div class="pd-card-grid" aria-hidden="true">
+                                    <div class="pd-cg-box"></div>
+                                    <div class="pd-cg-box"></div>
+                                    <div class="pd-cg-box"></div>
+                                    <div class="pd-cg-box"></div>
+                                </div>
+                                <div class="pd-card-body">
+                                    <h3 class="pd-card-title"><?= e($label) ?></h3>
+                                    <p class="pd-card-sub"><?= e($sub) ?></p>
+                                </div>
+                            </div>
+                        </article>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- PROGRESS INDICATOR BARS -->
+                    <div class="pd-nav-dots" aria-label="Deck cards navigation">
+                        <span class="pd-dot is-active" data-dot="0" role="button" tabindex="0" aria-label="Card 1: Online stores"></span>
+                        <span class="pd-dot" data-dot="1" role="button" tabindex="0" aria-label="Card 2: Mobile apps"></span>
+                        <span class="pd-dot" data-dot="2" role="button" tabindex="0" aria-label="Card 3: Marketing and landers"></span>
+                        <span class="pd-dot" data-dot="3" role="button" tabindex="0" aria-label="Card 4: Dashboards"></span>
+                        <span class="pd-dot" data-dot="4" role="button" tabindex="0" aria-label="Card 5: Content"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <?php /* ==========================================================
+       03b — VIRAL REELS & SHORT-FORM VIDEO CONTENT ENGINE
+       
+       IDEA → CONTENT → DISTRIBUTION → RESPONSE → CONVERSION
+       Five synchronized distribution surfaces built on a unified content engine.
+       ========================================================== */ ?>
+    <section class="reels-engine-section has-tex" id="reels" data-reels-engine>
+        <!-- Sticky Viewport Wrapper for Cinematic Scroll Pinned Experience -->
+        <div class="reels-sticky-viewport">
+            <!-- Background Layer 1: Architectural Grid & Texture -->
+            <div class="tex-apps-grid" aria-hidden="true"></div>
+            <div class="tex-apps-dots" aria-hidden="true"></div>
+            <div class="tex-apps-hatch" aria-hidden="true"></div>
+
+            <!-- Background Layer 2: Subtle Ambient Atmospheric Aura -->
+            <div class="reels-ambient-aura" aria-hidden="true"></div>
+
+            <!-- Technical Coordinate Markers -->
+            <div class="reels-tech-marker top-left" aria-hidden="true">
+                <span class="rtm-dot"></span>
+                <span class="rtm-label">SYS.CONTENT // 03-REELS</span>
+            </div>
+            <div class="reels-tech-marker top-right" aria-hidden="true">
+                <span class="rtm-label">PHASE <b data-reels-step>01</b> / 05</span>
             </div>
 
-            <div class="mb" data-macbook aria-hidden="true">
-                <div class="mb-lid">
-                    <div class="mb-shell">
-                        <span class="mb-cam"></span>
-                        <div class="mb-screen">
-                            <div class="mb-side">
-                                <span class="mb-logo"></span>
-                                <i class="is-on"></i><i></i><i></i><i></i><i></i>
-                            </div>
-                            <div class="mb-main">
-                                <div class="mb-bar"><i></i><u></u></div>
-                                <div class="mb-cards">
-<?php foreach (['--svc-web', '--svc-security', '--svc-marketing', '--svc-ecom'] as $tok): ?>
-                                    <div class="mb-card" style="--sc: var(<?= e($tok) ?>);"><i></i><b></b><s></s></div>
-<?php endforeach; ?>
+            <div class="container reels-main-container">
+                
+                <!-- ZONE 1: SECTION EDITORIAL HEADER -->
+                <div class="reels-header-zone">
+                    <div class="reels-eyebrow-row">
+                        <span class="reels-sys-tag">SYS.CONTENT // 03-REELS</span>
+                        <span class="reels-pipe-tag">// VIRAL HOOKS &amp; ATTRIBUTED SOCIAL FUNNELS</span>
+                        <span class="reels-badge-pill">@officialrafly.in &bull; 48.9K+</span>
+                    </div>
+
+                    <h2 class="reels-heading">
+                        <span class="rh-line">Viral Reels &amp; Content,</span>
+                        <span class="rh-line"><span class="rh-accent">scripted, shot &amp; edited to convert.</span></span>
+                    </h2>
+
+                    <p class="reels-subhead">
+                        One synchronized content engine producing five high-performing distribution surfaces &mdash;
+                        from 3-second hook scripts to direct-response checkout pipelines, synchronized directly with your brand architecture.
+                    </p>
+
+                    <!-- Process Navigation Strip -->
+                    <div class="reels-process-nav" role="tablist" aria-label="Content engine distribution pipeline" data-reels-nav>
+                        <button type="button" class="rpn-tab is-active" data-phase="0" role="tab" aria-selected="true">
+                            <span class="rpn-num">01</span>
+                            <span class="rpn-label">Strategy</span>
+                            <span class="rpn-indicator"></span>
+                        </button>
+                        <button type="button" class="rpn-tab" data-phase="1" role="tab" aria-selected="false">
+                            <span class="rpn-num">02</span>
+                            <span class="rpn-label">Scripting</span>
+                            <span class="rpn-indicator"></span>
+                        </button>
+                        <button type="button" class="rpn-tab" data-phase="2" role="tab" aria-selected="false">
+                            <span class="rpn-num">03</span>
+                            <span class="rpn-label">Production</span>
+                            <span class="rpn-indicator"></span>
+                        </button>
+                        <button type="button" class="rpn-tab" data-phase="3" role="tab" aria-selected="false">
+                            <span class="rpn-num">04</span>
+                            <span class="rpn-label">Distribution</span>
+                            <span class="rpn-indicator"></span>
+                        </button>
+                        <button type="button" class="rpn-tab" data-phase="4" role="tab" aria-selected="false">
+                            <span class="rpn-num">05</span>
+                            <span class="rpn-label">Conversion</span>
+                            <span class="rpn-indicator"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ZONE 2: CENTRAL 3D VISUAL COMPOSITION STAGE -->
+                <div class="reels-visual-stage" data-reels-stage>
+                    
+                    <!-- Atmospheric Depth Glow Behind Phones -->
+                    <div class="reels-stage-glow" aria-hidden="true"></div>
+
+                    <!-- FLOATING PROOF BADGES (Sequenced with Scroll Reveal) -->
+                    <div class="reels-proof-badge badge-top-left" data-proof-idx="0" aria-hidden="true">
+                        <span class="rpb-icon is-insta"><?= icon('instagram') ?></span>
+                        <div class="rpb-info">
+                            <strong>48.9K+ Active Community</strong>
+                            <span>@officialrafly.in &bull; Verified Proof</span>
+                        </div>
+                    </div>
+
+                    <div class="reels-proof-badge badge-top-right" data-proof-idx="1" aria-hidden="true">
+                        <span class="rpb-icon is-green"><?= icon('play') ?></span>
+                        <div class="rpb-info">
+                            <strong>10x Viral Hook Formats</strong>
+                            <span>3-Second Retention Scripting</span>
+                        </div>
+                    </div>
+
+                    <div class="reels-proof-badge badge-bot-left" data-proof-idx="2" aria-hidden="true">
+                        <span class="rpb-icon is-blue"><?= icon('trending-up') ?></span>
+                        <div class="rpb-info">
+                            <strong>Direct-Response Funnels</strong>
+                            <span>Social Traffic &rarr; High-Converting Store</span>
+                        </div>
+                    </div>
+
+                    <div class="reels-proof-badge badge-bot-right" data-proof-idx="3" aria-hidden="true">
+                        <span class="rpb-icon is-purple"><?= icon('verified') ?></span>
+                        <div class="rpb-info">
+                            <strong>100% Attributed Proof</strong>
+                            <span>ROAS 4.8x Performance Case Studies</span>
+                        </div>
+                    </div>
+
+                    <!-- 5 SYNCHRONIZED 3D PHONE SURFACES -->
+
+                    <!-- PHONE 04: REAR-LEFT (4K Motion & Creative Studio) -->
+                    <div class="iphone-pro-surface phone-rear-left" data-surface-idx="3">
+                        <div class="surface-chassis">
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">4K 60FPS</span></div>
+                                    </div>
                                 </div>
-                                <div class="mb-panels">
-                                    <div class="mb-panel">
-                                        <i></i>
-                                        <div class="mb-chart">
-<?php foreach ([38, 62, 47, 71, 55, 82, 66, 91, 74, 96] as $h): ?>
-                                            <i style="height:<?= (int)$h ?>%"></i>
-<?php endforeach; ?>
-                                        </div>
-                                    </div>
-                                    <div class="mb-panel">
-                                        <i></i>
-                                        <div class="mb-rows">
-                                            <div class="mb-row"><u class="is-on"></u><i style="width:72%"></i></div>
-                                            <div class="mb-row"><u></u><i style="width:54%"></i></div>
-                                            <div class="mb-row"><u></u><i style="width:64%"></i></div>
-                                            <div class="mb-row"><u class="is-on"></u><i style="width:46%"></i></div>
-                                        </div>
-                                    </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
                                 </div>
-                                <div class="mb-table">
-                                    <div class="mb-tr is-head"><i style="width:52%"></i><i style="width:64%"></i><i style="width:58%"></i><i style="width:70%"></i></div>
-<?php foreach ([[78, 62, true], [56, 44, false], [68, 72, true], [62, 54, false], [74, 48, true]] as [$w1, $w2, $on]): ?>
-                                    <div class="mb-tr">
-                                        <i style="width:<?= (int)$w1 ?>%"></i>
-                                        <i style="width:<?= (int)$w2 ?>%"></i>
-                                        <i style="width:56%"></i>
-                                        <b class="<?= $on ? 'is-on' : '' ?>"></b>
+                                <div class="surface-screen screen-studio">
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                        <source src="<?= e(site_path('/assets/mockups/reel-2.mp4')) ?>" type="video/mp4">
+                                    </video>
+                                    <div class="studio-meta-overlay">
+                                        <div class="studio-hud-tag">PROD.RENDER // 60 FPS</div>
+                                        <div class="studio-eq-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                                        <div class="studio-codec-tag">BITRATE 48Mbps &bull; REC.709</div>
                                     </div>
-<?php endforeach; ?>
+                                    <span class="home-indicator"></span>
                                 </div>
                             </div>
                         </div>
+                        <div class="surface-shadow" aria-hidden="true"></div>
                     </div>
-                </div>
-                <div class="mb-base"></div>
-            </div>
-        </div>
-    </section>
 
-    <?php /* ==========================================================
-       03 — THE PLATFORM
-
-       Five product surfaces, fanned. This REPLACES a WebGL assembly that came
-       apart as you scrolled: a machined object drawn with three.js, 755 KB of
-       library plus 712 KB of pre-rendered stills, and it was rejected on sight
-       along with the two 3-D objects before it. The objection was never the
-       execution. It was that a metal part says nothing about what this company
-       sells.
-
-       These do. Each mock is one of the five services as a working screen, and
-       the fan opens on scroll: a tight stack when the section arrives,
-       spreading to centre-plus-two-plus-two by the time you are through it.
-       The depth is real perspective rather than a drop shadow — the outer pair
-       sit 350px further back and turn 24 degrees to face the middle.
-
-       THEY ARE CHROME, NOT CLAIMS. Every bar, ring and KPI block inside is a
-       shape with no number on it. Nothing here reports a metric, because
-       nothing here measured one — the same rule inc/repo/metrics.php enforces
-       for the trust bar. The whole deck is aria-hidden.
-
-       With no JS the section is a normal-height block: the deck renders as a
-       readable stack and the list below carries the same five services as real
-       links, which is what a crawler and a screen reader use either way.
-       ========================================================== */ ?>
-    <section class="section platform" id="services">
-        <div class="tex-grid tex-mask-c" aria-hidden="true"></div>
-        <div class="orb" aria-hidden="true" style="width:760px; height:760px; left:-14%; top:6%;
-             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 16%, transparent), transparent 66%);"></div>
-        <div class="orb" aria-hidden="true" style="width:700px; height:700px; right:-12%; bottom:0;
-             background:radial-gradient(circle, color-mix(in srgb, var(--blue-deep) 14%, transparent), transparent 66%);"></div>
-
-        <div class="platform-sticky">
-            <div class="container">
-                <div class="platform-head">
-                    <p class="eyebrow" data-r="lift">One platform</p>
-                    <h2 data-r="lift">Five products.<br>One place they all live.</h2>
-                    <p class="lead" data-r="lift">
-                        Every service ships its own working surface &mdash; and they read as one
-                        system, not five logins stitched together.
-                    </p>
-                </div>
-            </div>
-
-            <div class="deck" data-deck aria-hidden="true">
-<?php foreach ($DECK as $i => [$app, $label, $accent, $accent2]): ?>
-                <div class="mock" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
-                    <div class="mock-bar">
-                        <i></i><i></i><i></i>
-                        <span>rafly.in/app/<?= e($app) ?></span>
-                    </div>
-                    <div class="mock-app">
-                        <div class="mock-side">
-                            <span class="mock-logo"></span>
-                            <b class="is-on"></b><b></b><b></b><b></b>
+                    <!-- PHONE 02: LEFT SUPPORT (Instagram Story & 3s Retention Hook) -->
+                    <div class="iphone-pro-surface phone-mid-left" data-surface-idx="1">
+                        <div class="surface-chassis">
+                            <span class="hw-btn btn-action" aria-hidden="true"></span>
+                            <span class="hw-btn btn-vol-up" aria-hidden="true"></span>
+                            <span class="hw-btn btn-vol-down" aria-hidden="true"></span>
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Story &bull; 2h</span></div>
+                                    </div>
+                                </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
+                                </div>
+                                <div class="surface-screen screen-story">
+                                    <div class="screen-glare" aria-hidden="true"></div>
+                                    <div class="story-progress-strip">
+                                        <span class="sps-bar is-done"><i></i></span>
+                                        <span class="sps-bar is-active"><i></i></span>
+                                        <span class="sps-bar"><i></i></span>
+                                    </div>
+                                    <div class="story-profile-head">
+                                        <div class="story-author">
+                                            <div class="story-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="story-av"></div>
+                                            <div class="story-user-meta">
+                                                <span class="story-name">officialrafly.in <?= icon('verified') ?></span>
+                                                <span class="story-age">2h ago</span>
+                                            </div>
+                                        </div>
+                                        <span class="story-close"><?= icon('x') ?></span>
+                                    </div>
+                                    <div class="story-media-view">
+                                        <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                            <source src="<?= e(site_path('/assets/mockups/reel-instagram.mp4')) ?>" type="video/mp4">
+                                            <source src="<?= e(site_path('/assets/mockups/reel-1.mp4')) ?>" type="video/mp4">
+                                        </video>
+                                        <div class="story-stickers">
+                                            <div class="sticker-highlight">🔥 +248% Revenue Spurt</div>
+                                            <div class="sticker-quote">
+                                                <p>"Shipped full ecommerce rebuild in 14 days with zero downtime."</p>
+                                                <span class="sticker-verified">&check; Client Verified</span>
+                                            </div>
+                                            <div class="sticker-swipe"><span>Swipe Up To Scale <?= icon('arrow-up') ?></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="story-reply-bar">
+                                        <div class="story-input-fake"><span>Send message...</span></div>
+                                        <div class="story-btns">
+                                            <button type="button" class="story-btn is-heart" aria-label="Like story"><?= icon('heart') ?></button>
+                                            <button type="button" class="story-btn" aria-label="Share story"><?= icon('send') ?></button>
+                                        </div>
+                                    </div>
+                                    <span class="home-indicator"></span>
+                                </div>
+                            </div>
                         </div>
-<?php require __DIR__ . '/partials/deck-mock.php'; ?>
+                        <div class="surface-shadow" aria-hidden="true"></div>
                     </div>
-                    <span class="mock-tag"><?= e($label) ?></span>
+
+                    <!-- PHONE 01: HERO CENTER (Flagship Studio Creator Reel) -->
+                    <div class="iphone-pro-surface phone-hero-center is-dominant" data-surface-idx="0">
+                        <div class="surface-chassis">
+                            <span class="hw-btn btn-action" aria-hidden="true"></span>
+                            <span class="hw-btn btn-vol-up" aria-hidden="true"></span>
+                            <span class="hw-btn btn-vol-down" aria-hidden="true"></span>
+                            <span class="hw-btn btn-power" aria-hidden="true"></span>
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text" data-di-status>🔴 Live Reel &bull; 1080p 60FPS</span></div>
+                                    </div>
+                                </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
+                                </div>
+                                <div class="surface-screen screen-reels">
+                                    <div class="screen-glare" aria-hidden="true"></div>
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>" data-reel-video>
+                                        <source src="<?= e(site_path('/assets/mockups/reel-main.mp4')) ?>" type="video/mp4">
+                                        <source src="<?= e(site_path('/assets/mockups/reel-1.mp4')) ?>" type="video/mp4">
+                                    </video>
+                                    <div class="reels-header-meta">
+                                        <span class="reels-logo-text">Reels</span>
+                                        <span class="reels-trend-pill">🔥 Trending</span>
+                                    </div>
+                                    <div class="reels-sidebar-actions">
+                                        <div class="reels-action-unit like-unit is-active" data-reel-like>
+                                            <span class="rau-icon is-liked"><?= icon('heart') ?></span>
+                                            <span class="rau-val" data-like-count>48.9K</span>
+                                        </div>
+                                        <div class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('message-circle') ?></span>
+                                            <span class="rau-val">1,842</span>
+                                        </div>
+                                        <div class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('send') ?></span>
+                                            <span class="rau-val">12.4K</span>
+                                        </div>
+                                        <div class="reels-action-unit"><span class="rau-icon"><?= icon('bookmark') ?></span></div>
+                                        <div class="reels-spinning-vinyl" title="Spinning Original Audio">
+                                            <span class="vinyl-groove"></span>
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art">
+                                        </div>
+                                    </div>
+                                    <div class="reels-content-footer">
+                                        <div class="reels-creator-row">
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic"></div>
+                                            <div class="reels-handle">
+                                                <strong>officialrafly.in</strong>
+                                                <span class="verif-tag"><?= icon('verified') ?></span>
+                                            </div>
+                                            <a href="https://www.instagram.com/officialrafly.in?igsh=MTMwYWZhb29waWZtbA==" target="_blank" rel="noopener" class="reels-follow-btn">Follow</a>
+                                        </div>
+                                        <p class="reels-caption">
+                                            Turning digital chaos into high-converting revenue systems 🚀 Full-stack web, security &amp; performance under one roof.
+                                        </p>
+                                        <div class="reels-tags">#RaflyGrowth #WebDev #GenZTech #Ecommerce</div>
+                                        <div class="reels-audio-badge">
+                                            <span class="audio-note"><?= icon('music') ?></span>
+                                            <span class="audio-title">officialrafly.in &bull; Original Audio &bull; Trending Sound</span>
+                                        </div>
+                                    </div>
+                                    <span class="home-indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="surface-shadow is-hero-shadow" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- PHONE 03: RIGHT SUPPORT (Performance Case Study & Feed Distribution) -->
+                    <div class="iphone-pro-surface phone-mid-right" data-surface-idx="2">
+                        <div class="surface-chassis">
+                            <span class="hw-btn btn-power" aria-hidden="true"></span>
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Case Study</span></div>
+                                    </div>
+                                </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
+                                </div>
+                                <div class="surface-screen screen-feed">
+                                    <div class="screen-glare" aria-hidden="true"></div>
+                                    <div class="feed-header-row">
+                                        <div class="feed-poster-info">
+                                            <div class="feed-av-wrap"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="feed-av"></div>
+                                            <div>
+                                                <span class="feed-name">officialrafly.in <?= icon('verified') ?></span>
+                                                <span class="feed-sub">Sponsored &bull; Case Study</span>
+                                            </div>
+                                        </div>
+                                        <span class="feed-dots">&bull;&bull;&bull;</span>
+                                    </div>
+                                    <div class="feed-media-viewport">
+                                        <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                            <source src="<?= e(site_path('/assets/mockups/reel-instagram-2.mp4')) ?>" type="video/mp4">
+                                            <source src="<?= e(site_path('/assets/mockups/reel-3.mp4')) ?>" type="video/mp4">
+                                        </video>
+                                        <div class="feed-kpi-badge">
+                                            <div class="kpi-card">
+                                                <span class="kpi-label">Conversion Velocity</span>
+                                                <strong>+310.8%</strong>
+                                                <span class="kpi-pill">Verified ROAS 4.8x</span>
+                                            </div>
+                                        </div>
+                                        <span class="feed-counter">1/3</span>
+                                    </div>
+                                    <div class="feed-actions-strip">
+                                        <div class="feed-left-btns">
+                                            <button type="button" class="feed-btn is-heart" aria-label="Like post"><?= icon('heart') ?></button>
+                                            <button type="button" class="feed-btn" aria-label="Comment on post"><?= icon('message-circle') ?></button>
+                                            <button type="button" class="feed-btn" aria-label="Share post"><?= icon('send') ?></button>
+                                        </div>
+                                        <button type="button" class="feed-btn" aria-label="Bookmark post"><?= icon('bookmark') ?></button>
+                                    </div>
+                                    <div class="feed-caption-box">
+                                        <div class="feed-likes">Liked by <strong>naveen.growth</strong> and <strong>18,340 others</strong></div>
+                                        <p class="feed-text"><strong>officialrafly.in</strong> Zero bloat. 100% custom architectures shipped directly to production.</p>
+                                    </div>
+                                    <span class="home-indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="surface-shadow" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- PHONE 05: REAR-RIGHT (Commerce & Growth Engine) -->
+                    <div class="iphone-pro-surface phone-rear-right" data-surface-idx="4">
+                        <div class="surface-chassis">
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Revenue Sync</span></div>
+                                    </div>
+                                </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
+                                </div>
+                                <div class="surface-screen screen-ledger">
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                        <source src="<?= e(site_path('/assets/mockups/reel-3.mp4')) ?>" type="video/mp4">
+                                    </video>
+                                    <div class="ledger-meta-overlay">
+                                        <div class="ledger-hud-tag">REVENUE.SYNC // ROAS 4.8x</div>
+                                        <div class="ledger-metric-box">
+                                            <strong>1,420 Orders</strong>
+                                            <span>+412% Checkout Velocity</span>
+                                        </div>
+                                        <div class="ledger-status-tag">🟢 100% Attributed Pipeline</div>
+                                    </div>
+                                    <span class="home-indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="surface-shadow" aria-hidden="true"></div>
+                    </div>
+
                 </div>
+
+                <!-- ZONE 3: FIVE SERVICE STAGE CARDS & CTA BAR -->
+                <div class="reels-footer-zone">
+                    <div class="reels-service-rail" data-reels-rail>
+<?php foreach ($REELS_CAPABILITIES as $i => $cap): ?>
+                        <div class="reels-service-card<?= $i === 0 ? ' is-active' : '' ?>" data-stage-card="<?= (int)$i ?>">
+                            <div class="rsc-header">
+                                <span class="rsc-number"><?= e($cap['idx']) ?></span>
+                                <span class="rsc-category"><?= e($cap['phase']) ?></span>
+                                <span class="rsc-arrow" aria-hidden="true">&rarr;</span>
+                            </div>
+                            <strong class="rsc-title"><?= e($cap['title']) ?></strong>
+                            <p class="rsc-desc"><?= e($cap['desc']) ?></p>
+                            <div class="rsc-footer">
+                                <span class="rsc-tag"><?= e($cap['tag']) ?></span>
+                            </div>
+                        </div>
 <?php endforeach; ?>
+                    </div>
+
+                    <div class="reels-cta-bar">
+                        <a class="btn btn-pill btn-sm btn-primary" href="https://www.instagram.com/officialrafly.in?igsh=MTMwYWZhb29waWZtbA==" target="_blank" rel="noopener" data-magnetic>
+                            <?= icon('instagram') ?> Follow @officialrafly.in <?= icon('arrow-up-right') ?>
+                        </a>
+                        <a class="btn btn-pill btn-sm btn-secondary" href="<?= e(site_path('/contact')) ?>" data-magnetic>
+                            Launch a Video Campaign <?= icon('arrow-right') ?>
+                        </a>
+                    </div>
+                </div>
+
             </div>
-        </div>
-
-    </section>
-
-    <?php /* The same five, as real links, in their OWN block outside the pinned
-             section. Inside it they fought the sticky: .platform-sticky can
-             only stick for as long as its PARENT has room left, so a list
-             sharing that parent ate the deck pinned range from the bottom and
-             left a screen of nothing where the deck had been.
-
-             A BENTO, NOT A LIST. They were a column of rows beside a panel,
-             which is a column of text beside an empty half-page and reads as
-             the section having run out rather than having finished. Six tiles
-             on three columns close it with nothing left over: the lead service
-             across two, the other four filling the rest, and the panel across
-             all three as the last word.
-
-             The cards are the ones Naveen has picked out at every round — glass
-             over the paper ground, a gradient border that arrives on hover, and
-             a sheen that follows the cursor. The sheen needs js/sheen.js for
-             the follow; without it --mx/--my resolve to the card's centre and
-             hover is a centred glow, which is a designed state rather than a
-             missing one. */ ?>
-    <section class="section platform-list">
-        <div class="tex-hatch" aria-hidden="true"></div>
-        <div class="container svc-bento">
-<?php foreach ($MODULES as [$idx, $slug, $label, $blurb, $token, $glyph]): ?>
-            <a class="svc-card" data-sheen data-r="lift"
-               href="<?= e(site_path('/' . $slug)) ?>"
-               style="--sc: var(<?= e($token) ?>);">
-                <span class="svc-card-top">
-                    <span class="svc-card-glyph"><?= icon($glyph) ?></span>
-                    <span class="svc-card-idx"><?= e($idx) ?></span>
-                </span>
-                <h3 class="svc-card-name"><?= e($label) ?></h3>
-                <p class="svc-card-desc"><?= e($blurb) ?></p>
-                <span class="svc-card-go">Explore <?= icon('arrow-up-right') ?></span>
-            </a>
-<?php endforeach; ?>
-
-            <aside class="platform-panel" data-r="lift">
-                <p class="eyebrow">What one platform means</p>
-                <h3>Five surfaces, one account, one bill.</h3>
-
-                <?php /* Structural, not claimed. The count comes from
-                         services_all(), the same array the list beside it is
-                         rendered from, so this number cannot drift from the
-                         page it sits on and cannot be wrong. Everything else
-                         here is a property of how the work is organised — not
-                         a metric, not a result, and not something a client
-                         would have to take on trust. */ ?>
-                <dl class="platform-facts">
-                    <div>
-                        <dt>Services</dt>
-                        <dd><?= (int)count($MODULES) ?>, under one scope</dd>
-                    </div>
-                    <div>
-                        <dt>Contact</dt>
-                        <dd>One person, accountable</dd>
-                    </div>
-                    <div>
-                        <dt>Security review</dt>
-                        <dd>In every package</dd>
-                    </div>
-                    <div>
-                        <dt>Ownership</dt>
-                        <dd>Full IP, transferred on final payment</dd>
-                    </div>
-                </dl>
-
-                <p class="platform-panel-foot">
-                    Add a service later and it joins the same scope and the same
-                    invoice &mdash; there is no second onboarding, and no second
-                    team to bring up to speed.
-                </p>
-
-                <a class="btn btn-line" href="<?= e(site_path('/pricing')) ?>" data-magnetic>
-                    See what a package includes <?= icon('arrow-up-right') ?>
-                </a>
-            </aside>
         </div>
     </section>
 
     <?php /* ==========================================================
-       03b — APPS
-
-       Rafly builds mobile apps, and nothing on the page said so.
-
-       ON PAPER, NOT ON INK. The prototype put this section on the dark ground.
-       Naveen asked for the opposite ("neeche bhi light theme hoga same"), and
-       he is right: a dark band three quarters of the way down read as a
-       different site rather than as the next paragraph. Depth without a dark
-       ground comes from the same place the deck above gets it — perspective, a
-       real turn toward the middle, and a lit top edge on each shell. The
-       SCREENS stay dark, because a phone screen is dark, and that is also what
-       keeps them legible against paper.
+       05 — THE RAFly BUILD MATRIX (#matrix)
+       
+       Internal Concept: "THE RAFly BUILD MATRIX"
+       Core Message: FOUR CAPABILITIES. ONE TEAM BEHIND THEM.
+       
+       Architectural Build Canvas (1280px max-width, 520–620px height) +
+       Horizontal Editorial Capability Index (01 Strategy, 02 UX/UI, 03 Web & App, 04 Growth).
+       4 Transforming Canvas2D + SVG Modes representing real design & engineering artifacts.
        ========================================================== */ ?>
-    <section class="section apps" id="apps">
-        <div class="tex-hatch" aria-hidden="true"></div>
-        <div class="orb" aria-hidden="true" style="width:900px; height:900px; left:50%; top:46%;
-             transform:translate(-50%,-50%);
-             background:radial-gradient(circle, color-mix(in srgb, var(--blue) 18%, transparent), transparent 64%);"></div>
+    <section class="section build-matrix" id="matrix" data-build-matrix aria-label="THE RAFly BUILD MATRIX — 04 Capabilities">
 
-        <div class="apps-sticky">
-            <?php /* CENTRED, not copy-left and phones-right. Three phones on
-                     the right of a paragraph read as an illustration OF the
-                     paragraph; the same three in the middle of the section are
-                     the subject of it. It also matches the platform section
-                     directly above, which is the composition this page has
-                     settled on for anything that is one object being shown. */ ?>
-            <div class="container">
-                <div class="apps-head">
-                    <p class="eyebrow" data-r="lift">On the phone</p>
-                    <h2 data-r="lift">Mobile apps, built by the same team.</h2>
-                    <p class="lead" data-r="lift">
-                        Native and cross-platform builds, store submission, and the releases
-                        after it &mdash; from the people already running your site, so the app
-                        and the web are never two versions of the truth.
-                    </p>
-                </div>
-            </div>
-
-            <div class="phones" data-phones aria-hidden="true">
-<?php foreach ($PHONES as $i => [$accent, $accent2, $variant]): ?>
-                <div class="phone" data-slot="<?= (int)$i ?>" style="--c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
-                    <span class="phone-notch"></span>
-<?php require __DIR__ . '/partials/phone-screen.php'; ?>
-                </div>
-<?php endforeach; ?>
-            </div>
-
-            <div class="container">
-                <ul class="apps-feat">
-<?php foreach ($APP_POINTS as $point): ?>
-                    <li data-r="lift"><span><?= icon('check') ?></span><?= e($point) ?></li>
-<?php endforeach; ?>
-                </ul>
-                <p class="apps-cta">
-                    <a class="btn btn-line" href="<?= e(site_path('/contact')) ?>" data-magnetic>Talk about an app build</a>
-                </p>
-            </div>
+        <!-- KINETIC BACKGROUND GHOST TYPOGRAPHY -->
+        <div class="bm-ghost-words" aria-hidden="true">
+            <span class="bm-ghost kw-strat">STRATEGY</span>
+            <span class="bm-ghost kw-design">DESIGN</span>
+            <span class="bm-ghost kw-build">BUILD</span>
+            <span class="bm-ghost kw-grow">GROW</span>
         </div>
-    </section>
 
-    <?php /* ==========================================================
-       03c — THE GALLERY
+        <!-- 8-LAYER ENVIRONMENT & TEXTURE SYSTEM -->
+        <div class="bm-bg-env" aria-hidden="true">
+            <div class="bm-grain"></div>
+            <div class="bm-grid"></div>
+            <div class="bm-dots"></div>
+            <div class="bm-glow glow-primary"></div>
+            <div class="bm-glow glow-secondary"></div>
+            <div class="bm-scanbeam"></div>
+            <svg class="bm-blueprint" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
+                <path class="bm-bp-line line-a" d="M -100,200 Q 400,100 800,450 T 1540,650" stroke="url(#bmBpGrad1)" stroke-width="1.2" />
+                <path class="bm-bp-line line-b" d="M -100,650 Q 450,800 800,450 T 1540,200" stroke="url(#bmBpGrad2)" stroke-width="1.2" />
+                <defs>
+                    <linearGradient id="bmBpGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
+                    </linearGradient>
+                    <linearGradient id="bmBpGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#0230c6" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#6134c9" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
 
-       OriginKit's coverflow, at its own numbers — Naveen sent the component
-       source, so the geometry in css/09-scenes.css is lifted value for value
-       rather than eyeballed: 1600 perspective, 240px of travel and 240px of
-       depth per step, 12 degrees of turn, 8 of lean, 0.16 of scale, a 40%
-       veil on everything that is not the centre.
+        <div class="container bm-container">
 
-       WHAT CHANGED IS THE PICTURES AND THE INPUT. The reference ships
-       photographs and advances on a timer; this draws its own covers and
-       advances on scroll depth, because a section is not a carousel and a
-       carousel that runs whether or not anyone is looking at it is a thing to
-       ignore rather than to read.
+            <!-- SECTION HEADER -->
+            <header class="bm-header">
+                <div class="bm-header-top">
+                    <div class="bm-sys-eyebrow">
+                        <span class="bm-sys-tag">SYS.BUILD // 04-MATRIX</span>
+                    </div>
+                    <div class="bm-editorial-eyebrow">
+                        <span>WHAT WE BUILD</span>
+                        <span class="bm-sep">//</span>
+                        <span>ONE TEAM</span>
+                        <span class="bm-sep">//</span>
+                        <span>FOUR CAPABILITIES</span>
+                    </div>
+                    <div class="bm-indicator">
+                        <span class="bm-ind-label">CAPABILITY</span>
+                        <span class="bm-ind-num" data-bm-step>01 / 04</span>
+                    </div>
+                </div>
 
-       Clicking a card does NOT set an index. It scrolls the page to the depth
-       at which that card is centred, so the scroll position stays the only
-       thing that decides what is active and the two can never disagree. The
-       dots underneath do the same and are the keyboard path.
-
-       Without JavaScript every card is laid out exactly where it would be with
-       the first one active — the stylesheet sets the same custom properties
-       js/gallery.js writes. It is the same design, holding still.
-       ========================================================== */ ?>
-    <section class="section gallery" id="build">
-        <div class="tex-hatch" aria-hidden="true"></div>
-
-        <div class="gallery-sticky">
-            <div class="container">
-                <div class="gallery-head">
-                    <p class="eyebrow" data-r="lift">What we build</p>
-                    <h2 data-r="lift">Five kinds of build,<br>one team behind them.</h2>
-                    <p class="lead" data-r="lift">
-                        Most work is one of these five. Scroll through them &mdash; or pick one,
-                        and the deck comes to it.
+                <div class="bm-header-main">
+                    <h2 class="bm-headline" aria-label="Four kinds of build, one team behind them.">
+                        <span class="bm-h-line">Four kinds of build,</span>
+                        <span class="bm-h-line bm-h-line--accent">one team behind them.</span>
+                    </h2>
+                    <p class="bm-sub">
+                        Most work is one of these four. Explore a capability and see how the pieces come together.
                     </p>
                 </div>
-            </div>
+            </header>
 
-            <div class="cf">
-                <div class="cf-track" data-gallery>
-<?php foreach ($GALLERY as $i => [$title, $what, $c1, $c2, $art]): ?>
-                    <div class="cf-card" data-slot="<?= (int)$i ?>" style="--c: <?= e($c1) ?>; --c2: <?= e($c2) ?>;">
-                        <span class="cf-art" aria-hidden="true">
-                            <span class="cf-sheet is-<?= e($art) ?>">
-                                <i></i><i></i><i class="is-dim"></i><i></i><i class="is-dim"></i><i></i>
-                            </span>
-                        </span>
-                        <span class="cf-card-label">
-                            <b><?= e($title) ?></b>
-                            <span><?= e($what) ?></span>
-                        </span>
+            <!-- HORIZONTAL EDITORIAL CAPABILITY NAVIGATION INDEX -->
+            <nav class="bm-nav" aria-label="Build matrix capability navigation" data-bm-nav role="tablist">
+                <button type="button" class="bm-nav-item is-active" data-bm-target="strategy" role="tab" aria-selected="true">
+                    <span class="bmn-num">01</span>
+                    <div class="bmn-text">
+                        <span class="bmn-title">Strategy</span>
+                        <span class="bmn-desc">Brand &amp; Positioning</span>
                     </div>
-<?php endforeach; ?>
-                </div>
-            </div>
-
-            <?php /* Real buttons, and the only part of this a keyboard needs.
-                     They move the PAGE, which is the same thing a click on a
-                     card does — one input, one source of truth. */ ?>
-            <div class="cf-dots">
-<?php foreach ($GALLERY as $i => [$title]): ?>
-                <button class="cf-dot" type="button" data-cf-dot
-                        aria-current="<?= $i === 0 ? 'true' : 'false' ?>">
-                    <span class="visually-hidden">Show <?= e($title) ?></span>
+                    <span class="bmn-line"></span>
                 </button>
-<?php endforeach; ?>
-            </div>
-        </div>
-    </section>
+
+                <button type="button" class="bm-nav-item" data-bm-target="uxui" role="tab" aria-selected="false">
+                    <span class="bmn-num">02</span>
+                    <div class="bmn-text">
+                        <span class="bmn-title">UX/UI</span>
+                        <span class="bmn-desc">Human-Centered Systems</span>
+                    </div>
+                    <span class="bmn-line"></span>
+                </button>
+
+                <button type="button" class="bm-nav-item" data-bm-target="webdev" role="tab" aria-selected="false">
+                    <span class="bmn-num">03</span>
+                    <div class="bmn-text">
+                        <span class="bmn-title">Web &amp; App</span>
+                        <span class="bmn-desc">High-Velocity Engine</span>
+                    </div>
+                    <span class="bmn-line"></span>
+                </button>
+
+                <button type="button" class="bm-nav-item" data-bm-target="growth" role="tab" aria-selected="false">
+                    <span class="bmn-num">04</span>
+                    <div class="bmn-text">
+                        <span class="bmn-title">Growth</span>
+                        <span class="bmn-desc">Performance Acquisition</span>
+                    </div>
+                    <span class="bmn-line"></span>
+                </button>
+            </nav>
+
+            <!-- MAIN ARCHITECTURAL BUILD CANVAS (1280px max-width, 520–620px height) -->
+            <div class="bm-stage-wrapper">
+                <div class="bm-stage" data-bm-stage>
+
+                    <!-- Soft Physical Surface & Edge Shadow -->
+                    <div class="bm-surface"></div>
+                    <div class="bm-shadow"></div>
+
+                    <!-- Canvas2D Animated Render Engine -->
+                    <canvas class="bm-canvas" data-bm-canvas width="1180" height="580" aria-hidden="true"></canvas>
+
+                    <!-- SVG Overlay & Blueprint Technical Annotations -->
+                    <div class="bm-stage-overlay" data-bm-overlay>
+                        <div class="bm-overlay-head">
+                            <span class="bmo-code" data-bm-code>SYS.STRATEGY // 01</span>
+                            <span class="bmo-status"><i class="bmo-dot"></i> LIVE MATRIX RENDER</span>
+                        </div>
+                        <div class="bm-overlay-corners top-left">+ 01 / ARCH.SYSTEM</div>
+                        <div class="bm-overlay-corners top-right">SCALE 100% // HIGH INTENT</div>
+                        <div class="bm-overlay-corners bottom-left">LATENCY &lt; 16ms</div>
+                        <div class="bm-overlay-corners bottom-right">RAF.SYS &bull; 60FPS</div>
+                    </div>
+
+                </div><!-- /.bm-stage -->
+            </div><!-- /.bm-stage-wrapper -->
+
+            <!-- SUBTLE BOTTOM METADATA FOOTER -->
+            <footer class="bm-footer-meta" aria-hidden="true">
+                <span>05 CAPABILITIES</span>
+                <span class="bm-meta-sep">/</span>
+                <span>ONE CONNECTED TEAM</span>
+                <span class="bm-meta-sep">/</span>
+                <span>BUILT TO WORK TOGETHER</span>
+            </footer>
+
+        </div><!-- /.container -->
+    </section><!-- /.build-matrix -->
 
     <?php /* ==========================================================
-       04 — DELIVERY
+       06 — DELIVERY (#delivery)
 
-       Calm on purpose, straight after the expensive section. A hairline
-       spine, real stage names, real durations. No 3-D, no WebGL, no
-       particles.
+       Calm on purpose, straight after the content engine section. A hairline
+       spine, real stage names, real durations.
        ========================================================== */ ?>
     <section class="section ground-2 grain has-tex" id="delivery">
         <div class="tex-hatch" aria-hidden="true"></div>
@@ -946,52 +1688,282 @@ require __DIR__ . '/partials/social-rail.php';
        service, so what the homepage refuses and what the service page
        refuses are the same file.
        ========================================================== */ ?>
-    <section class="section has-tex" id="limits">
-        <div class="tex-hatch" aria-hidden="true"></div>
-        <div class="orb" aria-hidden="true" style="width:700px; height:700px; right:-12%; top:-8%;
-             background:radial-gradient(circle, color-mix(in srgb, var(--blue-deep) 12%, transparent), transparent 66%);"></div>
+    <section class="section limits-section has-tex" id="limits">
+        <div class="limits-ambient-flare" aria-hidden="true"></div>
+        <div class="tex-limits-grid" aria-hidden="true"></div>
+        <div class="tex-limits-crosshairs" aria-hidden="true"></div>
+        <div class="tex-limits-lines" aria-hidden="true"></div>
+
         <div class="container">
-            <div class="sec-head">
-                <p class="eyebrow">Honest limits</p>
-                <h2>What we will <span class="soft">not</span> take on</h2>
-                <p class="lead">
-                    Fifteen of them, in writing, before you ask. A studio that will not
-                    name its edges has not found them yet.
-                </p>
-            </div>
-
-            <div class="limits" data-r="group">
-<?php foreach ($limits as [$svc, $title, $desc]): ?>
-                <div class="limit">
-                    <p class="limit-svc"><?= e($svc) ?></p>
-                    <h3><?= e($title) ?></h3>
-                    <p><?= e($desc) ?></p>
+            <div class="limits-header">
+                <div class="limits-eyebrow-row">
+                    <span class="limits-hud-node">SYS.REF // 07-LIMITS</span>
+                    <span class="limits-tag-mono">// RADICAL TRANSPARENCY</span>
+                    <span class="limits-tag-badge">15 Strict Boundaries</span>
                 </div>
+                <h2 class="limits-heading">What we will <span class="strike-glow">not</span> take on.</h2>
+                <p class="limits-subhead">
+                    Fifteen strict operational boundaries, in writing, before you ask. A studio that will not
+                    name its edges hasn't found them yet.
+                </p>
+
+                <!-- Smart Category Filter Tabs (No 'All' option) -->
+                <div class="limits-filter-nav" role="tablist" aria-label="Filter boundaries by service">
+<?php foreach ($serviceTabs as $i => $tab): 
+    $isActive = ($i === 0);
+?>
+                    <button type="button" 
+                            class="filter-pill <?= $isActive ? 'is-active' : '' ?>" 
+                            data-filter="<?= e($tab['slug']) ?>" 
+                            role="tab" 
+                            aria-selected="<?= $isActive ? 'true' : 'false' ?>" 
+                            style="--fp-accent: var(<?= e($tab['scTok']) ?>);">
+                        <span class="fp-glow-dot"></span>
+                        <span class="fp-icon"><?= icon($tab['icon']) ?></span>
+                        <span class="fp-label"><?= e($tab['label']) ?></span>
+                        <span class="fp-count"><?= $tab['count'] ?></span>
+                    </button>
+<?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Smart Bento Grid of Limits -->
+            <div class="limits-bento-grid" data-limits-grid>
+<?php 
+foreach ($limits as $item): 
+    $slugKey = $item['slug'];
+    $isFirstCat = ($slugKey === 'web-development');
+    $idxFormatted = str_pad((string)$item['localIdx'], 2, '0', STR_PAD_LEFT);
+?>
+                <article class="limit-card <?= $isFirstCat ? 'is-visible' : 'is-hidden' ?>" 
+                         data-category="<?= e($slugKey) ?>" 
+                         style="--card-svc-accent: var(<?= e($item['scTok']) ?>); <?= $isFirstCat ? '' : 'display:none;' ?>">
+                    <span class="card-bracket tl" aria-hidden="true"></span>
+                    <span class="card-bracket br" aria-hidden="true"></span>
+                    <span class="card-shimmer" aria-hidden="true"></span>
+
+                    <!-- Category-specific SVG Watermark Graphic -->
+<?php if ($slugKey === 'web-development'): ?>
+                    <svg class="card-tech-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <path d="M15 35L40 60L15 85M105 35L80 60L105 85M70 25L50 95" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="60" cy="60" r="45" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    </svg>
+<?php elseif ($slugKey === 'web-security'): ?>
+                    <svg class="card-tech-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <path d="M60 15L100 32V65C100 90 60 105 60 105C60 105 20 90 20 65V32L60 15Z" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="60" cy="60" r="18" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M50 60L57 67L72 52" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+<?php elseif ($slugKey === 'marketing-advertisement'): ?>
+                    <svg class="card-tech-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <path d="M15 95H105M25 85L45 55L70 70L100 25M100 25H80M100 25V45" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="45" cy="55" r="4" fill="currentColor"/>
+                        <circle cx="70" cy="70" r="4" fill="currentColor"/>
+                        <circle cx="100" cy="25" r="4" fill="currentColor"/>
+                    </svg>
+<?php elseif ($slugKey === 'content-creation'): ?>
+                    <svg class="card-tech-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <rect x="25" y="20" width="70" height="80" rx="6" stroke="currentColor" stroke-width="2"/>
+                        <path d="M40 40H80M40 55H80M40 70H65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="82" cy="70" r="3" fill="currentColor"/>
+                    </svg>
+<?php else: ?>
+                    <svg class="card-tech-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                        <path d="M20 25H32L45 75H92L105 38H36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="48" cy="92" r="7" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="88" cy="92" r="7" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+<?php endif; ?>
+
+                    <div class="limit-card-top">
+                        <div class="limit-index-pill">
+                            <span class="pulse-live-dot"></span>
+                            <span class="index-mono">[BOUNDARY <?= $idxFormatted ?>/03]</span>
+                        </div>
+                        <span class="limit-refusal-pill"><?= icon('x') ?> OUT OF SCOPE</span>
+                    </div>
+
+                    <h3 class="limit-card-title"><?= e($item['title']) ?></h3>
+                    <p class="limit-card-desc"><?= e($item['desc']) ?></p>
+
+                    <div class="limit-terminal-box">
+                        <div class="term-bar">
+                            <span class="term-led"></span>
+                            <span class="term-head">THE RAFLY STANDARD</span>
+                        </div>
+                        <p class="term-copy"><?= e($item['standard']) ?></p>
+                    </div>
+                </article>
 <?php endforeach; ?>
             </div>
 
-            <div class="compare-wrap" data-r="lift">
-                <table class="compare">
-                    <caption class="visually-hidden">Rafly compared with a traditional agency and with hiring separate freelancers</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col"><span class="visually-hidden">Aspect</span></th>
-                            <th scope="col">Rafly</th>
-                            <th scope="col">Traditional agency</th>
-                            <th scope="col">Separate freelancers</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-<?php foreach ($COMPARE as [$aspect, $us, $agency, $free]): ?>
-                        <tr>
-                            <th scope="row"><?= e($aspect) ?></th>
-                            <td class="is-us"><?= e($us) ?></td>
-                            <td><?= e($agency) ?></td>
-                            <td><?= e($free) ?></td>
-                        </tr>
-<?php endforeach; ?>
-                    </tbody>
-                </table>
+            <!-- Modern 3-Column Battlecard Comparison Deck -->
+            <div class="compare-battlecard-deck" data-r="lift">
+                <div class="compare-deck-head">
+                    <span class="compare-eyebrow">// WHY THE UNIFIED SYSTEM WINS</span>
+                    <h3 class="compare-title">Rafly vs. Traditional Agency vs. Freelancers</h3>
+                </div>
+
+                <div class="battlecard-grid">
+                    <!-- Column 1: Rafly (Featured Hero) -->
+                    <div class="battlecard is-rafly">
+                        <div class="bc-top">
+                            <span class="bc-badge">★ Recommended Choice</span>
+                            <h4 class="bc-name">Rafly</h4>
+                            <p class="bc-desc">One coordinated team. One scope. One flat rate.</p>
+                        </div>
+                        <ul class="bc-features">
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>All 5 Core Services in 1 Team</strong>
+                                    <span>Web, security, marketing, content &amp; e-commerce unified</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>Single Point of Contact</strong>
+                                    <span>Direct accountability for real business outcomes</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>Baseline Security Included</strong>
+                                    <span>Full audit &amp; hardening in every standard package</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>Parallel Delivery Sprints</strong>
+                                    <span>Zero delays waiting on separate external agencies</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>Transparent Bundled Pricing</strong>
+                                    <span>One clear agreed scope without hidden retainer creep</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-yes"><?= icon('circle-check') ?></span>
+                                <div>
+                                    <strong>Plain-Language Reporting</strong>
+                                    <span>Actionable roadmaps without agency jargon</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 2: Traditional Agency -->
+                    <div class="battlecard is-muted">
+                        <div class="bc-top">
+                            <span class="bc-badge-neutral">Traditional Agency</span>
+                            <h4 class="bc-name">Agency Retainers</h4>
+                            <p class="bc-desc">Fragmented silos with layered middlemen.</p>
+                        </div>
+                        <ul class="bc-features">
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Single Specialty</strong>
+                                    <span>Usually focuses on one vertical; outsources the rest</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Account Managers in the Middle</strong>
+                                    <span>You never speak directly to whoever does the build</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Security as an Expensive Add-on</strong>
+                                    <span>Rarely included in the core website contract</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Sequential Department Handoffs</strong>
+                                    <span>Weeks lost as tickets bounce between departments</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Costly Scope Creep</strong>
+                                    <span>Monthly retainer overages for every adjustment</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Complex PDF Decks</strong>
+                                    <span>Vanity metrics designed to justify the invoice</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Multiple Freelancers -->
+                    <div class="battlecard is-muted">
+                        <div class="bc-top">
+                            <span class="bc-badge-neutral">Separate Freelancers</span>
+                            <h4 class="bc-name">DIY Assembly</h4>
+                            <p class="bc-desc">You become the full-time project manager.</p>
+                        </div>
+                        <ul class="bc-features">
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Zero Shared Context</strong>
+                                    <span>Freelancers have never met and will not coordinate</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>You Coordinate Everything</strong>
+                                    <span>You spend 15+ hours weekly bridging handoffs</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Overlooked Security &amp; QA</strong>
+                                    <span>Nobody tests vulnerabilities or form sanitisation</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Unpredictable Availability</strong>
+                                    <span>Delivery depends on individual schedules and delays</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Hourly Invoicing Risks</strong>
+                                    <span>Uncapped hourly rates that balloon quickly</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="bc-icon is-no"><?= icon('x') ?></span>
+                                <div>
+                                    <strong>Constant Chasing</strong>
+                                    <span>Fragmented Slack chats and missed messages</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

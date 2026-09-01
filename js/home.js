@@ -44,26 +44,36 @@ if (allowCanvas()) {
 const hero = document.querySelector('[data-hero]');
 
 if (hero) {
-    // The cards move on any pointer-capable device and cost nothing but
-    // transforms, so they are gated on motion preference alone rather than on
-    // the full canvas ladder.
-    const cluster = hero.querySelector('[data-cluster]');
-    if (cluster && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        import('./cluster.js')
-            .then((m) => m.initCluster(cluster))
-            .catch(() => {});
-    }
+    import('./hero-growth-field.js')
+        .then((m) => m.initHeroGrowthField(hero))
+        .catch(() => {});
+}
 
-    if (allowShader()) {
-        const canvas = hero.querySelector('[data-aurora]');
-        if (canvas) {
-            whenIdle(() => {
-                import('./aurora.js')
-                    .then((m) => m.initAurora(canvas, hero, rgb(token('--paper', '#f6f8fc'))))
-                    .catch(() => { /* the CSS gradient fallback is the same design, frozen */ });
-            });
-        }
-    }
+/* ------------------------------------------------ the manifesto / difference */
+
+const manifesto = document.querySelector('[data-manifesto]');
+if (manifesto) {
+    import('./manifesto.js')
+        .then((m) => m.initManifesto(manifesto))
+        .catch(() => { /* Clean CSS fallback renders static presentation */ });
+}
+
+/* ------------------------------------------- THE RAFly SERVICE STUDIO */
+
+const serviceStudio = document.querySelector('[data-service-studio]');
+if (serviceStudio) {
+    import('./service-studio.js')
+        .then((m) => m.initServiceStudio(serviceStudio))
+        .catch(() => { /* Clean static CSS presentation is fallback */ });
+}
+
+/* ------------------------------------------- THE RAFly BUILD MATRIX */
+
+const buildMatrix = document.querySelector('[data-build-matrix]');
+if (buildMatrix) {
+    import('./build-matrix.js')
+        .then((m) => m.initBuildMatrix(buildMatrix))
+        .catch(() => { /* Clean static CSS presentation is fallback */ });
 }
 
 /* ------------------------------------------------------- the two decks */
@@ -80,20 +90,61 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
         .catch(() => { /* the CSS stack is a complete, readable fallback */ });
 }
 
-/* ------------------------------------------------------------ the laptop */
+/* ---------------------------------------------------- honest limits tabs */
 
-/* GATED ON WIDTH, and the gate matches the stylesheet exactly. The section is
-   only pinned above 960px; below that it is an ordinary block and
-   css/pages/home-scenes.css already declares the laptop OPEN at full size,
-   which is the finished design rather than a fallback. Fetching the module on
-   a phone would animate a lid nobody is scrolling past, on the one budget line
-   that actually matters — phone home JS, 80 KB. */
-if (document.querySelector('[data-macbook]')
-    && wideEnough(961)
-    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    import('./macbook.js')
-        .then((m) => m.initMacbook(document.querySelector('[data-macbook]')))
-        .catch(() => { /* the CSS resting state is a complete, open laptop */ });
+const limitsNav = document.querySelector('.limits-filter-nav');
+const limitsSec = document.querySelector('.limits-section');
+
+if (limitsNav) {
+    const buttons = limitsNav.querySelectorAll('[data-filter]');
+    const cards = document.querySelectorAll('.limit-card');
+
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            if (!filter) return;
+
+            buttons.forEach((b) => {
+                const isActive = b === btn;
+                b.classList.toggle('is-active', isActive);
+                b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            // Update ambient background flare to match active service token
+            const accentStyle = btn.style.getPropertyValue('--fp-accent');
+            if (limitsSec && accentStyle) {
+                limitsSec.style.setProperty('--active-svc-glow', accentStyle);
+            }
+
+            let visibleIdx = 0;
+            cards.forEach((card) => {
+                const match = card.dataset.category === filter;
+                if (match) {
+                    card.style.display = '';
+                    card.classList.remove('is-hidden');
+                    card.classList.remove('is-visible');
+                    card.style.animationDelay = (visibleIdx * 0.07) + 's';
+                    visibleIdx++;
+                    // Trigger reflow to restart CSS animation
+                    void card.offsetWidth;
+                    card.classList.add('is-visible');
+                } else {
+                    card.style.display = 'none';
+                    card.classList.add('is-hidden');
+                    card.classList.remove('is-visible');
+                }
+            });
+        });
+    });
+}
+
+/* ------------------------------------------- viral reels & content engine */
+
+const reelsEngineSection = document.querySelector('[data-reels-engine]');
+if (reelsEngineSection) {
+    import('./reels-engine.js')
+        .then((m) => m.initReelsEngine(reelsEngineSection))
+        .catch(() => { /* CSS fallback holds the assembled still form */ });
 }
 
 /* ----------------------------------------------------------- the gallery */
