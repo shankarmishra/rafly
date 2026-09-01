@@ -10981,21 +10981,15 @@
     color: #0a63ff;
     letter-spacing: 0.1em;
 }
-.bl-tf-val {
-    font-family: var(--font-display, sans-serif);
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #050f33;
-}
 
 /* SOLID CERAMIC WHITE CONSTRUCTION TABLE */
 .bl-construction-table {
     position: relative;
-    background: #ffffff;
-    border: 1px solid rgba(5, 15, 51, 0.12);
+    background: #ffffff !important;
+    border: 1px solid rgba(5, 15, 51, 0.16) !important;
     border-radius: 24px;
     padding: clamp(1.5rem, 2.5vw, 2.25rem);
-    box-shadow: 0 2px 8px rgba(5, 15, 51, 0.04), 0 24px 60px -12px rgba(5, 15, 51, 0.08);
+    box-shadow: 0 4px 16px rgba(5, 15, 51, 0.05), 0 28px 64px -12px rgba(5, 15, 51, 0.12);
 }
 .bl-table-hud {
     display: flex;
@@ -11007,7 +11001,7 @@
     color: #0a63ff;
     padding-bottom: 0.75rem;
     margin-bottom: 1.25rem;
-    border-bottom: 1px dashed rgba(10, 99, 255, 0.2);
+    border-bottom: 1px dashed rgba(10, 99, 255, 0.25);
 }
 .bl-table-tabs {
     display: grid;
@@ -11020,17 +11014,17 @@
     flex-direction: column;
     gap: 2px;
     padding: 0.75rem 1rem;
-    background: #f8fafc;
-    border: 1px solid rgba(5, 15, 51, 0.1);
+    background: #f1f5f9 !important;
+    border: 1px solid rgba(5, 15, 51, 0.14) !important;
     border-radius: 12px;
     cursor: pointer;
     text-align: left;
     transition: all 0.2s ease;
 }
 .bl-table-tab:hover, .bl-table-tab.is-active {
-    background: #ffffff;
-    border-color: #0a63ff;
-    box-shadow: 0 8px 24px -6px rgba(10, 99, 255, 0.18);
+    background: #ffffff !important;
+    border-color: #0a63ff !important;
+    box-shadow: 0 8px 24px -6px rgba(10, 99, 255, 0.22);
     transform: translateY(-2px);
 }
 .bl-tt-num { font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 800; color: #0a63ff; }
@@ -11039,8 +11033,8 @@
 
 .bl-canvas-wrapper {
     position: relative;
-    background: #f8fafc;
-    border: 1px solid rgba(5, 15, 51, 0.1);
+    background: #f8fafc !important;
+    border: 1px solid rgba(5, 15, 51, 0.14) !important;
     border-radius: 16px;
     padding: 1.5rem;
 }

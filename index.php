@@ -1563,7 +1563,12 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        06 — DELIVERY WORKFLOW: THE BUILD LOOP (#delivery)
        ========================================================== */ ?>
-    <section class="section build-loop-section" id="delivery" data-build-loop>
+    <section class="section build-loop-section ground-2 grain has-tex has-reels-bg" id="delivery" data-build-loop>
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             <div class="bl-split-grid">
                 
@@ -1692,7 +1697,12 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        07 — THE STACK: THE MATERIAL LIBRARY (#stack)
        ========================================================== */ ?>
-    <section class="section toolkit-section" id="stack" data-materials-workbench>
+    <section class="section toolkit-section ground-3 has-tex has-reels-bg" id="stack" data-materials-workbench>
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             <div class="tk-head">
                 <span class="tk-kicker">07 // MATERIAL LIBRARY</span>
@@ -1729,7 +1739,12 @@ require __DIR__ . '/partials/social-rail.php';
        08 — SELECTED WORK: PROOF NOT PROMISES (#work) — THE DARK CHAPTER
        ========================================================== */ ?>
 <?php if ($caseStudies): ?>
-    <section class="section work-showcase-section ground-chapter grain seam-top seam-bottom" id="work">
+    <section class="section work-showcase-section ground-chapter grain seam-top seam-bottom has-reels-bg" id="work">
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             <div class="ws-head">
                 <span class="ws-kicker">08 // PROOF, NOT PROMISES</span>
@@ -1765,7 +1780,12 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        09 — WHERE WE DRAW THE LINE & 10 — UNIFIED DIFFERENCE (#limits)
        ========================================================== */ ?>
-    <section class="section boundaries-section" id="limits" data-system-map-container>
+    <section class="section boundaries-section limits-section has-tex has-reels-bg" id="limits" data-system-map-container>
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             
             <!-- SECTION 09: WHERE WE DRAW THE LINE -->
@@ -1855,7 +1875,12 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        11 — PRICING & FAQ: CHOOSE YOUR STARTING POINT (#pricing)
        ========================================================== */ ?>
-    <section class="section pricing-editorial-section" id="pricing">
+    <section class="section pricing-editorial-section ground-2 grain has-tex has-reels-bg" id="pricing">
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             <div class="pe-head">
                 <span class="pe-kicker">11 // ENGAGEMENT VOLUMES</span>
@@ -1921,13 +1946,18 @@ require __DIR__ . '/partials/social-rail.php';
     <?php /* ==========================================================
        12 — START PROJECT: LET'S BUILD SOMETHING THAT MATTERS (#start)
        ========================================================== */ ?>
-    <section class="section close-editorial-section" id="start">
+    <section class="section close-editorial-section close has-tex has-reels-bg" id="start">
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
+
         <div class="container">
             <div class="ce-grid">
                 <div class="ce-copy">
                     <span class="ce-kicker">12 // LET'S BUILD</span>
                     <h2 class="ce-title">LET'S BUILD SOMETHING THAT MATTERS.</h2>
-                    <p class="ce-lead">Tell us what is in front of you. We will respond with a clear scope and a number within one working day &mdash; or tell you plainly if it's not a fit.</p>
+                    <p class="ce-lead">Tell us what is in front of you. We will respond with a clear scope and a number within one working day—or tell you plainly if it's not a fit.</p>
                     <div class="ce-commitments">
                         <div class="ce-comm-item">
                             <strong>FIRST STEP</strong>

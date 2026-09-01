@@ -17,7 +17,7 @@ export class RAFlyMotionEngine {
         this.scrollY = window.scrollY;
         this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
-        this.initAtmosphere();
+        // Section-specific backgrounds handle environment styling natively
         if (!this.isReducedMotion) {
             this.initCursor();
             this.initScrollChoreography();
@@ -26,30 +26,7 @@ export class RAFlyMotionEngine {
     }
 
     initAtmosphere() {
-        // Multi-plane atmosphere initialization
-        const body = document.body;
-        if (!document.querySelector('.rafly-atmosphere')) {
-            const atmos = document.createElement('div');
-            atmos.className = 'rafly-atmosphere';
-            atmos.setAttribute('aria-hidden', 'true');
-            atmos.innerHTML = `
-                <div class="atmos-grain"></div>
-                <div class="atmos-grid"></div>
-                <div class="atmos-dots"></div>
-                <div class="atmos-ghost-type">
-                    <span class="gt-word w1" style="top:15%; left:5%;">BUILD</span>
-                    <span class="gt-word w2" style="top:35%; right:8%;">PROTECT</span>
-                    <span class="gt-word w3" style="top:55%; left:12%;">CREATE</span>
-                    <span class="gt-word w4" style="top:75%; right:15%;">CONVERT</span>
-                    <span class="gt-word w5" style="top:90%; left:8%;">COMPOUND</span>
-                </div>
-                <canvas class="atmos-dust-canvas" id="dustCanvas"></canvas>
-                <div class="atmos-light-sweep" id="atmosSweep"></div>
-            `;
-            body.appendChild(atmos);
-        }
-
-        this.initDustCanvas();
+        // Disabled: Section-wise backgrounds are preserved per user request
     }
 
     initDustCanvas() {
