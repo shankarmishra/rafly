@@ -90,52 +90,82 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
         .catch(() => { /* the CSS stack is a complete, readable fallback */ });
 }
 
-/* ---------------------------------------------------- honest limits tabs */
+/* ---------------------------------------------------- RAFLY MASTER MOTION ENGINE */
 
-const limitsNav = document.querySelector('.limits-filter-nav');
-const limitsSec = document.querySelector('.limits-section');
+import('./rafly-motion.js')
+    .then((m) => m.initRAFlyMotion())
+    .catch(() => {});
 
-if (limitsNav) {
-    const buttons = limitsNav.querySelectorAll('[data-filter]');
-    const cards = document.querySelectorAll('.limit-card');
+/* ---------------------------------------------------- 06 BUILD LOOP CINEMA */
 
-    buttons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const filter = btn.dataset.filter;
+const buildLoopSection = document.querySelector('[data-build-loop]');
+if (buildLoopSection) {
+    import('./build-loop-cinema.js')
+        .then((m) => m.initBuildLoopCinema(buildLoopSection))
+        .catch(() => {});
+}
+
+/* ---------------------------------------------------- 07 MATERIALS LAB */
+
+const materialsWorkbench = document.querySelector('[data-materials-workbench]');
+if (materialsWorkbench) {
+    import('./materials-lab.js')
+        .then((m) => m.initMaterialsLab(materialsWorkbench))
+        .catch(() => {});
+}
+
+/* ---------------------------------------------------- 08 CASE REEL CINEMA */
+
+const workShowcaseSection = document.querySelector('.work-showcase-section');
+if (workShowcaseSection) {
+    import('./case-reel-cinema.js')
+        .then((m) => m.initCaseReelCinema(workShowcaseSection))
+        .catch(() => {});
+}
+
+/* ---------------------------------------------------- 09 BOUNDARIES & 10 SYSTEM MAP */
+
+const systemMapContainer = document.querySelector('[data-system-map-container]');
+if (systemMapContainer) {
+    import('./system-map-cinema.js')
+        .then((m) => m.initSystemMapCinema(systemMapContainer))
+        .catch(() => {});
+
+    const pills = systemMapContainer.querySelectorAll('.bs-pill');
+    const bsCards = systemMapContainer.querySelectorAll('.bs-card');
+    pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+            const filter = pill.dataset.filter;
             if (!filter) return;
-
-            buttons.forEach((b) => {
-                const isActive = b === btn;
-                b.classList.toggle('is-active', isActive);
-                b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            pills.forEach((p) => {
+                const isActive = p === pill;
+                p.classList.toggle('is-active', isActive);
+                p.setAttribute('aria-selected', isActive ? 'true' : 'false');
             });
-
-            // Update ambient background flare to match active service token
-            const accentStyle = btn.style.getPropertyValue('--fp-accent');
-            if (limitsSec && accentStyle) {
-                limitsSec.style.setProperty('--active-svc-glow', accentStyle);
-            }
-
-            let visibleIdx = 0;
-            cards.forEach((card) => {
+            bsCards.forEach((card) => {
                 const match = card.dataset.category === filter;
-                if (match) {
-                    card.style.display = '';
-                    card.classList.remove('is-hidden');
-                    card.classList.remove('is-visible');
-                    card.style.animationDelay = (visibleIdx * 0.07) + 's';
-                    visibleIdx++;
-                    // Trigger reflow to restart CSS animation
-                    void card.offsetWidth;
-                    card.classList.add('is-visible');
-                } else {
-                    card.style.display = 'none';
-                    card.classList.add('is-hidden');
-                    card.classList.remove('is-visible');
-                }
+                card.style.display = match ? 'flex' : 'none';
             });
         });
     });
+}
+
+/* ---------------------------------------------------- 11 ARCHITECTURAL PRICING & FAQ */
+
+const pricingSection = document.querySelector('#pricing');
+if (pricingSection) {
+    import('./architectural-pricing.js')
+        .then((m) => m.initArchitecturalPricing(pricingSection))
+        .catch(() => {});
+}
+
+/* ---------------------------------------------------- 12 CULMINATING CLOSE */
+
+const closeSection = document.querySelector('#start');
+if (closeSection) {
+    import('./close-cinema.js')
+        .then((m) => m.initCloseCinema(closeSection))
+        .catch(() => {});
 }
 
 /* ------------------------------------------- viral reels & content engine */
