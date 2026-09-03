@@ -1141,7 +1141,7 @@ require __DIR__ . '/partials/social-rail.php';
                                     </div>
                                     <div class="story-profile-head">
                                         <div class="story-author">
-                                            <div class="story-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="story-av"></div>
+                                            <div class="story-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="story-av" width="32" height="32" loading="lazy"></div>
                                             <div class="story-user-meta">
                                                 <span class="story-name">officialrafly.in <?= icon('verified') ?></span>
                                                 <span class="story-age">2h ago</span>
@@ -1221,12 +1221,12 @@ require __DIR__ . '/partials/social-rail.php';
                                         <div class="reels-action-unit"><span class="rau-icon"><?= icon('bookmark') ?></span></div>
                                         <div class="reels-spinning-vinyl" title="Spinning Original Audio">
                                             <span class="vinyl-groove"></span>
-                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art">
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art" width="32" height="32" loading="lazy">
                                         </div>
                                     </div>
                                     <div class="reels-content-footer">
                                         <div class="reels-creator-row">
-                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic"></div>
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic" width="32" height="32" loading="lazy"></div>
                                             <div class="reels-handle">
                                                 <strong>officialrafly.in</strong>
                                                 <span class="verif-tag"><?= icon('verified') ?></span>
@@ -1268,7 +1268,7 @@ require __DIR__ . '/partials/social-rail.php';
                                     <div class="screen-glare" aria-hidden="true"></div>
                                     <div class="feed-header-row">
                                         <div class="feed-poster-info">
-                                            <div class="feed-av-wrap"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="feed-av"></div>
+                                            <div class="feed-av-wrap"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="feed-av" width="32" height="32" loading="lazy"></div>
                                             <div>
                                                 <span class="feed-name">officialrafly.in <?= icon('verified') ?></span>
                                                 <span class="feed-sub">Sponsored &bull; Case Study</span>
@@ -1657,19 +1657,19 @@ require __DIR__ . '/partials/social-rail.php';
                             <!-- Stage Copy Overlay -->
                             <div class="bl-stage-copy-box">
                                 <div class="bl-stage-copy is-active" data-stage-copy="0">
-                                    <h4>01 // DISCOVER</h4>
+                                    <h3>01 // DISCOVER</h3>
                                     <p>Raw intent, traffic vectors, and stack bottlenecks gathered into one synchronized strategic audit.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="1" style="display:none;">
-                                    <h4>02 // ARCHITECT</h4>
+                                    <h3>02 // ARCHITECT</h3>
                                     <p>Scattered signals lock into grid structure, layout boundaries, and exact scope deliverables.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="2" style="display:none;">
-                                    <h4>03 // BUILD</h4>
+                                    <h3>03 // BUILD</h3>
                                     <p>Physical digital surfaces and parallel engineering components assemble in daily sprints.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="3" style="display:none;">
-                                    <h4>04 // HARDEN &amp; SHIP</h4>
+                                    <h3>04 // HARDEN &amp; SHIP</h3>
                                     <p>Circular perimeter scan verifies 100/100 CWV, TLS 1.3 encryption, and WAF security before shipping live.</p>
                                 </div>
                             </div>
@@ -1800,7 +1800,7 @@ require __DIR__ . '/partials/social-rail.php';
                 <!-- Floating Specimen Inspector -->
                 <div class="dm-inspector" data-dm-inspector aria-hidden="true">
                     <span class="dm-ins-cat">APPLICATION ARCHITECTURE</span>
-                    <h4 class="dm-ins-name">LARAVEL</h4>
+                    <h3 class="dm-ins-name">LARAVEL</h3>
                     <p class="dm-ins-desc">Fast server-side systems and zero-overhead database queries.</p>
                 </div>
 
@@ -2013,7 +2013,7 @@ require __DIR__ . '/partials/social-rail.php';
                 <div class="pe-accordion" data-accordion="single">
                     <?php foreach ($FAQS as $i => $f): ?>
                     <div class="pe-acc-item">
-                        <button type="button" class="pe-acc-trigger" id="faq-t-<?= $i ?>" aria-expanded="false" aria-controls="faq-p-<?= $i ?>">
+                        <button type="button" class="pe-acc-trigger accordion-trigger" id="faq-t-<?= $i ?>" aria-expanded="false" aria-controls="faq-p-<?= $i ?>">
                             <div class="pe-acc-left">
                                 <span class="pe-acc-num">0<?= $i + 1 ?></span>
                                 <span class="pe-acc-title"><?= e($f['q']) ?></span>

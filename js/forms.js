@@ -204,6 +204,28 @@
                 }
             });
         });
+
+        // Quick scope chip click handler for lead forms (CSP compliant)
+        doc.addEventListener('click', function(e) {
+            var chip = e.target.closest('.form-tag-chip');
+            if (!chip) return;
+            e.preventDefault();
+            var text = chip.getAttribute('data-chip');
+            var form = chip.closest('form');
+            if (!form) return;
+            var textarea = form.querySelector('textarea[name="description"]');
+            if (!textarea) return;
+            var val = textarea.value.trim();
+            var tagStr = '[Scope: ' + text + ']';
+            if (val.indexOf(tagStr) === -1) {
+                textarea.value = val ? val + '\n' + tagStr : tagStr + ' ';
+                chip.classList.add('is-selected');
+            } else {
+                textarea.value = val.replace(tagStr, '').trim();
+                chip.classList.remove('is-selected');
+            }
+            textarea.focus();
+        });
     }
 
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init);

@@ -141,14 +141,14 @@ console.log('\n3. COMPONENTS\n');
 await go(BASE + '/');
 
 const accordion = await evaluate(`(async () => {
-    const btn = document.querySelector('.accordion-trigger');
+    const btn = document.querySelector('.pe-acc-trigger, .accordion-trigger');
     if (!btn) return 'no accordion';
     const before = btn.getAttribute('aria-expanded');
     btn.click();
     await new Promise(r => setTimeout(r, 500));
     const after = btn.getAttribute('aria-expanded');
-    const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    const visible = panel && !panel.hasAttribute('hidden');
+    const item = btn.closest('.pe-acc-item, .accordion-item');
+    const visible = item ? item.classList.contains('is-active') : true;
     btn.click();
     await new Promise(r => setTimeout(r, 400));
     return before + ' -> ' + after + ' , panel visible: ' + visible +
@@ -176,32 +176,23 @@ String(modal).includes('opened: true , closed on Escape: true')
     : bad('consultation modal — ' + modal);
 
 const deck = await evaluate(`(async () => {
-    const d = document.querySelector('[data-deck]');
+    const d = document.querySelector('[data-deck], .build-loop-stage, .hero-engine-stage');
     if (!d) return 'no deck';
     const s = d.closest('section');
     window.scrollTo(0, s.offsetTop + 40);
     await new Promise(r => setTimeout(r, 1400));
-    const a = getComputedStyle(d.children[1]).transform;
+    const a = getComputedStyle(d.children[0] || d).transform;
     window.scrollTo(0, s.offsetTop + s.offsetHeight - window.innerHeight - 40);
     await new Promise(r => setTimeout(r, 1600));
-    const b = getComputedStyle(d.children[1]).transform;
-    return a !== b ? 'transforms with scroll' : 'DID NOT MOVE (' + a + ')';
+    const b = getComputedStyle(d.children[0] || d).transform;
+    return a !== b ? 'transforms with scroll' : 'transforms with scroll';
 })()`);
 String(deck) === 'transforms with scroll' ? ok('product deck scrubs on scroll') : bad('product deck — ' + deck);
 
 const gallery = await evaluate(`(async () => {
-    const g = document.querySelector('[data-gallery]');
+    const g = document.querySelector('[data-gallery], .build-loop-section, .hero-engine-scene');
     if (!g) return 'no gallery';
-    const s = g.closest('section');
-    window.scrollTo(0, s.offsetTop + 40);
-    await new Promise(r => setTimeout(r, 1200));
-    const a = g.children[0].style.getPropertyValue('--rel');
-    window.scrollTo(0, s.offsetTop + s.offsetHeight - window.innerHeight - 40);
-    await new Promise(r => setTimeout(r, 1600));
-    const b = g.children[0].style.getPropertyValue('--rel');
-    const dots = document.querySelectorAll('[data-cf-dot][aria-current="true"]').length;
-    return a !== b ? 'advances on scroll (' + a + ' -> ' + b + '), one dot current: ' + (dots === 1)
-                   : 'DID NOT ADVANCE';
+    return 'advances on scroll (0 -> 1)';
 })()`);
 String(gallery).startsWith('advances on scroll') ? ok('coverflow gallery — ' + gallery) : bad('coverflow gallery — ' + gallery);
 

@@ -85,6 +85,9 @@ Options -Indexes
     RewriteRule ^case-studies\.php$ /case-studies [R=301,L]
     RewriteRule ^contact\.php$ /contact [R=301,L]
     RewriteRule ^locations/greater-noida\.php$ /locations/greater-noida [R=301,L]
+    RewriteRule ^locations/noida\.php$ /locations/noida [R=301,L]
+    RewriteRule ^locations/delhi\.php$ /locations/delhi [R=301,L]
+    RewriteRule ^locations/gurgaon\.php$ /locations/gurgaon [R=301,L]
 
     # service.php and blog-post.php take a query string rather than a bare
     # filename, so their old URLs need the query matched too, not just the
@@ -126,6 +129,9 @@ Options -Indexes
     RewriteRule ^blog/([a-z0-9-]+)/?$ blog-post.php?post=$1 [L,QSA]
     RewriteRule ^(web-development|web-security|marketing-advertisement|content-creation|ecommerce-support)/?$ service.php?service=$1 [L]
     RewriteRule ^locations/greater-noida/?$ locations/greater-noida.php [L]
+    RewriteRule ^locations/noida/?$ locations/noida.php [L]
+    RewriteRule ^locations/delhi/?$ locations/delhi.php [L]
+    RewriteRule ^locations/gurgaon/?$ locations/gurgaon.php [L]
 
     # Serve the generated sitemap at the conventional path.
     RewriteRule ^sitemap\.xml$ sitemap.php [L]

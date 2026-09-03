@@ -112,6 +112,9 @@ $oldToClean = [
     'case-studies.php' => 'case-studies',
     'contact.php'      => 'contact',
     'locations/greater-noida.php' => 'locations/greater-noida',
+    'locations/noida.php'         => 'locations/noida',
+    'locations/delhi.php'         => 'locations/delhi',
+    'locations/gurgaon.php'       => 'locations/gurgaon',
 ];
 if (isset($oldToClean[$path]) && $redirect('/' . $oldToClean[$path])) {
     return true;
@@ -167,6 +170,9 @@ $cleanToFile = [
     'thank-you'    => 'thank-you.php',
     'submit'       => 'submit.php',
     'locations/greater-noida' => 'locations/greater-noida.php',
+    'locations/noida'         => 'locations/noida.php',
+    'locations/delhi'         => 'locations/delhi.php',
+    'locations/gurgaon'       => 'locations/gurgaon.php',
 ];
 if (isset($cleanToFile[$path])) {
     return $dispatch($cleanToFile[$path]);
