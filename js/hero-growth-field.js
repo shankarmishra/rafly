@@ -50,6 +50,13 @@ export function initHeroGrowthField(host) {
         commerce:  { h: 220, s: 100, l: 42 },
     };
 
+    /* ── Logo Mark Asset Preload ────────────────────────────────────────── */
+    let logoMarkImg = null;
+    if (typeof Image !== 'undefined') {
+        logoMarkImg = new Image();
+        logoMarkImg.src = '/assets/logo-mark.png';
+    }
+
     /* ── State ─────────────────────────────────────────────────────────── */
     let activeCap      = null;
     let hoverLocked    = false;
@@ -384,57 +391,26 @@ export function initHeroGrowthField(host) {
         ctx.stroke();
         ctx.restore();
 
-        // RAFly Official Real Brand Logo Mark Core Nucleus (Rendered Cleanly Inside Luminous Circle Disc)
-        if (typeof Path2D !== 'undefined') {
-            // Part 1: Top Aerodynamic Wing Swoosh & Loop
-            const pathLogoTop = new Path2D(
-                "M 0,16 C 0,6 16,0 36,0 L 64,0 C 84,0 100,16 100,36 C 100,54 84,60 68,54 C 78,46 82,34 82,24 C 82,12 68,10 48,10 L 24,10 C 10,10 0,16 0,16 Z"
-            );
-            // Part 2: Bottom Sweeping Leaf Blade / Leg
-            const pathLogoBot = new Path2D(
-                "M 0,60 C 20,60 48,64 68,76 L 96,96 C 100,99 92,100 84,100 L 70,100 C 42,84 18,72 0,70 C -2,68 -2,62 0,60 Z"
-            );
-
+        // RAFly Official Real Brand Logo Mark (100% Exact Image from assets/logo-mark.png)
+        if (logoMarkImg && logoMarkImg.complete && logoMarkImg.naturalWidth > 0) {
             ctx.save();
             ctx.translate(cx, cy);
 
-            // Dynamic breathing scale & subtle floating motion inside the circle
-            const logoScale = (coreR * 0.0105) * (1 + Math.sin(t * 0.85) * 0.04);
-            ctx.scale(logoScale, logoScale);
-            ctx.translate(-50, -50); // Center the 100x100 path bounding box precisely at circle center (0,0)
+            // Dynamic breathing scale & floating pulse
+            const breatheScale = 1 + Math.sin(t * 0.85) * 0.04;
+            const logoW = coreR * 1.15 * breatheScale;
+            const logoH = logoW * (99 / 80);
 
-            // Luminous Aura Glow behind the RAFly Brand Mark
-            ctx.shadowBlur  = isSyncing ? 42 : 28;
+            // Luminous Aura Glow behind the Logo Mark
+            ctx.shadowBlur  = isSyncing ? 45 : 30;
             ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
 
-            // Part 1 Top Wing Gradient (Vibrant Cyan to Royal Electric Blue)
-            const gTop = ctx.createLinearGradient(0, 0, 100, 54);
-            gTop.addColorStop(0.0, '#38bdf8'); // Electric Cyan
-            gTop.addColorStop(0.40, '#0a63ff'); // Royal Blue
-            gTop.addColorStop(1.0, '#0256d0'); // Deep Blue
-
-            ctx.fillStyle = gTop;
-            ctx.fill(pathLogoTop);
-
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 92%, 0.95)`;
-            ctx.lineWidth   = 1.2;
-            ctx.stroke(pathLogoTop);
-
-            // Part 2 Bottom Leaf Gradient (Electric Blue to Deep Cobalt)
-            const gBot = ctx.createLinearGradient(0, 60, 100, 100);
-            gBot.addColorStop(0.0, '#0a63ff'); // Electric Blue
-            gBot.addColorStop(1.0, '#021a5e'); // Deep Cobalt Navy
-
-            ctx.fillStyle = gBot;
-            ctx.fill(pathLogoBot);
-
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 88%, 0.90)`;
-            ctx.lineWidth   = 1.0;
-            ctx.stroke(pathLogoBot);
+            // Draw exact RAFly logo mark image centered at (cx, cy)
+            ctx.drawImage(logoMarkImg, -logoW / 2, -logoH / 2, logoW, logoH);
 
             ctx.restore();
         } else {
-            // Fallback for legacy environments
+            // Fallback while loading
             ctx.beginPath();
             ctx.arc(cx, cy, coreR * 0.4, 0, Math.PI * 2);
             ctx.fillStyle   = '#ffffff';
