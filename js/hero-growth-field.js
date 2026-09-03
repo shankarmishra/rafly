@@ -384,45 +384,7 @@ export function initHeroGrowthField(host) {
         ctx.stroke();
         ctx.restore();
 
-        // Double Faceted Prism Core (Hexagon + Diamond)
-        ctx.save();
-        const rot = t * 0.09;
-        const pR  = coreR * 0.55;
-        ctx.beginPath();
-        for (let i = 0; i < 6; i++) {
-            const a = rot + (i / 6) * Math.PI * 2;
-            const px = cx + Math.cos(a) * pR;
-            const py = cy + Math.sin(a) * pR;
-            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        const prism = ctx.createLinearGradient(cx - pR, cy - pR, cx + pR, cy + pR);
-        prism.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 55%, 0.82)`);
-        prism.addColorStop(1.0, `hsla(${activeColor.h}, 100%, 75%, 0.92)`);
-        ctx.fillStyle   = prism;
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth   = 1.3;
-        ctx.fill();
-        ctx.stroke();
-
-        // Inner Rotating Diamond
-        const rotInner = -t * 0.14;
-        const pR2 = pR * 0.55;
-        ctx.beginPath();
-        for (let i = 0; i < 4; i++) {
-            const a = rotInner + (i / 4) * Math.PI * 2;
-            const px = cx + Math.cos(a) * pR2;
-            const py = cy + Math.sin(a) * pR2;
-            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.fillStyle   = 'rgba(255, 255, 255, 0.92)';
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, 0.9)`;
-        ctx.lineWidth   = 1.1;
-        ctx.fill();
-        ctx.stroke();
-
-        // RAFly Official Real Brand Logo Mark Core Nucleus (100% Pixel-Accurate 2-Part Vector)
+        // RAFly Official Real Brand Logo Mark Core Nucleus (Rendered Cleanly Inside Luminous Circle Disc)
         if (typeof Path2D !== 'undefined') {
             // Part 1: Top Aerodynamic Wing Swoosh & Loop
             const pathLogoTop = new Path2D(
@@ -436,14 +398,14 @@ export function initHeroGrowthField(host) {
             ctx.save();
             ctx.translate(cx, cy);
 
-            // Dynamic breathing scale and 3D floating pulse
-            const logoScale = (pR * 0.024) * (1 + Math.sin(t * 0.85) * 0.05);
+            // Dynamic breathing scale & subtle floating motion inside the circle
+            const logoScale = (coreR * 0.0105) * (1 + Math.sin(t * 0.85) * 0.04);
             ctx.scale(logoScale, logoScale);
-            ctx.translate(-50, -50); // Center the 100x100 path bounding box precisely at (0,0)
+            ctx.translate(-50, -50); // Center the 100x100 path bounding box precisely at circle center (0,0)
 
             // Luminous Aura Glow behind the RAFly Brand Mark
-            ctx.shadowBlur  = isSyncing ? 40 : 28;
-            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 72%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
+            ctx.shadowBlur  = isSyncing ? 42 : 28;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
 
             // Part 1 Top Wing Gradient (Vibrant Cyan to Royal Electric Blue)
             const gTop = ctx.createLinearGradient(0, 0, 100, 54);
@@ -474,7 +436,7 @@ export function initHeroGrowthField(host) {
         } else {
             // Fallback for legacy environments
             ctx.beginPath();
-            ctx.arc(cx, cy, pR2 * 0.4, 0, Math.PI * 2);
+            ctx.arc(cx, cy, coreR * 0.4, 0, Math.PI * 2);
             ctx.fillStyle   = '#ffffff';
             ctx.shadowBlur  = isSyncing ? 26 : 16;
             ctx.shadowColor = '#ffffff';

@@ -137,11 +137,7 @@ require __DIR__ . '/partials/social-rail.php';
                 <details class="team-card" data-team-index="<?= (int)$i ?>">
                     <summary class="team-card-head">
                         <span class="team-avatar">
-<?php if ($p['photo'] !== null): ?>
-                            <?php /* site_path(), unlike admin/media.php, so the photo
-                                     still resolves when the site is installed in a
-                                     subfolder. Do not "simplify" this to a bare
-                                     /uploads/ path. */ ?>
+<?php if ($p['photo'] !== null && file_exists(__DIR__ . '/uploads/' . $p['photo'])): ?>
                             <img src="<?= e(site_path('/uploads/' . rawurlencode((string)$p['photo']))) ?>"
                                  alt="<?= e($alt) ?>" width="128" height="128" loading="lazy" decoding="async">
 <?php else: ?>
