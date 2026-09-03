@@ -229,9 +229,7 @@ require __DIR__ . '/partials/social-rail.php';
 
                            page itself as an image and reports a broken one. */ ?>
 
-                        <span class="team-detail-avatar">
-
-                            <img id="teamDetailPhoto" alt="" width="240" height="240" hidden>
+                            <img id="teamDetailPhoto" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="" width="240" height="240" hidden>
 
                             <?= icon('user', 'team-detail-avatar-icon') ?>
 
