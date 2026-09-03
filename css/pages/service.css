@@ -6,33 +6,36 @@
    body class and everything else is shared with the rest of the site.
    ========================================================================== */
 
-.svc-hero .svc-title { font-size: var(--fs-h1); }
-.svc-tagline { margin-top: var(--sp-4); }
+.svc-hero .svc-title { font-size: var(--fs-h1); font-weight: 800; font-family: var(--font-display); color: #06122f; }
+.svc-tagline { margin-top: var(--sp-4); font-size: 1.15rem; font-weight: 600; color: #1e293b; }
 .svc-intro {
     margin-top: var(--sp-4);
-    color: var(--ink-2);
+    color: #475569;
     max-width: 58ch;
+    line-height: 1.6;
 }
 .svc-pills { margin-top: var(--sp-6); }
 .svc-actions { margin-top: var(--sp-7); }
 .svc-note {
     margin-top: var(--sp-5);
     font-size: var(--fs-xs);
-    color: var(--ink-3);
+    color: #64748b;
 }
 
-/* The eyebrow, the chips and the mark all take the service's own accent —
-   but the eyebrow is TEXT at 12px, so it reads --accent-fg (the per-service
-   value set by body.svc-*), never --accent. --accent is the brand blue fill
-   and measures 4.41:1 against the page head's paper-02, which is a fail that
-   inc/tools/shoot.mjs catches on all five service pages at both viewports.
-   The ::before is a 2px bar, i.e. non-text, so it keeps the fill. */
-.page-service .page-head .eyebrow { color: var(--accent-fg); }
-.page-service .page-head .eyebrow::before { background: var(--accent); }
-.svc-pills .chip { border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
+.page-service .page-head .eyebrow { color: var(--accent-fg, #0a63ff); font-family: var(--font-mono, monospace); font-weight: 700; letter-spacing: 0.08em; }
+.page-service .page-head .eyebrow::before { background: var(--accent, #0a63ff); }
+.svc-pills .chip {
+    border-color: rgba(10, 99, 255, 0.2);
+    background: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #06122f;
+    box-shadow: inset 0 1px 0 #ffffff, 0 2px 8px rgba(6, 18, 47, 0.04);
+}
 
 /* ==========================================================================
-   The service mark — a drawn object, not a stock photograph
+   The service mark — distinct visual engines per service
    ========================================================================== */
 .svc-mark {
     position: relative;
@@ -48,35 +51,47 @@
     z-index: 2;
     display: grid;
     place-items: center;
-    width: 40%;
+    width: 42%;
     aspect-ratio: 1;
     border-radius: var(--r-2xl);
-    background: var(--accent);
+    background: linear-gradient(135deg, #06122f, var(--accent, #0a63ff));
     color: #fff;
-    box-shadow: 0 20px 50px color-mix(in srgb, var(--accent) 34%, transparent);
+    box-shadow: 0 20px 50px color-mix(in srgb, var(--accent, #0a63ff) 38%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
-.svc-mark-icon .icon { width: 42%; height: 42%; stroke-width: 1.5; }
+.svc-mark:hover .svc-mark-icon {
+    transform: scale(1.06);
+    box-shadow: 0 24px 60px color-mix(in srgb, var(--accent, #0a63ff) 50%, transparent), inset 0 1px 0 #ffffff;
+}
+.svc-mark-icon .icon { width: 44%; height: 44%; stroke-width: 2.0; }
 
 .svc-mark-ring {
     position: absolute;
-    inset: 14%;
+    inset: 12%;
     border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 68%);
+    border: 1px dashed color-mix(in srgb, var(--accent, #0a63ff) 30%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent, #0a63ff) 8%, transparent) 0%, transparent 68%);
+    animation: svcRingSpin 40s linear infinite;
 }
-.svc-mark-ring.is-2 { inset: 0; border-style: dashed; }
+.svc-mark-ring.is-2 {
+    inset: -2%;
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--accent, #0a63ff) 16%, transparent);
+    animation-duration: 65s;
+    animation-direction: reverse;
+}
 
-@supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-        .svc-mark-ring {
-            animation: svc-spin 1ms linear both;
-            animation-timeline: view();
-            animation-range: cover 0% cover 100%;
-        }
-        .svc-mark-ring.is-2 { animation-direction: reverse; }
-    }
+@keyframes svcRingSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
-@keyframes svc-spin { from { rotate: 0deg; } to { rotate: 90deg; } }
+
+/* Service-Specific Engine Themes */
+.svc-web .svc-mark-icon { background: linear-gradient(135deg, #06122f, #0a63ff); }
+.svc-security .svc-mark-icon { background: linear-gradient(135deg, #06122f, #0230c6); }
+.svc-marketing .svc-mark-icon { background: linear-gradient(135deg, #06122f, #1b6bff); }
+.svc-content .svc-mark-icon { background: linear-gradient(135deg, #06122f, #001a7a); }
+.svc-ecom .svc-mark-icon { background: linear-gradient(135deg, #06122f, #0847d6); }
 
 /* ==========================================================================
    Signals and limits

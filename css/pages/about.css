@@ -9,45 +9,55 @@
 /* ==========================================================================
    The branching figure — one core, five branches
    ========================================================================== */
+/* ==========================================================================
+   The branching figure — system architecture visual core
+   ========================================================================== */
 .branch-figure {
     position: relative;
     aspect-ratio: 1;
     width: 100%;
     max-width: 460px;
-    /* An absolute radius, not a percentage. A percentage translate resolves
-       against the ELEMENT's own box, not its container — so `translate(38%)`
-       moved each branch 38% of its own 120px width and stacked all five on
-       top of the core. */
     --branch-r: clamp(104px, 6rem + 6vw, 168px);
     margin-inline: auto;
     display: grid;
     place-items: center;
     border-radius: 50%;
     background:
-        radial-gradient(circle at 50% 45%, #ffffff 0%, var(--paper-2) 46%, var(--paper-3) 72%, transparent 74%);
+        radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(238, 244, 255, 0.85) 46%, rgba(220, 232, 255, 0.5) 72%, transparent 74%);
+    box-shadow: inset 0 0 40px rgba(10, 99, 255, 0.05), 0 12px 36px rgba(6, 18, 47, 0.06);
 }
-/* Two faint orbit rings, so the branches read as arranged rather than scattered */
 .branch-figure::before,
 .branch-figure::after {
     content: '';
     position: absolute;
     border-radius: 50%;
-    border: 1px dashed var(--line-strong);
+    border: 1px dashed rgba(10, 99, 255, 0.22);
+    animation: branchOrbitSpin 45s linear infinite;
 }
 .branch-figure::before { inset: 18%; }
-.branch-figure::after  { inset: 34%; }
+.branch-figure::after  { inset: 34%; border-style: solid; border-color: rgba(10, 99, 255, 0.12); animation-duration: 70s; animation-direction: reverse; }
+
+@keyframes branchOrbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
 
 .branch-core {
     position: relative;
     z-index: 2;
     display: grid;
     place-items: center;
-    width: 84px;
-    height: 84px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
-    background: var(--ink);
+    background: linear-gradient(135deg, #06122f, #0a63ff);
     color: #fff;
-    box-shadow: var(--sh-3);
+    box-shadow: 0 0 24px rgba(10, 99, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.branch-core:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 32px rgba(10, 99, 255, 0.5), inset 0 1px 0 #ffffff;
 }
 .branch-core .icon { width: 34px; height: 34px; }
 
@@ -63,8 +73,6 @@
     top: 50%;
     left: 50%;
     margin: 0;
-    /* Rotate out to the angle, translate along the radius, then un-rotate the
-       content so the label stays upright. */
     transform: rotate(var(--a)) translate(var(--branch-r)) rotate(calc(var(--a) * -1));
     display: flex;
     flex-direction: column;
@@ -74,28 +82,43 @@
     margin-left: -60px;
     margin-top: -30px;
     text-align: center;
+    transition: transform 0.35s ease;
 }
 .branch-dot {
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: var(--paper);
-    color: var(--accent-fg);
-    box-shadow: var(--sh-2);
+    background: #ffffff;
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    color: #0a63ff;
+    box-shadow: inset 0 1px 0 #ffffff, 0 4px 14px rgba(6, 18, 47, 0.08);
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+.branch-item:hover .branch-dot {
+    transform: scale(1.12);
+    border-color: rgba(10, 99, 255, 0.45);
+    color: #0230c6;
+    box-shadow: inset 0 1px 0 #ffffff, 0 8px 20px rgba(10, 99, 255, 0.2);
 }
 .branch-dot .icon { width: 20px; height: 20px; }
 .branch-label {
-    font-size: var(--fs-2xs);
-    font-weight: var(--fw-semi);
-    color: var(--ink-2);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #06122f;
     line-height: 1.25;
+    letter-spacing: 0.04em;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(10, 99, 255, 0.1);
 }
 
 @media (max-width: 480px) {
     .branch-item { width: 96px; margin-left: -48px; }
-    .branch-label { font-size: 0.6875rem; }
+    .branch-label { font-size: 0.625rem; }
 }
 
 /* ==========================================================================
@@ -107,16 +130,28 @@
     flex-direction: column;
     gap: var(--sp-4);
     padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-    background: var(--paper);
+    background: #ffffff;
+    border: 1px solid rgba(6, 18, 47, 0.1);
     border-radius: var(--r-xl);
-    box-shadow: var(--sh-2);
+    box-shadow: inset 0 1px 0 #ffffff, 0 6px 20px rgba(6, 18, 47, 0.04);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
-.mv-card h3 { font-size: var(--fs-h3); }
-.mv-card p { color: var(--ink-2); margin: 0; }
-.mv-card.is-vision { background: var(--ink); color: var(--on-dark-2); }
-.mv-card.is-vision h3 { color: #fff; }
-.mv-card.is-vision p { color: var(--on-dark-2); }
-.mv-card.is-vision .icon-box-ink { background: rgba(255, 255, 255, .12); }
+.mv-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(10, 99, 255, 0.28);
+    box-shadow: inset 0 1px 0 #ffffff, 0 12px 32px rgba(10, 99, 255, 0.1);
+}
+.mv-card h3 { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 800; color: #06122f; }
+.mv-card p { color: #475569; margin: 0; line-height: 1.6; }
+.mv-card.is-vision {
+    background: linear-gradient(145deg, #06122f, #021a5e);
+    color: #e2e8f0;
+    border-color: rgba(10, 99, 255, 0.3);
+    box-shadow: 0 12px 32px rgba(6, 18, 47, 0.2);
+}
+.mv-card.is-vision h3 { color: #ffffff; }
+.mv-card.is-vision p { color: #cbd5e1; }
+.mv-card.is-vision .icon-box-ink { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
 
 /* ==========================================================================
    The numbered service rail
@@ -129,30 +164,32 @@
     gap: var(--sp-5);
     margin: 0;
     padding: var(--sp-5);
-    background: var(--paper);
-    border: 1px solid var(--line);
+    background: #ffffff;
+    border: 1px solid rgba(6, 18, 47, 0.1);
     border-radius: var(--r-lg);
-    transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease),
-                border-color var(--dur-2) var(--ease);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .rail-item:hover {
     transform: translateY(-3px);
-    box-shadow: var(--sh-3);
-    border-color: transparent;
+    box-shadow: inset 0 1px 0 #ffffff, 0 8px 24px rgba(10, 99, 255, 0.1);
+    border-color: rgba(10, 99, 255, 0.3);
 }
 .rail-num {
-    font-family: var(--font-display);
-    font-size: var(--fs-h4);
-    font-weight: var(--fw-bold);
-    color: var(--ink-3);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0a63ff;
     font-variant-numeric: tabular-nums;
     flex: none;
+    background: rgba(10, 99, 255, 0.06);
+    padding: 4px 8px;
+    border-radius: 6px;
 }
 .rail-body { flex: 1; min-width: 0; }
-.rail-title { display: block; font-family: var(--font-display); font-weight: var(--fw-semi); color: var(--ink); font-size: var(--fs-h4); }
-.rail-text  { display: block; font-size: var(--fs-sm); color: var(--ink-3); margin-top: 2px; }
-.rail-go { color: var(--ink-3); flex: none; transition: transform var(--dur-2) var(--ease), color var(--dur-2) var(--ease); }
-.rail-item:hover .rail-go { transform: translateX(4px); color: var(--accent-fg); }
+.rail-title { display: block; font-family: var(--font-display); font-weight: 800; color: #06122f; font-size: var(--fs-h4); }
+.rail-text  { display: block; font-size: var(--fs-sm); color: #475569; margin-top: 2px; }
+.rail-go { color: #0a63ff; flex: none; transition: transform 0.3s ease, color 0.3s ease; }
+.rail-item:hover .rail-go { transform: translateX(6px); color: #0230c6; }
 
 @media (max-width: 620px) {
     .rail-item { gap: var(--sp-3); padding: var(--sp-4); }
@@ -176,17 +213,29 @@
     position: absolute;
     inset: 14%;
     border-radius: 50%;
-    border: 1px solid var(--line-strong);
-    background: radial-gradient(circle, #ffffff 0%, var(--paper) 62%, transparent 72%);
+    border: 1px dashed rgba(10, 99, 255, 0.25);
+    background: radial-gradient(circle, #ffffff 0%, rgba(240, 246, 255, 0.7) 62%, transparent 72%);
+    animation: peaceOrbitSpin 50s linear infinite;
 }
+
+@keyframes peaceOrbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
 .peace-orbit-core {
     position: relative;
     z-index: 2;
-    font-family: var(--font-display);
+    font-family: var(--font-mono, monospace);
     font-size: var(--fs-h4);
-    font-weight: var(--fw-bold);
-    letter-spacing: 0.06em;
-    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #0a63ff;
+    background: #ffffff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(10, 99, 255, 0.2);
+    box-shadow: 0 4px 14px rgba(10, 99, 255, 0.1);
 }
 .peace-orbit-ring {
     position: absolute;
@@ -201,6 +250,10 @@
     left: 50%;
     margin: -24px 0 0 -24px;
     transform: rotate(var(--a)) translate(150px) rotate(calc(var(--a) * -1));
+    transition: transform 0.35s ease;
+}
+.peace-orbit-ring li:hover {
+    transform: rotate(var(--a)) translate(150px) rotate(calc(var(--a) * -1)) scale(1.15);
 }
 .peace-orbit-ring span {
     display: grid;
@@ -208,13 +261,13 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: var(--blue);
+    background: linear-gradient(135deg, #0a63ff, #2563eb);
     color: #fff;
     font-family: var(--font-display);
-    font-weight: var(--fw-bold);
-    box-shadow: var(--sh-2);
+    font-weight: 800;
+    box-shadow: 0 4px 14px rgba(10, 99, 255, 0.25);
 }
-.peace-orbit-ring li:nth-child(even) span { background: var(--blue-deep); }
+.peace-orbit-ring li:nth-child(even) span { background: linear-gradient(135deg, #0230c6, #1d4ed8); }
 
 @media (max-width: 520px) {
     .peace-orbit-ring li { transform: rotate(var(--a)) translate(108px) rotate(calc(var(--a) * -1)); }
