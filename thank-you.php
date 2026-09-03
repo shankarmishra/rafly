@@ -1,13 +1,9 @@
 <?php
 require __DIR__ . '/inc/bootstrap.php';
 
-// One-shot page: reachable only immediately after a successful POST.
-// Without this guard it would be a crawlable, shareable "success" URL.
-if (empty($_SESSION['lead_ok'])) {
-    header('Location: /', true, 302);
-    exit;
+if (isset($_SESSION['lead_ok'])) {
+    unset($_SESSION['lead_ok']);
 }
-unset($_SESSION['lead_ok']);
 
 $page = [
     'id'        => 'contact',
