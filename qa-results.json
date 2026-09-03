@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-09-03T13:21:00Z",
+  "qaTarget": "http://127.0.0.1:8899",
+  "status": "PASS",
+  "passRate": "100%",
+  "testedRoutesCount": 16,
+  "consoleErrorsCount": 0,
+  "problemsCount": 0,
+  "viewportsTested": [
+    "1440px (Desktop)",
+    "1024px (Tablet)",
+    "768px (Small Screen)",
+    "390px (Mobile)"
+  ],
+  "evaluatedFlows": [
+    { "flow": "Clean Route Loads (16/16 routes)", "status": "PASS" },
+    { "flow": "Header Navigation & Services Dropdown", "status": "PASS" },
+    { "flow": "FAQ Accordion Open / Close Toggles", "status": "PASS" },
+    { "flow": "Consultation Modal Open / Close on Escape", "status": "PASS" },
+    { "flow": "Product Deck Scroll Scrubbing", "status": "PASS" },
+    { "flow": "Coverflow Gallery Scroll Advancement", "status": "PASS" },
+    { "flow": "Empty Lead Form Rejection & Flagging", "status": "PASS" },
+    { "flow": "Malformed Email Rejection", "status": "PASS" },
+    { "flow": "CSRF Session Token Validation", "status": "PASS" },
+    { "flow": "Arithmetic Anti-Bot Challenge Validation", "status": "PASS" },
+    { "flow": "Mobile Navigation Drawer Open / Close", "status": "PASS" },
+    { "flow": "Mobile Viewport Sideways Scroll Check (Zero CLS)", "status": "PASS" }
+  ]
+}

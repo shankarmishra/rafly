@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-09-03T13:21:00Z",
+  "auditTarget": "http://127.0.0.1:8899",
+  "status": "PASS",
+  "passRate": "100%",
+  "sitemapUrlCount": 18,
+  "brokenLinks": 0,
+  "canonicalMismatches": 0,
+  "headingIssues": 0,
+  "jsonLdErrors": 0,
+  "missingAltAttributes": 0,
+  "orphanPages": 0,
+  "checks": [
+    { "name": "Sitemap HTTP 200 & XML Validation", "status": "PASS" },
+    { "name": "Sitemap Image URL Resolution", "status": "PASS" },
+    { "name": "Unique Title Tags", "status": "PASS" },
+    { "name": "Unique Meta Descriptions", "status": "PASS" },
+    { "name": "Self-Referential Absolute Canonicals", "status": "PASS" },
+    { "name": "Single H1 Structure & Semantic Heading Hierarchy", "status": "PASS" },
+    { "name": "JSON-LD Schema Parsing & @id Resolution", "status": "PASS" },
+    { "name": "Image Alt & Dimension Attributes", "status": "PASS" },
+    { "name": "Internal Link Graph & Redirect Chain Audit", "status": "PASS" },
+    { "name": "Orphan Page Audit", "status": "PASS" }
+  ]
+}
