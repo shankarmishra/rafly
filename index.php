@@ -1558,133 +1558,128 @@ require __DIR__ . '/partials/social-rail.php';
     </section>
 
     <?php /* ==========================================================
-       06 — DELIVERY WORKFLOW: THE BUILD LOOP (#delivery)
+       06 — DELIVERY WORKFLOW: THE BUILD SCULPTURE (#delivery)
        ========================================================== */ ?>
-    <?php /* ==========================================================
-       06 — DELIVERY WORKFLOW: THE BUILD LOOP (#delivery)
-       ========================================================== */ ?>
-    <section class="section build-loop-section ground-2 grain has-tex has-reels-bg" id="delivery" data-build-loop>
-        <div class="tex-apps-grid" aria-hidden="true"></div>
-        <div class="tex-apps-dots" aria-hidden="true"></div>
-        <div class="tex-apps-hatch" aria-hidden="true"></div>
-        <div class="reels-ambient-aura" aria-hidden="true"></div>
+    <section class="section build-loop-section ground-2 grain has-tex" id="delivery" data-build-loop>
+        <!-- Oversized background ghost typography -->
+        <div class="bl-ghost-text" aria-hidden="true">
+            <span class="bl-gt-word gt-1">DISCOVER</span>
+            <span class="bl-gt-word gt-2">ARCHITECT</span>
+            <span class="bl-gt-word gt-3">BUILD</span>
+            <span class="bl-gt-word gt-4">HARDEN</span>
+            <span class="bl-gt-word gt-5">SHIP</span>
+        </div>
 
         <div class="container">
             <div class="bl-split-grid">
                 
-                <!-- LEFT 38%: EDITORIAL HEADLINE & TIMEFRAME -->
+                <!-- LEFT COLUMN (~42%): Kinetic Editorial Headline & Proof -->
                 <div class="bl-left-col">
                     <div class="bl-eyebrow">
-                        <span class="bl-tag">06 / DELIVERY SYSTEM</span>
+                        <span class="bl-tag">06 / DELIVERY</span>
                         <span class="bl-dot-live">●</span>
                     </div>
                     
                     <h2 class="bl-headline">
-                        FROM IDEA<br>
-                        <span class="bl-h-accent">TO SHIPPED.</span>
+                        FROM<br>
+                        FIRST SIGNAL<br>
+                        TO <span class="bl-h-accent">SHIPPED.</span>
                     </h2>
                     
                     <p class="bl-desc">
-                        Four synchronized stages of one connected digital assembly line. We don't drop wireframes and disappear &mdash; we architect, build, and harden inside one accountable team.
+                        Four focused stages turn an idea into a working digital system &mdash; strategy, structure, build and hardening moving as one continuous process.
                     </p>
 
-                    <div class="bl-timeframe">
-                        <span class="bl-tf-label">TYPICAL DELIVERY SPRINT</span>
-                        <span class="bl-tf-val">2 TO 6 WEEKS TOTAL</span>
+                    <div class="bl-proof-annotation">
+                        <span class="bl-pa-label">TYPICAL DELIVERY</span>
+                        <strong class="bl-pa-val">2 TO 6 WEEKS</strong>
+                        <span class="bl-pa-sub">SYNCHRONIZED SPRINT &bull; SLA GUARANTEED</span>
                     </div>
                 </div>
 
-                <!-- RIGHT 62%: SOLID CERAMIC WHITE CONSTRUCTION TABLE -->
+                <!-- RIGHT COLUMN (~58%): HERO ABSTRACT MOTION SCULPTURE -->
                 <div class="bl-right-col">
-                    <div class="bl-construction-table">
+                    <div class="bl-sculpture-wrapper" data-magnetic>
                         
-                        <!-- HUD Header -->
-                        <div class="bl-table-hud">
-                            <span class="bl-hud-coord">+ 06.01 // CONSTRUCTION_FIELD</span>
-                            <span class="bl-hud-grid">GRID: 4x4 // SCALE: 1.0</span>
-                            <span class="bl-hud-status">● SYSTEM ACTIVE // 60FPS</span>
-                        </div>
-
-                        <!-- Stage Tabs Rail -->
-                        <div class="bl-table-tabs" role="tablist" aria-label="Build Loop Stages">
+                        <!-- Sculpture Stage Nav Track -->
+                        <div class="bl-stage-track">
                             <?php 
                             $STAGES = [
-                                ['01', 'DISCOVER',  '2-3 DAYS'],
-                                ['02', 'ARCHITECT', '3-5 DAYS'],
-                                ['03', 'BUILD',     '2-6 WEEKS'],
-                                ['04', 'HARDEN',    '1 WEEK'],
+                                ['01', 'DISCOVER',  'RAW SIGNALS'],
+                                ['02', 'ARCHITECT', 'STRUCTURE'],
+                                ['03', 'BUILD',     'ASSEMBLY'],
+                                ['04', 'HARDEN',    'PERIMETER'],
                             ];
-                            foreach ($STAGES as $idx => [$num, $name, $timeframe]):
+                            foreach ($STAGES as $idx => [$num, $name, $sub]):
                             ?>
-                            <button type="button" class="bl-table-tab <?= $idx === 0 ? 'is-active' : '' ?>" data-stage="<?= $idx ?>" role="tab" aria-selected="<?= $idx === 0 ? 'true' : 'false' ?>">
-                                <span class="bl-tt-num"><?= $num ?></span>
-                                <span class="bl-tt-name"><?= $name ?></span>
-                                <span class="bl-tt-time"><?= $timeframe ?></span>
+                            <button type="button" class="bl-stage-node <?= $idx === 0 ? 'is-active' : '' ?>" data-stage="<?= $idx ?>">
+                                <span class="bl-sn-num"><?= $num ?></span>
+                                <span class="bl-sn-info">
+                                    <strong><?= $name ?></strong>
+                                    <small><?= $sub ?></small>
+                                </span>
                             </button>
                             <?php endforeach; ?>
                         </div>
 
-                        <!-- Live Vector Geometry Construction Field -->
-                        <div class="bl-canvas-wrapper">
-                            <svg class="bl-svg-canvas" viewBox="0 0 800 240" fill="none" aria-hidden="true">
-                                <path class="bl-svg-grid-lines" d="M0 60H800M0 120H800M0 180H800M200 0V240M400 0V240M600 0V240" stroke="rgba(10,99,255,0.06)" stroke-width="1" stroke-dasharray="4 4"/>
-                                <path class="bl-svg-trace" d="M40 120 C 160 40, 240 200, 400 120 C 560 40, 640 200, 760 120" stroke="#0a63ff" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Main Motion Sculpture Visual Container -->
+                        <div class="bl-sculpture-viewport">
+                            <svg class="bl-sculpture-svg" viewBox="0 0 600 400" fill="none" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="sculptureGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#0a63ff"/>
+                                        <stop offset="100%" stop-color="#38bdf8"/>
+                                    </linearGradient>
+                                    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                                    </filter>
+                                </defs>
+
+                                <!-- Base Grid & Blueprint Vector Paths -->
+                                <g class="bl-svg-grid">
+                                    <line x1="50" y1="200" x2="550" y2="200" stroke="rgba(6,18,47,0.08)" stroke-dasharray="4 4"/>
+                                    <line x1="300" y1="50" x2="300" y2="350" stroke="rgba(6,18,47,0.08)" stroke-dasharray="4 4"/>
+                                    <circle cx="300" cy="200" r="140" stroke="rgba(10,99,255,0.12)" stroke-width="1"/>
+                                </g>
+
+                                <!-- Evolving Structural Geometry Planes -->
+                                <g class="bl-sculpture-geometry">
+                                    <polygon class="bl-geo-plane plane-1" points="300,80 440,160 300,240 160,160" fill="#ffffff" stroke="rgba(6,18,47,0.16)" stroke-width="1.5"/>
+                                    <polygon class="bl-geo-plane plane-2" points="300,140 420,200 300,260 180,200" fill="#f6f8fc" stroke="rgba(10,99,255,0.3)" stroke-width="1.5"/>
+                                    <polygon class="bl-geo-plane plane-3" points="300,190 380,230 300,270 220,230" fill="#06122f" stroke="#0a63ff" stroke-width="2"/>
+                                </g>
+
+                                <!-- Perimeter Scan Shield Line -->
+                                <circle class="bl-scan-perimeter" cx="300" cy="200" r="160" stroke="#0a63ff" stroke-width="2" stroke-dasharray="20 400" stroke-linecap="round"/>
                             </svg>
 
-                            <!-- Panels -->
-                            <div class="bl-stage-panels">
-                                <div class="bl-stage-content is-active" data-stage-panel="0">
-                                    <div class="bl-panel-meta">
-                                        <span class="bl-pm-tag">STAGE 01 // DISCOVER</span>
-                                        <span class="bl-pm-time">2-3 DAYS SLA</span>
-                                    </div>
-                                    <h3 class="bl-panel-heading">No pitch decks. We map what is broken first.</h3>
-                                    <p class="bl-panel-desc">We start with a direct technical audit of your current stack, traffic vectors, and customer conversion bottlenecks before writing a single line of code.</p>
-                                    <div class="bl-blueprint-row">
-                                        <div class="bl-bp-node"><span>INTENT MATRIX</span></div>
-                                        <div class="bl-bp-node"><span>CWV 100 AUDIT</span></div>
-                                        <div class="bl-bp-node"><span>CONVERSION CONDUIT</span></div>
-                                    </div>
+                            <!-- Stage Copy Overlay -->
+                            <div class="bl-stage-copy-box">
+                                <div class="bl-stage-copy is-active" data-stage-copy="0">
+                                    <h4>01 // DISCOVER</h4>
+                                    <p>Raw intent, traffic vectors, and stack bottlenecks gathered into one synchronized strategic audit.</p>
                                 </div>
-
-                                <div class="bl-stage-content" data-stage-panel="1" style="display:none;">
-                                    <div class="bl-panel-meta">
-                                        <span class="bl-pm-tag">STAGE 02 // ARCHITECT</span>
-                                        <span class="bl-pm-time">3-5 DAYS SLA</span>
-                                    </div>
-                                    <h3 class="bl-panel-heading">One agreed scope. One flat price.</h3>
-                                    <p class="bl-panel-desc">We structure a custom bundled package matched directly to your commercial goals, with exact scope deliverables and zero surprise retainer creep.</p>
-                                    <div class="bl-blueprint-row">
-                                        <div class="bl-bp-node"><span>TOKEN HIERARCHY</span></div>
-                                        <div class="bl-bp-node"><span>LAYOUT BOUNDARIES</span></div>
-                                        <div class="bl-bp-node"><span>API CONDUITS</span></div>
-                                    </div>
+                                <div class="bl-stage-copy" data-stage-copy="1" style="display:none;">
+                                    <h4>02 // ARCHITECT</h4>
+                                    <p>Scattered signals lock into grid structure, layout boundaries, and exact scope deliverables.</p>
                                 </div>
-
-                                <div class="bl-stage-content" data-stage-panel="2" style="display:none;">
-                                    <div class="bl-panel-meta">
-                                        <span class="bl-pm-tag">STAGE 03 // BUILD</span>
-                                        <span class="bl-pm-time">2-6 WEEKS SPRINT</span>
-                                    </div>
-                                    <h3 class="bl-panel-heading">Parallel execution inside one team.</h3>
-                                    <p class="bl-panel-desc">Development, copywriting, security review, and performance creative run concurrently inside one synchronized studio team with daily progress visibility.</p>
-                                    <div class="bl-code-box">
-                                        <code>const studio = initRAFlyEngine({ cwv: 100, security: 'HARDENED' });</code>
-                                    </div>
+                                <div class="bl-stage-copy" data-stage-copy="2" style="display:none;">
+                                    <h4>03 // BUILD</h4>
+                                    <p>Physical digital surfaces and parallel engineering components assemble in daily sprints.</p>
                                 </div>
-
-                                <div class="bl-stage-content" data-stage-panel="3" style="display:none;">
-                                    <div class="bl-panel-meta">
-                                        <span class="bl-pm-tag">STAGE 04 // HARDEN &amp; SHIP</span>
-                                        <span class="bl-pm-time">1 WEEK SLA</span>
-                                    </div>
-                                    <h3 class="bl-panel-heading">Built to ship. Built to last.</h3>
-                                    <p class="bl-panel-desc">Your site, store, or campaign goes live with full baseline security hardening, SSL/TLS configuration, and 100/100 Core Web Vitals optimization built in up front.</p>
-                                    <div class="bl-shield-tag">
-                                        <span>⚡ 100/100 PERFORMANCE &amp; AES-256 HARDENED</span>
-                                    </div>
+                                <div class="bl-stage-copy" data-stage-copy="3" style="display:none;">
+                                    <h4>04 // HARDEN &amp; SHIP</h4>
+                                    <p>Circular perimeter scan verifies 100/100 CWV, TLS 1.3 encryption, and WAF security before shipping live.</p>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Payoff Footer Signal -->
+                        <div class="bl-sculpture-footer">
+                            <span class="bl-sf-signal">● SIGNAL STATUS: SHIPPED</span>
+                            <div class="bl-sf-line"><div class="bl-sf-pulse"></div></div>
+                            <span class="bl-sf-version">RAFLY ENGINE v3.0</span>
                         </div>
 
                     </div>
@@ -1695,42 +1690,120 @@ require __DIR__ . '/partials/social-rail.php';
     </section>
 
     <?php /* ==========================================================
-       07 — THE STACK: THE MATERIAL LIBRARY (#stack)
+       07 — THE STACK: THE DIGITAL ENGINE (#stack)
        ========================================================== */ ?>
-    <section class="section toolkit-section ground-3 has-tex has-reels-bg" id="stack" data-materials-workbench>
-        <div class="tex-apps-grid" aria-hidden="true"></div>
-        <div class="tex-apps-dots" aria-hidden="true"></div>
-        <div class="tex-apps-hatch" aria-hidden="true"></div>
-        <div class="reels-ambient-aura" aria-hidden="true"></div>
+    <section class="section toolkit-section ground-3 has-tex" id="stack" data-materials-workbench>
+        <!-- Narrative Signal Bridge continuation from Section 06 -->
+        <div class="section-bridge-line" aria-hidden="true">
+            <div class="sbl-pulse"></div>
+        </div>
+
+        <!-- Oversized background ghost typography -->
+        <div class="tk-ghost-text" aria-hidden="true">
+            <span class="tk-gt-word gt-1">FOUNDATION</span>
+            <span class="tk-gt-word gt-2">APPLICATION</span>
+            <span class="tk-gt-word gt-3">DATA</span>
+            <span class="tk-gt-word gt-4">PROTECTION</span>
+            <span class="tk-gt-word gt-5">GROWTH</span>
+        </div>
 
         <div class="container">
-            <div class="tk-head">
-                <span class="tk-kicker">07 // MATERIAL LIBRARY</span>
-                <h2 class="tk-title">THE MATERIALS WE BUILD WITH.</h2>
-                <p class="tk-sub">Named tools only. Tactile technology specimens selected for zero dependency bloat.</p>
+            <!-- Section Editorial Header -->
+            <div class="tk-editorial-head">
+                <span class="tk-kicker">07 // TECHNOLOGY</span>
+                <h2 class="tk-title">
+                    THE SYSTEM<br>
+                    BEHIND<br>
+                    <span class="tk-h-accent">THE BUILD.</span>
+                </h2>
+                <p class="tk-sub">The technology changes with the project. The standard does not &mdash; fast interfaces, reliable infrastructure, secure systems and measurable growth.</p>
             </div>
 
-            <!-- Detail Inspector -->
-            <div class="tk-inspector" data-tk-inspector aria-hidden="true">
-                <span class="tk-inspect-cat">RUNTIME &amp; INFRASTRUCTURE</span>
-                <h4 class="tk-inspect-name">PHP 8.3 / LARAVEL</h4>
-                <p class="tk-inspect-meta">Server-side velocity, sub-15ms TTFB execution, zero frontend framework bloat.</p>
-            </div>
-
-            <!-- Typographic Specimens Workbench Wall -->
-            <div class="tk-wall">
-                <?php foreach ($STACK as $gIdx => [$group, $items]): ?>
-                <div class="tk-group">
-                    <span class="tk-group-label"><?= strtoupper(e($group)) ?></span>
-                    <div class="tk-items">
-                        <?php foreach ($items as $item): ?>
-                        <div class="tk-item" data-specimen="<?= e($item) ?>" data-category="<?= strtoupper(e($group)) ?>">
-                            <span class="tk-item-name"><?= $item ?></span>
-                        </div>
-                        <?php endforeach; ?>
+            <!-- DIGITAL MATERIAL COMPOSITION (5 LAYERS & TYPOGRAPHIC SPECIMENS) -->
+            <div class="dm-composition-container">
+                
+                <!-- 5 Layer Depth Sculpture -->
+                <div class="dm-sculpture-core">
+                    <div class="dm-layer layer-1" data-layer="1">
+                        <span class="dm-l-tag">01 FOUNDATION</span>
+                        <div class="dm-l-surface"></div>
+                    </div>
+                    <div class="dm-layer layer-2" data-layer="2">
+                        <span class="dm-l-tag">02 APPLICATION</span>
+                        <div class="dm-l-surface"></div>
+                    </div>
+                    <div class="dm-layer layer-3" data-layer="3">
+                        <span class="dm-l-tag">03 DATA &amp; COMMERCE</span>
+                        <div class="dm-l-surface"></div>
+                    </div>
+                    <div class="dm-layer layer-4" data-layer="4">
+                        <span class="dm-l-tag">04 PROTECTION</span>
+                        <div class="dm-l-surface"></div>
+                    </div>
+                    <div class="dm-layer layer-5" data-layer="5">
+                        <span class="dm-l-tag">05 GROWTH</span>
+                        <div class="dm-l-surface"></div>
                     </div>
                 </div>
-                <?php endforeach; ?>
+
+                <!-- Typographic Specimen Grid Wall -->
+                <div class="dm-specimen-wall">
+                    <?php 
+                    $GROUPS = [
+                        ['01', 'FOUNDATION & APPLICATION', [
+                            'PHP'        => ['icon' => 'code', 'cat' => 'FOUNDATION', 'desc' => 'Sub-15ms server execution', 'badge' => 'Engine'],
+                            'LARAVEL'    => ['icon' => 'layers', 'cat' => 'APPLICATION', 'desc' => 'Enterprise MVC framework', 'badge' => 'MVC'],
+                            'WORDPRESS'  => ['icon' => 'file-pen', 'cat' => 'APPLICATION', 'desc' => 'Custom PHP headless backend', 'badge' => 'CMS'],
+                            'JAVASCRIPT' => ['icon' => 'terminal', 'cat' => 'CLIENT', 'desc' => 'Native ES6+ micro-interactions', 'badge' => 'ES6+']
+                        ]],
+                        ['02', 'COMMERCE & DATA', [
+                            'SHOPIFY'   => ['icon' => 'shopping-cart', 'cat' => 'COMMERCE', 'desc' => 'Headless Liquid theme engine', 'badge' => 'Store'],
+                            'PAYMENTS'  => ['icon' => 'lock', 'cat' => 'GATEWAY', 'desc' => 'PCI-DSS Stripe & PayPal sync', 'badge' => 'PCI-DSS'],
+                            'CATALOGUE' => ['icon' => 'database', 'cat' => 'DATA', 'desc' => 'High-density product indexing', 'badge' => 'Data']
+                        ]],
+                        ['03', 'SECURITY & PROTECTION', [
+                            'SSL / TLS' => ['icon' => 'shield', 'cat' => 'PROTECTION', 'desc' => 'HSTS headers & TLS 1.3 protocol', 'badge' => 'TLS 1.3'],
+                            'WAF'       => ['icon' => 'bot', 'cat' => 'PROTECTION', 'desc' => 'Bot filtering & SQLi shields', 'badge' => 'Shield'],
+                            'ACCESS'    => ['icon' => 'settings', 'cat' => 'SECURITY', 'desc' => 'Role-based access & token rotation', 'badge' => 'Auth']
+                        ]],
+                        ['04', 'GROWTH & ANALYTICS', [
+                            'GOOGLE ADS' => ['icon' => 'megaphone', 'cat' => 'GROWTH', 'desc' => 'High-intent search campaigns', 'badge' => 'Search'],
+                            'META ADS'   => ['icon' => 'share', 'cat' => 'GROWTH', 'desc' => 'Direct-response short-form creative', 'badge' => 'Social'],
+                            'ANALYTICS'  => ['icon' => 'pie-chart', 'cat' => 'GROWTH', 'desc' => 'Server-side GTM event tracking', 'badge' => 'GTM']
+                        ]]
+                    ];
+
+                    foreach ($GROUPS as [$gNum, $gTitle, $items]):
+                    ?>
+                    <div class="dm-spec-group">
+                        <span class="dm-sg-label"><?= $gNum ?> // <?= $gTitle ?></span>
+                        <div class="dm-sg-items">
+                            <?php foreach ($items as $name => $meta): ?>
+                            <div class="dm-spec-node" data-specimen="<?= strtolower($name) ?>" data-cat="<?= $meta['cat'] ?>" data-desc="<?= $meta['desc'] ?>">
+                                <div class="dm-sn-icon-wrap">
+                                    <?= icon($meta['icon'], 'dm-sn-svg') ?>
+                                </div>
+                                <div class="dm-sn-content">
+                                    <div class="dm-sn-title-row">
+                                        <span class="dm-sn-name"><?= $name ?></span>
+                                        <span class="dm-sn-badge"><?= $meta['badge'] ?></span>
+                                    </div>
+                                    <small class="dm-sn-desc"><?= $meta['desc'] ?></small>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Floating Specimen Inspector -->
+                <div class="dm-inspector" data-dm-inspector aria-hidden="true">
+                    <span class="dm-ins-cat">APPLICATION ARCHITECTURE</span>
+                    <h4 class="dm-ins-name">LARAVEL</h4>
+                    <p class="dm-ins-desc">Fast server-side systems and zero-overhead database queries.</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -1883,7 +1956,7 @@ require __DIR__ . '/partials/social-rail.php';
 
         <div class="container">
             <div class="pe-head">
-                <span class="pe-kicker">11 // ENGAGEMENT VOLUMES</span>
+                <span class="pe-kicker">11 // ENGAGEMENT VOLUMES <span class="bl-dot-live">●</span></span>
                 <h2 class="pe-title">Transparent Engagement Scope.</h2>
                 <p class="pe-sub">Every engagement is scoped up front. One scope, one number, zero hourly rate creep.</p>
             </div>
@@ -1892,29 +1965,31 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="pe-tiers-grid">
                 <?php 
                 $tierHeights = ['tier-foundation', 'tier-growth is-recommended', 'tier-scale'];
+                $tierTags    = ['01 // FOUNDATION BUILD', '★ MOST POPULAR ENGAGEMENT', '03 // ENTERPRISE ENGINE'];
                 foreach ($bundles as $i => $t): 
                     $tierClass = $tierHeights[$i] ?? 'tier-foundation';
+                    $tierTag   = $tierTags[$i] ?? ('0' . ($i + 1) . ' // PACKAGE');
                 ?>
                 <div class="pe-tier-card <?= $tierClass ?>">
-                    <?php if ($i === 1): ?>
-                    <span class="pe-rec-badge">RECOMMENDED ENGAGEMENT</span>
-                    <?php endif; ?>
+                    <div class="pe-tier-top-tag">
+                        <span class="pe-rec-badge"><?= $tierTag ?></span>
+                    </div>
                     <div class="pe-card-top">
                         <h3 class="pe-card-name"><?= e($t['title'] ?? 'Package') ?></h3>
                         <p class="pe-card-sub"><?= e($t['tagline'] ?? '') ?></p>
                         <div class="pe-price-row">
                             <span class="pe-price"><?= e($t['price_formatted'] ?? 'Custom Scope') ?></span>
-                            <span class="pe-price-sub">Fixed Scope</span>
+                            <span class="pe-price-sub">Fixed Scope &bull; SLA Guaranteed</span>
                         </div>
                     </div>
                     <?php if (!empty($t['features'])): ?>
                     <ul class="pe-feature-list">
                         <?php foreach (array_slice((array)$t['features'], 0, 5) as $f): ?>
-                        <li><i class="pe-check">&check;</i> <span><?= e(is_array($f) ? ($f['title'] ?? '') : $f) ?></span></li>
+                        <li><span class="pe-check-circle">&check;</span> <span><?= e(is_array($f) ? ($f['title'] ?? '') : $f) ?></span></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php endif; ?>
-                    <button type="button" class="btn btn-pill pe-btn" data-modal-open="consultationModal">Scope This Package</button>
+                    <button type="button" class="btn btn-pill pe-btn <?= $i === 1 ? 'btn-accent-glow' : '' ?>" data-modal-open="consultationModal">Scope This Package &rarr;</button>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -1922,16 +1997,28 @@ require __DIR__ . '/partials/social-rail.php';
             <!-- Integrated Minimalist Accordion FAQ -->
             <div class="pe-faq-wrap" id="faq">
                 <div class="pe-faq-head">
-                    <h3>Before you get in touch</h3>
-                    <p>Questions about timeline or setup? <a href="<?= e(whatsapp_link('Hi Rafly, I have a question.')) ?>" target="_blank" rel="noopener">Ask directly on WhatsApp &rarr;</a></p>
+                    <span class="pe-kicker">02 // FREQUENTLY ASKED QUESTIONS</span>
+                    <div class="pe-faq-title-row">
+                        <div>
+                            <h3 class="pe-faq-main-title">Before you get in touch</h3>
+                            <p class="pe-faq-sub">Clear answers on timelines, team alignment, and setup process.</p>
+                        </div>
+                        <a href="<?= e(whatsapp_link('Hi Rafly, I have a question about timelines and pricing.')) ?>" target="_blank" rel="noopener" class="pe-wa-badge">
+                            <span class="pe-wa-dot">●</span>
+                            <span>Need fast answers? Chat on WhatsApp &rarr;</span>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="pe-accordion" data-accordion="single">
                     <?php foreach ($FAQS as $i => $f): ?>
                     <div class="pe-acc-item">
                         <button type="button" class="pe-acc-trigger" id="faq-t-<?= $i ?>" aria-expanded="false" aria-controls="faq-p-<?= $i ?>">
-                            <span><?= e($f['q']) ?></span>
-                            <span class="pe-acc-icon"></span>
+                            <div class="pe-acc-left">
+                                <span class="pe-acc-num">0<?= $i + 1 ?></span>
+                                <span class="pe-acc-title"><?= e($f['q']) ?></span>
+                            </div>
+                            <span class="pe-acc-icon" aria-hidden="true"></span>
                         </button>
                         <div class="pe-acc-panel" id="faq-p-<?= $i ?>" role="region" aria-labelledby="faq-t-<?= $i ?>">
                             <div class="pe-acc-body"><p><?= e($f['a']) ?></p></div>

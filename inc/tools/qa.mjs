@@ -241,7 +241,7 @@ const honeypot = await evaluate(`(() => {
     const sum = [...f.querySelectorAll('label')].find(l => /what is|\\+/.test(l.textContent));
     return JSON.stringify({ hidden: hp.length, sumCheck: !!sum, csrf: !!f.querySelector('input[name*=csrf], input[name*=token]') });
 })()`);
-const hp = JSON.parse(honeypot || '{}');
+const hp = typeof honeypot === 'object' ? honeypot : JSON.parse(honeypot || '{}');
 hp.csrf ? ok('form carries a CSRF token') : bad('form has NO CSRF token');
 hp.sumCheck ? ok('arithmetic anti-bot check present') : bad('no anti-bot check on the form');
 

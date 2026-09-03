@@ -86,8 +86,8 @@ export class RAFlyMotionEngine {
             this.targetMouseY = e.clientY;
         }, { passive: true });
 
-        // Magnetic interactive pull on elements with data-magnetic
-        document.querySelectorAll('[data-magnetic], .btn, button, a').forEach(el => {
+        // Magnetic interactive pull on primary buttons and magnetic elements
+        document.querySelectorAll('[data-magnetic], .btn, button, .pe-acc-trigger, .form-tag-chip, .footer-social a').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursor.classList.add('is-hovering');
                 const text = el.getAttribute('data-cursor-text');

@@ -169,7 +169,7 @@
     background: var(--paper);
     overflow: hidden;
     isolation: isolate;
-    padding-block: calc(var(--sp-10) + var(--sp-4));
+    padding-block: clamp(2.25rem, 4vw, 3.5rem);
 }
 
 /* Layered Ambient Light & Architectural Textures */

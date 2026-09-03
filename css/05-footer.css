@@ -92,10 +92,10 @@ main:has(> section:last-child.band-ink)  ~ .site-footer { margin-top: 0; border-
     background: rgba(255, 255, 255, .07);
     color: var(--on-dark-2);
     transition: background var(--dur-2) var(--ease), color var(--dur-2) var(--ease),
-                transform var(--dur-2) var(--ease);
+                box-shadow var(--dur-2) var(--ease);
 }
-.footer-social a:hover { background: rgba(255, 255, 255, .16); color: #fff; transform: translateY(-2px); }
-.footer-social .icon { width: 16px; height: 16px; }
+.footer-social a:hover { background: rgba(255, 255, 255, .16); color: #fff; box-shadow: 0 4px 12px rgba(10, 99, 255, 0.25); }
+.footer-social .icon { width: 16px; height: 16px; pointer-events: none; }
 
 .footer-bottom {
     padding-block: var(--sp-5);
