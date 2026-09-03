@@ -98,11 +98,19 @@ require __DIR__ . '/partials/social-rail.php';
                     <p class="eyebrow">Core team</p>
                     <h1 class="display">The people behind <span class="soft">every package.</span></h1>
                 </div>
-                <p class="lead">
-                    One coordinated team rather than five separate vendors &mdash; these are the
-                    people who actually do the work, and the ones you will meet on the
-                    consultation call.
-                </p>
+                <div>
+                    <p class="lead">
+                        One coordinated team rather than five separate vendors &mdash; these are the
+                        people who actually do the work, and the ones you will meet on the
+                        consultation call.
+                    </p>
+                    <div class="team-ecosystem-strip" aria-hidden="true" style="margin-top:1.25rem;">
+                        <span class="chip chip-mono">[ENGINEERING CORE]</span>
+                        <span class="chip chip-mono">[STRATEGY & ARCHITECTURE]</span>
+                        <span class="chip chip-mono">[SECURITY & COMPLIANCE]</span>
+                        <span class="chip chip-mono">[GROWTH MARKETING]</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

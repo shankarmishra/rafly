@@ -133,10 +133,73 @@
 /* ==========================================================================
    Cross-links
    ========================================================================== */
+/* ==========================================================================
+   Cross-links & HUD Node Models
+   ========================================================================== */
+.svc-node-model {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.svc-hud-node {
+    position: absolute;
+    z-index: 4;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #06122f;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(10, 99, 255, 0.22);
+    box-shadow: 0 4px 12px rgba(6, 18, 47, 0.08), inset 0 1px 0 #ffffff;
+    pointer-events: none;
+    transition: transform 0.3s ease;
+    animation: hudNodeFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes hudNodeFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-6px); }
+}
+
+/* Web Model Node Positioning */
+.web-model .node-fe   { top: 8%; left: 4%; animation-delay: 0s; }
+.web-model .node-api  { top: 8%; right: 4%; animation-delay: 1s; }
+.web-model .node-db   { bottom: 8%; left: 4%; animation-delay: 2s; }
+.web-model .node-edge { bottom: 8%; right: 4%; animation-delay: 1.5s; }
+
+/* Security Model Node Positioning */
+.sec-model .node-waf  { top: 6%; left: 50%; transform: translateX(-50%); border-color: rgba(16, 185, 129, 0.4); color: #047857; }
+.sec-model .node-tls  { bottom: 8%; left: 6%; border-color: rgba(10, 99, 255, 0.4); }
+.sec-model .node-scan { bottom: 8%; right: 6%; border-color: rgba(16, 185, 129, 0.4); color: #047857; }
+.sec-model .ring-shield { border-color: rgba(16, 185, 129, 0.35); }
+.sec-model .ring-shield-outer { border-color: rgba(10, 99, 255, 0.25); }
+
+/* Marketing Model Node Positioning */
+.mkt-model .node-roi  { top: 8%; right: 4%; border-color: rgba(56, 189, 248, 0.4); color: #0284c7; }
+.mkt-model .node-ctr  { top: 8%; left: 4%; }
+.mkt-model .node-conv { bottom: 8%; left: 50%; transform: translateX(-50%); }
+
+/* Content Model Node Positioning */
+.cnt-model .node-pipe { top: 8%; left: 6%; }
+.cnt-model .node-edit { top: 8%; right: 6%; }
+.cnt-model .node-dist { bottom: 8%; left: 50%; transform: translateX(-50%); }
+
+/* E-Commerce Model Node Positioning */
+.ecom-model .node-store { top: 8%; left: 4%; }
+.ecom-model .node-pay   { top: 8%; right: 4%; }
+.ecom-model .node-order { bottom: 8%; left: 50%; transform: translateX(-50%); }
+
 .svc-other .card-body { gap: var(--sp-3); }
 @media (max-width: 1080px) {
     .page-service .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 620px) {
     .page-service .grid-4 { grid-template-columns: 1fr; }
+    .svc-hud-node { font-size: 0.55rem; padding: 2px 6px; }
 }

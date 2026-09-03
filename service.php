@@ -118,10 +118,58 @@ require __DIR__ . '/partials/social-rail.php';
                    and it said nothing about THIS service that it did not also
                    say about the other four. If a real photograph of Rafly's own
                    work exists later, it drops into the same frame. */ ?>
-                <div class="svc-mark" aria-hidden="true" data-fx="drift" style="--depth: 24px;">
-                    <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
-                    <span class="svc-mark-ring"></span>
-                    <span class="svc-mark-ring is-2"></span>
+                <div class="svc-mark svc-mark-<?= e($data['key']) ?>" aria-hidden="true" data-fx="drift" style="--depth: 24px;">
+                    <?php if ($data['key'] === 'web'): ?>
+                        <div class="svc-node-model web-model">
+                            <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                            <span class="svc-hud-node node-fe">[FRONTEND]</span>
+                            <span class="svc-hud-node node-api">[API GATEWAY]</span>
+                            <span class="svc-hud-node node-db">[DATABASE]</span>
+                            <span class="svc-hud-node node-edge">[EDGE CDN]</span>
+                            <span class="svc-mark-ring"></span>
+                            <span class="svc-mark-ring is-2"></span>
+                        </div>
+                    <?php elseif ($data['key'] === 'security'): ?>
+                        <div class="svc-node-model sec-model">
+                            <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                            <span class="svc-hud-node node-waf">[WAF ACTIVE]</span>
+                            <span class="svc-hud-node node-tls">[TLS 1.3 SHIELD]</span>
+                            <span class="svc-hud-node node-scan">[ZERO THREATS]</span>
+                            <span class="svc-mark-ring ring-shield"></span>
+                            <span class="svc-mark-ring is-2 ring-shield-outer"></span>
+                        </div>
+                    <?php elseif ($data['key'] === 'marketing'): ?>
+                        <div class="svc-node-model mkt-model">
+                            <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                            <span class="svc-hud-node node-roi">[ROI 3.4X]</span>
+                            <span class="svc-hud-node node-ctr">[CTR +140%]</span>
+                            <span class="svc-hud-node node-conv">[CONVERSIONS]</span>
+                            <span class="svc-mark-ring ring-pulse"></span>
+                            <span class="svc-mark-ring is-2"></span>
+                        </div>
+                    <?php elseif ($data['key'] === 'content'): ?>
+                        <div class="svc-node-model cnt-model">
+                            <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                            <span class="svc-hud-node node-pipe">[STRATEGY]</span>
+                            <span class="svc-hud-node node-edit">[EDITORIAL]</span>
+                            <span class="svc-hud-node node-dist">[DISTRIBUTION]</span>
+                            <span class="svc-mark-ring"></span>
+                            <span class="svc-mark-ring is-2"></span>
+                        </div>
+                    <?php elseif ($data['key'] === 'ecom'): ?>
+                        <div class="svc-node-model ecom-model">
+                            <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                            <span class="svc-hud-node node-store">[STOREFRONT]</span>
+                            <span class="svc-hud-node node-pay">[GATEWAY]</span>
+                            <span class="svc-hud-node node-order">[ORDER ENGINE]</span>
+                            <span class="svc-mark-ring"></span>
+                            <span class="svc-mark-ring is-2"></span>
+                        </div>
+                    <?php else: ?>
+                        <span class="svc-mark-icon"><?= icon($data['icon']) ?></span>
+                        <span class="svc-mark-ring"></span>
+                        <span class="svc-mark-ring is-2"></span>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

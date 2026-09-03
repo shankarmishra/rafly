@@ -67,6 +67,8 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="split split-wide-r">
                 <div class="branch-figure" aria-hidden="true" data-fx="drift" style="--depth: 30px;">
                     <span class="branch-core"><?= icon('layers') ?></span>
+                    <span class="branch-hud-tag tag-top">[SYSTEM INTEGRATION]</span>
+                    <span class="branch-hud-tag tag-bot">[5 CORE BRANCHES ACTIVE]</span>
                     <ol class="branch-list">
                         <?php foreach ($services as $n => $svc): ?>
                             <li class="branch-item" style="--a:<?= -90 + $n * 72 ?>deg">
