@@ -422,51 +422,51 @@ export function initHeroGrowthField(host) {
         ctx.fill();
         ctx.stroke();
 
-        // RAFly Official Real Brand Logo Mark Core Nucleus (Animated 2-Part Aerodynamic Wing)
+        // RAFly Official Real Brand Logo Mark Core Nucleus (100% Pixel-Accurate 2-Part Vector)
         if (typeof Path2D !== 'undefined') {
             // Part 1: Top Aerodynamic Wing Swoosh & Loop
             const pathLogoTop = new Path2D(
-                "M 6,10 C 28,10 52,10 72,13 C 90,16 98,32 88,48 C 78,62 56,64 40,60 C 58,58 76,48 76,33 C 76,21 60,19 42,19 C 26,19 16,15 6,10 Z"
+                "M 0,16 C 0,6 16,0 36,0 L 64,0 C 84,0 100,16 100,36 C 100,54 84,60 68,54 C 78,46 82,34 82,24 C 82,12 68,10 48,10 L 24,10 C 10,10 0,16 0,16 Z"
             );
             // Part 2: Bottom Sweeping Leaf Blade / Leg
             const pathLogoBot = new Path2D(
-                "M 6,48 C 24,50 44,68 68,88 C 78,88 88,88 88,88 C 68,74 50,58 36,49 C 22,41 14,46 6,48 Z"
+                "M 0,60 C 20,60 48,64 68,76 L 96,96 C 100,99 92,100 84,100 L 70,100 C 42,84 18,72 0,70 C -2,68 -2,62 0,60 Z"
             );
 
             ctx.save();
             ctx.translate(cx, cy);
 
-            // Dynamic breathing scale and subtle 3D pulse
-            const logoScale = (pR * 0.026) * (1 + Math.sin(t * 0.85) * 0.05);
+            // Dynamic breathing scale and 3D floating pulse
+            const logoScale = (pR * 0.024) * (1 + Math.sin(t * 0.85) * 0.05);
             ctx.scale(logoScale, logoScale);
-            ctx.translate(-47, -49); // Center the 94x98 path bounding box around (0,0)
+            ctx.translate(-50, -50); // Center the 100x100 path bounding box precisely at (0,0)
 
-            // Luminous Aura Glow behind the RAFly Logo Mark
-            ctx.shadowBlur  = isSyncing ? 38 : 26;
-            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.85 + Math.sin(t * 1.2) * 0.15})`;
+            // Luminous Aura Glow behind the RAFly Brand Mark
+            ctx.shadowBlur  = isSyncing ? 40 : 28;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 72%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
 
-            // Part 1 Top Wing Gradient (Sky Cyan to Electric Blue)
-            const gTop = ctx.createLinearGradient(6, 10, 88, 48);
-            gTop.addColorStop(0.0, '#38bdf8'); // Cyan highlight
-            gTop.addColorStop(0.45, '#0a63ff'); // Royal Electric Blue
-            gTop.addColorStop(1.0, '#0284c7'); // Deep Cyan
+            // Part 1 Top Wing Gradient (Vibrant Cyan to Royal Electric Blue)
+            const gTop = ctx.createLinearGradient(0, 0, 100, 54);
+            gTop.addColorStop(0.0, '#38bdf8'); // Electric Cyan
+            gTop.addColorStop(0.40, '#0a63ff'); // Royal Blue
+            gTop.addColorStop(1.0, '#0256d0'); // Deep Blue
 
             ctx.fillStyle = gTop;
             ctx.fill(pathLogoTop);
 
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 90%, 0.92)`;
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 92%, 0.95)`;
             ctx.lineWidth   = 1.2;
             ctx.stroke(pathLogoTop);
 
             // Part 2 Bottom Leaf Gradient (Electric Blue to Deep Cobalt)
-            const gBot = ctx.createLinearGradient(6, 48, 88, 88);
+            const gBot = ctx.createLinearGradient(0, 60, 100, 100);
             gBot.addColorStop(0.0, '#0a63ff'); // Electric Blue
-            gBot.addColorStop(1.0, '#0230c6'); // Deep Cobalt
+            gBot.addColorStop(1.0, '#021a5e'); // Deep Cobalt Navy
 
             ctx.fillStyle = gBot;
             ctx.fill(pathLogoBot);
 
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 85%, 0.88)`;
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 88%, 0.90)`;
             ctx.lineWidth   = 1.0;
             ctx.stroke(pathLogoBot);
 
