@@ -55,10 +55,10 @@ function send_security_headers(string $mode = 'page'): void
         // SVG sprite, so no third-party origin is allowed anywhere any more.
         "font-src 'self'",
 
-        // facebook.com: the Pixel's <noscript> fallback <img> and its fbevents
-        // beacon both target facebook.com/tr, not connect.facebook.net.
-        "img-src 'self' data: https://www.facebook.com",
-        "connect-src 'self' https://www.facebook.com",
+        // facebook.com & connect.facebook.net: the Pixel's <noscript> fallback <img>,
+        // error logger and fbevents beacon target facebook.com and connect.facebook.net.
+        "img-src 'self' data: https://www.facebook.com https://connect.facebook.net",
+        "connect-src 'self' https://www.facebook.com https://connect.facebook.net",
         "media-src 'self'",
     ];
 
