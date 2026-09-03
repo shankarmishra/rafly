@@ -422,13 +422,45 @@ export function initHeroGrowthField(host) {
         ctx.fill();
         ctx.stroke();
 
-        // Core AI Nucleus Point
-        ctx.beginPath();
-        ctx.arc(cx, cy, pR2 * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle   = '#ffffff';
-        ctx.shadowBlur  = isSyncing ? 26 : 16;
-        ctx.shadowColor = '#ffffff';
-        ctx.fill();
+        // RAFly "R" Brand Logo Core Nucleus (Animated + Luminous Glow)
+        if (typeof Path2D !== 'undefined') {
+            const pathR = new Path2D("M21 15h13.2c7.1 0 11.6 3.9 11.6 10.1 0 4.5-2.4 7.8-6.4 9.2L46.6 49h-8.3l-6-13.2h-4.1V49H21V15zm12.4 15.1c3.3 0 5.2-1.8 5.2-4.7 0-2.9-1.9-4.6-5.2-4.6h-5.2v9.3h5.2z");
+            ctx.save();
+            ctx.translate(cx, cy);
+
+            // Dynamic breathing scale and pulse
+            const rScale = (pR * 0.038) * (1 + Math.sin(t * 0.80) * 0.06);
+            ctx.scale(rScale, rScale);
+            ctx.translate(-33.8, -32); // Offset to center 64x64 SVG path around (0,0)
+
+            // Luminous Aura Glow behind the R logo
+            ctx.shadowBlur  = isSyncing ? 36 : 24;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.85 + Math.sin(t * 1.2) * 0.15})`;
+
+            // Glowing gradient fill matching the RAFly theme
+            const rGrad = ctx.createLinearGradient(21, 15, 46.6, 49);
+            rGrad.addColorStop(0.0, '#ffffff');
+            rGrad.addColorStop(0.55, `hsla(${activeColor.h}, 100%, 92%, 1.0)`);
+            rGrad.addColorStop(1.0, `hsla(${activeColor.h}, 100%, 72%, 0.95)`);
+
+            ctx.fillStyle = rGrad;
+            ctx.fill(pathR);
+
+            // Precision specular edge highlight
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 85%, 0.95)`;
+            ctx.lineWidth   = 1.0;
+            ctx.stroke(pathR);
+
+            ctx.restore();
+        } else {
+            // Fallback for legacy environments
+            ctx.beginPath();
+            ctx.arc(cx, cy, pR2 * 0.4, 0, Math.PI * 2);
+            ctx.fillStyle   = '#ffffff';
+            ctx.shadowBlur  = isSyncing ? 26 : 16;
+            ctx.shadowColor = '#ffffff';
+            ctx.fill();
+        }
         ctx.restore();
 
         /* ── Ambient Orbiting Micro-Particles ───────────────────────────── */
