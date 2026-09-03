@@ -611,26 +611,36 @@ require __DIR__ . '/partials/social-rail.php';
                                 <path class="sig-leader sig-leader--cmr" data-leader="commerce" d="M 320,570 C 320,510 320,460 320,410" />
                             </svg>
 
-                            <?php /* Floating minimalist editorial labels (sparse, no SaaS cards) */ ?>
+                            <?php /* Floating minimalist editorial labels (dimensional service nodes) */ ?>
                             <div class="sig-tag sig-tag--web" data-sig-tag="web">
+                                <span class="sig-tag__icon"><?= icon('code') ?></span>
                                 <span class="sig-tag__idx">01</span>
                                 <span class="sig-tag__name">WEB</span>
+                                <span class="sig-tag__pulse"></span>
                             </div>
                             <div class="sig-tag sig-tag--sec" data-sig-tag="security">
+                                <span class="sig-tag__icon"><?= icon('shield') ?></span>
                                 <span class="sig-tag__idx">02</span>
                                 <span class="sig-tag__name">SECURITY</span>
+                                <span class="sig-tag__pulse"></span>
                             </div>
                             <div class="sig-tag sig-tag--mkt" data-sig-tag="marketing">
+                                <span class="sig-tag__icon"><?= icon('pie-chart') ?></span>
                                 <span class="sig-tag__idx">03</span>
                                 <span class="sig-tag__name">MARKETING</span>
+                                <span class="sig-tag__pulse"></span>
                             </div>
                             <div class="sig-tag sig-tag--cnt" data-sig-tag="content">
+                                <span class="sig-tag__icon"><?= icon('file-pen') ?></span>
                                 <span class="sig-tag__idx">04</span>
                                 <span class="sig-tag__name">CONTENT</span>
+                                <span class="sig-tag__pulse"></span>
                             </div>
                             <div class="sig-tag sig-tag--cmr" data-sig-tag="commerce">
+                                <span class="sig-tag__icon"><?= icon('shopping-cart') ?></span>
                                 <span class="sig-tag__idx">05</span>
                                 <span class="sig-tag__name">COMMERCE</span>
+                                <span class="sig-tag__pulse"></span>
                             </div>
 
                         </div><!-- /.sig-3d-scene -->

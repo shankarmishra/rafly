@@ -191,26 +191,27 @@ export function initHeroGrowthField(host) {
         const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 220, s: 100, l: 52 };
 
         /* ── Outer radial atmosphere ──────────────────────────────────── */
-        const atmo = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.2);
-        atmo.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.14 : 0.07})`);
-        atmo.addColorStop(0.6, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,0.03)`);
+        const atmo = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.25);
+        atmo.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.16 : 0.08})`);
+        atmo.addColorStop(0.5, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,0.035)`);
         atmo.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, r * 1.2, 0, Math.PI * 2);
+        ctx.arc(cx, cy, r * 1.25, 0, Math.PI * 2);
         ctx.fillStyle = atmo;
         ctx.fill();
 
-        /* ── Five ribbons ─────────────────────────────────────────────── */
+        /* ── Five ribbons / Connection paths ────────────────────────────── */
         const ribbons = getRibbons(cx, cy, r, t);
         for (const rib of ribbons) {
             const isCap    = activeCap === rib.key;
             const isDimmed = activeCap && !isCap && !isSyncing;
-            const alpha    = isSyncing ? rib.opacity * 0.95 : (isDimmed ? rib.opacity * 0.22 : rib.opacity * (isCap ? 1.0 : 0.62));
-            const lWidth   = isSyncing ? rib.width * 1.4 : (isDimmed ? rib.width * 0.6 : rib.width * (isCap ? 1.5 : 1.0));
+            const alpha    = isSyncing ? rib.opacity * 0.95 : (isDimmed ? rib.opacity * 0.22 : rib.opacity * (isCap ? 1.0 : 0.65));
+            const lWidth   = isSyncing ? rib.width * 1.4 : (isDimmed ? rib.width * 0.65 : rib.width * (isCap ? 1.6 : 1.0));
 
             const color  = CAP_COLORS[rib.key];
             const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
 
+            // Outer subtle glow path
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(x0, y0);
@@ -220,80 +221,131 @@ export function initHeroGrowthField(host) {
             ctx.lineCap     = 'round';
             ctx.stroke();
 
-            // Active glow pass
+            // Active glow pass & particle energy pulse
             if (isCap || isSyncing) {
                 ctx.beginPath();
                 ctx.moveTo(x0, y0);
                 ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-                ctx.strokeStyle = ribbonGradient(rib.pts, color, isSyncing ? 0.35 : 0.22);
-                ctx.lineWidth   = lWidth * (isSyncing ? 4.0 : 3.5);
+                ctx.strokeStyle = ribbonGradient(rib.pts, color, isSyncing ? 0.38 : 0.25);
+                ctx.lineWidth   = lWidth * (isSyncing ? 4.2 : 3.6);
                 ctx.lineCap     = 'round';
                 ctx.stroke();
             }
+
+            // Connection node endpoints (small glowing target rings)
+            if (!isDimmed || isSyncing) {
+                ctx.beginPath();
+                ctx.arc(x0, y0, isCap ? 3.5 : 2.2, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${color.h},${color.s}%,${color.l + 15}%,${isCap ? 0.9 : 0.5})`;
+                ctx.fill();
+            }
             ctx.restore();
 
-            // Travelling signal dot along ribbon
+            // Travelling signal data particle along ribbon
             if (!isDimmed || isSyncing) {
-                const phase  = ((t * (isCap || isSyncing ? 0.55 : 0.40)) + CAPS.indexOf(rib.key) * 0.22) % 1.0;
-                const tp     = easeOut(phase);
-                // deCasteljau at tp
+                const speedMult = (isCap || isSyncing) ? 0.65 : 0.42;
+                const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20) % 1.0;
+                const tp        = easeOut(phase);
+
+                // deCasteljau algorithm to sample point at tp
                 const ax = lerp(x0, x1, tp), ay = lerp(y0, y1, tp);
                 const bx = lerp(x1, x2, tp), by = lerp(y1, y2, tp);
                 const cx2= lerp(x2, x3, tp), cy2= lerp(y2, y3, tp);
                 const dx = lerp(ax, bx, tp),  dy = lerp(ay, by, tp);
                 const ex = lerp(bx, cx2,tp),  ey = lerp(by, cy2,tp);
                 const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
-                const dotR = (isCap || isSyncing) ? 3.8 : 2.0;
+                const dotR = (isCap || isSyncing) ? 4.2 : 2.4;
+
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
                 const { h: dh, s: ds, l: dl } = color;
-                ctx.fillStyle = `hsla(${dh},${ds}%,${dl + 15}%,${isCap || isSyncing ? 0.95 : 0.55})`;
-                ctx.shadowBlur  = isCap || isSyncing ? 12 : 5;
-                ctx.shadowColor = `hsla(${dh},${ds}%,${dl}%,0.75)`;
+                ctx.fillStyle   = `hsla(${dh},${ds}%,${dl + 20}%,${isCap || isSyncing ? 1.0 : 0.65})`;
+                ctx.shadowBlur  = isCap || isSyncing ? 14 : 6;
+                ctx.shadowColor = `hsla(${dh},${ds}%,${dl}%,0.85)`;
                 ctx.fill();
                 ctx.restore();
             }
         }
 
-        /* ── Central crystalline core ─────────────────────────────────── */
-        const breathe = (1 + Math.sin(t * 0.55) * 0.03) * (isSyncing ? 1.04 : 1.0);
-        const coreR   = r * 0.21 * breathe;
+        /* ── Central AI System Core ───────────────────────────────────── */
+        const breathe = (1 + Math.sin(t * 0.55) * 0.035) * (isSyncing ? 1.05 : 1.0);
+        const coreR   = r * 0.22 * breathe;
 
-        // Outer halo
-        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.8, cx, cy, coreR * (isSyncing ? 2.2 : 1.8));
-        halo.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.30 : 0.18})`);
+        // Outer halo atmosphere
+        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.75, cx, cy, coreR * (isSyncing ? 2.4 : 2.0));
+        halo.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.32 : 0.20})`);
+        halo.addColorStop(0.6, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,0.06)`);
         halo.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, coreR * (isSyncing ? 2.2 : 1.8), 0, Math.PI * 2);
+        ctx.arc(cx, cy, coreR * (isSyncing ? 2.4 : 2.0), 0, Math.PI * 2);
         ctx.fillStyle = halo;
         ctx.fill();
 
-        // Frosted glass disc
+        // Outer rotating concentric blueprint ring (clockwise)
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(t * 0.05);
+        ctx.beginPath();
+        ctx.arc(0, 0, coreR * 1.55, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 10}%,${isSyncing ? 0.45 : 0.28})`;
+        ctx.lineWidth   = 0.8;
+        ctx.setLineDash([4, 8]);
+        ctx.stroke();
+
+        // Tick marks at cardinal angles
+        for (let i = 0; i < 4; i++) {
+            const ta = (i / 4) * Math.PI * 2;
+            const xA = Math.cos(ta) * (coreR * 1.48);
+            const yA = Math.sin(ta) * (coreR * 1.48);
+            const xB = Math.cos(ta) * (coreR * 1.62);
+            const yB = Math.sin(ta) * (coreR * 1.62);
+            ctx.beginPath();
+            ctx.moveTo(xA, yA);
+            ctx.lineTo(xB, yB);
+            ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 15}%,${isSyncing ? 0.60 : 0.35})`;
+            ctx.lineWidth   = 1.0;
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // Inner counter-rotating concentric ring
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-t * 0.08);
+        ctx.beginPath();
+        ctx.arc(0, 0, coreR * 1.26, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 25}%,${isSyncing ? 0.50 : 0.30})`;
+        ctx.lineWidth   = 0.8;
+        ctx.setLineDash([2, 5]);
+        ctx.stroke();
+        ctx.restore();
+
+        // Frosted glass core disc
         const disc = ctx.createRadialGradient(cx - coreR * 0.28, cy - coreR * 0.28, 0, cx, cy, coreR);
-        disc.addColorStop(0.0, 'rgba(255,255,255,0.96)');
-        disc.addColorStop(0.5, 'rgba(235,242,255,0.88)');
-        disc.addColorStop(1.0, 'rgba(210,228,255,0.72)');
+        disc.addColorStop(0.0, 'rgba(255,255,255,0.98)');
+        disc.addColorStop(0.45, 'rgba(235,244,255,0.90)');
+        disc.addColorStop(1.0, 'rgba(205,226,255,0.76)');
         ctx.save();
         ctx.beginPath();
         ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
         ctx.fillStyle = disc;
-        ctx.shadowBlur  = isSyncing ? 36 : 28;
-        ctx.shadowColor = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.55 : 0.35})`;
+        ctx.shadowBlur  = isSyncing ? 40 : 30;
+        ctx.shadowColor = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,${isSyncing ? 0.58 : 0.38})`;
         ctx.fill();
 
         // Inner edge ring
         ctx.beginPath();
         ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 20}%,0.55)`;
-        ctx.lineWidth   = 1.2;
+        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 20}%,0.60)`;
+        ctx.lineWidth   = 1.4;
         ctx.stroke();
         ctx.restore();
 
         // Faceted prism inside core (hexagon)
         ctx.save();
-        const rot = t * 0.08;
-        const pR  = coreR * 0.52;
+        const rot = t * 0.09;
+        const pR  = coreR * 0.54;
         ctx.beginPath();
         for (let i = 0; i < 6; i++) {
             const a = rot + (i / 6) * Math.PI * 2;
@@ -303,40 +355,40 @@ export function initHeroGrowthField(host) {
         }
         ctx.closePath();
         const prism = ctx.createLinearGradient(cx - pR, cy - pR, cx + pR, cy + pR);
-        prism.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,0.75)`);
-        prism.addColorStop(1.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 20}%,0.85)`);
+        prism.addColorStop(0.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l}%,0.78)`);
+        prism.addColorStop(1.0, `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 22}%,0.88)`);
         ctx.fillStyle   = prism;
-        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 30}%,0.80)`;
-        ctx.lineWidth   = 1;
+        ctx.strokeStyle = `hsla(${activeColor.h},${activeColor.s}%,${activeColor.l + 32}%,0.85)`;
+        ctx.lineWidth   = 1.1;
         ctx.fill();
         ctx.stroke();
 
-        // Inner light dot
+        // Core AI Nucleus dot
         ctx.beginPath();
-        ctx.arc(cx, cy, pR * 0.22, 0, Math.PI * 2);
+        ctx.arc(cx, cy, pR * 0.24, 0, Math.PI * 2);
         ctx.fillStyle   = '#ffffff';
-        ctx.shadowBlur  = isSyncing ? 18 : 12;
-        ctx.shadowColor = `hsla(${activeColor.h},${activeColor.s}%,80%,0.85)`;
+        ctx.shadowBlur  = isSyncing ? 22 : 14;
+        ctx.shadowColor = `hsla(${activeColor.h},${activeColor.s}%,85%,0.90)`;
         ctx.fill();
         ctx.restore();
 
         /* ── Ambient floating micro-particles ───────────────────────────── */
         if (!reduced) {
-            const pCount = 12;
+            const pCount = 14;
             for (let i = 0; i < pCount; i++) {
                 const seed = i * 137.508; // golden angle
-                const a    = (seed * 0.0174533) + t * 0.06;
-                const dist = r * (0.55 + 0.45 * ((Math.sin(seed * 0.0837) + 1) / 2));
+                const a    = (seed * 0.0174533) + t * 0.065;
+                const dist = r * (0.50 + 0.50 * ((Math.sin(seed * 0.0837) + 1) / 2));
                 const px   = cx + Math.cos(a) * dist;
-                const py   = cy + Math.sin(a) * dist * 0.82; // slight ellipse
-                const sz   = 1.0 + 1.2 * ((Math.sin(seed * 0.113 + t * 0.22) + 1) / 2);
-                const al   = 0.18 + 0.22 * ((Math.sin(seed * 0.077 + t * 0.18) + 1) / 2);
+                const py   = cy + Math.sin(a) * dist * 0.82;
+                const sz   = 1.1 + 1.3 * ((Math.sin(seed * 0.113 + t * 0.24) + 1) / 2);
+                const al   = 0.20 + 0.25 * ((Math.sin(seed * 0.077 + t * 0.20) + 1) / 2);
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(px, py, sz, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(220,100%,62%,${al})`;
-                ctx.shadowBlur  = 6;
-                ctx.shadowColor = 'rgba(10,99,255,0.35)';
+                ctx.fillStyle = `hsla(218, 100%, 64%, ${al})`;
+                ctx.shadowBlur  = 7;
+                ctx.shadowColor = 'rgba(10, 99, 255, 0.40)';
                 ctx.fill();
                 ctx.restore();
             }
