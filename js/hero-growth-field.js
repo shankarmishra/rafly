@@ -1,18 +1,29 @@
 /**
- * hero-growth-field.js — RAFly Premium Ecosystem Hero Controller (Light & Restrained)
+ * hero-growth-field.js — RAFly Growth Studio Controller
+ *
+ * Concept: "Growth Reactor / Growth Lens"
+ * A premium physical sculpture rendered on Canvas2D.
+ * Five flowing ribbons (Web, Security, Marketing, Content, Commerce)
+ * converge into a central translucent crystalline core.
  *
  * Responsibilities:
- *   • Cinematic staggered entrance timeline (0.0s -> 1.5s idle state)
- *   • Dynamic SVG Bezier connection ribbon recalculation on resize
- *   • Subconscious card floating motion (max ±3-4px, 6-7.2s periods)
- *   • Interactive local hover feedback (subtle card lift, light stream focus)
- *   • Damped 3D mouse spatial parallax (max 1-3px movement)
- *   • Subtle scroll choreography
- *   • Full prefers-reduced-motion support & 60fps performance optimization
+ *   • Canvas2D reactor: crystalline core + 5 flowing ribbons + ambient particles
+ *   • Damped mouse parallax (bg 0.5×, reactor 1.0×, annotations 1.8×)
+ *   • 3D-style tilt via CSS perspective (max ±5°)
+ *   • Kinetic typography: staggered mask reveal on load
+ *   • Periodic light sweep on "Scale Smarter." every 7s
+ *   • Idle auto-cycling through 5 capabilities + hover lock
+ *   • Scroll choreography (reactor scale + ghost word drift)
+ *   • Ghost background word parallax
+ *   • IntersectionObserver lifecycle — pause when off-screen
+ *   • Full prefers-reduced-motion support
  */
 
 const lerp = (a, b, n) => a + (b - a) * n;
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+/** Bezier easing (same as CSS ease-out cubic-bezier(.16,1,.3,1)) */
+const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 
 export function initHeroGrowthField(host) {
     if (!host) return () => {};
@@ -20,499 +31,584 @@ export function initHeroGrowthField(host) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isFine  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    /* ── DOM Selectors ─────────────────────────────────────────────────── */
-    const stage              = host.querySelector('[data-hero-stage]');
-    const hub                = host.querySelector('[data-hero-hub]');
-    const cards              = Array.from(host.querySelectorAll('[data-hero-card]'));
-    const svgConnections     = host.querySelector('.rafly-hero__connections');
-    const pathGroups         = Array.from(host.querySelectorAll('[data-path]'));
-    const dots               = Array.from(host.querySelectorAll('[data-dot]'));
-    const particlesContainer = host.querySelector('[data-hero-particles]');
-    const grid               = host.querySelector('.rafly-hero__grid');
-    const cursorGlow         = host.querySelector('[data-hero-cursor-glow]');
-    const model3d            = host.querySelector('[data-hero-model3d]');
-    const leftCol            = host.querySelector('[data-hero-left]');
+    /* ── DOM refs ──────────────────────────────────────────────────────── */
+    const canvas     = host.querySelector('[data-signal-canvas], [data-reactor-canvas]');
+    const reactor    = host.querySelector('[data-signal-stage], [data-reactor]');
+    const focusWord  = host.querySelector('[data-light-sweep], [data-focus-word]');
+    const annots     = Array.from(host.querySelectorAll('[data-sig-tag], [data-annot]'));
+    const leaders    = Array.from(host.querySelectorAll('[data-leader]'));
+    const ghostWords = Array.from(host.querySelectorAll('[data-ghost]'));
+    const glow       = host.querySelector('.sig-env__glow, .grs-env__glow');
 
-    if (!stage || !hub) return () => {};
-
-    /* ── Card Motion Config (Restrained 2px max float) ─────────────────── */
-    const CARD_CONFIG = {
-        web:       { ampY: 2.0, period: 8200,  phase: 0 },
-        security:  { ampY: 2.0, period: 9400,  phase: 1.2 },
-        marketing: { ampY: 2.0, period: 10100, phase: 2.4 },
-        content:   { ampY: 2.0, period: 8800,  phase: 3.6 },
-        commerce:  { ampY: 2.0, period: 11200, phase: 4.8 }
+    /* ── Capability config ─────────────────────────────────────────────── */
+    const CAPS = ['web', 'security', 'marketing', 'content', 'commerce'];
+    const CAP_COLORS = {
+        web:       { h: 220, s: 100, l: 52 },
+        security:  { h: 166, s: 78,  l: 38 },
+        marketing: { h: 260, s: 78,  l: 55 },
+        content:   { h: 200, s: 85,  l: 46 },
+        commerce:  { h: 220, s: 100, l: 42 },
     };
 
+    /* ── Logo Mark Asset Preload ────────────────────────────────────────── */
+    let logoMarkImg = null;
+    if (typeof Image !== 'undefined') {
+        logoMarkImg = new Image();
+        logoMarkImg.src = '/assets/logo-mark.png';
+    }
+
     /* ── State ─────────────────────────────────────────────────────────── */
-    let isVisible     = true;
-    let rafId         = 0;
-    let startTime     = performance.now();
-    let hoveredCard   = null;
-    let pxTarget      = 0, pyTarget = 0;
-    let pxCurr        = 0, pyCurr   = 0;
-    let scrollProgress= 0;
+    let activeCap      = null;
+    let hoverLocked    = false;
+    let cycleIdx       = 0;
+    let cycleTimer     = 0;
+    let sweepTimer     = 0;
+    let syncTimer      = 0;
+    let isSyncing      = false;
+    let raf            = 0;
+    let isVisible      = true;
+    let t0             = performance.now();
 
-    /* ── 1. PARTICLES GENERATOR (Subtle Ambient Nodes) ───────────────── */
-    function initParticles() {
-        if (!particlesContainer || reduced) return;
-        particlesContainer.innerHTML = '';
-        const particleCount = window.innerWidth < 768 ? 6 : 10;
+    // Pointer (normalised -0.5 … +0.5)
+    let pxTarget = 0, pyTarget = 0;
+    let pxCurr   = 0, pyCurr   = 0;
 
-        for (let i = 0; i < particleCount; i++) {
-            const p = document.createElement('span');
-            p.className = 'rafly-particle';
-            const size = (Math.random() * 1.5 + 2).toFixed(1);
-            const posX = (Math.random() * 80 + 10).toFixed(1);
-            const posY = (Math.random() * 80 + 10).toFixed(1);
-            const dx   = ((Math.random() - 0.5) * 15).toFixed(1);
-            const dy   = ((Math.random() - 0.5) * 20).toFixed(1);
-            const dur  = (Math.random() * 5 + 8).toFixed(1);
-            const delay= (Math.random() * 4).toFixed(1);
+    // Scroll
+    let scrollProgress = 0; // 0–1
 
-            p.style.width  = `${size}px`;
-            p.style.height = `${size}px`;
-            p.style.left   = `${posX}%`;
-            p.style.top    = `${posY}%`;
-            p.style.setProperty('--dx', `${dx}px`);
-            p.style.setProperty('--dy', `${dy}px`);
-            p.style.setProperty('--dur', `${dur}s`);
-            p.style.animationDelay = `${delay}s`;
+    /* ── Entrance ──────────────────────────────────────────────────────── */
+    host.classList.add('sig-hero--entered');
+    host.classList.add('grs-hero--entered');
 
-            particlesContainer.appendChild(p);
-        }
+    /* ── Canvas setup ──────────────────────────────────────────────────── */
+    if (!canvas) return () => {};
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return () => {};
+
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width  || 640;
+        const h = rect.height || 640;
+        canvas.width  = w * DPR;
+        canvas.height = h * DPR;
+        ctx.scale(DPR, DPR);
+        // Store logical size
+        canvas._w = w;
+        canvas._h = h;
     }
+    resizeCanvas();
+    new ResizeObserver(resizeCanvas).observe(canvas);
 
-    /* ── 2. DYNAMIC SVG BEZIER PATH CALCULATOR (Precision Anchoring) ──── */
-    function updateSVGPaths() {
-        if (!svgConnections || window.innerWidth <= 768) return;
-
-        const heroRect = host.getBoundingClientRect();
-        const hubRect  = hub.getBoundingClientRect();
-
-        if (heroRect.width === 0 || hubRect.width === 0) return;
-
-        // Map viewport pixels to SVG viewBox (1440 x 900)
-        const scaleX = 1440 / heroRect.width;
-        const scaleY = 900 / heroRect.height;
-
-        // Hub center & perimeter radius (~82.5px in SVG space)
-        const hubCX = (hubRect.left + hubRect.width / 2 - heroRect.left) * scaleX;
-        const hubCY = (hubRect.top + hubRect.height / 2 - heroRect.top) * scaleY;
-        const sphereEl = hub.querySelector('.rafly-hub__sphere');
-        const sphereRect = sphereEl ? sphereEl.getBoundingClientRect() : hubRect;
-        const hubR  = ((sphereRect.width / 2) || 82.5) * scaleX;
-
-        cards.forEach((card) => {
-            const key = card.dataset.heroCard;
-            const pathGroup = pathGroups.find((g) => g.dataset.path === key);
-            if (!pathGroup) return;
-
-            const cardRect = card.getBoundingClientRect();
-            let anchorX, anchorY, targetX, targetY;
-            let cp1X, cp1Y, cp2X, cp2Y;
-
-            if (key === 'web') {
-                // 01 WEB (Top-Left of hub): socket on right edge center -> hub top-left perimeter
-                anchorX = (cardRect.right - heroRect.left) * scaleX;
-                anchorY = (cardRect.top + cardRect.height / 2 - heroRect.top) * scaleY;
-                targetX = hubCX - hubR * 0.707;
-                targetY = hubCY - hubR * 0.707;
-
-                cp1X = anchorX + (targetX - anchorX) * 0.5;
-                cp1Y = anchorY;
-                cp2X = targetX;
-                cp2Y = targetY - (targetY - anchorY) * 0.5;
-
-            } else if (key === 'security') {
-                // 02 SECURITY (Left-Middle of hub): socket on right edge center -> hub left perimeter
-                anchorX = (cardRect.right - heroRect.left) * scaleX;
-                anchorY = (cardRect.top + cardRect.height / 2 - heroRect.top) * scaleY;
-                targetX = hubCX - hubR;
-                targetY = hubCY;
-
-                cp1X = anchorX + (targetX - anchorX) * 0.5;
-                cp1Y = anchorY;
-                cp2X = targetX - (targetX - anchorX) * 0.15;
-                cp2Y = targetY;
-
-            } else if (key === 'marketing') {
-                // 03 MARKETING (Top-Right of hub): socket on left edge center -> hub top-right perimeter
-                anchorX = (cardRect.left - heroRect.left) * scaleX;
-                anchorY = (cardRect.top + cardRect.height / 2 - heroRect.top) * scaleY;
-                targetX = hubCX + hubR * 0.707;
-                targetY = hubCY - hubR * 0.707;
-
-                cp1X = anchorX + (targetX - anchorX) * 0.5;
-                cp1Y = anchorY;
-                cp2X = targetX;
-                cp2Y = targetY - (targetY - anchorY) * 0.5;
-
-            } else if (key === 'content') {
-                // 04 CONTENT (Right-Middle of hub): socket on left edge center -> hub right perimeter
-                anchorX = (cardRect.left - heroRect.left) * scaleX;
-                anchorY = (cardRect.top + cardRect.height / 2 - heroRect.top) * scaleY;
-                targetX = hubCX + hubR;
-                targetY = hubCY;
-
-                cp1X = anchorX + (targetX - anchorX) * 0.5;
-                cp1Y = anchorY;
-                cp2X = targetX + (targetX - anchorX) * 0.15;
-                cp2Y = targetY;
-
-            } else if (key === 'commerce') {
-                // 05 COMMERCE (Bottom-Center under hub): socket on top-center -> hub bottom perimeter
-                anchorX = (cardRect.left + cardRect.width / 2 - heroRect.left) * scaleX;
-                anchorY = (cardRect.top - heroRect.top) * scaleY;
-                targetX = hubCX;
-                targetY = hubCY + hubR;
-
-                cp1X = anchorX;
-                cp1Y = anchorY + (targetY - anchorY) * 0.5;
-                cp2X = targetX;
-                cp2Y = targetY + (targetY - anchorY) * 0.2;
-            }
-
-            const dPath = `M ${anchorX.toFixed(1)},${anchorY.toFixed(1)} C ${cp1X.toFixed(1)},${cp1Y.toFixed(1)} ${cp2X.toFixed(1)},${cp2Y.toFixed(1)} ${targetX.toFixed(1)},${targetY.toFixed(1)}`;
-
-            const baseLine = pathGroup.querySelector('.rafly-path__base');
-            const glowLine = pathGroup.querySelector('.rafly-path__glow');
-            const coreLine = pathGroup.querySelector('.rafly-path__core');
-            const packet   = pathGroup.querySelector('.rafly-path__packet');
-
-            if (baseLine) baseLine.setAttribute('d', dPath);
-            if (glowLine) glowLine.setAttribute('d', dPath);
-            if (coreLine) coreLine.setAttribute('d', dPath);
-            if (packet && !pathGroup.classList.contains('is-active')) {
-                packet.setAttribute('cx', anchorX.toFixed(1));
-                packet.setAttribute('cy', anchorY.toFixed(1));
-            }
-        });
-    }
-
-    /* ── 3. STAGGERED ENTRANCE TIMELINE ───────────────────────────────── */
-    function initEntrance() {
-        if (reduced) {
-            host.classList.add('rafly-hero--entered');
-            return;
-        }
-
-        setTimeout(() => {
-            host.classList.add('rafly-hero--entered');
-        }, 100);
-
-        // Staggered reveal delays per Section 22
-        const revealEls = Array.from(host.querySelectorAll('[data-hero-reveal]'));
-        const revealDelays = {
-            'eyebrow': 300,
-            'title-1': 400,
-            'title-2': 500,
-            'title-3': 600,
-            'title-4': 700,
-            'desc': 800,
-            'cta': 900,
-            'metrics': 1000
-        };
-
-        revealEls.forEach((el) => {
-            const key = el.dataset.heroReveal;
-            const delay = revealDelays[key] || 400;
-            el.style.transitionDelay = `${delay}ms`;
-        });
-
-        // Staggered card delays (650ms - 900ms)
-        const cardDelays = {
-            web: 650,
-            security: 720,
-            marketing: 790,
-            content: 840,
-            commerce: 900
-        };
-
-        cards.forEach((card) => {
-            const key = card.dataset.heroCard;
-            const delay = cardDelays[key] || 650;
-            card.style.transitionDelay = `${delay}ms`;
-        });
-
-        if (model3d) {
-            model3d.style.transitionDelay = '850ms';
-        }
-    }
-
-    /* ── 4. HOVER & INTERACTION HANDLERS ───────────────────────────────── */
-    function initInteractions() {
-        cards.forEach((card) => {
-            const key = card.dataset.heroCard;
-            const pathGroup = pathGroups.find((g) => g.dataset.path === key);
-            const dot = dots.find((d) => d.dataset.dot === key);
-
-            card.addEventListener('mouseenter', () => {
-                hoveredCard = key;
-                if (pathGroup) pathGroup.classList.add('is-active');
-                if (hub) hub.classList.add('is-pulsing');
-                if (dot) {
-                    dots.forEach((d) => d.classList.remove('is-active'));
-                    dot.classList.add('is-active');
-                }
-
-                // Fire traveling energy packet on hover
-                if (pathGroup) {
-                    const packet = pathGroup.querySelector('.rafly-path__packet');
-                    const corePath = pathGroup.querySelector('.rafly-path__core');
-                    if (packet && corePath && typeof corePath.getTotalLength === 'function') {
-                        const totalLen = corePath.getTotalLength();
-                        let pProgress = 0;
-                        const animatePacket = () => {
-                            pProgress += 0.05;
-                            if (pProgress <= 1) {
-                                const pt = corePath.getPointAtLength(pProgress * totalLen);
-                                packet.setAttribute('cx', pt.x.toFixed(1));
-                                packet.setAttribute('cy', pt.y.toFixed(1));
-                                requestAnimationFrame(animatePacket);
-                            }
-                        };
-                        animatePacket();
-                    }
-                }
-            });
-
-            card.addEventListener('mouseleave', () => {
-                hoveredCard = null;
-                if (pathGroup) pathGroup.classList.remove('is-active');
-                if (hub) hub.classList.remove('is-pulsing');
-            });
-        });
-    }
-
-    /* ── Single Clean Waveform Slow Morphing (8-12s loop) ────────────── */
-    function initWaveformMorphing() {
-        if (!model3d || reduced) return;
-        const mainWave = model3d.querySelector('.rafly-wave--primary');
-        const fillWave = model3d.querySelector('.rafly-wave--primary-fill');
-        if (!mainWave) return;
-
-        const waveStates = [
-            "M 0 70 Q 60 58 120 42 T 240 16",
-            "M 0 66 Q 70 48 130 52 T 240 22",
-            "M 0 74 Q 50 62 110 36 T 240 12"
+    /* ── Ribbon definitions ─────────────────────────────────────────────
+       Each ribbon is described as a set of cubic bezier control points
+       relative to the canvas centre (cx, cy).
+       The ribbons animate by modulating control points with time.
+    */
+    function getRibbons(cx, cy, r, t) {
+        const s = r * 0.72; // ribbon spread
+        return [
+            /* 01 WEB — structured, geometric, top-left */
+            {
+                key: 'web',
+                pts: [
+                    cx - s * 0.92, cy - s * 0.78,
+                    cx - s * 0.42 + Math.sin(t * 0.4) * 8, cy - s * 0.38 + Math.cos(t * 0.35) * 6,
+                    cx - s * 0.18 + Math.sin(t * 0.3) * 5, cy - s * 0.15,
+                    cx, cy,
+                ],
+                width: 2.2,
+                opacity: 0.72,
+            },
+            /* 02 SECURITY — protective arc, left side */
+            {
+                key: 'security',
+                pts: [
+                    cx - s * 1.02, cy - s * 0.05,
+                    cx - s * 0.62 + Math.sin(t * 0.28) * 10, cy - s * 0.22 + Math.cos(t * 0.32) * 8,
+                    cx - s * 0.28, cy - s * 0.08,
+                    cx, cy,
+                ],
+                width: 2.8,
+                opacity: 0.80,
+            },
+            /* 03 MARKETING — radiating energy, top-right */
+            {
+                key: 'marketing',
+                pts: [
+                    cx + s * 0.92, cy - s * 0.78,
+                    cx + s * 0.42 + Math.cos(t * 0.38) * 8, cy - s * 0.38 + Math.sin(t * 0.42) * 6,
+                    cx + s * 0.18, cy - s * 0.15 + Math.cos(t * 0.28) * 4,
+                    cx, cy,
+                ],
+                width: 2.2,
+                opacity: 0.72,
+            },
+            /* 04 CONTENT — organic flow, right side */
+            {
+                key: 'content',
+                pts: [
+                    cx + s * 1.02, cy + s * 0.12,
+                    cx + s * 0.58 + Math.cos(t * 0.35) * 12, cy + s * 0.32 + Math.sin(t * 0.28) * 10,
+                    cx + s * 0.26, cy + s * 0.18 + Math.sin(t * 0.45) * 5,
+                    cx, cy,
+                ],
+                width: 3.0,
+                opacity: 0.85,
+            },
+            /* 05 COMMERCE — converging, bottom */
+            {
+                key: 'commerce',
+                pts: [
+                    cx, cy + s * 1.0,
+                    cx + Math.sin(t * 0.30) * 14, cy + s * 0.58 + Math.cos(t * 0.25) * 8,
+                    cx + Math.sin(t * 0.42) * 6,  cy + s * 0.28,
+                    cx, cy,
+                ],
+                width: 2.6,
+                opacity: 0.78,
+            },
         ];
-
-        let stateIdx = 0;
-        setInterval(() => {
-            if (!isVisible) return;
-            stateIdx = (stateIdx + 1) % waveStates.length;
-            const strokeD = waveStates[stateIdx];
-            const fillD = strokeD + " L 240 100 L 0 100 Z";
-            mainWave.setAttribute('d', strokeD);
-            if (fillWave) fillWave.setAttribute('d', fillD);
-        }, 9000);
     }
 
-    /* ── Continuous Data Flow Packet System (4.5s - 8s random interval) ── */
-    function initContinuousDataFlow() {
-        if (reduced) return;
-
-        const pathKeys = ['web', 'security', 'marketing', 'content', 'commerce'];
-
-        function dispatchPacket() {
-            if (!isVisible) {
-                scheduleNext();
-                return;
-            }
-
-            const key = pathKeys[Math.floor(Math.random() * pathKeys.length)];
-            const pathGroup = pathGroups.find((g) => g.dataset.path === key);
-            if (!pathGroup) {
-                scheduleNext();
-                return;
-            }
-
-            const packet = pathGroup.querySelector('.rafly-path__packet');
-            const corePath = pathGroup.querySelector('.rafly-path__core');
-
-            if (packet && corePath && typeof corePath.getTotalLength === 'function') {
-                const totalLen = corePath.getTotalLength();
-                let pProgress = 0;
-                pathGroup.classList.add('is-active');
-
-                const animatePacket = () => {
-                    pProgress += 0.018; // smooth duration ~2.2s
-                    if (pProgress <= 1) {
-                        const eased = pProgress < 0.5 
-                            ? 2 * pProgress * pProgress 
-                            : -1 + (4 - 2 * pProgress) * pProgress;
-                        const pt = corePath.getPointAtLength(eased * totalLen);
-                        packet.setAttribute('cx', pt.x.toFixed(1));
-                        packet.setAttribute('cy', pt.y.toFixed(1));
-                        requestAnimationFrame(animatePacket);
-                    } else {
-                        pathGroup.classList.remove('is-active');
-                        if (hub) {
-                            hub.classList.add('is-pulsing');
-                            setTimeout(() => hub.classList.remove('is-pulsing'), 600);
-                        }
-                    }
-                };
-                animatePacket();
-            }
-
-            scheduleNext();
-        }
-
-        function scheduleNext() {
-            const delay = Math.random() * 3500 + 4500; // 4.5s - 8.0s
-            setTimeout(dispatchPacket, delay);
-        }
-
-        setTimeout(dispatchPacket, 2500);
+    /* Ribbon gradient factory */
+    function ribbonGradient(pts, color, alpha) {
+        const [x0, y0, , , , , x3, y3] = pts;
+        const grad = ctx.createLinearGradient(x0, y0, x3, y3);
+        const { h, s, l } = color;
+        grad.addColorStop(0.0,  `hsla(${h},${s}%,${l + 14}%,0)`);
+        grad.addColorStop(0.35, `hsla(${h},${s}%,${l + 8}%, ${alpha * 0.55})`);
+        grad.addColorStop(0.70, `hsla(${h},${s}%,${l}%,     ${alpha * 0.90})`);
+        grad.addColorStop(1.0,  `hsla(${h},${s}%,${l}%,     ${alpha * 1.00})`);
+        return grad;
     }
 
-    /* ── 5. MOUSE PARALLAX & CURSOR GLOW TRACKING ─────────────────────── */
-    function onMouseMove(e) {
-        if (!isFine || reduced) return;
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        pxTarget = clamp((e.clientX / w) - 0.5, -0.5, 0.5);
-        pyTarget = clamp((e.clientY / h) - 0.5, -0.5, 0.5);
+    /* ── Draw frame ─────────────────────────────────────────────────────── */
+    function draw(ts) {
+        const t  = (ts - t0) / 1000; // seconds since start
+        const w  = canvas._w || 640;
+        const h  = canvas._h || 640;
+        const cx = w / 2;
+        const cy = h / 2;
+        const r  = Math.min(w, h) * 0.42; // radius of the reactor field
 
-        if (cursorGlow) {
-            cursorGlow.style.opacity = '1';
-            cursorGlow.style.left = `${e.clientX}px`;
-            cursorGlow.style.top = `${e.clientY}px`;
+        ctx.clearRect(0, 0, w, h);
+
+        // Active capability color
+        const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 220, s: 100, l: 52 };
+
+        /* ── Luminous Outer Radial Atmosphere ─────────────────────────── */
+        const atmo = ctx.createRadialGradient(cx, cy, r * 0.25, cx, cy, r * 1.35);
+        atmo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.28 : 0.16})`);
+        atmo.addColorStop(0.4, `hsla(${activeColor.h}, 85%, 55%, ${isSyncing ? 0.10 : 0.05})`);
+        atmo.addColorStop(0.8, `hsla(210, 90%, 60%, 0.02)`);
+        atmo.addColorStop(1.0, 'transparent');
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 1.35, 0, Math.PI * 2);
+        ctx.fillStyle = atmo;
+        ctx.fill();
+
+        /* ── Five Energy Connection Beams ────────────────────────────── */
+        const ribbons = getRibbons(cx, cy, r, t);
+        for (const rib of ribbons) {
+            const isCap    = activeCap === rib.key;
+            const isDimmed = activeCap && !isCap && !isSyncing;
+            const alpha    = isSyncing ? rib.opacity * 1.0 : (isDimmed ? rib.opacity * 0.28 : rib.opacity * (isCap ? 1.0 : 0.75));
+            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.7 : rib.width * (isCap ? 1.85 : 1.2));
+
+            const color  = CAP_COLORS[rib.key];
+            const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
+
+            // Ambient outer glow pass
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.45);
+            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 5.2 : 3.8);
+            ctx.lineCap     = 'round';
+            ctx.stroke();
+
+            // Luminous core energy path
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha);
+            ctx.lineWidth   = lWidth;
+            ctx.lineCap     = 'round';
+            ctx.stroke();
+
+            // Connection node endpoints (luminous target rings)
+            if (!isDimmed || isSyncing) {
+                ctx.beginPath();
+                ctx.arc(x0, y0, isCap ? 4.5 : 3.0, 0, Math.PI * 2);
+                ctx.fillStyle   = `hsla(${color.h},${color.s}%,80%,${isCap ? 1.0 : 0.7})`;
+                ctx.shadowBlur  = isCap ? 12 : 6;
+                ctx.shadowColor = `hsla(${color.h},${color.s}%,${color.l}%,0.9)`;
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // Travelling light energy particle with soft glowing trail
+            if (!isDimmed || isSyncing) {
+                const speedMult = (isCap || isSyncing) ? 0.72 : 0.48;
+                const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20) % 1.0;
+                const tp        = easeOut(phase);
+
+                // Sample particle head position via deCasteljau
+                const ax = lerp(x0, x1, tp), ay = lerp(y0, y1, tp);
+                const bx = lerp(x1, x2, tp), by = lerp(y1, y2, tp);
+                const cx2= lerp(x2, x3, tp), cy2= lerp(y2, y3, tp);
+                const dx = lerp(ax, bx, tp),  dy = lerp(ay, by, tp);
+                const ex = lerp(bx, cx2,tp),  ey = lerp(by, cy2,tp);
+                const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
+
+                // Particle tail (slightly behind tp)
+                const tpTail = Math.max(0, tp - 0.05);
+                const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
+                const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
+                const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
+                const tdx = lerp(tax, tbx, tpTail), tdy = lerp(tay, tby, tpTail);
+                const tex = lerp(tbx, tcx2, tpTail), tey = lerp(tby, tcy2, tpTail);
+                const tfx = lerp(tdx, tex, tpTail), tfy = lerp(tdy, tey, tpTail);
+
+                ctx.save();
+                // Glowing tail line
+                ctx.beginPath();
+                ctx.moveTo(tfx, tfy);
+                ctx.lineTo(fx, fy);
+                ctx.strokeStyle = `hsla(${color.h},${color.s}%,75%,${isCap || isSyncing ? 0.85 : 0.45})`;
+                ctx.lineWidth   = isCap || isSyncing ? 3.2 : 2.0;
+                ctx.lineCap     = 'round';
+                ctx.stroke();
+
+                // Particle head
+                const dotR = (isCap || isSyncing) ? 4.8 : 3.0;
+                ctx.beginPath();
+                ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
+                ctx.fillStyle   = '#ffffff';
+                ctx.shadowBlur  = isCap || isSyncing ? 18 : 8;
+                ctx.shadowColor = `hsla(${color.h},${color.s}%,70%,0.95)`;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        /* ── Central AI System Core ───────────────────────────────────── */
+        const breathe = (1 + Math.sin(t * 0.60) * 0.04) * (isSyncing ? 1.06 : 1.0);
+        const coreR   = r * 0.23 * breathe;
+
+        // Luminous atmosphere halo
+        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.6, cx, cy, coreR * (isSyncing ? 2.6 : 2.2));
+        halo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.45 : 0.28})`);
+        halo.addColorStop(0.5, `hsla(${activeColor.h}, 90%, 55%, ${isSyncing ? 0.18 : 0.09})`);
+        halo.addColorStop(1.0, 'transparent');
+        ctx.beginPath();
+        ctx.arc(cx, cy, coreR * (isSyncing ? 2.6 : 2.2), 0, Math.PI * 2);
+        ctx.fillStyle = halo;
+        ctx.fill();
+
+        // 1. Outer rotating blueprint ring (clockwise)
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(t * 0.04);
+        ctx.beginPath();
+        ctx.arc(0, 0, coreR * 1.85, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 70%, ${isSyncing ? 0.55 : 0.32})`;
+        ctx.lineWidth   = 1.0;
+        ctx.setLineDash([6, 10]);
+        ctx.stroke();
+
+        // Crosshair tick marks
+        for (let i = 0; i < 4; i++) {
+            const ta = (i / 4) * Math.PI * 2;
+            const xA = Math.cos(ta) * (coreR * 1.76);
+            const yA = Math.sin(ta) * (coreR * 1.76);
+            const xB = Math.cos(ta) * (coreR * 1.94);
+            const yB = Math.sin(ta) * (coreR * 1.94);
+            ctx.beginPath();
+            ctx.moveTo(xA, yA);
+            ctx.lineTo(xB, yB);
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 75%, ${isSyncing ? 0.75 : 0.45})`;
+            ctx.lineWidth   = 1.2;
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // 2. Middle precision ring (counter-clockwise)
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-t * 0.075);
+        ctx.beginPath();
+        ctx.arc(0, 0, coreR * 1.55, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.60 : 0.38})`;
+        ctx.lineWidth   = 1.1;
+        ctx.setLineDash([3, 6]);
+        ctx.stroke();
+
+        // 8 node markers at 45 degree intervals
+        for (let i = 0; i < 8; i++) {
+            const ta = (i / 8) * Math.PI * 2;
+            const px = Math.cos(ta) * (coreR * 1.55);
+            const py = Math.sin(ta) * (coreR * 1.55);
+            ctx.beginPath();
+            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // 3. Inner rotating ring (clockwise fast)
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(t * 0.11);
+        ctx.beginPath();
+        ctx.arc(0, 0, coreR * 1.28, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 80%, ${isSyncing ? 0.70 : 0.42})`;
+        ctx.lineWidth   = 1.2;
+        ctx.setLineDash([12, 18]);
+        ctx.stroke();
+        ctx.restore();
+
+        // Luminous Frosted Glass Core Disc
+        const disc = ctx.createRadialGradient(cx - coreR * 0.3, cy - coreR * 0.3, 0, cx, cy, coreR);
+        disc.addColorStop(0.0, 'rgba(255, 255, 255, 0.99)');
+        disc.addColorStop(0.4, 'rgba(235, 245, 255, 0.94)');
+        disc.addColorStop(1.0, 'rgba(195, 222, 255, 0.82)');
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+        ctx.fillStyle = disc;
+        ctx.shadowBlur  = isSyncing ? 48 : 36;
+        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 60%, ${isSyncing ? 0.65 : 0.45})`;
+        ctx.fill();
+
+        // Inner specular edge ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 85%, 0.75)`;
+        ctx.lineWidth   = 1.6;
+        ctx.stroke();
+        ctx.restore();
+
+        // RAFly Official Real Brand Logo Mark (100% Exact Image from assets/logo-mark.png)
+        if (logoMarkImg && logoMarkImg.complete && logoMarkImg.naturalWidth > 0) {
+            ctx.save();
+            ctx.translate(cx, cy);
+
+            // Dynamic breathing scale & floating pulse
+            const breatheScale = 1 + Math.sin(t * 0.85) * 0.04;
+            const logoW = coreR * 1.15 * breatheScale;
+            const logoH = logoW * (99 / 80);
+
+            // Luminous Aura Glow behind the Logo Mark
+            ctx.shadowBlur  = isSyncing ? 45 : 30;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
+
+            // Draw exact RAFly logo mark image centered at (cx, cy)
+            ctx.drawImage(logoMarkImg, -logoW / 2, -logoH / 2, logoW, logoH);
+
+            ctx.restore();
+        } else {
+            // Fallback while loading
+            ctx.beginPath();
+            ctx.arc(cx, cy, coreR * 0.4, 0, Math.PI * 2);
+            ctx.fillStyle   = '#ffffff';
+            ctx.shadowBlur  = isSyncing ? 26 : 16;
+            ctx.shadowColor = '#ffffff';
+            ctx.fill();
+        }
+        ctx.restore();
+
+        /* ── Ambient Orbiting Micro-Particles ───────────────────────────── */
+        if (!reduced) {
+            const pCount = 16;
+            for (let i = 0; i < pCount; i++) {
+                const seed = i * 137.508; // golden angle
+                const a    = (seed * 0.0174533) + t * 0.07;
+                const dist = r * (0.45 + 0.55 * ((Math.sin(seed * 0.0837) + 1) / 2));
+                const px   = cx + Math.cos(a) * dist;
+                const py   = cy + Math.sin(a) * dist * 0.82;
+                const sz   = 1.2 + 1.5 * ((Math.sin(seed * 0.113 + t * 0.26) + 1) / 2);
+                const al   = 0.25 + 0.30 * ((Math.sin(seed * 0.077 + t * 0.22) + 1) / 2);
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(px, py, sz, 0, Math.PI * 2);
+                ctx.fillStyle   = `hsla(215, 100%, 70%, ${al})`;
+                ctx.shadowBlur  = 8;
+                ctx.shadowColor = 'rgba(10, 99, 255, 0.55)';
+                ctx.fill();
+                ctx.restore();
+            }
         }
     }
 
-    if (isFine) {
-        window.addEventListener('mousemove', onMouseMove, { passive: true });
-        host.addEventListener('mouseleave', () => {
-            if (cursorGlow) cursorGlow.style.opacity = '0';
+    let lastTs = performance.now();
+
+    /* ── RAF loop ───────────────────────────────────────────────────────── */
+    function tick(ts) {
+        if (!isVisible) return;
+        raf = requestAnimationFrame(tick);
+
+        const dt = Math.min((ts - lastTs) / 1000, 0.05); // Cap dt at 50ms to prevent jumps
+        lastTs = ts;
+
+        // Ultra-smooth frame-rate independent pointer lerp
+        const damp = 1 - Math.exp(-12 * dt);
+        pxCurr = lerp(pxCurr, pxTarget, damp);
+        pyCurr = lerp(pyCurr, pyTarget, damp);
+
+        // Reactor parallax + tilt (max 4-5 deg)
+        if (reactor && !reduced) {
+            const tx = pxCurr * 16;
+            const ty = pyCurr * 12 - scrollProgress * 20;
+            const rx = -pyCurr * 5;  // tilt X (pitch)
+            const ry =  pxCurr * 5;  // tilt Y (yaw)
+            const scale = 1 - scrollProgress * 0.05;
+
+            reactor.style.transform =
+                `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0)` +
+                ` rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)` +
+                ` scale(${scale.toFixed(3)})`;
+
+            // Glow follows subtly
+            if (glow) {
+                glow.style.transform = `translateY(-50%) translate(${(pxCurr * 5).toFixed(2)}px, ${(pyCurr * 4).toFixed(2)}px)`;
+            }
+        }
+
+        // Annotation parallax
+        if (!reduced) {
+            annots.forEach((a, i) => {
+                const ax = pxCurr * (18 + i * 1.2);
+                const ay = pyCurr * (14 + i * 1.0);
+                a.style.setProperty('--ax', `${ax.toFixed(2)}px`);
+                a.style.setProperty('--ay', `${ay.toFixed(2)}px`);
+            });
+            // Ghost words slow drift
+            ghostWords.forEach((g, i) => {
+                const sign = i % 2 === 0 ? 1 : -1;
+                const gx   = pxCurr * (6 + i * 2) * sign
+                            + scrollProgress * (24 + i * 8) * sign;
+                g.style.setProperty('--ghost-x', `${gx.toFixed(2)}px`);
+            });
+        }
+
+        // Idle auto-cycle
+        cycleTimer += dt;
+        if (!hoverLocked && cycleTimer > 3.2) {
+            cycleTimer = 0;
+            cycleIdx   = (cycleIdx + 1) % CAPS.length;
+            setActiveCap(CAPS[cycleIdx]);
+        }
+
+        // Periodic signature synchronization pulse (every ~5.5s for 750ms)
+        syncTimer += dt;
+        if (syncTimer > 5.5) {
+            if (syncTimer > 6.25) {
+                syncTimer = 0;
+                isSyncing = false;
+            } else {
+                isSyncing = true;
+            }
+        }
+
+        // Sweep timer
+        sweepTimer += dt;
+        if (sweepTimer > 7 && focusWord) {
+            sweepTimer = 0;
+            triggerSweep();
+        }
+
+        if (!reduced) draw(ts);
+    }
+
+    /* ── Capability activation ──────────────────────────────────────────── */
+    function setActiveCap(cap) {
+        activeCap = cap;
+        annots.forEach((a) => {
+            const k = a.dataset.sigTag || a.dataset.annot;
+            a.classList.toggle('is-active',  k === cap);
+            a.classList.toggle('is-dimmed',  cap && k !== cap);
+        });
+        leaders.forEach((l) => {
+            const k = l.dataset.leader;
+            l.classList.toggle('is-active',  k === cap);
+            l.classList.toggle('is-visible',  true);
         });
     }
 
-    /* ── 6. MAIN TICK & ANIMATION LOOP (Subconscious Restrained Motion) ── */
-    function renderLoop(time) {
-        if (!isVisible) {
-            rafId = requestAnimationFrame(renderLoop);
-            return;
-        }
+    /* ── Light sweep ────────────────────────────────────────────────────── */
+    function triggerSweep() {
+        if (!focusWord) return;
+        focusWord.classList.remove('is-sweeping');
+        void focusWord.offsetWidth;
+        focusWord.classList.add('is-sweeping');
+    }
+    setTimeout(triggerSweep, 800);
 
-        const elapsed = time - startTime;
+    /* ── Annotation hover ───────────────────────────────────────────────── */
+    annots.forEach((a) => {
+        a.addEventListener('mouseenter', () => {
+            hoverLocked = true;
+            cycleTimer  = 0;
+            setActiveCap(a.dataset.sigTag || a.dataset.annot);
+        });
+        a.addEventListener('focus', () => {
+            hoverLocked = true;
+            cycleTimer  = 0;
+            setActiveCap(a.dataset.sigTag || a.dataset.annot);
+        });
+        a.addEventListener('mouseleave', () => {
+            hoverLocked = false;
+        });
+        a.addEventListener('blur', () => {
+            hoverLocked = false;
+        });
+    });
 
-        // Damped Mouse Parallax Lerp (0.05)
-        pxCurr = lerp(pxCurr, pxTarget, 0.05);
-        pyCurr = lerp(pyCurr, pyTarget, 0.05);
-
-        // Apply Spatial Depth Parallax Transforms on Desktop (Section 20)
-        if (!reduced && window.innerWidth > 768) {
-            if (grid) {
-                // Grid parallax max 2px
-                grid.style.transform = `translate3d(${pxCurr * 2}px, ${pyCurr * 2}px, 0)`;
-            }
-            if (hub) {
-                // Hub parallax max 4px
-                hub.style.transform = `translate(-50%, -50%) translate3d(${pxCurr * 4}px, ${pyCurr * 4}px, 0)`;
-            }
-            if (model3d) {
-                // Analytics panel max 7px parallax + subtle glass rotation (-6deg Y, 2deg X)
-                const modelFloatY = Math.sin((elapsed / 8000) * Math.PI * 2) * 3;
-                const vp = model3d.querySelector('.rafly-model3d__viewport');
-                if (vp) {
-                    vp.style.transform = `rotateY(${-6 + pxCurr * 4}deg) rotateX(${2 - pyCurr * 3}deg)`;
-                }
-                model3d.style.transform = `translateY(-50%) translate3d(${pxCurr * 7}px, ${modelFloatY + pyCurr * 7}px, 0)`;
-            }
-
-            // Subconscious Card Floating (2px max amplitude) + 5px Card Parallax
-            cards.forEach((card) => {
-                const key = card.dataset.heroCard;
-                const cfg = CARD_CONFIG[key] || { ampY: 2.0, period: 8500, phase: 0 };
-                
-                const floatY = Math.sin((elapsed / cfg.period) * Math.PI * 2 + cfg.phase) * cfg.ampY;
-                const isHovered = (hoveredCard === key);
-                const hoverLift = isHovered ? -3 : 0;
-
-                if (key === 'commerce') {
-                    card.style.transform = `translateX(-50%) translate3d(${pxCurr * 5}px, ${floatY + hoverLift + pyCurr * 5}px, 0)`;
-                } else {
-                    card.style.transform = `translate3d(${pxCurr * 5}px, ${floatY + hoverLift + pyCurr * 5}px, 0)`;
-                }
-            });
-
-            // Recalculate dynamic SVG Bezier connection anchors per frame
-            updateSVGPaths();
-        }
-
-        rafId = requestAnimationFrame(renderLoop);
+    /* ── Mouse tracking ─────────────────────────────────────────────────── */
+    if (isFine) {
+        document.addEventListener('mousemove', (e) => {
+            const rect = host.getBoundingClientRect();
+            pxTarget = clamp((e.clientX - rect.left) / rect.width  - 0.5, -0.5, 0.5);
+            pyTarget = clamp((e.clientY - rect.top)  / rect.height - 0.5, -0.5, 0.5);
+        }, { passive: true });
     }
 
-    /* ── 7. SCROLL CHOREOGRAPHY (Restrained max -15px translateY) ───── */
+    /* ── Scroll ─────────────────────────────────────────────────────────── */
     function onScroll() {
-        if (!host) return;
         const rect = host.getBoundingClientRect();
-        const vh = window.innerHeight;
-        
-        if (rect.bottom > 0 && rect.top < vh) {
-            scrollProgress = clamp(-rect.top / vh, 0, 1);
-            if (!reduced && window.innerWidth > 768) {
-                const translateY = scrollProgress * -15;
-                const scale = 1 - scrollProgress * 0.005;
-
-                if (stage) {
-                    stage.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
-                }
-                if (leftCol) {
-                    leftCol.style.transform = `translate3d(0, ${translateY * 0.5}px, 0)`;
-                }
-            }
-        }
+        const h    = rect.height || window.innerHeight;
+        scrollProgress = clamp(-rect.top / h, 0, 1);
     }
-
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    /* ── 8. INTERSECTION OBSERVER LIFECYCLE ────────────────────────────── */
+    /* ── IntersectionObserver ───────────────────────────────────────────── */
     const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-            isVisible = e.isIntersecting;
-        });
+        isVisible = entries[0].isIntersecting;
+        if (isVisible) { t0 = performance.now() - (t0 || 0); raf = requestAnimationFrame(tick); }
+        else cancelAnimationFrame(raf);
     }, { threshold: 0.05 });
-
     io.observe(host);
 
-    /* ── 9. RESIZE HANDLER ────────────────────────────────────────────── */
-    function onResize() {
-        updateSVGPaths();
+    /* ── Reduced motion static fallback ─────────────────────────────────── */
+    if (reduced) {
+        host.classList.add('grs-hero--entered');
+        annots.forEach((a) => a.classList.add('is-visible'));
+        leaders.forEach((l) => l.classList.add('is-visible'));
+        // Draw one static frame
+        requestAnimationFrame((ts) => { t0 = ts; draw(ts); });
+        return () => {};
     }
 
-    window.addEventListener('resize', onResize, { passive: true });
+    /* ── Start ──────────────────────────────────────────────────────────── */
+    raf = requestAnimationFrame(tick);
+    setActiveCap(CAPS[0]);
 
-    /* ── INITIALIZATION ───────────────────────────────────────────────── */
-    const isStaticMode = host.hasAttribute('data-hero-static');
-    
-    initParticles();
-    initEntrance();
-    initInteractions();
-    initWaveformMorphing();
-    initContinuousDataFlow();
-    
-    setTimeout(updateSVGPaths, 50);
-    setTimeout(updateSVGPaths, 300);
-
-    if (isStaticMode) {
-        host.classList.add('rafly-hero--entered');
-        cards.forEach((card) => {
-            card.style.opacity = '1';
-        });
-        updateSVGPaths();
-    } else {
-        rafId = requestAnimationFrame(renderLoop);
-    }
-
-    return () => {
-        cancelAnimationFrame(rafId);
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('scroll', onScroll);
-        window.removeEventListener('resize', onResize);
+    return function destroy() {
+        cancelAnimationFrame(raf);
         io.disconnect();
+        window.removeEventListener('scroll', onScroll);
     };
 }
