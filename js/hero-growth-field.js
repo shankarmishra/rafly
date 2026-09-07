@@ -218,8 +218,8 @@ export function initHeroGrowthField(host) {
         for (const rib of ribbons) {
             const isCap    = activeCap === rib.key;
             const isDimmed = activeCap && !isCap && !isSyncing;
-            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.22 : (isCap ? 1.0 : 0.75));
-            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.75 : rib.width * (isCap ? 1.9 : 1.25));
+            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.18 : (isCap ? 1.0 : 0.75));
+            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.70 : rib.width * (isCap ? 2.2 : 1.25));
 
             const color  = CAP_COLORS[rib.key] || { h: 217, s: 95, l: 54 };
             const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
@@ -230,7 +230,7 @@ export function initHeroGrowthField(host) {
             ctx.moveTo(x0, y0);
             ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
             ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.45);
-            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 5.0 : 3.4);
+            ctx.lineWidth   = lWidth * (isCap ? 5.8 : (isSyncing ? 5.0 : 3.4));
             ctx.lineCap     = 'round';
             ctx.stroke();
 
@@ -243,21 +243,33 @@ export function initHeroGrowthField(host) {
             ctx.lineCap     = 'round';
             ctx.stroke();
 
+            // Active Card Hyper-Beam Core Highlight
+            if (isCap) {
+                ctx.beginPath();
+                ctx.moveTo(x0, y0);
+                ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.90)';
+                ctx.lineWidth   = lWidth * 0.45;
+                ctx.shadowBlur  = 18;
+                ctx.shadowColor = '#0a63ff';
+                ctx.stroke();
+            }
+
             // Connection node endpoint target rings at each card
             if (!isDimmed || isSyncing) {
                 // Outer pulse target ring
-                const targetPulseR = 6.5 + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.2;
+                const targetPulseR = (isCap ? 8.0 : 6.5) + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.2;
                 ctx.beginPath();
                 ctx.arc(x0, y0, targetPulseR, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.90 : 0.45})`;
-                ctx.lineWidth   = 1.1;
+                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.95 : 0.45})`;
+                ctx.lineWidth   = isCap ? 1.4 : 1.1;
                 ctx.stroke();
 
                 // Solid center node dot
                 ctx.beginPath();
-                ctx.arc(x0, y0, isCap ? 4.5 : 3.2, 0, Math.PI * 2);
+                ctx.arc(x0, y0, isCap ? 4.8 : 3.2, 0, Math.PI * 2);
                 ctx.fillStyle   = isCap ? '#ffffff' : '#90c2ff';
-                ctx.shadowBlur  = isCap ? 16 : 8;
+                ctx.shadowBlur  = isCap ? 18 : 8;
                 ctx.shadowColor = '#0a63ff';
                 ctx.fill();
             }
@@ -267,7 +279,7 @@ export function initHeroGrowthField(host) {
             if (!isDimmed || isSyncing) {
                 const particlePhases = [0.0, 0.33, 0.66]; // 3 packets per path
                 for (const pOffset of particlePhases) {
-                    const speedMult = (isCap || isSyncing) ? 0.75 : 0.45;
+                    const speedMult = isCap ? 0.95 : (isSyncing ? 0.75 : 0.45);
                     const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20 + pOffset) % 1.0;
                     const tp        = easeOut(phase);
 
@@ -280,7 +292,7 @@ export function initHeroGrowthField(host) {
                     const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
 
                     // Tail position
-                    const tpTail = Math.max(0, tp - 0.07);
+                    const tpTail = Math.max(0, tp - (isCap ? 0.09 : 0.07));
                     const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
                     const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
                     const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
@@ -294,16 +306,16 @@ export function initHeroGrowthField(host) {
                     ctx.moveTo(tfx, tfy);
                     ctx.lineTo(fx, fy);
                     ctx.strokeStyle = `rgba(90, 180, 255, ${isCap || isSyncing ? 0.95 : 0.55})`;
-                    ctx.lineWidth   = isCap || isSyncing ? 3.5 : 2.0;
+                    ctx.lineWidth   = isCap || isSyncing ? 3.8 : 2.0;
                     ctx.lineCap     = 'round';
                     ctx.stroke();
 
                     // Particle head
-                    const dotR = (isCap || isSyncing) ? 4.8 : 3.0;
+                    const dotR = (isCap || isSyncing) ? 5.2 : 3.0;
                     ctx.beginPath();
                     ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
                     ctx.fillStyle   = '#ffffff';
-                    ctx.shadowBlur  = isCap || isSyncing ? 20 : 10;
+                    ctx.shadowBlur  = isCap || isSyncing ? 22 : 10;
                     ctx.shadowColor = 'rgba(10, 99, 255, 0.95)';
                     ctx.fill();
                     ctx.restore();
@@ -311,13 +323,13 @@ export function initHeroGrowthField(host) {
                     // Arrival docking splash wave pulse at central core rim
                     if (tp > 0.82) {
                         const sPhase  = (tp - 0.82) / 0.18;
-                        const sRadius = (r * 0.23) + sPhase * 28;
-                        const sAlpha  = (1.0 - sPhase) * (isCap ? 0.75 : 0.35);
+                        const sRadius = (r * 0.23) + sPhase * 32;
+                        const sAlpha  = (1.0 - sPhase) * (isCap ? 0.85 : 0.35);
                         ctx.save();
                         ctx.beginPath();
                         ctx.arc(cx, cy, sRadius, 0, Math.PI * 2);
                         ctx.strokeStyle = `rgba(56, 189, 248, ${sAlpha})`;
-                        ctx.lineWidth   = 1.5 * (1.0 - sPhase);
+                        ctx.lineWidth   = 1.6 * (1.0 - sPhase);
                         ctx.stroke();
                         ctx.restore();
                     }
@@ -339,6 +351,19 @@ export function initHeroGrowthField(host) {
         ctx.arc(cx, cy, coreR * (isSyncing ? 3.0 : 2.5), 0, Math.PI * 2);
         ctx.fillStyle = halo;
         ctx.fill();
+
+        // Bidirectional System Outbound Heartbeat Wave (Core → Cards every 4s)
+        const hbPhase = (t * 0.25) % 1.0;
+        const hbRadius = coreR + hbPhase * (r * 0.75 - coreR);
+        const hbAlpha  = (1.0 - hbPhase) * 0.30;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, hbRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(10, 99, 255, ${hbAlpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([6, 6]);
+        ctx.stroke();
+        ctx.restore();
 
         // Dynamic Expanding Signal Wave Ripples emitting from core
         const waveCount = 3;
@@ -431,9 +456,11 @@ export function initHeroGrowthField(host) {
         ctx.fill();
         ctx.restore();
 
-        // 2. Solid Porcelain 3D Disc Gradient Fill
-        const disc = ctx.createLinearGradient(cx - coreR, cy - coreR, cx + coreR, cy + coreR);
-        disc.addColorStop(0.00, '#ffffff');           // Pure top-left specular highlight
+        // 2. Solid Porcelain 3D Disc Gradient Fill with Interactive Specular Mouse Parallax
+        const specularX = cx - coreR * 0.75 + pxCurr * 24;
+        const specularY = cy - coreR * 0.75 + pyCurr * 20;
+        const disc = ctx.createLinearGradient(specularX, specularY, cx + coreR, cy + coreR);
+        disc.addColorStop(0.00, '#ffffff');           // Pure dynamic top-left specular highlight
         disc.addColorStop(0.35, '#f4f8ff');          // Soft luminous porcelain white
         disc.addColorStop(0.75, '#e4effe');          // Soft cyan-blue tint
         disc.addColorStop(1.00, '#d0e2fc');          // Soft depth shadow on bottom right

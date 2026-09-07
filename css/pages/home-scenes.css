@@ -3161,6 +3161,26 @@
     color: #06122f;
     font-weight: 700;
 }
+.sig-tag__badge {
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #0a63ff;
+    background: rgba(10, 99, 255, 0.08);
+    border: 1px solid rgba(10, 99, 255, 0.20);
+    padding: 0;
+    border-radius: 4px;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, max-width 0.35s ease, padding 0.3s ease;
+}
+.sig-tag:hover .sig-tag__badge, .sig-tag.is-active .sig-tag__badge {
+    opacity: 1;
+    max-width: 110px;
+    padding: 2px 6px;
+}
 .sig-tag__pulse {
     width: 6px;
     height: 6px;
