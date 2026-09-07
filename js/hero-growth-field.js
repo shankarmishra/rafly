@@ -99,20 +99,26 @@ export function initHeroGrowthField(host) {
     resizeCanvas();
     new ResizeObserver(resizeCanvas).observe(canvas);
 
-    /* ── Ambient Constellation Node Particles ────────────────────────── */
-    const NODE_COUNT = 42;
-    const nodes = [];
-    for (let i = 0; i < NODE_COUNT; i++) {
-        nodes.push({
-            x: Math.random(),
-            y: Math.random(),
-            vx: (Math.random() - 0.5) * 0.0004,
-            vy: (Math.random() - 0.5) * 0.0004,
-            radius: 1.5 + Math.random() * 2.2,
-            alpha: 0.25 + Math.random() * 0.50,
-            phase: Math.random() * Math.PI * 2,
-        });
+    /* ── Kinetic Matrix (Spring-Mass Lattice Grid) Setup ───────────── */
+    const COLS = 18;
+    const ROWS = 12;
+    const grid = [];
+
+    for (let r = 0; r < ROWS; r++) {
+        grid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+            grid[r][c] = {
+                xr: (c + 0.5) / COLS, // equilibrium ratio X (0..1)
+                yr: (r + 0.5) / ROWS, // equilibrium ratio Y (0..1)
+                x: 0,  // current physical X
+                y: 0,  // current physical Y
+                vx: 0,
+                vy: 0,
+            };
+        }
     }
+
+    let isGridInit = false;
 
     /* ── Draw frame ─────────────────────────────────────────────────────── */
     function draw(ts) {
@@ -128,92 +134,153 @@ export function initHeroGrowthField(host) {
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
-        /* 1. Fluid Aurora Mesh Background Orbs */
-        const orb1X = cx + Math.sin(t * 0.25) * (w * 0.25) + pxCurr * 40;
-        const orb1Y = cy + Math.cos(t * 0.20) * (h * 0.20) + pyCurr * 30;
-        const orb1  = ctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, w * 0.45);
-        orb1.addColorStop(0.0, 'rgba(10, 99, 255, 0.14)');
-        orb1.addColorStop(0.5, 'rgba(56, 189, 248, 0.06)');
+        // Initialize grid physical coordinates on first frame or window resize
+        if (!isGridInit || canvas._prevW !== w || canvas._prevH !== h) {
+            canvas._prevW = w;
+            canvas._prevH = h;
+            isGridInit = true;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const n = grid[r][c];
+                    n.x = n.xr * w;
+                    n.y = n.yr * h;
+                    n.vx = 0;
+                    n.vy = 0;
+                }
+            }
+        }
+
+        /* 1. Fluid Ambient Background Mesh Orbs (Light Mode Spectrum) */
+        const orb1X = cx + Math.sin(t * 0.25) * (w * 0.22) + pxCurr * 45;
+        const orb1Y = cy + Math.cos(t * 0.20) * (h * 0.18) + pyCurr * 35;
+        const orb1  = ctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, w * 0.40);
+        orb1.addColorStop(0.0, 'rgba(10, 99, 255, 0.12)');
+        orb1.addColorStop(0.5, 'rgba(56, 189, 248, 0.05)');
         orb1.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(orb1X, orb1Y, w * 0.45, 0, Math.PI * 2);
+        ctx.arc(orb1X, orb1Y, w * 0.40, 0, Math.PI * 2);
         ctx.fillStyle = orb1;
         ctx.fill();
 
-        const orb2X = cx - Math.cos(t * 0.22) * (w * 0.22) - pxCurr * 30;
-        const orb2Y = cy - Math.sin(t * 0.28) * (h * 0.22) - pyCurr * 25;
-        const orb2  = ctx.createRadialGradient(orb2X, orb2Y, 10, orb2X, orb2Y, w * 0.40);
-        orb2.addColorStop(0.0, 'rgba(99, 102, 241, 0.12)');
-        orb2.addColorStop(0.5, 'rgba(10, 99, 255, 0.05)');
-        orb2.addColorStop(1.0, 'transparent');
-        ctx.beginPath();
-        ctx.arc(orb2X, orb2Y, w * 0.40, 0, Math.PI * 2);
-        ctx.fillStyle = orb2;
-        ctx.fill();
+        /* 2. Physics Step — Hooke's Law Spring Restoring + Cursor Force Field */
+        const mouseX = cx + pxCurr * (w * 0.9);
+        const mouseY = cy + pyCurr * (h * 0.9);
+        const mouseRadius = 190;
 
-        /* 2. Expanding System Wave Shockwave */
-        const pulsePhase = (t * 0.18) % 1.0;
-        const pulseR     = pulsePhase * (Math.max(w, h) * 0.70);
-        const pulseAlpha = (1.0 - pulsePhase) * 0.15;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(cx + pxCurr * 20, cy + pyCurr * 15, pulseR, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(10, 99, 255, ${pulseAlpha})`;
-        ctx.lineWidth   = 1.2;
-        ctx.stroke();
-        ctx.restore();
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const n = grid[r][c];
+                const baseX = n.xr * w;
+                const baseY = n.yr * h;
 
-        /* 3. Constellation Node Network & Interconnecting Beams */
-        const mouseX = cx + pxCurr * w;
-        const mouseY = cy + pyCurr * h;
+                // Hooke's Law spring force pulling back to equilibrium
+                const springFx = (baseX - n.x) * 0.075;
+                const springFy = (baseY - n.y) * 0.075;
 
-        // Position nodes & calculate physical coordinates
-        const physNodes = nodes.map((node) => {
-            node.x += node.vx;
-            node.y += node.vy;
-            if (node.x < 0 || node.x > 1) node.vx *= -1;
-            if (node.y < 0 || node.y > 1) node.vy *= -1;
-
-            const px = node.x * w + Math.sin(t * 0.4 + node.phase) * 8 + pxCurr * 15;
-            const py = node.y * h + Math.cos(t * 0.3 + node.phase) * 8 + pyCurr * 12;
-            return { px, py, radius: node.radius, alpha: node.alpha };
-        });
-
-        // Interconnecting lines between close nodes
-        const maxDist = 170;
-        for (let i = 0; i < physNodes.length; i++) {
-            for (let j = i + 1; j < physNodes.length; j++) {
-                const n1 = physNodes[i];
-                const n2 = physNodes[j];
-                const dx = n1.px - n2.px;
-                const dy = n1.py - n2.py;
+                // Cursor repulsion force field
+                const dx = n.x - mouseX;
+                const dy = n.y - mouseY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                if (dist < maxDist) {
-                    const lineAlpha = (1.0 - dist / maxDist) * 0.18;
+                let repelFx = 0, repelFy = 0;
+                if (dist < mouseRadius && dist > 0.1) {
+                    const factor = Math.pow(1 - dist / mouseRadius, 2) * 16.0;
+                    repelFx = (dx / dist) * factor;
+                    repelFy = (dy / dist) * factor;
+                }
+
+                // Update velocity with spring force + cursor push + damping
+                n.vx = (n.vx + springFx + repelFx) * 0.83;
+                n.vy = (n.vy + springFy + repelFy) * 0.83;
+
+                // Integrate position
+                n.x += n.vx;
+                n.y += n.vy;
+            }
+        }
+
+        /* 3. Render Kinetic Matrix Spring-Mass Lattice Lines (Light Theme) */
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const n1 = grid[r][c];
+
+                // Horizontal Spring Connection
+                if (c < COLS - 1) {
+                    const n2 = grid[r][c + 1];
+                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
+                    const lineAlpha = 0.16 + Math.min(strain * 0.03, 0.50);
                     ctx.beginPath();
-                    ctx.moveTo(n1.px, n1.py);
-                    ctx.lineTo(n2.px, n2.py);
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.0;
+                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.02, 1.2);
+                    ctx.stroke();
+                }
+
+                // Vertical Spring Connection
+                if (r < ROWS - 1) {
+                    const n2 = grid[r + 1][c];
+                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
+                    const lineAlpha = 0.16 + Math.min(strain * 0.03, 0.50);
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
+                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.02, 1.2);
                     ctx.stroke();
                 }
             }
         }
 
-        // Draw individual glowing nodes
-        for (const n of physNodes) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(n.px, n.py, n.radius, 0, Math.PI * 2);
-            ctx.fillStyle   = '#ffffff';
-            ctx.shadowBlur  = 10;
-            ctx.shadowColor = 'rgba(10, 99, 255, 0.8)';
-            ctx.globalAlpha = n.alpha;
-            ctx.fill();
-            ctx.restore();
+        /* 4. Render Mass Node Dots & Synaptic Data Pulses */
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const n = grid[r][c];
+                const dx = n.x - n.xr * w;
+                const dy = n.y - n.yr * h;
+                const strain = Math.sqrt(dx * dx + dy * dy);
+
+                ctx.save();
+                ctx.beginPath();
+                const dotR = 2.0 + Math.min(strain * 0.08, 2.5);
+                ctx.arc(n.x, n.y, dotR, 0, Math.PI * 2);
+
+                if (strain > 8) {
+                    ctx.fillStyle   = '#0a63ff';
+                    ctx.shadowBlur  = 12;
+                    ctx.shadowColor = 'rgba(10, 99, 255, 0.9)';
+                } else {
+                    ctx.fillStyle   = 'rgba(5, 15, 51, 0.38)';
+                }
+                ctx.fill();
+                ctx.restore();
+            }
         }
 
+        /* 5. Traveling Synaptic Data Packets along Matrix Grid */
+        const packetCount = 5;
+        for (let p = 0; p < packetCount; p++) {
+            const pRow = (p * 2 + 1) % ROWS;
+            const phase = ((t * 0.35) + (p * 0.22)) % 1.0;
+            const pColFloat = phase * (COLS - 1);
+            const cIdx = Math.floor(pColFloat);
+            const subRatio = pColFloat - cIdx;
+
+            if (cIdx < COLS - 1) {
+                const nodeA = grid[pRow][cIdx];
+                const nodeB = grid[pRow][cIdx + 1];
+                const px = lerp(nodeA.x, nodeB.x, subRatio);
+                const py = lerp(nodeA.y, nodeB.y, subRatio);
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle   = '#ffffff';
+                ctx.shadowBlur  = 14;
+                ctx.shadowColor = '#0a63ff';
+                ctx.fill();
+                ctx.restore();
+            }
         }
     }
 
