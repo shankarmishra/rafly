@@ -2998,8 +2998,8 @@
 
 .sig-h-inner {
     display: block;
-    transform: translateY(110%);
-    filter: blur(10px);
+    transform: translateY(0);
+    filter: blur(0);
     will-change: transform, filter;
     transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
 }
@@ -3040,8 +3040,8 @@
     color: #3a4468;
     max-width: 500px;
     margin: 0 0 1.75rem;
-    opacity: 0;
-    transform: translateY(16px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.6s ease 0.48s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.48s;
 }
 .sig-hero--entered .sig-body { opacity: 1; transform: translateY(0); }
@@ -3053,8 +3053,8 @@
     gap: 0.9rem;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
-    opacity: 0;
-    transform: translateY(16px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.6s ease 0.56s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.56s;
 }
 .sig-hero--entered .sig-actions { opacity: 1; transform: translateY(0); }

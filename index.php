@@ -461,7 +461,7 @@ require __DIR__ . '/partials/social-rail.php';
        Left (~44%): Editorial typography with exact 3-line headline & light sweep accent.
        Right (~56%): Generative Canvas2D + SVG 3D Signal Field sculpture.
        ========================================================================== */ ?>
-    <section class="section hero sig-hero" id="home" data-hero aria-label="RAFly — Digital Growth Studio">
+    <section class="section hero sig-hero sig-hero--entered grs-hero--entered" id="home" data-hero data-sig-hero aria-label="RAFly — Digital Growth Studio">
 
         <?php /* ── 8-LAYER ENVIRONMENT & TEXTURE SYSTEM ── */ ?>
         <div class="sig-env" aria-hidden="true">
