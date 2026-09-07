@@ -187,7 +187,7 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 2. Render Triangulated Geometric Mesh Facets & Uniform Kinetic Waves */
+        /* 2. Render Triangulated Geometric Mesh Facets & Full-Grid Wave Animation */
         for (let r = 0; r < ROWS - 1; r++) {
             for (let c = 0; c < COLS - 1; c++) {
                 const n1 = grid[r][c];
@@ -195,9 +195,9 @@ export function initHeroGrowthField(host) {
                 const n3 = grid[r + 1][c + 1];
                 const n4 = grid[r][c + 1];
 
-                const wave = Math.sin(t * 1.4 + (r * 0.30) + (c * 0.20)) * 0.5 + 0.5;
+                const wave = Math.sin(t * 1.5 + (r * 0.28) + (c * 0.18)) * 0.5 + 0.5;
                 const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                const alpha = 0.012 + wave * 0.028 + Math.min(strain * 0.02, 0.08);
+                const alpha = 0.035 + wave * 0.045 + Math.min(strain * 0.02, 0.08);
 
                 // Triangle 1 Facet Fill
                 ctx.beginPath();
@@ -214,7 +214,7 @@ export function initHeroGrowthField(host) {
                 ctx.lineTo(n3.x, n3.y);
                 ctx.lineTo(n4.x, n4.y);
                 ctx.closePath();
-                ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.70})`;
+                ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.85})`;
                 ctx.fill();
             }
         }
@@ -227,39 +227,42 @@ export function initHeroGrowthField(host) {
                 // Horizontal Spring Line
                 if (c < COLS - 1) {
                     const n2 = grid[r][c + 1];
+                    const wave = Math.sin(t * 1.5 + (r * 0.22) + (c * 0.14)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.14 + Math.min(strain * 0.03, 0.45);
+                    const lineAlpha = 0.26 + wave * 0.18 + Math.min(strain * 0.03, 0.35);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.02, 1.2);
+                    ctx.lineWidth   = 1.1 + Math.min(strain * 0.02, 1.2);
                     ctx.stroke();
                 }
 
                 // Vertical Spring Line
                 if (r < ROWS - 1) {
                     const n2 = grid[r + 1][c];
+                    const wave = Math.sin(t * 1.5 + (r * 0.14) + (c * 0.22)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.14 + Math.min(strain * 0.03, 0.45);
+                    const lineAlpha = 0.26 + wave * 0.18 + Math.min(strain * 0.03, 0.35);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.02, 1.2);
+                    ctx.lineWidth   = 1.1 + Math.min(strain * 0.02, 1.2);
                     ctx.stroke();
                 }
 
                 // Diagonal Triangle Spring Line (Top-Left to Bottom-Right)
                 if (r < ROWS - 1 && c < COLS - 1) {
                     const n2 = grid[r + 1][c + 1];
+                    const wave = Math.sin(t * 1.5 + (r * 0.20) + (c * 0.20)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.10 + Math.min(strain * 0.025, 0.40);
+                    const lineAlpha = 0.22 + wave * 0.16 + Math.min(strain * 0.025, 0.30);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = `rgba(56, 189, 248, ${lineAlpha})`;
-                    ctx.lineWidth   = 0.9 + Math.min(strain * 0.015, 1.0);
+                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.015, 1.0);
                     ctx.stroke();
                 }
             }
@@ -275,15 +278,16 @@ export function initHeroGrowthField(host) {
 
                 ctx.save();
                 ctx.beginPath();
-                const dotR = 2.0 + Math.min(strain * 0.08, 2.5);
+                const dotR = 2.2 + Math.min(strain * 0.08, 2.5);
                 ctx.arc(n.x, n.y, dotR, 0, Math.PI * 2);
 
-                if (strain > 8) {
+                const nodePulse = Math.sin(t * 2.2 + (r * 0.4) + (c * 0.3)) > 0.65;
+                if (strain > 5 || nodePulse) {
                     ctx.fillStyle   = '#0a63ff';
-                    ctx.shadowBlur  = 12;
-                    ctx.shadowColor = 'rgba(10, 99, 255, 0.9)';
+                    ctx.shadowBlur  = 10;
+                    ctx.shadowColor = 'rgba(10, 99, 255, 0.85)';
                 } else {
-                    ctx.fillStyle   = 'rgba(5, 15, 51, 0.38)';
+                    ctx.fillStyle   = 'rgba(10, 99, 255, 0.50)';
                 }
                 ctx.fill();
                 ctx.restore();
