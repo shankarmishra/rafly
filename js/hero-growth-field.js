@@ -178,9 +178,9 @@ export function initHeroGrowthField(host) {
     function ribbonGradient(pts, color, alpha) {
         const [x0, y0, , , , , x3, y3] = pts;
         const grad = ctx.createLinearGradient(x0, y0, x3, y3);
-        grad.addColorStop(0.00, `rgba(10, 99, 255, 0.05)`);
-        grad.addColorStop(0.25, `rgba(10, 99, 255, ${alpha * 0.65})`);
-        grad.addColorStop(0.70, `rgba(0, 180, 216, ${alpha * 0.90})`);
+        grad.addColorStop(0.00, `rgba(10, 99, 255, 0.12)`);
+        grad.addColorStop(0.20, `rgba(10, 99, 255, ${alpha * 0.75})`);
+        grad.addColorStop(0.65, `rgba(56, 189, 248, ${alpha * 0.95})`);
         grad.addColorStop(1.00, `rgba(10, 99, 255, ${alpha * 1.00})`);
         return grad;
     }
@@ -218,8 +218,8 @@ export function initHeroGrowthField(host) {
         for (const rib of ribbons) {
             const isCap    = activeCap === rib.key;
             const isDimmed = activeCap && !isCap && !isSyncing;
-            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.22 : (isCap ? 1.0 : 0.70));
-            const lWidth   = isSyncing ? rib.width * 1.5 : (isDimmed ? rib.width * 0.7 : rib.width * (isCap ? 1.8 : 1.1));
+            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.22 : (isCap ? 1.0 : 0.75));
+            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.75 : rib.width * (isCap ? 1.9 : 1.25));
 
             const color  = CAP_COLORS[rib.key] || { h: 217, s: 95, l: 54 };
             const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
@@ -229,8 +229,8 @@ export function initHeroGrowthField(host) {
             ctx.beginPath();
             ctx.moveTo(x0, y0);
             ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.40);
-            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 4.8 : 3.2);
+            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.45);
+            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 5.0 : 3.4);
             ctx.lineCap     = 'round';
             ctx.stroke();
 
@@ -246,18 +246,18 @@ export function initHeroGrowthField(host) {
             // Connection node endpoint target rings at each card
             if (!isDimmed || isSyncing) {
                 // Outer pulse target ring
-                const targetPulseR = 6.0 + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.0;
+                const targetPulseR = 6.5 + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.2;
                 ctx.beginPath();
                 ctx.arc(x0, y0, targetPulseR, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.85 : 0.40})`;
-                ctx.lineWidth   = 1.0;
+                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.90 : 0.45})`;
+                ctx.lineWidth   = 1.1;
                 ctx.stroke();
 
                 // Solid center node dot
                 ctx.beginPath();
-                ctx.arc(x0, y0, isCap ? 4.2 : 3.0, 0, Math.PI * 2);
+                ctx.arc(x0, y0, isCap ? 4.5 : 3.2, 0, Math.PI * 2);
                 ctx.fillStyle   = isCap ? '#ffffff' : '#90c2ff';
-                ctx.shadowBlur  = isCap ? 14 : 6;
+                ctx.shadowBlur  = isCap ? 16 : 8;
                 ctx.shadowColor = '#0a63ff';
                 ctx.fill();
             }
