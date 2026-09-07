@@ -150,22 +150,10 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 1. Fluid Ambient Background Mesh Orbs (Light Mode Spectrum) */
-        const orb1X = cx + Math.sin(t * 0.25) * (w * 0.22) + pxCurr * 45;
-        const orb1Y = cy + Math.cos(t * 0.20) * (h * 0.18) + pyCurr * 35;
-        const orb1  = ctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, w * 0.40);
-        orb1.addColorStop(0.0, 'rgba(10, 99, 255, 0.12)');
-        orb1.addColorStop(0.5, 'rgba(56, 189, 248, 0.05)');
-        orb1.addColorStop(1.0, 'transparent');
-        ctx.beginPath();
-        ctx.arc(orb1X, orb1Y, w * 0.40, 0, Math.PI * 2);
-        ctx.fillStyle = orb1;
-        ctx.fill();
-
-        /* 2. Physics Step — Hooke's Law Spring Restoring + Cursor Force Field */
+        /* 1. Physics Step — Hooke's Law Spring Restoring + Cursor Force Field */
         const mouseX = cx + pxCurr * (w * 0.9);
         const mouseY = cy + pyCurr * (h * 0.9);
-        const mouseRadius = 190;
+        const mouseRadius = 220;
 
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
@@ -184,7 +172,7 @@ export function initHeroGrowthField(host) {
 
                 let repelFx = 0, repelFy = 0;
                 if (dist < mouseRadius && dist > 0.1) {
-                    const factor = Math.pow(1 - dist / mouseRadius, 2) * 16.0;
+                    const factor = Math.pow(1 - dist / mouseRadius, 2) * 18.0;
                     repelFx = (dx / dist) * factor;
                     repelFy = (dy / dist) * factor;
                 }
@@ -199,16 +187,49 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 3. Render Kinetic Matrix Spring-Mass Lattice Lines (Light Theme) */
+        /* 2. Render Triangulated Geometric Mesh Facets & Facet Highlights */
+        for (let r = 0; r < ROWS - 1; r++) {
+            for (let c = 0; c < COLS - 1; c++) {
+                const n1 = grid[r][c];
+                const n2 = grid[r + 1][c];
+                const n3 = grid[r + 1][c + 1];
+                const n4 = grid[r][c + 1];
+
+                const centerDist = Math.hypot((n1.x + n3.x) / 2 - mouseX, (n1.y + n3.y) / 2 - mouseY);
+                if (centerDist < mouseRadius * 1.2) {
+                    const alpha = Math.max(0, (1 - centerDist / (mouseRadius * 1.2)) * 0.08);
+
+                    // Triangle 1 Facet Fill
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.lineTo(n3.x, n3.y);
+                    ctx.closePath();
+                    ctx.fillStyle = `rgba(10, 99, 255, ${alpha})`;
+                    ctx.fill();
+
+                    // Triangle 2 Facet Fill
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n3.x, n3.y);
+                    ctx.lineTo(n4.x, n4.y);
+                    ctx.closePath();
+                    ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.75})`;
+                    ctx.fill();
+                }
+            }
+        }
+
+        /* 3. Render Triangulated Mesh Spring Lines (Horizontal, Vertical, & Diagonal) */
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
                 const n1 = grid[r][c];
 
-                // Horizontal Spring Connection
+                // Horizontal Spring Line
                 if (c < COLS - 1) {
                     const n2 = grid[r][c + 1];
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.16 + Math.min(strain * 0.03, 0.50);
+                    const lineAlpha = 0.14 + Math.min(strain * 0.03, 0.45);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
@@ -217,16 +238,29 @@ export function initHeroGrowthField(host) {
                     ctx.stroke();
                 }
 
-                // Vertical Spring Connection
+                // Vertical Spring Line
                 if (r < ROWS - 1) {
                     const n2 = grid[r + 1][c];
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.16 + Math.min(strain * 0.03, 0.50);
+                    const lineAlpha = 0.14 + Math.min(strain * 0.03, 0.45);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
                     ctx.lineWidth   = 1.0 + Math.min(strain * 0.02, 1.2);
+                    ctx.stroke();
+                }
+
+                // Diagonal Triangle Spring Line (Top-Left to Bottom-Right)
+                if (r < ROWS - 1 && c < COLS - 1) {
+                    const n2 = grid[r + 1][c + 1];
+                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
+                    const lineAlpha = 0.10 + Math.min(strain * 0.025, 0.40);
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${lineAlpha})`;
+                    ctx.lineWidth   = 0.9 + Math.min(strain * 0.015, 1.0);
                     ctx.stroke();
                 }
             }
@@ -257,27 +291,34 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 5. Traveling Synaptic Data Packets along Matrix Grid */
-        const packetCount = 5;
+        /* 5. Traveling Synaptic Data Packets & Floating Geometric Triangles */
+        const packetCount = 6;
         for (let p = 0; p < packetCount; p++) {
-            const pRow = (p * 2 + 1) % ROWS;
-            const phase = ((t * 0.35) + (p * 0.22)) % 1.0;
+            const pRow = (p * 2 + 1) % (ROWS - 1);
+            const phase = ((t * 0.30) + (p * 0.18)) % 1.0;
             const pColFloat = phase * (COLS - 1);
             const cIdx = Math.floor(pColFloat);
             const subRatio = pColFloat - cIdx;
 
             if (cIdx < COLS - 1) {
                 const nodeA = grid[pRow][cIdx];
-                const nodeB = grid[pRow][cIdx + 1];
+                const nodeB = grid[pRow + 1][cIdx + 1]; // Move along diagonal triangle spring!
                 const px = lerp(nodeA.x, nodeB.x, subRatio);
                 const py = lerp(nodeA.y, nodeB.y, subRatio);
 
+                // Draw kinetic triangle particle at packet position
                 ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(t * 1.5 + p);
                 ctx.beginPath();
-                ctx.arc(px, py, 3.5, 0, Math.PI * 2);
-                ctx.fillStyle   = '#ffffff';
-                ctx.shadowBlur  = 14;
-                ctx.shadowColor = '#0a63ff';
+                const size = 6.0;
+                ctx.moveTo(0, -size);
+                ctx.lineTo(size * 0.866, size * 0.5);
+                ctx.lineTo(-size * 0.866, size * 0.5);
+                ctx.closePath();
+                ctx.fillStyle   = 'rgba(10, 99, 255, 0.95)';
+                ctx.shadowBlur  = 12;
+                ctx.shadowColor = '#38bdf8';
                 ctx.fill();
                 ctx.restore();
             }

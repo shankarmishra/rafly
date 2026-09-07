@@ -2798,7 +2798,7 @@
     background-image:
         linear-gradient(to right, #0a63ff 1px, transparent 1px),
         linear-gradient(to bottom, #0a63ff 1px, transparent 1px);
-    background-size: 44px 44px;
+    background-size: 22px 22px;
     mask-image: radial-gradient(ellipse at center, #000 35%, transparent 82%);
     -webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 82%);
     transform: perspective(900px) rotateX(12deg);
@@ -2807,7 +2807,7 @@
 
 @keyframes sigGridDrift {
     0% { transform: perspective(900px) rotateX(12deg) translateY(0); }
-    100% { transform: perspective(900px) rotateX(12deg) translateY(22px); }
+    100% { transform: perspective(900px) rotateX(12deg) translateY(11px); }
 }
 
 .sig-env__dots {
@@ -2815,7 +2815,7 @@
     inset: 0;
     opacity: 0.05;
     background-image: radial-gradient(#050f33 1.2px, transparent 1.2px);
-    background-size: 22px 22px;
+    background-size: 11px 11px;
 }
 
 .sig-env__glow {
@@ -2994,105 +2994,33 @@
 
 .sig-body--centered {
     text-align: center;
-    max-width: 640px;
+    max-width: 680px;
     margin: 0 auto 2.2rem;
-    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
-    color: #3b466d;
+    font-size: clamp(1.125rem, 1.0rem + 0.5vw, 1.32rem);
+    line-height: 1.62;
+    letter-spacing: -0.015em;
+    font-weight: 450;
+    color: #2b365e;
 }
 
-.sig-actions--centered {
-    justify-content: center;
-    margin-bottom: 2.2rem;
-}
-
-.sig-trust--centered {
-    justify-content: center;
-}
-
-.sig-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    font-family: var(--font-mono, monospace);
-    font-size: 0.6875rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-3, #5b6384);
-    margin-bottom: 1.25rem;
-}
-
-.sig-eyebrow__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-}
-
-.sig-eyebrow__label { font-weight: 700; color: var(--ink, #050f33); }
-.sig-eyebrow__sep { opacity: 0.4; }
-
-/* Headline */
-.sig-headline {
-    font-family: var(--font-display, 'Space Grotesk', sans-serif);
-    font-size: clamp(3.6rem, 5.0vw, 5.8rem);
-    line-height: 0.90;
-    letter-spacing: -0.06em;
-    font-weight: 800;
-    color: #050f33;
-    margin: 0 0 1.25rem;
-}
-
-.sig-h-line {
-    display: block;
-    overflow: hidden;
-}
-
-.sig-h-inner {
-    display: block;
-    transform: translateY(0);
-    filter: blur(0);
-    will-change: transform, filter;
-    transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
-}
-
-.sig-hero--entered .sig-h-line[data-line="1"] .sig-h-inner { transform: translateY(0); filter: blur(0); transition-delay: 0.18s; }
-.sig-hero--entered .sig-h-line[data-line="2"] .sig-h-inner { transform: translateY(0); filter: blur(0); transition-delay: 0.28s; }
-.sig-hero--entered .sig-h-line[data-line="3"] .sig-h-inner { transform: translateY(0); filter: blur(0); transition-delay: 0.38s; }
-
-.sig-h-line--accent .sig-h-inner { color: #0a63ff; }
-
-/* Light sweep on "Scale smarter." */
-.sig-h-focus {
-    display: inline;
-    background: linear-gradient(110deg,
-        #0a63ff 0%,
-        #0a63ff 35%,
-        #60a5fa 50%,
-        #0a63ff 65%,
-        #0a63ff 100%);
-    background-size: 300% auto;
+.sig-body-highlight {
+    font-weight: 650;
+    background: linear-gradient(120deg, #0a63ff 0%, #0284c7 60%, #38bdf8 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
-}
-.sig-h-focus.is-sweeping {
-    animation: sigSweep 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-@keyframes sigSweep {
-    0% { background-position: 100% center; }
-    100% { background-position: 0% center; }
 }
 
 /* Body Copy */
 .sig-body {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.25rem);
-    line-height: 1.5;
-    color: #3a4468;
-    max-width: 500px;
-    margin: 0 0 1.75rem;
+    font-size: clamp(1.125rem, 1.0rem + 0.5vw, 1.32rem);
+    line-height: 1.62;
+    letter-spacing: -0.015em;
+    color: #2b365e;
+    max-width: 680px;
+    margin: 0 0 2.2rem;
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.6s ease 0.48s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.48s;

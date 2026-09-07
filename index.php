@@ -497,7 +497,7 @@ require __DIR__ . '/partials/social-rail.php';
 
                 <?php /* Body copy */ ?>
                 <p class="sig-body sig-body--centered">
-                    RAFly transforms ambitious ideas into market-dominating digital platforms with high-velocity engineering, security, and growth engines.
+                    RAFly transforms ambitious ideas into <span class="sig-body-highlight">market-dominating digital platforms</span> with high-velocity engineering, security, and growth engines.
                 </p>
 
                 <?php /* CTAs */ ?>
