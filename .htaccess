@@ -33,10 +33,10 @@ Options -Indexes
     RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
     RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
-    # Subdomain rewrite for admin.rafly.in (if pointing to root web directory)
+    # Subdomain rewrite for admin.rafly.in (strip redundant /admin/ prefix if present)
     RewriteCond %{HTTP_HOST} ^admin\.rafly\.in$ [NC]
-    RewriteCond %{REQUEST_URI} !^/admin/
-    RewriteRule ^(.*)$ /admin/$1 [L]
+    RewriteCond %{REQUEST_URI} ^/admin/(.*)$
+    RewriteRule ^admin/(.*)$ /$1 [R=301,L]
 
     # RewriteCond %{HTTP_HOST} !^www\. [NC]
     # RewriteCond %{HTTP_HOST} !^localhost [NC]
