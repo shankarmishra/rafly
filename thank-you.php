@@ -9,7 +9,8 @@ $page = [
     'id'        => 'contact',
     'title'     => 'Thank You | ' . SITE_NAME,
     'desc'      => 'Your request has been received. The Rafly team will be in touch shortly.',
-    'bodyClass' => 'page-notice',
+    'styles'    => ['home', 'home-scenes'],
+    'module'    => 'home',
     'noindex'   => true,
 ];
 require __DIR__ . '/partials/head.php';

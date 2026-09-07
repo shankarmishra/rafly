@@ -51,6 +51,28 @@ $compact     = $compact     ?? false;
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="field">
+            <label for="<?= e($formId) ?>-pillar">Service Pillar <span class="req" aria-hidden="true">*</span></label>
+            <select class="form-control" id="<?= e($formId) ?>-pillar" name="service_interest" required>
+                <option value="" disabled selected>Select Primary Pillar...</option>
+                <option value="01_build">01. BUILD — Web App &amp; Store Infrastructure</option>
+                <option value="02_protect">02. PROTECT — Cyber Security Hardening &amp; Recovery</option>
+                <option value="03_grow">03. GROW — Performance Marketing &amp; Lead Automation</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="<?= e($formId) ?>-budget">Indicative Budget Bracket <span class="req" aria-hidden="true">*</span></label>
+            <select class="form-control" id="<?= e($formId) ?>-budget" name="budget_bracket" required>
+                <option value="" disabled selected>Select Budget Range...</option>
+                <option value="under_30k">₹25,000 – ₹45,000 (Local Service / Clinic)</option>
+                <option value="45k_100k">₹45,000 – ₹1,00,000 (E-Commerce Storefront / App)</option>
+                <option value="100k_plus">₹1,00,000+ (Custom System &amp; Full Retainer)</option>
+                <option value="emergency">₹12,000 – ₹25,000 (Security Emergency Recovery)</option>
+            </select>
+        </div>
+    </div>
+
     <div class="field">
         <div class="field-label-row">
             <label for="<?= e($formId) ?>-desc">Project Context / Requirements <span class="req" aria-hidden="true">*</span></label>

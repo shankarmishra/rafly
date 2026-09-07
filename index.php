@@ -200,21 +200,6 @@ $REELS_CAPABILITIES = [
 $CONTENT_REELS_POINTS = array_column($REELS_CAPABILITIES, 'title');
 $APP_POINTS = &$CONTENT_REELS_POINTS;
 
-$MODULES = [
-    ['01', 'web-development',         'Web',       'Sites and web apps that load fast and do not fall over as you grow.',            '--svc-web',       'code'],
-    ['02', 'web-security',            'Security',  'A practical look at what someone probing your site would find first.',           '--svc-security',  'shield'],
-    ['03', 'marketing-advertisement', 'Marketing', 'Campaigns built around who is actually buying, reported in plain language.',     '--svc-marketing', 'megaphone'],
-    ['04', 'content-creation',        'Content',   'Copy that says what you do, in your words, without the filler.',                 '--svc-content',   'pencil'],
-    ['05', 'ecommerce-support',       'Commerce',  'The unglamorous side of selling online, kept in order.',                         '--svc-ecom',      'shopping-cart'],
-];
-
-$DECK = [
-    ['web',       'Web Development', '#0a63ff', '#4b8bff'],
-    ['security',  'Web Security',    '#0230c6', '#3d6ee8'],
-    ['marketing', 'Marketing',       '#1b6bff', '#6aa4ff'],
-    ['content',   'Content',         '#001a7a', '#3a63d8'],
-    ['commerce',  'Commerce',        '#0847d6', '#5c93ff'],
-];
 
 /**
  * WHAT WE BUILD — FOUR KINDS OF BUILD, ONE CONNECTED TEAM
@@ -400,8 +385,8 @@ foreach (services_all() as $svc) {
 
 $page = [
     'id'        => 'home',
-    'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
-    'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
+    'title'     => 'RAFly Digital Growth — Build. Protect. Grow.',
+    'desc'      => 'High-performance web infrastructure, cyber security protection, and 24/7 lead qualification systems. Your business is our responsibility.',
     'bodyClass' => 'page-home',
     'styles'    => ['home', 'home-scenes'],
     'module'    => 'home',
@@ -476,189 +461,244 @@ require __DIR__ . '/partials/social-rail.php';
        Left (~44%): Editorial typography with exact 3-line headline & light sweep accent.
        Right (~56%): Generative Canvas2D + SVG 3D Signal Field sculpture.
        ========================================================================== */ ?>
-    <section class="section hero sig-hero" id="home" data-hero aria-label="RAFly — Digital Growth Studio">
+    <section class="section hero rafly-hero" id="home" data-hero aria-label="RAFly — Digital Growth Ecosystem">
 
-        <?php /* ── 8-LAYER ENVIRONMENT & TEXTURE SYSTEM ── */ ?>
-        <div class="sig-env" aria-hidden="true">
-            <div class="sig-env__grain"></div>
-            <div class="sig-env__grid"></div>
-            <div class="sig-env__dots"></div>
-            <div class="sig-env__glow glow-primary"></div>
-            <div class="sig-env__glow glow-secondary"></div>
-            <div class="sig-env__scanbeam"></div>
-            <svg class="sig-env__blueprint" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
-                <path class="sig-bp-line line-a" d="M -100,220 Q 380,120 780,440 T 1540,620" stroke="url(#sigBpGrad1)" stroke-width="1.5" />
-                <path class="sig-bp-line line-b" d="M -100,640 Q 420,780 780,440 T 1540,180" stroke="url(#sigBpGrad2)" stroke-width="1.5" />
-                <defs>
-                    <linearGradient id="sigBpGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.45" />
-                        <stop offset="50%" stop-color="#0891b2" stop-opacity="0.25" />
-                        <stop offset="100%" stop-color="#0a63ff" stop-opacity="0" />
-                    </linearGradient>
-                    <linearGradient id="sigBpGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#0230c6" stop-opacity="0.35" />
-                        <stop offset="50%" stop-color="#6134c9" stop-opacity="0.20" />
-                        <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div class="sig-env__ghost-words" data-ghost-words>
-                <span class="sig-ghost" data-ghost="build">BUILD</span>
-                <span class="sig-ghost" data-ghost="protect">PROTECT</span>
-                <span class="sig-ghost" data-ghost="create">CREATE</span>
-                <span class="sig-ghost" data-ghost="grow">GROW</span>
-                <span class="sig-ghost" data-ghost="convert">CONVERT</span>
+        <?php /* ── 1. LIGHT ATMOSPHERIC ENVIRONMENT & FINE TECHNICAL GRID ── */ ?>
+        <div class="rafly-hero__env" aria-hidden="true">
+            <div class="rafly-hero__bg-base"></div>
+            <div class="rafly-hero__bg-glow"></div>
+            <div class="rafly-hero__grid"></div>
+            <div class="rafly-hero__orbit-bg">
+                <svg viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
+                    <ellipse cx="720" cy="450" rx="580" ry="320" stroke="rgba(10, 99, 255, 0.035)" stroke-width="1" stroke-dasharray="4 8" />
+                    <ellipse cx="720" cy="450" rx="380" ry="210" stroke="rgba(8, 145, 178, 0.04)" stroke-width="1" />
+                </svg>
             </div>
-            <div class="sig-env__light-sweep"></div>
+            <div class="rafly-hero__particles" data-hero-particles></div>
+            <div class="rafly-hero__beam" aria-hidden="true"></div>
         </div>
 
-        <?php /* ── MAIN CONTAINER ── */ ?>
-        <div class="container sig-container">
-            <div class="sig-grid">
-
-                <?php /* ── LEFT SIDE — EDITORIAL CONTENT (~44%) ── */ ?>
-                <div class="sig-content">
-
-                    <?php /* Eyebrow */ ?>
-                    <div class="sig-eyebrow">
-                        <span class="sig-eyebrow__dot" aria-hidden="true"></span>
-                        <span class="sig-eyebrow__label">DIGITAL GROWTH PARTNER</span>
-                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
-                        <span class="sig-eyebrow__item">WEB</span>
-                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
-                        <span class="sig-eyebrow__item">SECURITY</span>
-                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
-                        <span class="sig-eyebrow__item">GROWTH</span>
-                        <span class="sig-eyebrow__sep" aria-hidden="true">/</span>
-                        <span class="sig-eyebrow__item">COMMERCE</span>
-                    </div>
-
-                    <?php /* Headline — Exactly 3 lines */ ?>
-                    <h1 class="sig-headline" aria-label="Build fast. Grow faster. Scale smarter.">
-                        <span class="sig-h-line" data-line="1">
-                            <span class="sig-h-mask"><span class="sig-h-inner">Build fast.</span></span>
-                        </span>
-                        <span class="sig-h-line" data-line="2">
-                            <span class="sig-h-mask"><span class="sig-h-inner">Grow faster.</span></span>
-                        </span>
-                        <span class="sig-h-line sig-h-line--accent" data-line="3">
-                            <span class="sig-h-mask">
-                                <span class="sig-h-inner">
-                                    <span class="sig-h-focus" data-light-sweep>Scale smarter.</span>
-                                </span>
-                            </span>
-                        </span>
-                    </h1>
-
-                    <?php /* Body copy */ ?>
-                    <p class="sig-body">
-                        One team building the digital systems that turn attention into growth.
-                    </p>
-
-                    <?php /* CTAs */ ?>
-                    <div class="sig-actions">
-                        <button type="button" class="sig-btn sig-btn--primary" data-modal-open="consultationModal" data-magnetic>
-                            <span class="sig-btn__label">Book a free consultation</span>
-                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                            <span class="sig-btn__sheen" aria-hidden="true"></span>
-                        </button>
-                        <a class="sig-btn sig-btn--secondary" href="#approach" data-magnetic>
-                            <span class="sig-btn__label">See our work</span>
-                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-up-right') ?></span>
-                        </a>
-                    </div>
-
-                    <?php /* Compact Editorial Trust Row */ ?>
-                    <div class="sig-trust">
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◉</span>
-                            <span>48H DISCOVERY</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>SECURITY INCLUDED</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>100% IP OWNERSHIP</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>ONE UNIFIED TEAM</span>
-                        </span>
-                    </div>
-
-                </div><!-- /.sig-content -->
-
-                <?php /* ── RIGHT SIDE — SIGNATURE VISUAL: THE RAFly SIGNAL FIELD (~56%) ── */ ?>
-                <div class="sig-visual" aria-label="Interactive RAFly Signal Field Sculpture">
-
-                    <div class="sig-stage" data-signal-stage>
-
-                        <?php /* Multi-depth Canvas2D Signal Field */ ?>
-                        <div class="sig-3d-scene">
-                            <canvas class="sig-canvas" data-signal-canvas width="640" height="640" aria-hidden="true"></canvas>
-
-                            <?php /* SVG leader overlay for sparse capability indicators */ ?>
-                            <svg class="sig-annot-svg" viewBox="0 0 640 640" fill="none" aria-hidden="true">
-                                <path class="sig-leader sig-leader--web" data-leader="web" d="M 90,140 C 140,140 180,180 230,220" />
-                                <path class="sig-leader sig-leader--sec" data-leader="security" d="M 60,320 C 120,320 160,310 210,310" />
-                                <path class="sig-leader sig-leader--mkt" data-leader="marketing" d="M 550,140 C 500,140 460,180 410,220" />
-                                <path class="sig-leader sig-leader--cnt" data-leader="content" d="M 580,320 C 520,320 480,310 430,310" />
-                                <path class="sig-leader sig-leader--cmr" data-leader="commerce" d="M 320,570 C 320,510 320,460 320,410" />
-                            </svg>
-
-                            <?php /* Floating minimalist editorial labels (dimensional service nodes) */ ?>
-                            <div class="sig-tag sig-tag--web" data-sig-tag="web">
-                                <span class="sig-tag__icon"><?= icon('code') ?></span>
-                                <span class="sig-tag__idx">01</span>
-                                <span class="sig-tag__name">WEB</span>
-                                <span class="sig-tag__pulse"></span>
-                            </div>
-                            <div class="sig-tag sig-tag--sec" data-sig-tag="security">
-                                <span class="sig-tag__icon"><?= icon('shield') ?></span>
-                                <span class="sig-tag__idx">02</span>
-                                <span class="sig-tag__name">SECURITY</span>
-                                <span class="sig-tag__pulse"></span>
-                            </div>
-                            <div class="sig-tag sig-tag--mkt" data-sig-tag="marketing">
-                                <span class="sig-tag__icon"><?= icon('pie-chart') ?></span>
-                                <span class="sig-tag__idx">03</span>
-                                <span class="sig-tag__name">MARKETING</span>
-                                <span class="sig-tag__pulse"></span>
-                            </div>
-                            <div class="sig-tag sig-tag--cnt" data-sig-tag="content">
-                                <span class="sig-tag__icon"><?= icon('file-pen') ?></span>
-                                <span class="sig-tag__idx">04</span>
-                                <span class="sig-tag__name">CONTENT</span>
-                                <span class="sig-tag__pulse"></span>
-                            </div>
-                            <div class="sig-tag sig-tag--cmr" data-sig-tag="commerce">
-                                <span class="sig-tag__icon"><?= icon('shopping-cart') ?></span>
-                                <span class="sig-tag__idx">05</span>
-                                <span class="sig-tag__name">COMMERCE</span>
-                                <span class="sig-tag__pulse"></span>
-                            </div>
-
-                        </div><!-- /.sig-3d-scene -->
-
-                    </div><!-- /.sig-stage -->
-
-                </div><!-- /.sig-visual -->
-
-            </div><!-- /.sig-grid -->
-        </div><!-- /.container -->
-
-        <?php /* ── Scroll cue ── */ ?>
-        <div class="sig-scroll" aria-hidden="true">
-            <span class="sig-scroll__label">SCROLL TO DISCOVER</span>
-            <span class="sig-scroll__line"><i></i></span>
+        <?php /* ── 2. FRAMING: TOP LEFT SUBTLE BRANDING ── */ ?>
+        <div class="rafly-hero__top-left">
+            <div class="rafly-hero__brand">
+                <img src="<?= e(asset('assets/logo-mark.png')) ?>" alt="RAFly" class="rafly-hero__brand-mark" width="20" height="20">
+                <span class="rafly-hero__brand-label">RAFly</span>
+                <span class="rafly-hero__brand-sep">/</span>
+                <span class="rafly-hero__brand-tag">IDEAS &rarr; PRODUCTS &rarr; IMPACT</span>
+            </div>
         </div>
 
-    </section><!-- /.sig-hero -->
+        <?php /* ── 3. FRAMING: TOP RIGHT SUBTLE TYPOGRAPHY ── */ ?>
+        <div class="rafly-hero__top-right">
+            <div class="rafly-hero__tagline">
+                <span class="rafly-hero__tagline-main">SMART SOLUTIONS</span>
+                <span class="rafly-hero__tagline-sub">FOR A BRIGHTER TOMORROW</span>
+            </div>
+        </div>
+
+        <?php /* ── 4. THIN SUBTLE SVG CONNECTION PATHS ── */ ?>
+        <svg class="rafly-hero__connections" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+                <linearGradient id="raflyGradWeb" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0.15" />
+                </linearGradient>
+                <linearGradient id="raflyGradSec" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0891b2" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
+                </linearGradient>
+                <linearGradient id="raflyGradMkt" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#6134c9" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
+                </linearGradient>
+                <linearGradient id="raflyGradCnt" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0.15" />
+                </linearGradient>
+                <linearGradient id="raflyGradCmr" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stop-color="#0230c6" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
+                </linearGradient>
+                <filter id="raflyPathGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <g class="rafly-path-group" data-path="web">
+                <path class="rafly-path__base" d="M 450,180 C 557,180 610,394 664,394" stroke="rgba(10, 99, 255, 0.1)" stroke-width="1.5" fill="none" />
+                <path class="rafly-path__glow" d="M 450,180 C 557,180 610,394 664,394" stroke="url(#raflyGradWeb)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
+                <path class="rafly-path__core" d="M 450,180 C 557,180 610,394 664,394" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
+                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+            </g>
+
+            <g class="rafly-path-group" data-path="security">
+                <path class="rafly-path__base" d="M 420,450 C 530,450 585,450 640,450" stroke="rgba(8, 145, 178, 0.1)" stroke-width="1.5" fill="none" />
+                <path class="rafly-path__glow" d="M 420,450 C 530,450 585,450 640,450" stroke="url(#raflyGradSec)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
+                <path class="rafly-path__core" d="M 420,450 C 530,450 585,450 640,450" stroke="#22d3ee" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
+                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+            </g>
+
+            <g class="rafly-path-group" data-path="marketing">
+                <path class="rafly-path__base" d="M 990,180 C 883,180 830,394 776,394" stroke="rgba(97, 52, 201, 0.1)" stroke-width="1.5" fill="none" />
+                <path class="rafly-path__glow" d="M 990,180 C 883,180 830,394 776,394" stroke="url(#raflyGradMkt)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
+                <path class="rafly-path__core" d="M 990,180 C 883,180 830,394 776,394" stroke="#c084fc" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
+                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+            </g>
+
+            <g class="rafly-path-group" data-path="content">
+                <path class="rafly-path__base" d="M 1020,450 C 910,450 855,450 800,450" stroke="rgba(37, 99, 235, 0.1)" stroke-width="1.5" fill="none" />
+                <path class="rafly-path__glow" d="M 1020,450 C 910,450 855,450 800,450" stroke="url(#raflyGradCnt)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
+                <path class="rafly-path__core" d="M 1020,450 C 910,450 855,450 800,450" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
+                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+            </g>
+
+            <g class="rafly-path-group" data-path="commerce">
+                <path class="rafly-path__base" d="M 720,700 C 720,615 720,560 720,530" stroke="rgba(2, 48, 198, 0.1)" stroke-width="1.5" fill="none" />
+                <path class="rafly-path__glow" d="M 720,700 C 720,615 720,560 720,530" stroke="url(#raflyGradCmr)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
+                <path class="rafly-path__core" d="M 720,700 C 720,615 720,560 720,530" stroke="#93c5fd" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
+                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+            </g>
+        </svg>
+
+        <?php /* ── 5. SPATIAL STAGE: DOMINANT CENTRAL HUB + 5 SUPPORTING SERVICE CARDS ── */ ?>
+        <div class="rafly-hero__stage" data-hero-stage>
+
+            <!-- CENTRAL RAFly LOGO HUB (DOMINANT HERO ELEMENT) -->
+            <div class="rafly-hub" data-hero-hub>
+                <div class="rafly-hub__halo"></div>
+                <div class="rafly-hub__orbit rafly-hub__orbit--1"></div>
+                <div class="rafly-hub__orbit rafly-hub__orbit--2"></div>
+                <div class="rafly-hub__sphere">
+                    <div class="rafly-hub__sphere-shine"></div>
+                    <div class="rafly-hub__logo-wrap">
+                        <img src="<?= e(asset('assets/logo-mark.png')) ?>" alt="RAFly Core" class="rafly-hub__logo" width="72" height="72">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 01 WEB CARD (Upper-Left) -->
+            <a href="/services/web-development" class="rafly-card rafly-card--web" data-hero-card="web" aria-label="01 WEB - Web Development">
+                <div class="rafly-card__inner">
+                    <div class="rafly-card__icon-box rafly-card__icon-box--blue">
+                        <?= icon('code') ?>
+                    </div>
+                    <div class="rafly-card__content">
+                        <div class="rafly-card__header">
+                            <span class="rafly-card__num">01</span>
+                            <h3 class="rafly-card__title">WEB</h3>
+                        </div>
+                        <p class="rafly-card__desc">High-performance sites &amp; web apps</p>
+                    </div>
+                    <div class="rafly-card__action">
+                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 02 SECURITY CARD (Middle-Left) -->
+            <a href="/services/web-security" class="rafly-card rafly-card--security" data-hero-card="security" aria-label="02 SECURITY - Web Security">
+                <div class="rafly-card__inner">
+                    <div class="rafly-card__icon-box rafly-card__icon-box--cyan">
+                        <?= icon('shield') ?>
+                    </div>
+                    <div class="rafly-card__content">
+                        <div class="rafly-card__header">
+                            <span class="rafly-card__num">02</span>
+                            <h3 class="rafly-card__title">SECURITY</h3>
+                        </div>
+                        <p class="rafly-card__desc">Cyber security &amp; threat hardening</p>
+                    </div>
+                    <div class="rafly-card__action">
+                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 03 MARKETING CARD (Upper-Right) -->
+            <a href="/services/marketing-advertisement" class="rafly-card rafly-card--marketing" data-hero-card="marketing" aria-label="03 MARKETING - Growth & Ads">
+                <div class="rafly-card__inner">
+                    <div class="rafly-card__icon-box rafly-card__icon-box--violet">
+                        <?= icon('pie-chart') ?>
+                    </div>
+                    <div class="rafly-card__content">
+                        <div class="rafly-card__header">
+                            <span class="rafly-card__num">03</span>
+                            <h3 class="rafly-card__title">MARKETING</h3>
+                        </div>
+                        <p class="rafly-card__desc">Data-driven campaigns &amp; ROAS</p>
+                    </div>
+                    <div class="rafly-card__action">
+                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 04 CONTENT CARD (Middle-Right) -->
+            <a href="/services/content-creation" class="rafly-card rafly-card--content" data-hero-card="content" aria-label="04 CONTENT - Copy & Media">
+                <div class="rafly-card__inner">
+                    <div class="rafly-card__icon-box rafly-card__icon-box--blue">
+                        <?= icon('file-pen') ?>
+                    </div>
+                    <div class="rafly-card__content">
+                        <div class="rafly-card__header">
+                            <span class="rafly-card__num">04</span>
+                            <h3 class="rafly-card__title">CONTENT</h3>
+                        </div>
+                        <p class="rafly-card__desc">High-intent copy &amp; brand media</p>
+                    </div>
+                    <div class="rafly-card__action">
+                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 05 COMMERCE CARD (Bottom-Center) -->
+            <a href="/services/ecommerce-support" class="rafly-card rafly-card--commerce" data-hero-card="commerce" aria-label="05 COMMERCE - E-Commerce Support">
+                <div class="rafly-card__inner">
+                    <div class="rafly-card__icon-box rafly-card__icon-box--navy">
+                        <?= icon('shopping-cart') ?>
+                    </div>
+                    <div class="rafly-card__content">
+                        <div class="rafly-card__header">
+                            <span class="rafly-card__num">05</span>
+                            <h3 class="rafly-card__title">COMMERCE</h3>
+                        </div>
+                        <p class="rafly-card__desc">Storefront &amp; checkout operations</p>
+                    </div>
+                    <div class="rafly-card__action">
+                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                    </div>
+                </div>
+            </a>
+
+        </div><!-- /.rafly-hero__stage -->
+
+        <?php /* ── 6. FRAMING: BOTTOM LEFT SCROLL CUE ── */ ?>
+        <div class="rafly-hero__bottom-left">
+            <a href="#approach" class="rafly-hero__scroll-cue" aria-label="Scroll to discover">
+                <span class="rafly-hero__scroll-text">SCROLL TO DISCOVER</span>
+                <span class="rafly-hero__scroll-track">
+                    <i class="rafly-hero__scroll-bar"></i>
+                </span>
+            </a>
+        </div>
+
+        <?php /* ── 7. FRAMING: BOTTOM RIGHT PAGINATION DOTS ── */ ?>
+        <div class="rafly-hero__bottom-right" aria-hidden="true">
+            <div class="rafly-hero__dots">
+                <span class="rafly-hero__dot is-active" data-dot="web"></span>
+                <span class="rafly-hero__dot" data-dot="security"></span>
+                <span class="rafly-hero__dot" data-dot="marketing"></span>
+                <span class="rafly-hero__dot" data-dot="content"></span>
+                <span class="rafly-hero__dot" data-dot="commerce"></span>
+            </div>
+        </div>
+
+    </section><!-- /.rafly-hero -->
     <section class="section statement manifesto-scene has-tex" id="approach" data-manifesto aria-label="The difference">
         <!-- Generative Environment Layers -->
         <div class="manifesto-bg" aria-hidden="true">
@@ -778,9 +818,7 @@ require __DIR__ . '/partials/social-rail.php';
             <!-- Supporting Paragraph: Slower reveal, high legibility -->
             <p class="statement-sub manifesto-sub" data-r="rise">
                 Five separate vendors produce five separate deliverables and no system.
-                The website does not know what the campaign promised; the campaign does
-                not know what the store can actually ship. We build the parts that have
-                to agree, together, so that they do.
+                We operate as one unified team following a clear progression: <strong>Build the digital infrastructure &rarr; Protect the infrastructure &rarr; Grow the business.</strong>
             </p>
         </div>
 
@@ -1975,34 +2013,40 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="pe-tiers-grid">
                 <?php 
                 $tierHeights = ['tier-foundation', 'tier-growth is-recommended', 'tier-scale'];
-                $tierTags    = ['01 // FOUNDATION BUILD', '★ MOST POPULAR ENGAGEMENT', '03 // ENTERPRISE ENGINE'];
+                $tierTags    = ['01 // FOUNDATION BUILD', '★ MOST POPULAR ENGAGEMENT', '03 // EMERGENCY & DEFENSE'];
                 foreach ($bundles as $i => $t): 
                     $tierClass = $tierHeights[$i] ?? 'tier-foundation';
                     $tierTag   = $tierTags[$i] ?? ('0' . ($i + 1) . ' // PACKAGE');
+                    $name      = $t['name'] ?? ($t['title'] ?? 'Package');
+                    $sub       = $t['sub']  ?? ($t['tagline'] ?? '');
+                    $price     = !empty($t['price_text']) ? $t['price_text'] : (!empty($t['price_formatted']) ? $t['price_formatted'] : 'Custom Scope');
+                    $points    = !empty($t['points']) ? $t['points'] : (!empty($t['features']) ? $t['features'] : []);
                 ?>
                 <div class="pe-tier-card <?= $tierClass ?>">
                     <div class="pe-tier-top-tag">
                         <span class="pe-rec-badge"><?= $tierTag ?></span>
                     </div>
                     <div class="pe-card-top">
-                        <h3 class="pe-card-name"><?= e($t['title'] ?? 'Package') ?></h3>
-                        <p class="pe-card-sub"><?= e($t['tagline'] ?? '') ?></p>
+                        <h3 class="pe-card-name"><?= e($name) ?></h3>
+                        <p class="pe-card-sub"><?= e($sub) ?></p>
                         <div class="pe-price-row">
-                            <span class="pe-price"><?= e($t['price_formatted'] ?? 'Custom Scope') ?></span>
+                            <span class="pe-price"><?= e($price) ?></span>
                             <span class="pe-price-sub">Fixed Scope &bull; SLA Guaranteed</span>
                         </div>
                     </div>
-                    <?php if (!empty($t['features'])): ?>
+                    <?php if (!empty($points)): ?>
                     <ul class="pe-feature-list">
-                        <?php foreach (array_slice((array)$t['features'], 0, 5) as $f): ?>
+                        <?php foreach (array_slice((array)$points, 0, 6) as $f): ?>
                         <li><span class="pe-check-circle">&check;</span> <span><?= e(is_array($f) ? ($f['title'] ?? '') : $f) ?></span></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php endif; ?>
-                    <button type="button" class="btn btn-pill pe-btn <?= $i === 1 ? 'btn-accent-glow' : '' ?>" data-modal-open="consultationModal">Scope This Package &rarr;</button>
+                    <button type="button" class="btn btn-pill pe-btn <?= $i === 1 ? 'btn-accent-glow' : '' ?>" data-modal-open="consultationModal">Start a Growth Conversation &rarr;</button>
                 </div>
                 <?php endforeach; ?>
             </div>
+
+            <?php require __DIR__ . '/partials/pricing-matrix.php'; ?>
 
             <!-- Integrated Minimalist Accordion FAQ -->
             <div class="pe-faq-wrap" id="faq">

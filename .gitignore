@@ -33,3 +33,8 @@ uploads/*
 
 # Local MySQL test config, kept for re-running the port verification.
 inc/config.local.php.mysql-test
+
+# Temporary scratch & debug files
+scratch/
+scratch_cookie.txt
+node_modules/

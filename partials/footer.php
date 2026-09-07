@@ -36,17 +36,27 @@ $footHours = setting('contact.hours', '');
                         <li><a href="/case-studies">Case Studies</a></li>
                         <li><a href="/blog">Blog</a></li>
                         <li><a href="/contact">Contact</a></li>
-                        <li><a href="/locations/greater-noida">Serving <?= e(BUSINESS_GEO_LOCALITY) ?></a></li>
                     </ul>
                 </div>
 
                 <div>
                     <p class="footer-col-title">Services</p>
                     <ul class="footer-links">
-                        <?php foreach (SERVICES as $slug => $label): ?>
-                            <li><a href="/<?= e($slug) ?>"><?= e($label) ?></a></li>
+                        <?php foreach (services_all() as $slug => $svc): ?>
+                            <li><a href="<?= e(service_url($slug)) ?>"><?= e($svc['title']) ?></a></li>
                         <?php endforeach; ?>
                         <li><a href="/pricing">Bundle packages</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <p class="footer-col-title">Locations</p>
+                    <ul class="footer-links">
+                        <li><a href="/locations">All Regional Hubs</a></li>
+                        <li><a href="/locations/greater-noida">Greater Noida (HQ)</a></li>
+                        <li><a href="/locations/noida">Noida Tech Hub</a></li>
+                        <li><a href="/locations/delhi">Delhi Enterprise</a></li>
+                        <li><a href="/locations/gurgaon">Gurgaon Cyber City</a></li>
                     </ul>
                 </div>
 

@@ -8,8 +8,8 @@ require __DIR__ . '/../inc/bootstrap.php';
 
 $crumbs = [
     ['name' => 'Home',       'url' => '/'],
-    ['name' => 'Locations',  'url' => '/locations/greater-noida'],
-    ['name' => 'Delhi NCR',  'url' => '/locations/delhi'],
+    ['name' => 'Locations',  'url' => '/locations'],
+    ['name' => 'Delhi',      'url' => '/locations/delhi'],
 ];
 
 $title = 'Web Development & Digital Systems in Delhi NCR | ' . SITE_NAME;
@@ -95,7 +95,7 @@ require __DIR__ . '/../partials/social-rail.php';
                         <h3 style="font-family:var(--font-display); font-size:1.2rem; font-weight:800; color:#06122f; margin:6px 0 4px;"><?= e($s['title']) ?></h3>
                         <p style="font-size:0.88rem; color:#475569; margin:0; line-height:1.45;"><?= e($s['card']) ?></p>
                     </div>
-                    <a href="/<?= e($s['slug']) ?>" style="font-family:var(--font-mono, monospace); font-size:0.78rem; font-weight:700; color:#0a63ff; text-decoration:none;">View Scope &rarr;</a>
+                    <a href="<?= e(service_url($s['slug'])) ?>" style="font-family:var(--font-mono, monospace); font-size:0.78rem; font-weight:700; color:#0a63ff; text-decoration:none;">View Scope &rarr;</a>
                 </div>
                 <?php endforeach; ?>
             </div>

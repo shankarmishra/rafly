@@ -11,7 +11,8 @@ $page = [
     'title'     => 'About Rafly | Digital Growth',
     'desc'      => 'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
     'bodyClass' => 'page-about',
-    'styles'    => ['home', 'about'],
+    'styles'    => ['home', 'home-scenes', 'about'],
+    'module'    => 'home',
     'schema'    => [
         schema_webpage(
             'about',
@@ -106,11 +107,16 @@ require __DIR__ . '/partials/social-rail.php';
                 <p class="lead">Two commitments that shape how every package is scoped and delivered.</p>
             </div>
 
-            <div class="grid grid-2 mv-grid" data-r="group">
+            <div class="grid grid-3 mv-grid" data-r="group">
                 <article class="mv-card">
                     <span class="icon-box icon-box-lg"><?= icon('compass') ?></span>
                     <h3>Our mission</h3>
                     <p>To give growing businesses one accountable team for every part of their digital presence &mdash; website, content, marketing, security, and store operations &mdash; bundled into clear packages instead of scattered contracts. We focus on dependable delivery, transparent pricing, and outcomes you can actually measure.</p>
+                </article>
+                <article class="mv-card">
+                    <span class="icon-box icon-box-lg icon-box-heart"><?= icon('heart') ?></span>
+                    <h3>Our philosophy</h3>
+                    <p><strong>"Grahak Hamaare Liye Atithi Aur Bhagwan Hai."</strong> We treat your business like our own. 100% code ownership, zero hidden terms, and direct 24/7 support &mdash; because trust is the foundation of every long-term relationship.</p>
                 </article>
                 <article class="mv-card is-vision">
                     <span class="icon-box icon-box-lg icon-box-ink"><?= icon('rocket') ?></span>

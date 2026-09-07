@@ -209,6 +209,16 @@ $description    = str_cut($description, 2000);
 
 $contact_number = preg_replace('/[^0-9+()\-\s]/', '', $contact_number);
 
+$service_interest = trim(strip_tags((string)($_POST['service_interest'] ?? '')));
+$budget_bracket   = trim(strip_tags((string)($_POST['budget_bracket'] ?? '')));
+
+if ($service_interest !== '' || $budget_bracket !== '') {
+    $qualContext = "\n[Qualification: Pillar=" . ($service_interest ?: 'General') . ", Budget=" . ($budget_bracket ?: 'Unspecified') . "]";
+    if (!str_contains($description, '[Qualification:')) {
+        $description .= $qualContext;
+    }
+}
+
 if ($contact_name === '' || $contact_email === '' || $company_name === '' || $contact_number === '' || $description === '') {
     if ($isAjax) {
         sendJsonResponse(false, 'Please provide all required details.', 400);
@@ -353,15 +363,33 @@ if (db_available()) {
     $ip_hash    = hash('sha256', (string)($_SERVER['REMOTE_ADDR'] ?? '') . '|' . SITE_DOMAIN);
     $user_agent = str_cut((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 500);
 
+    // Auto-calculate initial SOP 10 lead qualification score (0 - 100)
+    $autoScore = 0;
+    if (!empty($company_name))   $autoScore += 20; // Legitimacy
+    if (!empty($contact_name))   $autoScore += 15; // DM contact
+    if (!empty($service_slug))   $autoScore += 15; // Tech fit
+    if (str_contains(strtolower($description), 'budget') || str_contains(strtolower($description), '₹') || str_contains(strtolower($description), '25000')) $autoScore += 30; // Budget alignment
+    if (str_contains(strtolower($description), 'urgent') || str_contains(strtolower($description), 'asap') || str_contains(strtolower($description), 'week'))  $autoScore += 20; // Urgency
+
+    $initStage = ($autoScore >= 70) ? 'qualified' : 'new';
+    $initStatus = ($autoScore >= 70) ? 'qualified' : 'new';
+
     try {
-        insert_returning_id(
+        $leadId = insert_returning_id(
             'INSERT INTO leads
                 (contact_name, contact_email, company_name, contact_number, description,
-                 consent_given, source_page, service_slug, ip_hash, user_agent)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                 consent_given, source_page, service_slug, ip_hash, user_agent, status, deal_stage, qualification_score, budget_bracket)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [$contact_name, $contact_email, $company_name, $contact_number, $description,
-             true, $source_page, $service_slug, $ip_hash, $user_agent]
+             true, $source_page, $service_slug, $ip_hash, $user_agent, $initStatus, $initStage, $autoScore, $budget_bracket]
         );
+
+        // Populate CRM Deals pipeline in Team OS
+        if ($leadId > 0) {
+            $dealTitle = $company_name . ' — Inbound Lead (' . ($service_slug ?: 'General Inquiry') . ')';
+            q('INSERT INTO crm_deals (lead_id, title, deal_stage, proposal_value, probability) VALUES (?, ?, ?, ?, ?)',
+              [$leadId, $dealTitle, $initStage, 35000.00, ($autoScore >= 70 ? 70 : 30)]);
+        }
     } catch (Throwable $e) {
         // The lead is not lost — it is in the CSV and the notification email.
         error_log('Rafly: lead saved to CSV but DB insert failed: ' . $e->getMessage());

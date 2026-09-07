@@ -18,8 +18,9 @@
 require __DIR__ . '/../inc/bootstrap.php';
 
 $crumbs = [
-    ['name' => 'Home',                    'url' => '/'],
-    ['name' => BUSINESS_GEO_LOCALITY,     'url' => '/locations/greater-noida'],
+    ['name' => 'Home',                  'url' => '/'],
+    ['name' => 'Locations',             'url' => '/locations'],
+    ['name' => BUSINESS_GEO_LOCALITY,   'url' => '/locations/greater-noida'],
 ];
 
 $title = 'Web Development & Digital Growth in ' . BUSINESS_GEO_LOCALITY . ' | ' . SITE_NAME;
@@ -31,7 +32,8 @@ $page = [
     'title'     => $title,
     'desc'      => $desc,
     'bodyClass' => 'page-location',
-    'styles'    => ['home', 'about'],
+    'styles'    => ['home', 'home-scenes', 'about'],
+    'module'    => 'home',
     'canonical' => 'locations/greater-noida',
     'schema'    => [
         schema_webpage('locations/greater-noida', $title, $desc, 'WebPage'),
@@ -135,7 +137,7 @@ require __DIR__ . '/../partials/social-rail.php';
                             <span class="rail-text"><?= e($svc['card']) ?></span>
                         </span>
                         <span class="rail-go"><?= icon('arrow-right') ?></span>
-                        <a class="card-link" href="/<?= e($svc['slug']) ?>" aria-label="<?= e($svc['title']) ?>"></a>
+                        <a class="card-link" href="<?= e(service_url($svc['slug'])) ?>" aria-label="<?= e($svc['title']) ?>"></a>
                     </li>
                 <?php endforeach; ?>
             </ol>

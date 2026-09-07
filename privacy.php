@@ -8,7 +8,8 @@ $page = [
     'title'     => 'Privacy Policy | Rafly Digital Growth Partner',
     'desc'      => 'How Rafly Digital Growth Partner collects, uses, stores and protects your information.',
     'bodyClass' => 'page-legal',
-    'styles'    => ['legal'],
+    'styles'    => ['home', 'home-scenes', 'legal'],
+    'module'    => 'home',
     'schema'    => [schema_breadcrumbs($crumbs = [
         ['name' => 'Home',    'url' => '/'],
         ['name' => 'Privacy', 'url' => '/privacy'],

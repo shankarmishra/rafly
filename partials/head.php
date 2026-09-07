@@ -120,6 +120,10 @@ $pixelId = !$page['noindex']
         src="https://www.facebook.com/tr?id=<?= e(rawurlencode($pixelId)) ?>&ev=PageView&noscript=1" alt=""></noscript>
 <?php endif; ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php if (!$page['noindex']): ?>
+    <!-- dns-prefetch for the one third-party origin the Pixel JS loads -->
+    <link rel="dns-prefetch" href="//connect.facebook.net">
+<?php endif; ?>
     <title><?= e($page['title']) ?></title>
     <meta name="description" content="<?= e($page['desc']) ?>">
     <link rel="canonical" href="<?= e($canonical) ?>">
@@ -148,14 +152,21 @@ $pixelId = !$page['noindex']
 <?php endif; ?>
 <?php endif; ?>
 
-    <!-- twitter:card needs its own title/description/image; it does not inherit og:*. -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= e($page['title']) ?>">
     <meta name="twitter:description" content="<?= e($page['desc']) ?>">
     <meta name="twitter:image" content="<?= e($ogImageUrl) ?>">
     <meta name="twitter:image:alt" content="<?= e(SITE_NAME . ' — ' . SITE_TAGLINE) ?>">
-    <?php /* twitter:site / twitter:creator omitted — no verified @handle exists in SOCIAL_LINKS/config
-             to attribute this to; adding one would be fabricated metadata. */ ?>
+<?php
+/* twitter:site — only emitted when a verified X/Twitter handle is configured
+   in the admin settings (analytics.twitter_handle) or in config.local.php.
+   An empty / missing handle silently emits nothing rather than a blank tag. */
+$twitterHandle = ltrim(trim((string)setting('analytics.twitter_handle', '')), '@');
+if ($twitterHandle !== ''):
+?>
+    <meta name="twitter:site" content="@<?= e($twitterHandle) ?>">
+    <meta name="twitter:creator" content="@<?= e($twitterHandle) ?>">
+<?php endif; ?>
     <?php /* The logo blue, matching --blue in css/00-tokens.css. This paints the
              browser chrome on Android and the status bar in an iOS PWA, so it is
              the one colour a visitor sees BEFORE the stylesheet has parsed — a
@@ -205,9 +216,13 @@ $pixelId = !$page['noindex']
     <link rel="preload" href="<?= e(site_path('/vendor/fonts/inter-var.woff2')) ?>" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?= e(asset('vendor/fonts/fonts.css')) ?>">
 
+<?php if (is_file(dirname(__DIR__) . '/css/core-bundle.css')): ?>
+    <link rel="stylesheet" href="<?= e(asset('css/core-bundle.css')) ?>">
+<?php else: ?>
 <?php foreach ($coreStyles as $href): ?>
     <link rel="stylesheet" href="<?= e(asset($href)) ?>">
 <?php endforeach; ?>
+<?php endif; ?>
 <?php foreach ($page['styles'] as $s): ?>
     <link rel="stylesheet" href="<?= e(asset("css/pages/{$s}.css")) ?>">
 <?php endforeach; ?>

@@ -102,7 +102,7 @@ function related_articles_for_service(string $serviceSlug, int $limit = 3): arra
     $in = implode(', ', array_fill(0, count($categorySlugs), '?'));
 
     return all(
-        'SELECT DISTINCT p.slug, p.title, p.excerpt, p.read_minutes
+        'SELECT DISTINCT p.slug, p.title, p.excerpt, p.read_minutes, p.published_at
            FROM posts p
            JOIN post_categories pc ON pc.post_id = p.id
            JOIN categories c ON c.id = pc.category_id

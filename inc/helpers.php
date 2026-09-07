@@ -89,6 +89,19 @@ function site_path(string $path): string
 }
 
 /**
+ * Canonical URL path for a service slug.
+ */
+function service_url(string $slug): string
+{
+    $aliasMap = [
+        'ecommerce-support'       => 'ecommerce',
+        'marketing-advertisement' => 'performance-marketing',
+    ];
+    $cleanSlug = $aliasMap[$slug] ?? $slug;
+    return site_path('/services/' . $cleanSlug);
+}
+
+/**
  * Narrower WebP widths inc/tools/build-photos.php generates alongside the
  * full-size twin — kept in sync with that file's own PHOTO_WIDTHS by hand,
  * the same way router.php and .htaccess are: two files, one contract, no

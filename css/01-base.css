@@ -11,6 +11,7 @@ html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-h) + var(--sp-5));
     tab-size: 4;
+    background: var(--ink);
 }
 
 body {
@@ -235,19 +236,6 @@ blockquote { margin: 0; }
     z-index: -1;
     pointer-events: none;
     background-color: var(--paper);
-    /* Paper grain, and nothing else.
-
-       This used to carry three coloured radial blooms — blue at 18%/12%,
-       orange at 84%/8%, deep blue at 62%/88% — over a 26px dot lattice. It is
-       the most heavily used SaaS background of the last five years, the orange
-       bloom muddied every warm neutral near it, and the lattice put a repeating
-       pattern behind an object whose entire job is to look like a photograph
-       of a real thing on real paper. All four layers are gone.
-
-       What is left is the one thing a paper ground genuinely needs:
-       texture. Without grain, #f6f8fc reads as a flat blue-grey fill; with it, it
-       reads as a surface — and a surface is what the object's contact shadow
-       has to land on for the object to have any weight at all. */
     background-image: var(--grain-fine);
     background-size: 140px 140px;
 }

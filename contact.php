@@ -21,7 +21,8 @@ $page = [
     'title'     => 'Contact Rafly | Talk to one team about all of it',
     'desc'      => 'Tell us what is slowing your growth down. One point of contact for web development, content, marketing, security and e-commerce support. We reply within one working day.',
     'bodyClass' => 'page-contact',
-    'styles'    => ['home'],
+    'styles'    => ['home', 'home-scenes'],
+    'module'    => 'home',
     'canonical' => 'contact',
     'schema'    => [schema_breadcrumbs($crumbs)],
 ];

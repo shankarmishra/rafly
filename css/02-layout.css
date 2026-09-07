@@ -71,8 +71,8 @@
 .band-round   { border-radius: var(--r-2xl); }
 
 /* --- Section headers ---------------------------------------------------- */
-.sec-head { margin-bottom: var(--sp-8); max-width: 60ch; }
-.sec-head .lead { margin-top: var(--sp-4); }
+.sec-head { margin-bottom: var(--sp-5); max-width: 60ch; }
+.sec-head .lead { margin-top: var(--sp-3); }
 
 .sec-head-center {
     margin-inline: auto;
@@ -86,10 +86,10 @@
 .sec-head-split {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: var(--sp-6) var(--sp-9);
+    gap: var(--sp-4) var(--sp-6);
     align-items: end;
     max-width: none;
-    margin-bottom: var(--sp-8);
+    margin-bottom: var(--sp-5);
 }
 .sec-head-split .lead { margin-top: 0; }
 @media (max-width: 860px) {

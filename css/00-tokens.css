@@ -73,22 +73,12 @@
     --paper-3:      #e3e9f6;   /* paper-03 — wells, inputs, stripes         */
     --paper-4:      #d5ddef;   /* pressed / active well                     */
 
-    /* --- Ink ------------------------------------------------------------
-       Ratios read: paper-01 / paper-02 / paper-03. The ink is a navy, not a
-       black: #050f33 is the logo's dark neutralised against the blue, and it
-       is also the chapter ground further down. One colour doing both jobs is
-       why the dark chapter reads as the same room with the lights off rather
-       than as a different site. */
+    /* --- Ink ------------------------------------------------------------ */
     --ink:          #050f33;   /* display, headings   17.59 / 16.67 / 15.37 */
     --ink-2:        #3a4468;   /* body                 8.95 /  8.48 /  7.82 */
     --ink-3:        #5b6384;   /* captions, metadata   5.54 /  5.25 /  4.84 */
-    --ink-4:        #767ea6;   /* the grey half of a two-tone display line  */
-                               /* 3.72 / 3.53 / 3.25 — LARGE TEXT ONLY.     */
-                               /* Never body, never a caption, never an icon */
-                               /* that must be seen. The prototype used this */
-                               /* value for an 11.5px .eyebrow, which is     */
-                               /* small text at 3.72:1 — a fail. Eyebrows    */
-                               /* read --ink-3.                              */
+    --ink-4:        #767ea6;   /* soft subtitles                           */
+
     --line:         #e2e7f2;   /* hairline — cool, so it belongs to paper   */
     --line-strong:  #cbd3e6;
 
@@ -202,8 +192,8 @@
     --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 2.5rem;   --sp-8: 3rem;
     --sp-9: 4rem;     --sp-10: 5rem;    --sp-11: 6.5rem;  --sp-12: 8rem;
 
-    --section-y:   clamp(4.5rem, 2.4rem + 8vw, 9rem);
-    --section-y-s: clamp(3rem, 1.9rem + 4.4vw, 5.5rem);
+    --section-y:   clamp(2.75rem, 1.8rem + 3vw, 4.5rem);
+    --section-y-s: clamp(1.75rem, 1.2rem + 1.8vw, 3rem);
 
     /* --- Measure --------------------------------------------------------- */
     --container:   1240px;

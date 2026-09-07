@@ -17,18 +17,27 @@
  * ships — the admin simply never loaded it.
  */
 const ADMIN_NAV = [
-    ['/admin/',                'Dashboard',    'leads.view',    '',          'gauge'],
-    ['/admin/leads.php',       'Leads',        'leads.view',    'Enquiries', 'mail-open'],
-    ['/admin/posts.php',       'Blog',         'content.view',  'Content',   'file-pen'],
-    ['/admin/categories.php',  'Categories',   'content.view',  '',          'layers'],
-    ['/admin/case-studies.php','Case studies', 'content.view',  '',          'trending-up'],
-    ['/admin/testimonials.php','Testimonials', 'content.view',  '',          'star'],
-    ['/admin/bundles.php',     'Packages',     'content.view',  '',          'package'],
-    ['/admin/team.php',        'Team',         'content.view',  '',          'users'],
-    ['/admin/media.php',       'Media',        'media.view',    '',          'image'],
-    ['/admin/settings.php',    'Settings',     'settings.view', 'System',    'settings'],
-    ['/admin/users.php',       'Users',        'users.view',    '',          'users'],
-    ['/admin/audit.php',       'Audit log',    'audit.view',    '',          'history'],
+    ['/admin/',                'Command Center', 'leads.view',    '',          'gauge'],
+    ['/admin/clients.php',     'Clients (360)',  'leads.view',    'Operations', 'building'],
+    ['/admin/projects.php',    'Projects',       'content.view',  '',          'rocket'],
+    ['/admin/tasks.php',       'Tasks & My Work','content.view',  '',          'check-square'],
+    ['/admin/channels.php',    'Channels Hub',   'content.view',  'Collaboration', 'message-square'],
+    ['/admin/creative.php',    'Creative Studio','content.view',  '',          'video'],
+    ['/admin/approvals.php',   'Approvals',      'content.view',  '',          'shield-check'],
+    ['/admin/leads.php',       'Leads / CRM',    'leads.view',    'Growth',    'mail-open'],
+    ['/admin/documents.php',   'Docs & SOPs',    'content.view',  '',          'file-text'],
+    ['/admin/search.php',      'Global Search',  'content.view',  '',          'search'],
+    ['/admin/posts.php',       'Blog',           'content.view',  'Content',   'file-pen'],
+    ['/admin/categories.php',  'Categories',     'content.view',  '',          'layers'],
+    ['/admin/case-studies.php','Case studies',   'content.view',  '',          'trending-up'],
+    ['/admin/testimonials.php','Testimonials',   'content.view',  '',          'star'],
+    ['/admin/bundles.php',     'Packages',       'content.view',  '',          'package'],
+    ['/admin/services.php',    'Services',       'content.view',  '',          'layers'],
+    ['/admin/team.php',        'Team',           'content.view',  'System',    'users'],
+    ['/admin/media.php',       'Media',          'media.view',    '',          'image'],
+    ['/admin/settings.php',    'Settings',       'settings.view', '',          'settings'],
+    ['/admin/users.php',       'Users',          'users.view',    '',          'users'],
+    ['/admin/audit.php',       'Audit log',      'audit.view',    '',          'history'],
 ];
 
 function admin_head(array $page): void
@@ -91,6 +100,20 @@ function admin_head(array $page): void
         <div class="sidebar-foot">
             <strong><?= e($user['name'] ?? '') ?></strong>
             <div class="roles"><?= e(implode(', ', $user['roles'] ?? [])) ?></div>
+
+<?php 
+$isDevHost = in_array($_SERVER['HTTP_HOST'] ?? '', ['localhost', '127.0.0.1', 'localhost:8000', '127.0.0.1:8000'], true) || (defined('APP_ENV') && APP_ENV === 'dev');
+if ($isDevHost): ?>
+            <div class="dev-role-switcher" style="margin:10px 0; padding:8px; background:rgba(255,255,255,0.06); border-radius:6px; border:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:0.7rem; text-transform:uppercase; color:#94a3b8; font-weight:700; margin-bottom:4px;">⚡ Dev Role Switcher</div>
+                <div style="display:flex; gap:4px; font-size:0.75rem;">
+                    <a href="<?= e(site_path('/admin/login.php?dev_role=admin&next=' . rawurlencode($_SERVER['REQUEST_URI'] ?? '/admin/'))) ?>" style="color:#a5b4fc; text-decoration:none; padding:2px 4px; background:rgba(79,70,229,0.3); border-radius:3px;">Admin</a>
+                    <a href="<?= e(site_path('/admin/login.php?dev_role=editor&next=' . rawurlencode($_SERVER['REQUEST_URI'] ?? '/admin/'))) ?>" style="color:#7dd3fc; text-decoration:none; padding:2px 4px; background:rgba(2,132,199,0.3); border-radius:3px;">Editor</a>
+                    <a href="<?= e(site_path('/admin/login.php?dev_role=viewer&next=' . rawurlencode($_SERVER['REQUEST_URI'] ?? '/admin/'))) ?>" style="color:#cbd5e1; text-decoration:none; padding:2px 4px; background:rgba(71,85,105,0.3); border-radius:3px;">Viewer</a>
+                </div>
+            </div>
+<?php endif; ?>
+
             <?php /* Account-level, not content-permission-level — every signed-in
                      user should be able to secure their own login regardless of
                      role, so this is hand-placed here rather than in the

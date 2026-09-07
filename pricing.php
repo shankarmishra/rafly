@@ -32,7 +32,8 @@ $page = [
     'title'     => 'Pricing | Rafly Digital Growth',
     'desc'      => 'Indicative pricing for our bundled packages — Starter, Growth and Enterprise. Get an exact quote for your specific requirements.',
     'bodyClass' => 'page-pricing',
-    'styles'    => ['home'],
+    'styles'    => ['home', 'home-scenes'],
+    'module'    => 'home',
     'schema'    => [schema_breadcrumbs($crumbs), schema_faq($PRICING_FAQ)],
 ];
 
@@ -68,9 +69,7 @@ require __DIR__ . '/partials/social-rail.php';
                         Ranges below are a starting point, not a final invoice &mdash; every engagement
                         is scoped to what you actually need during a free consultation.
                     <?php else: ?>
-                        Every engagement is scoped on a free call and priced as a single package
-                        &mdash; web, content, marketing, security and e-commerce support under one
-                        number, instead of five invoices from five vendors.
+                        Packages are built around what your business actually needs.
                     <?php endif; ?>
                 </p>
             </div>
@@ -96,6 +95,8 @@ require __DIR__ . '/partials/social-rail.php';
             </p>
         </div>
     </section>
+
+    <?php require __DIR__ . '/partials/pricing-matrix.php'; ?>
 
     <section class="section band-soft">
         <div class="container">

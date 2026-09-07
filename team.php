@@ -31,7 +31,8 @@ $page = [
     'title'     => 'Our Team | Rafly Digital Growth',
     'desc'      => 'The people behind Rafly — the developers, marketers and strategists who run every bundled package.',
     'bodyClass' => 'page-team',
-    'styles'    => ['home', 'team'],
+    'styles'    => ['home', 'home-scenes', 'team'],
+    'module'    => 'home',
     'scripts'   => ['team'],
     'schema'    => [
         schema_webpage(
@@ -89,7 +90,7 @@ require __DIR__ . '/partials/header.php';
 require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
-    <section class="section page-head">
+    <section class="section page-head" data-hero>
         <?php require __DIR__ . '/partials/head-object.php'; ?>
         <div class="container">
             <?= breadcrumbs($crumbs) ?>
@@ -142,7 +143,7 @@ require __DIR__ . '/partials/social-rail.php';
             $hasLinks = $p['github_url'] !== '' || $p['linkedin_url'] !== '';
             $alt      = (string)($p['photo_alt'] !== '' ? $p['photo_alt'] : $p['name']);
 ?>
-                <details class="team-card" data-team-index="<?= (int)$i ?>">
+                <details class="team-card" data-sheen data-team-index="<?= (int)$i ?>">
                     <summary class="team-card-head">
                         <span class="team-avatar">
 <?php if ($p['photo'] !== null && file_exists(__DIR__ . '/uploads/' . $p['photo'])): ?>
@@ -291,6 +292,41 @@ require __DIR__ . '/partials/social-rail.php';
                 out without telling you first.
             </p>
 <?php endif; ?>
+        </div>
+    </section>
+
+    <?php /* ================= TEAM STANDARDS SECTION ================= */ ?>
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <p class="eyebrow">// TEAM OPERATING PRINCIPLES</p>
+                <h2 class="display">Direct engineering, <span class="soft">zero middleman lag</span></h2>
+                <p class="lead">How our multi-disciplinary team collaborates directly with your stakeholders.</p>
+            </div>
+            
+            <div class="grid grid-3" data-r="group">
+                <article class="card card-hover" data-sheen>
+                    <div class="card-body">
+                        <div class="hud-badge"><span class="pulse-dot"></span> [DIRECT ACCESS]</div>
+                        <h3 class="card-title">Talk directly to engineers</h3>
+                        <p class="card-text">No account manager layer relaying technical details back and forth. You speak directly to the engineers building your platform.</p>
+                    </div>
+                </article>
+                <article class="card card-hover" data-sheen>
+                    <div class="card-body">
+                        <div class="hud-badge"><span class="pulse-dot"></span> [UNIFIED ROADMAP]</div>
+                        <h3 class="card-title">Cross-discipline sync</h3>
+                        <p class="card-text">Designers, developers, security auditors, and growth marketers work against one single shared sprint timeline.</p>
+                    </div>
+                </article>
+                <article class="card card-hover" data-sheen>
+                    <div class="card-body">
+                        <div class="hud-badge"><span class="pulse-dot"></span> [TRANSPARENT COMMITS]</div>
+                        <h3 class="card-title">Weekly progress audits</h3>
+                        <p class="card-text">Every task is tracked with clear deliverable milestones, direct repository access, and weekly live demo walk-throughs.</p>
+                    </div>
+                </article>
+            </div>
         </div>
     </section>
 

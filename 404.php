@@ -15,7 +15,8 @@ $page = [
     'id'        => '',
     'title'     => 'Page not found | ' . SITE_NAME,
     'desc'      => 'That page does not exist. Browse our services or get in touch with the Rafly team.',
-    'bodyClass' => 'page-notice',
+    'styles'    => ['home', 'home-scenes'],
+    'module'    => 'home',
     'noindex'   => true,
 ];
 require __DIR__ . '/partials/head.php';

@@ -124,6 +124,19 @@
     }
 
     /* --------------------------------------------------------------------
+       Analytics Custom Event Tracking Helper
+       -------------------------------------------------------------------- */
+    function trackEvent(eventName, params) {
+        params = params || {};
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, params);
+        }
+        if (typeof window.fbq === 'function') {
+            window.fbq('trackCustom', eventName, params);
+        }
+    }
+
+    /* --------------------------------------------------------------------
        Submission
        -------------------------------------------------------------------- */
     function submit(form) {
@@ -168,6 +181,12 @@
                     }
                     if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
 
+                    var sourcePage = (form.querySelector('input[name="source_page"]') || {}).value || '';
+                    trackEvent('LeadForm_Complete', { form_id: form.id, source_page: sourcePage });
+                    if (sourcePage === '/landing/website-audit') {
+                        trackEvent('Audit_Request', { form_id: form.id });
+                    }
+
                     var done = form.getAttribute('data-success-redirect');
                     if (done) setTimeout(function () { window.location.href = done; }, 900);
                 } else {
@@ -191,6 +210,13 @@
         Array.prototype.forEach.call(doc.querySelectorAll('form[data-ajax-form]'), function (form) {
             form.setAttribute('novalidate', '');
 
+            form.addEventListener('focusin', function () {
+                if (!form.getAttribute('data-started')) {
+                    form.setAttribute('data-started', 'true');
+                    trackEvent('LeadForm_Start', { form_id: form.id });
+                }
+            });
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 if (validate(form)) submit(form);
@@ -205,8 +231,18 @@
             });
         });
 
-        // Quick scope chip click handler for lead forms (CSP compliant)
+        // Global click listener for WhatsApp & Consultation CTA analytics events
         doc.addEventListener('click', function(e) {
+            var waLink = e.target.closest('a[href*="wa.me"]');
+            if (waLink) {
+                trackEvent('WhatsApp_Click', { link_url: waLink.href });
+            }
+            var modalTrigger = e.target.closest('[data-modal-open="consultationModal"]');
+            if (modalTrigger) {
+                trackEvent('Call_Scheduled', { trigger_label: modalTrigger.textContent.trim() });
+            }
+
+            // Quick scope chip click handler for lead forms (CSP compliant)
             var chip = e.target.closest('.form-tag-chip');
             if (!chip) return;
             e.preventDefault();

@@ -114,18 +114,26 @@ $n('settings', count($settings));
 // Bundles — from the BUNDLES const in inc/config.php
 // ---------------------------------------------------------------------------
 
+// Delete orphan bundles not present in config BUNDLES array
+$validNames = array_column(BUNDLES, 'name');
+if (!empty($validNames)) {
+    $placeholders = implode(',', array_fill(0, count($validNames), '?'));
+    q('DELETE FROM bundle_points WHERE bundle_id IN (SELECT id FROM bundles WHERE name NOT IN (' . $placeholders . '))', $validNames);
+    q('DELETE FROM bundles WHERE name NOT IN (' . $placeholders . ')', $validNames);
+}
+
 $order = 0;
 foreach (BUNDLES as $b) {
     $id = scalar('SELECT id FROM bundles WHERE name = ?', [$b['name']]);
 
     if ($id === null) {
         $id = insert_returning_id('
-            INSERT INTO bundles (name, sub, is_featured, sort_order)
-            VALUES (?, ?, ?, ?)
-        ', [$b['name'], $b['sub'], $b['featured'], $order]);
+            INSERT INTO bundles (name, sub, price_text, is_featured, sort_order)
+            VALUES (?, ?, ?, ?, ?)
+        ', [$b['name'], $b['sub'], $b['price_text'], $b['featured'], $order]);
     } else {
-        q('UPDATE bundles SET sub = ?, is_featured = ?, sort_order = ?, updated_at = now() WHERE id = ?',
-          [$b['sub'], $b['featured'], $order, $id]);
+        q('UPDATE bundles SET sub = ?, price_text = ?, is_featured = ?, sort_order = ?, updated_at = now() WHERE id = ?',
+          [$b['sub'], $b['price_text'], $b['featured'], $order, $id]);
     }
 
     // Points are replaced wholesale: they are an ordered list, and reconciling

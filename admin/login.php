@@ -28,6 +28,36 @@ if (!admin_gate_ok()) {
 
 $next = admin_safe_next($_GET['next'] ?? null);
 
+// --- Dev Quick Sign-In Mode ---
+// Dev quick sign-in is ONLY permitted when explicitly enabled via local environment
+// configuration (APP_ENV === 'dev' or ALLOW_DEV_LOGIN === true).
+// Client-controlled headers such as $_SERVER['HTTP_HOST'] must NEVER be used
+// as a security boundary.
+$isDevMode = (defined('APP_ENV') && APP_ENV === 'dev') || (defined('ALLOW_DEV_LOGIN') && ALLOW_DEV_LOGIN === true);
+$devRole   = $_GET['dev_role'] ?? $_POST['dev_role'] ?? '';
+$devLogin  = isset($_GET['dev_login']) || isset($_POST['dev_login']) || $devRole !== '';
+
+if ($isDevMode && $devLogin) {
+    $targetRole = in_array($devRole, ['admin', 'editor', 'viewer'], true) ? $devRole : 'admin';
+    $devUser = one("
+        SELECT u.id, u.name, u.email 
+          FROM users u 
+          JOIN user_roles ur ON ur.user_id = u.id 
+          JOIN roles r ON r.id = ur.role_id 
+         WHERE r.slug = ? AND u.status = 'active' 
+      ORDER BY u.id ASC LIMIT 1
+    ", [$targetRole]);
+
+    if ($devUser !== null) {
+        auth_start_session((int)$devUser['id']);
+        admin_redirect(
+            admin_safe_next($_REQUEST['next'] ?? null),
+            "Dev Quick Sign-In active: Logged in as {$devUser['name']} (" . strtoupper($targetRole) . ")",
+            'info'
+        );
+    }
+}
+
 // Already signed in — nothing to do here.
 if (is_logged_in()) {
     header('Location: ' . $next, true, 302);
@@ -108,6 +138,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <button type="submit" class="btn">Sign in</button>
+
+<?php if ($isDevMode): ?>
+        <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); text-align:center;">
+            <p style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color:#94a3b8; margin-bottom:10px; font-weight:600;">⚡ Dev Quick Sign-In (Local Mode)</p>
+            <div style="display:flex; gap:6px; justify-content:center;">
+                <a href="login.php?dev_role=admin<?= $next ? '&next=' . rawurlencode($next) : '' ?>" 
+                   style="flex:1; padding:8px 12px; background:#4f46e5; color:#fff; text-decoration:none; border-radius:6px; font-size:0.85rem; font-weight:600; text-align:center;">
+                   👑 Admin
+                </a>
+                <a href="login.php?dev_role=editor<?= $next ? '&next=' . rawurlencode($next) : '' ?>" 
+                   style="flex:1; padding:8px 12px; background:#0284c7; color:#fff; text-decoration:none; border-radius:6px; font-size:0.85rem; font-weight:600; text-align:center;">
+                   ✏️ Editor
+                </a>
+                <a href="login.php?dev_role=viewer<?= $next ? '&next=' . rawurlencode($next) : '' ?>" 
+                   style="flex:1; padding:8px 12px; background:#475569; color:#fff; text-decoration:none; border-radius:6px; font-size:0.85rem; font-weight:600; text-align:center;">
+                   👁️ Viewer
+                </a>
+            </div>
+        </div>
+<?php endif; ?>
     </form>
 </body>
 </html>
+

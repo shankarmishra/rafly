@@ -15,6 +15,7 @@ function send_security_headers(string $mode = 'page'): void
 {
     header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
+    header('X-XSS-Protection: 1; mode=block');
 
     // strict-origin-when-cross-origin, not no-referrer: the old value broke
     // referral attribution in analytics while gaining essentially nothing.

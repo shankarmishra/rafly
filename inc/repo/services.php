@@ -36,15 +36,54 @@ function services_all(): array
         return $cache;
     }
 
-    /* --- DB branch goes here when a `services` table exists ---------------
-       if (db_available()) {
-           $rows = all('SELECT ... FROM services WHERE is_published ORDER BY sort_order, id');
-           if ($rows) { return $cache = services_shape($rows); }
-       }
-       Falling through to the seed on an empty result is deliberate: an empty
-       table means "nobody has migrated the content yet", not "this business
-       offers no services". bundles_all() makes the same call.
+    /* --- DB branch: reads from `services` table when it exists and has rows --
+       Falls through to the seed when:
+         - the DB is unavailable (no creds, connection error)
+         - the table does not exist yet (migration not run)
+         - the table exists but is empty (nobody has seeded it yet)
+       The last case is deliberate: an empty table means "migration ran but
+       content hasn't been entered yet", not "no services", so the seed keeps
+       the site running while content is being populated in the admin.
        -------------------------------------------------------------------- */
+    if (db_available()) {
+        try {
+            $rows = all('SELECT * FROM services WHERE is_published = ? ORDER BY sort_order, id', [true]);
+            if ($rows) {
+                $out = [];
+                foreach ($rows as $row) {
+                    $slug = (string)$row['slug'];
+                    $out[$slug] = [
+                        'slug'       => $slug,
+                        'title'      => (string)$row['title'],
+                        'icon'       => (string)($row['icon']     ?? 'layers'),
+                        'key'        => (string)($row['key_name'] ?? 'web'),
+                        'tagline'    => (string)($row['tagline']  ?? ''),
+                        'intro'      => (string)($row['intro']    ?? ''),
+                        'card'       => (string)($row['card']     ?? ''),
+                        'wide'       => false,
+                        'scene'      => 'browser',
+                        // Fields below are not stored in DB yet — they require
+                        // the full seed data for service detail pages. Fall back
+                        // to seed for any slug we recognise, so that the detail
+                        // page still renders even before seed data is migrated.
+                    ];
+                }
+                // Merge deep fields (faqs, process, deliverables …) from seed
+                // for any slug that has a DB row but no extended data in the DB.
+                $seed = require __DIR__ . '/../data/services.php';
+                foreach ($out as $slug => &$svc) {
+                    if (isset($seed[$slug])) {
+                        $svc = array_merge($seed[$slug], $svc);
+                        $svc['slug'] = $slug;
+                    }
+                }
+                unset($svc);
+                return $cache = $out;
+            }
+        } catch (\Throwable $e) {
+            // Table does not exist yet — fall through to seed silently.
+        }
+    }
 
     $seed = require __DIR__ . '/../data/services.php';
 
@@ -105,5 +144,13 @@ function services_labels(): array
  */
 function services_source(): string
 {
-    return 'seed';   // flip to 'database' inside the DB branch above
+    if (!db_available()) {
+        return 'seed';
+    }
+    try {
+        $count = scalar('SELECT count(*) FROM services WHERE is_published = ?', [true]);
+        return ((int)$count > 0) ? 'database' : 'seed';
+    } catch (\Throwable $e) {
+        return 'seed';   // table doesn't exist yet
+    }
 }

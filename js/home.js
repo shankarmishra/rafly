@@ -67,6 +67,15 @@ if (serviceStudio) {
         .catch(() => { /* Clean static CSS presentation is fallback */ });
 }
 
+/* ------------------------------------------- THE RAFly SERVICE ENGINE */
+const serviceEngine = document.querySelector('[data-service-engine]');
+if (serviceEngine) {
+    import('./service-engine.js')
+        .then((m) => m.initServiceEngine(serviceEngine))
+        .catch(() => {});
+}
+
+
 /* ------------------------------------------- THE RAFly BUILD MATRIX */
 
 const buildMatrix = document.querySelector('[data-build-matrix]');

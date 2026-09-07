@@ -65,10 +65,10 @@
 
         if (hasTimelines || reduced) return;
 
-        each('[data-r]', function (el) {
+        each('[data-r], .rafly-underline, .rafly-reveal, .rafly-stagger', function (el) {
             // A clipped element reports a zero-area intersection rect and would
             // never fire, so those are observed through their parent instead.
-            var probe = el.getAttribute('data-r') === 'wipe' && el.parentElement
+            var probe = el.getAttribute && el.getAttribute('data-r') === 'wipe' && el.parentElement
                 ? el.parentElement
                 : el;
             onceInView(probe, function () { markIn(el); });

@@ -111,6 +111,7 @@ $oldToClean = [
     'pricing.php'      => 'pricing',
     'case-studies.php' => 'case-studies',
     'contact.php'      => 'contact',
+    'locations.php'               => 'locations',
     'locations/greater-noida.php' => 'locations/greater-noida',
     'locations/noida.php'         => 'locations/noida',
     'locations/delhi.php'         => 'locations/delhi',
@@ -120,10 +121,31 @@ if (isset($oldToClean[$path]) && $redirect('/' . $oldToClean[$path])) {
     return true;
 }
 
+$bareServiceToCanonical = [
+    'web-development'         => 'services/web-development',
+    'web-security'            => 'services/web-security',
+    'marketing-advertisement' => 'services/performance-marketing',
+    'content-creation'        => 'services/content-creation',
+    'ecommerce-support'       => 'services/ecommerce',
+    'ecommerce'               => 'services/ecommerce',
+    'lead-automation'         => 'services/lead-automation',
+];
+if (isset($bareServiceToCanonical[$path]) && $redirect('/' . $bareServiceToCanonical[$path])) {
+    return true;
+}
+
 if ($path === 'service.php' && isset($_GET['service'])) {
     $slug = (string)$_GET['service'];
-    if (in_array($slug, ['web-development', 'web-security', 'marketing-advertisement', 'content-creation', 'ecommerce-support'], true)
-        && $redirect('/' . $slug)) {
+    $serviceToCanonical = [
+        'web-development'         => 'services/web-development',
+        'web-security'            => 'services/web-security',
+        'marketing-advertisement' => 'services/performance-marketing',
+        'content-creation'        => 'services/content-creation',
+        'ecommerce-support'       => 'services/ecommerce',
+        'ecommerce'               => 'services/ecommerce',
+        'lead-automation'         => 'services/lead-automation',
+    ];
+    if (isset($serviceToCanonical[$slug]) && $redirect('/' . $serviceToCanonical[$slug])) {
         return true;
     }
 }
@@ -169,10 +191,15 @@ $cleanToFile = [
     'privacy'      => 'privacy.php',
     'thank-you'    => 'thank-you.php',
     'submit'       => 'submit.php',
+    'locations'               => 'locations.php',
     'locations/greater-noida' => 'locations/greater-noida.php',
     'locations/noida'         => 'locations/noida.php',
     'locations/delhi'         => 'locations/delhi.php',
     'locations/gurgaon'       => 'locations/gurgaon.php',
+    'landing/security-emergency'  => 'landing/security-emergency.php',
+    'landing/website-audit'       => 'landing/website-audit.php',
+    'landing/whatsapp-automation' => 'landing/whatsapp-automation.php',
+    'client-portal'               => 'client-portal.php',
 ];
 if (isset($cleanToFile[$path])) {
     return $dispatch($cleanToFile[$path]);
@@ -207,8 +234,18 @@ if (preg_match('#^blog/([a-z0-9-]+)$#', $path, $m)) {
     return $dispatch('blog-post.php', ['post' => $m[1]]);
 }
 
-if (preg_match('#^(web-development|web-security|marketing-advertisement|content-creation|ecommerce-support)$#', $path, $m)) {
-    return $dispatch('service.php', ['service' => $m[1]]);
+// Canonical service routes -> service.php
+$serviceAliases = [
+    'services/web-development'       => 'web-development',
+    'services/web-security'          => 'web-security',
+    'services/performance-marketing' => 'marketing-advertisement',
+    'services/content-creation'      => 'content-creation',
+    'services/ecommerce'             => 'ecommerce-support',
+    'services/lead-automation'       => 'lead-automation',
+    'services/ecommerce-support'     => 'ecommerce-support',
+];
+if (isset($serviceAliases[$path])) {
+    return $dispatch('service.php', ['service' => $serviceAliases[$path]]);
 }
 
 if (preg_match('#^admin-gate/([A-Za-z0-9_-]+)$#', $path, $m)) {

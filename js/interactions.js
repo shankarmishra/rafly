@@ -112,13 +112,21 @@
     function initCursor() {
         if (!fine.matches || reduced.matches) return;
 
-        var dot = doc.createElement('div');
-        dot.className = 'cursor';
-        dot.setAttribute('aria-hidden', 'true');
-        var label = doc.createElement('span');
-        label.className = 'cursor-label';
-        dot.appendChild(label);
-        doc.body.appendChild(dot);
+        var dot = doc.querySelector('.rafly-cursor, .cursor');
+        if (!dot) {
+            dot = doc.createElement('div');
+            dot.className = 'rafly-cursor';
+            dot.setAttribute('aria-hidden', 'true');
+            dot.innerHTML = '<span class="cursor-dot"></span><span class="cursor-badge"></span>';
+            doc.body.appendChild(dot);
+        }
+
+        var label = dot.querySelector('.cursor-badge, .cursor-label');
+        if (!label) {
+            label = doc.createElement('span');
+            label.className = 'cursor-badge';
+            dot.appendChild(label);
+        }
 
         var x = window.innerWidth / 2, y = window.innerHeight / 2;
         var tx = x, ty = y, shown = false;
@@ -133,29 +141,38 @@
             dot.classList.remove('is-on');
         });
 
-        /* One delegated listener rather than one per target, so anything the
-           page adds later is covered without re-binding. */
+        doc.addEventListener('pointerdown', function () {
+            dot.classList.add('is-clicking');
+        });
+        doc.addEventListener('pointerup', function () {
+            dot.classList.remove('is-clicking');
+        });
+
         doc.addEventListener('pointerover', function (e) {
             var t = e.target.closest
-                ? e.target.closest('[data-cursor], a, button, .svc-row, .statement-item')
+                ? e.target.closest('[data-cursor], [data-magnetic], a, button, .btn, .svc-row, .statement-item')
                 : null;
             if (!t) {
-                dot.className = 'cursor is-on';
+                dot.classList.remove('is-hovering', 'is-link', 'is-explore', 'is-view', 'is-open', 'has-badge');
                 label.textContent = '';
                 return;
             }
-            var mode = t.getAttribute('data-cursor')
-                || (t.matches('.svc-row, .statement-item') ? 'explore' : 'link');
-            dot.className = 'cursor is-on is-' + mode;
-            label.textContent = mode === 'explore' ? 'Explore'
-                : mode === 'view' ? 'View'
-                : mode === 'open' ? 'Open' : '';
+            var text = t.getAttribute('data-cursor-text') || '';
+            var mode = t.getAttribute('data-cursor') || (t.matches('.svc-row, .statement-item') ? 'explore' : 'link');
+            
+            dot.classList.add('is-hovering', 'is-' + mode);
+            if (text) {
+                label.textContent = text;
+                dot.classList.add('has-badge');
+            } else {
+                label.textContent = mode === 'explore' ? 'Explore' : mode === 'view' ? 'View' : mode === 'open' ? 'Open' : '';
+            }
         });
 
         addTicker(function () {
             x += (tx - x) * 0.22;
             y += (ty - y) * 0.22;
-            dot.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';
+            dot.style.transform = 'translate3d(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px, 0)';
         });
     }
 
@@ -193,10 +210,34 @@
         });
     }
 
+    /* ====================================================================
+       SYSTEM ARCHITECTURE NODES
+       Interactive node highlighting for service architecture diagrams.
+       ==================================================================== */
+    function initSystemArchitecture() {
+        var diagrams = [].slice.call(doc.querySelectorAll('[data-system-architecture]'));
+        diagrams.forEach(function (diag) {
+            var nodes = [].slice.call(diag.querySelectorAll('.system-node-card'));
+            if (!nodes.length) return;
+
+            nodes.forEach(function (node) {
+                node.addEventListener('pointerenter', function () {
+                    nodes.forEach(function (n) { n.classList.remove('is-active'); });
+                    node.classList.add('is-active');
+                });
+                node.addEventListener('click', function () {
+                    nodes.forEach(function (n) { n.classList.remove('is-active'); });
+                    node.classList.add('is-active');
+                });
+            });
+        });
+    }
+
     function init() {
         initMagnetic();
         initCursor();
         initSpotlight();
+        initSystemArchitecture();
     }
 
     if (doc.readyState === 'loading') {
@@ -205,3 +246,4 @@
         init();
     }
 }());
+

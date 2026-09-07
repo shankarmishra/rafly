@@ -232,6 +232,11 @@ admin_head([
 ]);
 ?>
 
+<?php
+$teamOsProjectsCount = (int)scalar('SELECT count(*) FROM projects');
+$teamOsTasksCount    = (int)scalar("SELECT count(*) FROM tasks WHERE status NOT IN ('completed', 'approved')");
+$teamOsDealValue     = (float)scalar("SELECT coalesce(sum(proposal_value), 0) FROM crm_deals WHERE deal_stage NOT IN ('won', 'lost')");
+?>
 <div class="stat-grid">
     <div class="stat<?= $staleTotal > 0 ? ' attn' : '' ?>">
         <div class="n"><?= number_format($staleTotal) ?></div>
@@ -240,32 +245,21 @@ admin_head([
     </div>
 
     <div class="stat">
-        <div class="n"><?= number_format($week) ?></div>
-        <div class="k">Last 7 days</div>
-        <div class="sub">
-<?php if ($delta === 0): ?>
-            <span class="delta delta-flat">no change</span> on previous 7
-<?php else: ?>
-            <span class="delta <?= $delta > 0 ? 'delta-up' : 'delta-down' ?>">
-                <?= $delta > 0 ? '&#9650;' : '&#9660;' ?>
-                <?= $delta > 0 ? '+' : '&minus;' ?><?= number_format(abs($delta)) ?><?php
-                    if ($deltaPct !== null) { echo ' (' . ($delta > 0 ? '+' : '&minus;') . abs($deltaPct) . '%)'; }
-                ?>
-            </span> on previous 7
-<?php endif; ?>
-        </div>
+        <div class="n"><?= number_format($teamOsProjectsCount) ?></div>
+        <div class="k">Active Projects</div>
+        <div class="sub"><a href="<?= e(site_path('/admin/projects.php')) ?>">Open Project 360 &rarr;</a></div>
     </div>
 
     <div class="stat">
-        <div class="n"><?= number_format($leadsNew) ?></div>
-        <div class="k">Unopened</div>
-        <div class="sub">Still marked new</div>
+        <div class="n"><?= number_format($teamOsTasksCount) ?></div>
+        <div class="k">Open Tasks</div>
+        <div class="sub"><a href="<?= e(site_path('/admin/tasks.php')) ?>">Open Task Board &rarr;</a></div>
     </div>
 
     <div class="stat">
-        <div class="n"><?= number_format($leadsTotal) ?></div>
-        <div class="k">Enquiries all time</div>
-        <div class="sub"><?= number_format($postsPublished) ?> article<?= $postsPublished === 1 ? '' : 's' ?> published<?= $postsDraft ? ', ' . $postsDraft . ' draft' . ($postsDraft === 1 ? '' : 's') : '' ?></div>
+        <div class="n">₹<?= number_format($teamOsDealValue, 0) ?></div>
+        <div class="k">Pipeline Value</div>
+        <div class="sub"><a href="<?= e(site_path('/admin/leads.php')) ?>">Active Deals &rarr;</a></div>
     </div>
 </div>
 

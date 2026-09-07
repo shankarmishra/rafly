@@ -85,7 +85,8 @@ $page = [
     'title'     => $post['title'] . ' | ' . SITE_NAME,
     'desc'      => (string)($post['meta_desc'] ?: $post['excerpt']),
     'bodyClass' => 'page-blog-post',
-    'styles'    => ['blog', 'blog-post'],
+    'styles'    => ['home', 'home-scenes', 'blog', 'blog-post'],
+    'module'    => 'home',
     'ogType'    => 'article',
 
     // The content varies by slug, so the canonical must be set explicitly —

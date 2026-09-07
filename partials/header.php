@@ -21,7 +21,7 @@ $navServices = services_all();
                 </button>
                 <div class="nav-drop nav-drop-wide" id="navDropServices">
                     <?php foreach ($navServices as $s): ?>
-                        <a class="nav-drop-item" href="/<?= e($s['slug']) ?>">
+                        <a class="nav-drop-item" href="<?= e(service_url($s['slug'])) ?>">
                             <span class="icon-box"><?= icon($s['icon']) ?></span>
                             <span>
                                 <span class="nav-drop-title"><?= e($s['title']) ?></span><br>
@@ -65,7 +65,7 @@ $navServices = services_all();
             <ul class="drawer-sub" id="drawerServices" hidden>
                 <?php foreach ($navServices as $s): ?>
                     <li>
-                        <a href="/<?= e($s['slug']) ?>">
+                        <a href="<?= e(service_url($s['slug'])) ?>">
                             <span class="icon-box"><?= icon($s['icon']) ?></span>
                             <?= e($s['title']) ?>
                         </a>

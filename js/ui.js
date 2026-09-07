@@ -353,6 +353,25 @@
         }, 5000);
     }
 
+    /* ====================================================================
+       Social rail observer — hides fixed social rail when footer is near
+       ==================================================================== */
+    function initSocialRailFooterObserver() {
+        var rail = doc.querySelector('.social-rail');
+        var footer = doc.querySelector('.site-footer');
+        if (!rail || !footer) return;
+
+        function check() {
+            var footerTop = footer.getBoundingClientRect().top;
+            var isNearFooter = footerTop <= window.innerHeight + 100;
+            rail.classList.toggle('is-hidden', isNearFooter);
+        }
+
+        window.addEventListener('scroll', check, { passive: true });
+        window.addEventListener('resize', check, { passive: true });
+        check();
+    }
+
     /* ==================================================================== */
     function init() {
         initHeader();
@@ -362,6 +381,7 @@
         initAccordions();
         initToTop();
         initScrollSpy();
+        initSocialRailFooterObserver();
     }
 
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init);

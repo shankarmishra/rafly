@@ -283,6 +283,12 @@ body.nav-open { overflow: hidden; }
     background: rgba(255, 255, 255, .7);
     border: 1px solid var(--line);
     backdrop-filter: blur(12px);
+    transition: opacity var(--dur-2) var(--ease), visibility var(--dur-2) var(--ease);
+}
+.social-rail.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 .social-rail a {
     display: grid;

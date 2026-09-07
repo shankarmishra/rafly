@@ -251,9 +251,11 @@ define('LEAD_CSV_FILE',   LEAD_STORE_PATH . '/leads.csv');
 const SERVICES = [
     'web-development'          => 'Web Development',
     'web-security'             => 'Web Security',
+    'lead-automation'          => 'Lead Automation',
     'marketing-advertisement'  => 'Marketing & Advertisement',
     'content-creation'         => 'Content Creation',
-    'ecommerce-support'        => 'E-commerce Support',
+    'ecommerce-support'        => 'E-Commerce Storefronts',
+    'ecommerce'                => 'E-Commerce Storefronts',
 ];
 
 /**
@@ -286,36 +288,45 @@ const NAV_ITEMS = [
  */
 const BUNDLES = [
     [
-        'name'     => 'Starter',
-        'sub'      => 'For businesses getting online',
-        'featured' => false,
-        'points'   => [
-            'Website (up to 5 pages)',
-            'Baseline security hardening',
-            'Starter content pack',
-            'Social profile setup',
+        'name'       => 'Starter',
+        'sub'        => 'Local Service Businesses, Clinics & Practices',
+        'price_text' => '₹25,000 – ₹60,000',
+        'featured'   => false,
+        'points'     => [
+            '5 to 10 Page High-Speed Website (< 1.5s benchmark)',
+            'Baseline Cyber Security Hardening & SSL Setup',
+            'Google Business Profile & Local SEO Setup',
+            'Direct WhatsApp Lead Routing & Automated Form',
+            '100% Source Code & Asset Ownership Transfer',
+            'Optional Growth Retainer: ₹10,000 – ₹20,000 / mo',
         ],
     ],
     [
-        'name'     => 'Growth',
-        'sub'      => 'For businesses ready to scale',
-        'featured' => true,
-        'points'   => [
-            'Everything in Starter',
-            'Ongoing marketing campaigns',
-            'Advanced security audit',
-            'E-commerce storefront setup',
+        'name'       => 'Growth',
+        'sub'        => 'Scaling D2C & E-Commerce Storefronts',
+        'price_text' => '₹45,000 – ₹1,00,000',
+        'featured'   => true,
+        'points'     => [
+            'Scalable Shopify or Custom WooCommerce Storefront',
+            'Payment Gateway, Shipping & Inventory Flow Sync',
+            'Conversion Rate Optimization & Abandoned Cart Recovery',
+            'Performance Meta & Google Search Ad Setup',
+            '24/7 Lead Qualification & WhatsApp Routing',
+            'Growth & Marketing Retainer: ₹35,000 – ₹75,000 / mo',
         ],
     ],
     [
-        'name'     => 'Enterprise',
-        'sub'      => 'For established operations',
-        'featured' => false,
-        'points'   => [
-            'Everything in Growth',
-            'Dedicated account team',
-            'Custom integrations & APIs',
-            'Priority support SLA',
+        'name'       => 'Security Emergency',
+        'sub'        => 'Compromised Sites & Managed Cyber Defense',
+        'price_text' => '₹12,000 – ₹25,000',
+        'featured'   => false,
+        'points'     => [
+            '1-Hour SLA Emergency Malware Isolation & DB Cleanup',
+            'Google Blacklist & Security Review Resubmission',
+            'Web Application Firewall (WAF) & Header Hardening',
+            'Daily Automated Offsite Backups & 24/7 Monitoring',
+            'Restoration Dry-Run & Vulnerability Audit Report',
+            'Managed Security Retainer: ₹5,000 – ₹15,000 / mo',
         ],
     ],
 ];
