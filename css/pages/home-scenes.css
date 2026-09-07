@@ -2899,6 +2899,58 @@
     width: 100%;
 }
 
+/* CONSTRAINED ROUNDED HERO CARD BOX CONTAINER */
+.sig-hero-box {
+    position: relative;
+    width: 100%;
+    max-width: 1080px;
+    height: min(600px, 78svh);
+    min-height: 520px;
+    margin: 0 auto;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    box-shadow:
+        0 24px 70px rgba(6, 18, 47, 0.08),
+        0 2px 12px rgba(10, 99, 255, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 3.5vw, 3.0rem);
+    isolation: isolate;
+}
+
+.sig-canvas--box {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    pointer-events: auto;
+    z-index: 0;
+}
+
+/* ANIMATED GRADIENT TEXT FILL TYPOGRAPHY */
+.sig-gradient-text {
+    background-image: linear-gradient(110deg, #050f33 0%, #0a63ff 30%, #38bdf8 50%, #0a63ff 70%, #050f33 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: gradTextFill 7s ease-in-out infinite;
+}
+
+@keyframes gradTextFill {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* FULL-VIEWPORT AMBIENT CANVAS BACKGROUND */
 .sig-canvas--full-bg {
     position: absolute;
@@ -2913,6 +2965,7 @@
 
 /* CENTERED EDITORIAL HERO CONTENT */
 .sig-content--centered {
+    position: relative;
     align-items: center;
     text-align: center;
     max-width: 860px;
@@ -2934,7 +2987,7 @@
 
 .sig-headline--centered {
     text-align: center;
-    font-size: clamp(3.8rem, 5.8vw, 6.2rem);
+    font-size: clamp(3.2rem, 5.0vw, 5.6rem);
     letter-spacing: -0.05em;
     margin-bottom: 1.5rem;
 }
@@ -2943,7 +2996,7 @@
     text-align: center;
     max-width: 640px;
     margin: 0 auto 2.2rem;
-    font-size: clamp(1.1rem, 1.0rem + 0.5vw, 1.35rem);
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
     color: #3b466d;
 }
 
