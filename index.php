@@ -463,84 +463,80 @@ require __DIR__ . '/partials/social-rail.php';
        ========================================================================== */ ?>
     <section class="section hero sig-hero sig-hero--entered grs-hero--entered" id="home" data-hero data-sig-hero aria-label="RAFly — Digital Growth Studio">
 
-        <?php /* ── MAIN CONTAINER WITH CONSTRAINED HERO CARD BOX ── */ ?>
+        <?php /* Kinetic Matrix Spring-Mass Simulation Canvas (Full Hero Background) */ ?>
+        <canvas class="sig-canvas sig-canvas--full-bg" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
+
+        <?php /* ── MAIN CONTAINER ── */ ?>
         <div class="container sig-container">
-            <div class="sig-hero-box">
+            <div class="sig-content sig-content--centered">
 
-                <?php /* Kinetic Matrix Spring-Mass Simulation Canvas */ ?>
-                <canvas class="sig-canvas sig-canvas--box" data-signal-canvas width="1080" height="580" aria-hidden="true"></canvas>
+                <?php /* Top Badge */ ?>
+                <div class="sig-eyebrow sig-eyebrow--pill">
+                    <span class="sig-eyebrow__dot" aria-hidden="true"></span>
+                    <span class="sig-eyebrow__label">RAFly Growth Studio 2.0</span>
+                    <span class="sig-eyebrow__sep" aria-hidden="true">•</span>
+                    <span class="sig-eyebrow__item">High-Velocity Digital Infrastructure</span>
+                </div>
 
-                <div class="sig-content sig-content--centered">
-
-                    <?php /* Top Badge */ ?>
-                    <div class="sig-eyebrow sig-eyebrow--pill">
-                        <span class="sig-eyebrow__dot" aria-hidden="true"></span>
-                        <span class="sig-eyebrow__label">RAFly Growth Studio 2.0</span>
-                        <span class="sig-eyebrow__sep" aria-hidden="true">•</span>
-                        <span class="sig-eyebrow__item">High-Velocity Digital Infrastructure</span>
-                    </div>
-
-                    <?php /* Animated GradientText Headline */ ?>
-                    <h1 class="sig-headline sig-headline--centered" aria-label="Build fast. Grow faster. Scale smarter.">
-                        <span class="sig-h-line" data-line="1">
-                            <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Build fast.</span></span>
-                        </span>
-                        <span class="sig-h-line" data-line="2">
-                            <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Grow faster.</span></span>
-                        </span>
-                        <span class="sig-h-line sig-h-line--accent" data-line="3">
-                            <span class="sig-h-mask">
-                                <span class="sig-h-inner sig-gradient-text">
-                                    <span class="sig-h-focus" data-light-sweep>Scale smarter.</span>
-                                </span>
+                <?php /* Animated GradientText Headline */ ?>
+                <h1 class="sig-headline sig-headline--centered" aria-label="Build fast. Grow faster. Scale smarter.">
+                    <span class="sig-h-line" data-line="1">
+                        <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Build fast.</span></span>
+                    </span>
+                    <span class="sig-h-line" data-line="2">
+                        <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Grow faster.</span></span>
+                    </span>
+                    <span class="sig-h-line sig-h-line--accent" data-line="3">
+                        <span class="sig-h-mask">
+                            <span class="sig-h-inner sig-gradient-text">
+                                <span class="sig-h-focus" data-light-sweep>Scale smarter.</span>
                             </span>
                         </span>
-                    </h1>
+                    </span>
+                </h1>
 
-                    <?php /* Body copy */ ?>
-                    <p class="sig-body sig-body--centered">
-                        RAFly transforms ambitious ideas into market-dominating digital platforms with high-velocity engineering, security, and growth engines.
-                    </p>
+                <?php /* Body copy */ ?>
+                <p class="sig-body sig-body--centered">
+                    RAFly transforms ambitious ideas into market-dominating digital platforms with high-velocity engineering, security, and growth engines.
+                </p>
 
-                    <?php /* CTAs */ ?>
-                    <div class="sig-actions sig-actions--centered">
-                        <button type="button" class="sig-btn sig-btn--primary" data-modal-open="consultationModal" data-magnetic>
-                            <span class="sig-btn__label">Book a free consultation</span>
-                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                            <span class="sig-btn__sheen" aria-hidden="true"></span>
-                        </button>
-                        <a class="sig-btn sig-btn--secondary" href="#approach" data-magnetic>
-                            <span class="sig-btn__label">See our work</span>
-                            <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-up-right') ?></span>
-                        </a>
-                    </div>
+                <?php /* CTAs */ ?>
+                <div class="sig-actions sig-actions--centered">
+                    <button type="button" class="sig-btn sig-btn--primary" data-modal-open="consultationModal" data-magnetic>
+                        <span class="sig-btn__label">Book a free consultation</span>
+                        <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                        <span class="sig-btn__sheen" aria-hidden="true"></span>
+                    </button>
+                    <a class="sig-btn sig-btn--secondary" href="#approach" data-magnetic>
+                        <span class="sig-btn__label">See our work</span>
+                        <span class="sig-btn__arrow" aria-hidden="true"><?= icon('arrow-up-right') ?></span>
+                    </a>
+                </div>
 
-                    <?php /* Compact Editorial Trust Row */ ?>
-                    <div class="sig-trust sig-trust--centered">
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◉</span>
-                            <span>48H DISCOVERY</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>SECURITY INCLUDED</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>100% IP OWNERSHIP</span>
-                        </span>
-                        <span class="sig-trust__sep" aria-hidden="true">·</span>
-                        <span class="sig-trust__cell">
-                            <span class="sig-trust__dot" aria-hidden="true">◇</span>
-                            <span>ONE UNIFIED TEAM</span>
-                        </span>
-                    </div>
+                <?php /* Compact Editorial Trust Row */ ?>
+                <div class="sig-trust sig-trust--centered">
+                    <span class="sig-trust__cell">
+                        <span class="sig-trust__dot" aria-hidden="true">◉</span>
+                        <span>48H DISCOVERY</span>
+                    </span>
+                    <span class="sig-trust__sep" aria-hidden="true">·</span>
+                    <span class="sig-trust__cell">
+                        <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                        <span>SECURITY INCLUDED</span>
+                    </span>
+                    <span class="sig-trust__sep" aria-hidden="true">·</span>
+                    <span class="sig-trust__cell">
+                        <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                        <span>100% IP OWNERSHIP</span>
+                    </span>
+                    <span class="sig-trust__sep" aria-hidden="true">·</span>
+                    <span class="sig-trust__cell">
+                        <span class="sig-trust__dot" aria-hidden="true">◇</span>
+                        <span>ONE UNIFIED TEAM</span>
+                    </span>
+                </div>
 
-                </div><!-- /.sig-content -->
-
-            </div><!-- /.sig-hero-box -->
+            </div><!-- /.sig-content -->
         </div><!-- /.container -->
 
         <?php /* ── Scroll cue ── */ ?>
