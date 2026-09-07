@@ -385,8 +385,8 @@ foreach (services_all() as $svc) {
 
 $page = [
     'id'        => 'home',
-    'title'     => 'RAFly Digital Growth — Build. Protect. Grow.',
-    'desc'      => 'High-performance web infrastructure, cyber security protection, and 24/7 lead qualification systems. Your business is our responsibility.',
+    'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
+    'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
     'styles'    => ['home', 'home-scenes'],
     'module'    => 'home',
@@ -508,62 +508,59 @@ require __DIR__ . '/partials/social-rail.php';
         <?php /* ── 4. ASYMMETRIC MAIN CONTAINER: LEFT CONTENT + RIGHT ECOSYSTEM ── */ ?>
         <div class="rafly-hero__container">
 
-            <?php /* ── LEFT COLUMN: COMPACT EDITORIAL MARKETING CONTENT (35% width) ── */ ?>
+            <?php /* ── LEFT COLUMN: EDITORIAL MARKETING CONTENT (35% width) ── */ ?>
             <div class="rafly-hero__left" data-hero-left>
                 <!-- Eyebrow Pill -->
                 <div class="rafly-hero__eyebrow" data-hero-reveal="eyebrow">
                     <span class="rafly-hero__sparkle">✦</span>
-                    <span class="rafly-hero__eyebrow-text">DIGITAL SOLUTIONS ECOSYSTEM</span>
+                    <span class="rafly-hero__eyebrow-text">DIGITAL GROWTH PARTNER &mdash; WEB / SECURITY / GROWTH / COMMERCE</span>
                 </div>
 
-                <!-- Main Headline with 4-Line Staggered Reveal -->
-                <h1 class="rafly-hero__title">
+                <!-- Main Headline with 3-Line Staggered Reveal -->
+                <h1 class="rafly-hero__title" aria-label="Build fast. Grow faster. Scale smarter.">
                     <span class="rafly-hero__title-line" data-hero-reveal="title-1">
-                        <span class="rafly-hero__title-text">TURN</span>
+                        <span class="rafly-hero__title-text">BUILD FAST.</span>
                     </span>
                     <span class="rafly-hero__title-line" data-hero-reveal="title-2">
-                        <span class="rafly-hero__title-text">IDEAS INTO</span>
+                        <span class="rafly-hero__title-text">GROW FASTER.</span>
                     </span>
                     <span class="rafly-hero__title-line" data-hero-reveal="title-3">
-                        <span class="rafly-hero__title-text rafly-hero__title-text--blue">REAL DIGITAL</span>
-                    </span>
-                    <span class="rafly-hero__title-line" data-hero-reveal="title-4">
-                        <span class="rafly-hero__title-text rafly-hero__title-text--blue">IMPACT</span>
+                        <span class="rafly-hero__title-text rafly-hero__title-text--blue">SCALE SMARTER.</span>
                     </span>
                 </h1>
 
                 <!-- Short Description -->
                 <p class="rafly-hero__desc" data-hero-reveal="desc">
-                    We build high-performance digital solutions that help businesses grow, secure and scale — from web and security to marketing, content and commerce.
+                    One team building the digital systems that turn attention into growth. Web, security, marketing, content and commerce — built on one plan, with one person accountable.
                 </p>
 
                 <!-- CTA Actions -->
                 <div class="rafly-hero__actions" data-hero-reveal="cta">
                     <a href="#contact" class="rafly-hero__cta-primary">
-                        <span>GET STARTED</span>
+                        <span>BOOK A FREE CONSULTATION</span>
                         <span class="rafly-hero__cta-arrow" aria-hidden="true">&rarr;</span>
                     </a>
-                    <a href="/services" class="rafly-hero__cta-secondary">
-                        <span>EXPLORE SERVICES</span>
+                    <a href="#delivery" class="rafly-hero__cta-secondary">
+                        <span>SEE HOW DELIVERY RUNS</span>
                         <span class="rafly-hero__cta-subarrow" aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
 
-                <!-- Compact Metrics Bar -->
+                <!-- Compact Metrics & Trust Bar -->
                 <div class="rafly-hero__metrics" data-hero-reveal="metrics">
                     <div class="rafly-hero__metric">
-                        <span class="rafly-hero__metric-val">5+</span>
-                        <span class="rafly-hero__metric-lbl">CORE SERVICES</span>
+                        <span class="rafly-hero__metric-val">48H</span>
+                        <span class="rafly-hero__metric-lbl">DISCOVERY</span>
                     </div>
                     <div class="rafly-hero__metric-sep"></div>
                     <div class="rafly-hero__metric">
-                        <span class="rafly-hero__metric-val">100+</span>
-                        <span class="rafly-hero__metric-lbl">PROJECTS</span>
+                        <span class="rafly-hero__metric-val">100%</span>
+                        <span class="rafly-hero__metric-lbl">IP OWNERSHIP</span>
                     </div>
                     <div class="rafly-hero__metric-sep"></div>
                     <div class="rafly-hero__metric">
-                        <span class="rafly-hero__metric-val">98%</span>
-                        <span class="rafly-hero__metric-lbl">SATISFACTION</span>
+                        <span class="rafly-hero__metric-val">FREE</span>
+                        <span class="rafly-hero__metric-lbl">SECURITY REVIEW</span>
                     </div>
                 </div>
             </div>
