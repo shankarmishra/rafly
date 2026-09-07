@@ -23,12 +23,12 @@
    ========================================================================== */
 
 /* ==========================================================================
-   THE RAFly PREMIUM HERO SECTION — LIGHT, CLEAN & RESTRAINED
+   THE RAFly PREMIUM HERO SECTION — ASYMMETRIC DIGITAL ECOSYSTEM
    ========================================================================== */
 
 .rafly-hero {
-    --hub-size: 190px;
-    --card-w: 340px;
+    --hub-size: 230px;
+    --card-w: 320px;
     position: relative;
     width: 100%;
     min-height: 100vh;
@@ -38,15 +38,21 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #f8fafd;
+    color: #13213d;
     isolation: isolate;
-    padding: 80px 24px 60px;
+    padding: 90px 48px 60px;
     box-sizing: border-box;
     font-family: inherit;
 }
 
-/* ── 1. ATMOSPHERIC BACKGROUND SYSTEM ── */
+.rafly-hero[data-hero-static] *,
+.rafly-hero[data-hero-static] *::before,
+.rafly-hero[data-hero-static] *::after {
+    animation: none !important;
+}
+
+/* ── 1. ATMOSPHERIC BACKGROUND SYSTEM & TECHNICAL GRIDS ── */
 .rafly-hero__env {
     position: absolute;
     inset: 0;
@@ -58,68 +64,99 @@
 .rafly-hero__bg-base {
     position: absolute;
     inset: 0;
-    background: #f8fafc;
+    background: #f8fafd;
 }
 
-.rafly-hero__bg-glow {
+.rafly-hero__bg-glows {
     position: absolute;
-    left: 50%;
-    top: 46%;
-    width: 800px;
-    height: 800px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle at center, 
-        rgba(10, 99, 255, 0.05) 0%, 
-        rgba(8, 145, 178, 0.025) 45%, 
-        transparent 75%);
-    filter: blur(40px);
+    inset: 0;
     pointer-events: none;
+}
+
+.rafly-hero__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+}
+
+.rafly-hero__glow--center {
+    left: 55%;
+    top: 45%;
+    width: 750px;
+    height: 750px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(43, 130, 255, 0.10) 0%, rgba(23, 105, 255, 0.04) 50%, transparent 75%);
+}
+
+.rafly-hero__glow--right {
+    right: 5%;
+    top: 30%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(121, 103, 255, 0.06) 0%, transparent 70%);
+}
+
+.rafly-hero__glow--left {
+    left: -5%;
+    top: 20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(42, 160, 255, 0.035) 0%, transparent 70%);
+}
+
+.rafly-hero__glow--bottom {
+    left: 45%;
+    bottom: -10%;
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(80, 150, 255, 0.035) 0%, transparent 70%);
 }
 
 .rafly-hero__grid {
     position: absolute;
     inset: 0;
     background-image: 
-        linear-gradient(to right, rgba(10, 99, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(10, 99, 255, 0.035) 1px, transparent 1px);
+        linear-gradient(to right, rgba(50, 110, 210, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(50, 110, 210, 0.045) 1px, transparent 1px);
     background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 40%, transparent 100%);
-    opacity: 0.8;
+    mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 35%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 35%, transparent 100%);
+    opacity: 0.9;
 }
 
-.rafly-hero__orbit-bg {
+.rafly-hero__grid-sec {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.6;
+    background-image: 
+        linear-gradient(to right, rgba(50, 110, 210, 0.018) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(50, 110, 210, 0.018) 1px, transparent 1px);
+    background-size: 96px 96px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%);
 }
-.rafly-hero__orbit-bg svg {
+
+.rafly-hero__light-ribbons {
+    position: absolute;
+    inset: 0;
+    opacity: 0.8;
+}
+.rafly-hero__light-ribbons svg {
     width: 100%;
     height: 100%;
 }
 
-.rafly-hero__beam {
+.rafly-hero__cursor-glow {
     position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    transform: translateX(-50%);
-    background: linear-gradient(to bottom, 
-        transparent, 
-        rgba(10, 99, 255, 0.1) 30%, 
-        rgba(8, 145, 178, 0.15) 50%, 
-        rgba(10, 99, 255, 0.1) 70%, 
-        transparent);
-    animation: raflyBeamBreathe 6s ease-in-out infinite;
-}
-
-@keyframes raflyBeamBreathe {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(23, 105, 255, 0.05) 0%, transparent 70%);
+    filter: blur(50px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .rafly-hero__particles {
@@ -130,14 +167,14 @@
 .rafly-particle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(10, 99, 255, 0.4);
-    box-shadow: 0 0 6px rgba(10, 99, 255, 0.4);
-    animation: raflyParticleFloat var(--dur, 8s) ease-in-out infinite alternate;
+    background: rgba(23, 105, 255, 0.45);
+    box-shadow: 0 0 6px rgba(23, 105, 255, 0.45);
+    animation: raflyParticleFloat var(--dur, 9s) ease-in-out infinite alternate;
 }
 
 @keyframes raflyParticleFloat {
     0% { transform: translate(0, 0); opacity: 0.15; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.55; }
     100% { transform: translate(var(--dx, 15px), var(--dy, -20px)); opacity: 0.2; }
 }
 
@@ -165,7 +202,7 @@
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: #0f172a;
+    color: #13213d;
     text-transform: uppercase;
 }
 
@@ -178,7 +215,7 @@
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.16em;
-    color: #64748b;
+    color: #647594;
     text-transform: uppercase;
 }
 
@@ -200,7 +237,7 @@
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.16em;
-    color: #0f172a;
+    color: #13213d;
     text-transform: uppercase;
 }
 
@@ -208,7 +245,7 @@
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 0.14em;
-    color: #64748b;
+    color: #647594;
     text-transform: uppercase;
 }
 
@@ -224,11 +261,11 @@
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    color: #64748b;
+    color: #647594;
     transition: color 0.25s ease;
 }
 .rafly-hero__scroll-cue:hover {
-    color: #0a63ff;
+    color: #1769ff;
 }
 
 .rafly-hero__scroll-text {
@@ -253,7 +290,7 @@
     left: 0;
     width: 100%;
     height: 8px;
-    background: #0a63ff;
+    background: #1769ff;
     border-radius: 2px;
     animation: raflyScrollMove 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
@@ -284,13 +321,279 @@
     transition: all 0.3s ease;
 }
 .rafly-hero__dot.is-active {
-    width: 16px;
+    width: 18px;
     border-radius: 4px;
-    background: #0a63ff;
-    box-shadow: 0 0 8px rgba(10, 99, 255, 0.3);
+    background: #1769ff;
+    box-shadow: 0 0 10px rgba(23, 105, 255, 0.35);
 }
 
-/* ── 3. SVG CONNECTIONS ── */
+/* ── 3. ASYMMETRIC MAIN LAYOUT CONTAINER ── */
+.rafly-hero__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1440px;
+    padding: 0 48px 0 80px;
+    gap: 36px;
+    z-index: 10;
+    margin-top: 20px;
+}
+
+/* LEFT COLUMN: COMPACT MARKETING CONTENT (28-32% width) */
+.rafly-hero__left {
+    width: 31%;
+    max-width: 480px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 20;
+}
+
+.rafly-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(23, 105, 255, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 999px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(23, 105, 255, 0.04);
+}
+
+.rafly-hero__sparkle {
+    font-size: 10px;
+    color: #1769ff;
+}
+
+.rafly-hero__eyebrow-text {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #1769ff;
+    text-transform: uppercase;
+}
+
+/* Editorial Headline Typography */
+.rafly-hero__title {
+    font-size: 54px;
+    font-weight: 750;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: #12203d;
+    margin: 0 0 22px 0;
+    max-width: 440px;
+}
+
+.rafly-hero__title-line {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+
+.rafly-hero__title-text {
+    display: block;
+}
+
+.rafly-hero__title-text--blue {
+    color: #1769ff;
+    background: linear-gradient(135deg, #1769ff 0%, #3a8cff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Staggered Reveal Choreography */
+.rafly-hero [data-hero-reveal] {
+    opacity: 0;
+    will-change: opacity, transform, filter;
+    transition-property: opacity, transform, filter;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rafly-hero [data-hero-reveal="eyebrow"] {
+    transform: translateY(12px);
+    filter: blur(5px);
+    transition-duration: 700ms;
+}
+
+.rafly-hero [data-hero-reveal="title-1"],
+.rafly-hero [data-hero-reveal="title-2"],
+.rafly-hero [data-hero-reveal="title-3"],
+.rafly-hero [data-hero-reveal="title-4"] {
+    transform: translateY(28px) scaleY(0.98);
+    filter: blur(6px);
+}
+
+.rafly-hero [data-hero-reveal="title-1"] { transition-duration: 450ms; }
+.rafly-hero [data-hero-reveal="title-2"] { transition-duration: 550ms; }
+.rafly-hero [data-hero-reveal="title-3"] { transition-duration: 650ms; }
+.rafly-hero [data-hero-reveal="title-4"] { transition-duration: 750ms; }
+
+.rafly-hero [data-hero-reveal="desc"] {
+    transform: translateY(16px);
+    filter: blur(4px);
+    transition-duration: 600ms;
+}
+
+.rafly-hero [data-hero-reveal="cta"] {
+    transform: translateY(16px);
+    transition-duration: 600ms;
+}
+
+.rafly-hero [data-hero-reveal="metrics"] {
+    transform: translateY(10px);
+    transition-duration: 600ms;
+}
+
+.rafly-hero.rafly-hero--entered [data-hero-reveal] {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    filter: blur(0);
+}
+
+.rafly-hero__desc {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: #647594;
+    max-width: 420px;
+    margin: 0 0 28px 0;
+    font-weight: 450;
+}
+
+.rafly-hero__actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 36px;
+}
+
+.rafly-hero__cta-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    width: 178px;
+    padding: 0 24px;
+    background: #101c3b;
+    color: #ffffff;
+    border-radius: 26px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    box-shadow: 0 10px 25px -5px rgba(16, 28, 59, 0.20);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.rafly-hero__cta-primary:hover {
+    transform: translateY(-2px);
+    background: #1769ff;
+    box-shadow: 0 14px 30px -5px rgba(23, 105, 255, 0.35);
+}
+
+.rafly-hero__cta-arrow {
+    font-size: 15px;
+    transition: transform 0.3s ease;
+}
+
+.rafly-hero__cta-primary:hover .rafly-hero__cta-arrow {
+    transform: translateX(4px);
+}
+
+.rafly-hero__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #13213d;
+    transition: color 0.25s ease;
+}
+
+.rafly-hero__cta-secondary:hover {
+    color: #1769ff;
+}
+
+.rafly-hero__cta-subarrow {
+    font-size: 13px;
+    transition: transform 0.25s ease;
+}
+
+.rafly-hero__cta-secondary:hover .rafly-hero__cta-subarrow {
+    transform: translateX(3px);
+}
+
+.rafly-hero__metrics {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(30, 90, 170, 0.10);
+    width: 100%;
+    max-width: 440px;
+}
+
+.rafly-hero__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rafly-hero__metric-val {
+    font-size: 22px;
+    font-weight: 800;
+    color: #182744;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.rafly-hero__metric-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #71809a;
+    text-transform: uppercase;
+}
+
+.rafly-hero__metric-sep {
+    width: 1px;
+    height: 28px;
+    background: rgba(30, 90, 170, 0.12);
+}
+
+/* RIGHT COLUMN: DIGITAL ECOSYSTEM (68-72% width) */
+.rafly-hero__right {
+    width: 69%;
+    flex-grow: 1;
+    position: relative;
+    height: 680px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── 4. MAIN SPATIAL STAGE ── */
+.rafly-hero__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ── 5. SVG CONNECTIONS ── */
 .rafly-hero__connections {
     position: absolute;
     inset: 0;
@@ -309,13 +612,13 @@
 }
 
 .rafly-path__glow {
-    opacity: 0.5;
+    opacity: 0.6;
     transition: opacity 0.3s ease;
 }
 
 .rafly-path__core {
     stroke-dashoffset: 0;
-    animation: raflyPathFlow 30s linear infinite;
+    animation: raflyPathFlow 25s linear infinite;
 }
 
 @keyframes raflyPathFlow {
@@ -323,33 +626,18 @@
 }
 
 .rafly-path__packet {
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .rafly-path-group.is-active .rafly-path__glow {
-    opacity: 0.9;
-    stroke-width: 3.5;
-}
-.rafly-path-group.is-active .rafly-path__base {
-    stroke: rgba(10, 99, 255, 0.25);
+    opacity: 0.95;
+    stroke-width: 14;
 }
 
-/* ── 4. MAIN SPATIAL STAGE ── */
-.rafly-hero__stage {
-    position: relative;
-    width: 100%;
-    max-width: 1360px;
-    height: 660px;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ── 5. CENTRAL RAFly LOGO HUB (DOMINANT HERO ELEMENT) ── */
+/* ── 6. CENTRAL RAFly LOGO HUB ── */
 .rafly-hub {
     position: absolute;
-    left: 50%;
+    left: 48%;
     top: 46%;
     transform: translate(-50%, -50%);
     width: 230px;
@@ -365,16 +653,16 @@
     inset: -45px;
     border-radius: 50%;
     background: radial-gradient(circle, 
-        rgba(10, 99, 255, 0.12) 0%, 
-        rgba(8, 145, 178, 0.05) 45%, 
+        rgba(23, 105, 255, 0.14) 0%, 
+        rgba(34, 184, 214, 0.05) 45%, 
         transparent 70%);
-    animation: raflyHaloPulse 4.5s ease-in-out infinite;
+    animation: raflyHaloPulse 5s ease-in-out infinite;
     pointer-events: none;
 }
 
 @keyframes raflyHaloPulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.05); opacity: 0.95; }
+    0%, 100% { transform: scale(1); opacity: 0.55; }
+    50% { transform: scale(1.06); opacity: 0.95; }
 }
 
 .rafly-hub__orbit {
@@ -386,17 +674,36 @@
 .rafly-hub__orbit--1 {
     width: 260px;
     height: 260px;
-    border: 1px solid rgba(10, 99, 255, 0.14);
-    box-shadow: 0 0 20px rgba(10, 99, 255, 0.04);
-    animation: raflyOrbitSpin 35s linear infinite;
+    border: 1px solid rgba(23, 105, 255, 0.16);
+    box-shadow: 0 0 20px rgba(23, 105, 255, 0.04);
+    animation: raflyOrbitSpin 32s linear infinite;
 }
 
 .rafly-hub__orbit--2 {
     width: 360px;
     height: 360px;
-    border: 1px dashed rgba(8, 145, 178, 0.12);
+    border: 1px dashed rgba(34, 184, 214, 0.14);
     animation: raflyOrbitSpin 50s linear infinite reverse;
 }
+
+.rafly-hub__orbit--3 {
+    width: 430px;
+    height: 430px;
+    border: 1px dotted rgba(124, 92, 255, 0.10);
+    animation: raflyOrbitSpin 80s linear infinite;
+}
+
+.rafly-hub__orbit-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1769ff;
+    box-shadow: 0 0 8px #1769ff;
+}
+
+.rafly-hub__orbit-dot--1 { top: -3px; left: 50%; transform: translateX(-50%); }
+.rafly-hub__orbit-dot--2 { bottom: -3px; left: 50%; transform: translateX(-50%); background: #22b8d6; box-shadow: 0 0 8px #22b8d6; }
 
 @keyframes raflyOrbitSpin {
     to { transform: rotate(360deg); }
@@ -405,22 +712,22 @@
 /* Translucent Glass Sphere with Crisp Stable Logo */
 .rafly-hub__sphere {
     position: relative;
-    width: 160px;
-    height: 160px;
+    width: 165px;
+    height: 165px;
     border-radius: 50%;
-    background: radial-gradient(135deg at 35% 35%, 
-        rgba(255, 255, 255, 0.98) 0%, 
-        rgba(240, 246, 255, 0.88) 50%, 
-        rgba(219, 234, 254, 0.55) 85%,
-        rgba(191, 219, 254, 0.35) 100%);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.94) 0%, 
+        rgba(235, 244, 255, 0.85) 50%, 
+        rgba(215, 233, 255, 0.6) 85%,
+        rgba(185, 218, 254, 0.4) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1.5px solid rgba(255, 255, 255, 0.98);
     box-shadow: 
-        0 16px 40px -8px rgba(10, 99, 255, 0.16),
-        0 0 24px rgba(10, 99, 255, 0.10),
+        0 20px 60px rgba(60, 130, 255, 0.14),
+        0 0 40px rgba(23, 105, 255, 0.10),
         inset 0 2px 4px rgba(255, 255, 255, 1),
-        inset -6px -6px 18px rgba(10, 99, 255, 0.09);
+        inset -6px -6px 20px rgba(23, 105, 255, 0.09);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -433,7 +740,7 @@
     inset: -50%;
     background: linear-gradient(135deg, 
         transparent 42%, 
-        rgba(255, 255, 255, 0.55) 50%, 
+        rgba(255, 255, 255, 0.65) 50%, 
         transparent 58%);
     animation: raflyLightSweep 7s ease-in-out infinite;
     pointer-events: none;
@@ -453,35 +760,34 @@
 }
 
 .rafly-hub__logo {
-    width: 72px;
-    height: 72px;
+    width: 76px;
+    height: 76px;
     object-fit: contain;
-    filter: drop-shadow(0 3px 8px rgba(10, 99, 255, 0.2));
-    /* Crisp stable logo — no continuous rotation! */
+    filter: drop-shadow(0 4px 10px rgba(23, 105, 255, 0.22));
     transform: translateZ(0);
 }
 
 .rafly-hub.is-pulsing .rafly-hub__sphere {
-    transform: scale(1.03);
+    transform: scale(1.035);
     box-shadow: 
-        0 18px 42px -6px rgba(10, 99, 255, 0.22),
-        0 0 30px rgba(10, 99, 255, 0.15),
+        0 22px 50px -4px rgba(23, 105, 255, 0.25),
+        0 0 35px rgba(23, 105, 255, 0.18),
         inset 0 2px 4px rgba(255, 255, 255, 1);
 }
 
-/* ── 6. SUPPORTING GLASS SERVICE CARDS ── */
+/* ── 7. SUPPORTING GLASS SERVICE CARDS ── */
 .rafly-card {
     position: absolute;
     width: var(--card-w);
-    padding: 16px 20px;
-    background: rgba(255, 255, 255, 0.86);
-    backdrop-filter: blur(18px) saturate(180%);
-    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.95);
     box-shadow: 
-        0 12px 30px -10px rgba(10, 99, 255, 0.07),
-        0 2px 6px rgba(15, 23, 42, 0.02),
+        0 18px 45px rgba(40, 100, 180, 0.08),
+        0 2px 6px rgba(19, 33, 61, 0.03),
         inset 0 1px 1px rgba(255, 255, 255, 0.95);
     text-decoration: none;
     color: inherit;
@@ -503,34 +809,34 @@
 .rafly-card__inner {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
-/* Card Positions Desktop (1440x900 base) */
+/* Card Positions (Relative to Ecosystem Stage) */
 .rafly-card--web {
-    left: 6%;
-    top: 12%;
+    left: 2%;
+    top: 14%;
 }
 
 .rafly-card--security {
-    left: 4%;
+    left: 0%;
     top: 48%;
 }
 
 .rafly-card--marketing {
-    right: 6%;
-    top: 12%;
+    right: 26%;
+    top: 14%;
 }
 
 .rafly-card--content {
-    right: 4%;
-    top: 48%;
+    right: 26%;
+    top: 52%;
 }
 
 .rafly-card--commerce {
-    left: 50%;
+    left: 48%;
     top: 78%;
-    width: 330px;
+    width: 320px;
     transform: translateX(-50%) translateY(20px) scale(0.96);
 }
 
@@ -540,8 +846,8 @@
 
 /* Card Icon Box */
 .rafly-card__icon-box {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -557,23 +863,23 @@
 }
 
 .rafly-card__icon-box--blue {
-    background: rgba(10, 99, 255, 0.07);
-    color: #0a63ff;
+    background: rgba(23, 105, 255, 0.08);
+    color: #1769ff;
 }
 
 .rafly-card__icon-box--cyan {
-    background: rgba(8, 145, 178, 0.07);
-    color: #0891b2;
+    background: rgba(34, 184, 214, 0.08);
+    color: #22b8d6;
 }
 
 .rafly-card__icon-box--violet {
-    background: rgba(97, 52, 201, 0.07);
-    color: #6134c9;
+    background: rgba(124, 92, 255, 0.08);
+    color: #7c5cff;
 }
 
 .rafly-card__icon-box--navy {
-    background: rgba(2, 48, 198, 0.07);
-    color: #0230c6;
+    background: rgba(37, 60, 136, 0.08);
+    color: #253c88;
 }
 
 /* Card Content Text */
@@ -593,11 +899,458 @@
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.12em;
-    color: #0a63ff;
+    color: #1769ff;
 }
 
-.rafly-card--security .rafly-card__num { color: #0891b2; }
-.rafly-card--marketing .rafly-card__num { color: #6134c9; }
+.rafly-card--security .rafly-card__num { color: #22b8d6; }
+.rafly-card--marketing .rafly-card__num { color: #7c5cff; }
+
+.rafly-card__title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #13213d;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.rafly-card__desc {
+    font-size: 11px;
+    line-height: 1.3;
+    color: #647594;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rafly-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(240, 246, 255, 0.8);
+    color: #647594;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.rafly-card__arrow svg {
+    width: 13px;
+    height: 13px;
+    stroke-width: 2px;
+}
+
+.rafly-card:hover {
+    transform: translateY(-5px) scale(1.015);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 
+        0 24px 55px rgba(23, 105, 255, 0.14),
+        0 4px 12px rgba(19, 33, 61, 0.04);
+    border-color: rgba(23, 105, 255, 0.3);
+}
+
+.rafly-card:hover .rafly-card__action {
+    background: #1769ff;
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.rafly-card:hover .rafly-card__icon-box {
+    transform: scale(1.08);
+}
+
+/* ── 8. FAR-RIGHT COMPACT FLOATING 3D DIGITAL SYSTEM MODULE ── */
+.rafly-hero__model3d {
+    position: absolute;
+    right: -2%;
+    top: 42%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 220px;
+    z-index: 26;
+    pointer-events: auto;
+    perspective: 1200px;
+}
+
+.rafly-model3d__viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateY(-10deg) rotateX(4deg) rotateZ(-1deg);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Layer 1: Rear Translucent Glass Back Plate (translateZ 0px) */
+.rafly-model3d__layer--back {
+    position: absolute;
+    inset: -6px;
+    border-radius: 24px;
+    background: rgba(235, 244, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    transform: translateZ(0px);
+    opacity: 0.45;
+    box-shadow: 0 25px 60px rgba(20, 80, 180, 0.12);
+}
+
+/* Layer 2 & 3: Inner Luminous Glass Plane & Main Device Frame (translateZ 12px) */
+.rafly-model3d__layer--mid {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 248, 255, 0.76) 100%);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 
+        0 20px 50px rgba(30, 90, 180, 0.12),
+        inset 0 1px 2px rgba(255, 255, 255, 1),
+        inset -4px -4px 15px rgba(23, 105, 255, 0.05);
+    transform: translateZ(12px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.rafly-model3d__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(240, 246, 255, 0.65);
+    border-bottom: 1px solid rgba(220, 235, 255, 0.7);
+}
+
+.rafly-model3d__dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.rafly-model3d__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+.rafly-model3d__dot.red { background: #ff5f56; }
+.rafly-model3d__dot.yellow { background: #ffbd2e; }
+.rafly-model3d__dot.green { background: #27c93f; }
+
+.rafly-model3d__title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #647594;
+    text-transform: uppercase;
+    margin-left: 4px;
+}
+
+.rafly-model3d__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #38d39f;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.rafly-model3d__status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #38d39f;
+    box-shadow: 0 0 6px #38d39f;
+    animation: raflyStatusPulse 2s ease-in-out infinite;
+}
+
+@keyframes raflyStatusPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.rafly-model3d__screen {
+    position: relative;
+    flex: 1;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.rafly-model3d__grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, rgba(23, 105, 255, 0.04) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(23, 105, 255, 0.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+
+.rafly-model3d__graph {
+    position: relative;
+    width: 100%;
+    height: 85px;
+}
+
+.rafly-model3d__waves-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.rafly-wave {
+    transition: d 0.5s ease;
+}
+
+.rafly-wave--primary {
+    filter: drop-shadow(0 4px 8px rgba(23, 105, 255, 0.25));
+}
+
+.rafly-model3d__indicators {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.rafly-model3d__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 16px;
+}
+
+.rafly-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(23, 105, 255, 0.4);
+    animation: raflyBarPulse 3s ease-in-out infinite alternate;
+}
+.rafly-bar--1 { height: 40%; animation-delay: 0.1s; }
+.rafly-bar--2 { height: 75%; animation-delay: 0.4s; background: #1769ff; }
+.rafly-bar--3 { height: 50%; animation-delay: 0.7s; }
+.rafly-bar--4 { height: 90%; animation-delay: 0.2s; background: #22b8d6; }
+.rafly-bar--5 { height: 60%; animation-delay: 0.5s; }
+
+@keyframes raflyBarPulse {
+    0% { transform: scaleY(0.6); }
+    100% { transform: scaleY(1.1); }
+}
+
+.rafly-model3d__micro-label {
+    font-size: 7.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #71809a;
+}
+
+/* Layer 4: Dark Navy Status Capsule (translateZ 24px) */
+.rafly-model3d__panel {
+    position: relative;
+    z-index: 5;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    background: rgba(16, 28, 59, 0.92);
+    backdrop-filter: blur(12px);
+    border-radius: 10px;
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(16, 28, 59, 0.25);
+    transform: translateZ(24px);
+}
+
+.rafly-model3d__badge {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #60a5fa;
+    text-transform: uppercase;
+}
+
+.rafly-model3d__stat {
+    font-size: 10px;
+    font-weight: 800;
+    color: #38d39f;
+}
+
+/* Layer 6: Floating Detached Process Pill (translateZ 35px) */
+.rafly-hero__floating-tag {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%) translateZ(35px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.98);
+    border-radius: 999px;
+    box-shadow: 0 12px 28px rgba(23, 105, 255, 0.12);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #13213d;
+    z-index: 30;
+}
+
+.rafly-tag__arr {
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.rafly-tag__highlight {
+    color: #1769ff;
+}
+
+/* ── 9. RESPONSIVE BREAKPOINTS ── */
+@media (max-width: 1280px) {
+    .rafly-hero__container {
+        gap: 24px;
+    }
+
+    .rafly-hero__left {
+        width: 34%;
+    }
+
+    .rafly-hero__title {
+        font-size: 48px;
+    }
+
+    .rafly-hero__model3d {
+        display: none; /* Hide far-right 3D card on medium laptop to prevent clutter */
+    }
+
+    .rafly-card--marketing {
+        right: 6%;
+    }
+
+    .rafly-card--content {
+        right: 4%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .rafly-hero {
+        padding: 100px 32px 60px;
+        min-height: auto;
+    }
+
+    .rafly-hero__container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .rafly-hero__left {
+        width: 100%;
+        max-width: 640px;
+        align-items: center;
+    }
+
+    .rafly-hero__desc {
+        text-align: center;
+    }
+
+    .rafly-hero__right {
+        width: 100%;
+        height: 580px;
+    }
+
+    .rafly-hub {
+        left: 50%;
+    }
+
+    .rafly-card--web { left: 4%; top: 10%; }
+    .rafly-card--security { left: 2%; top: 48%; }
+    .rafly-card--marketing { right: 4%; top: 10%; }
+    .rafly-card--content { right: 2%; top: 48%; }
+    .rafly-card--commerce { left: 50%; top: 82%; }
+}
+
+@media (max-width: 768px) {
+    .rafly-hero {
+        padding: 90px 20px 50px;
+    }
+
+    .rafly-hero__top-left,
+    .rafly-hero__top-right {
+        display: none;
+    }
+
+    .rafly-hero__title {
+        font-size: 38px;
+    }
+
+    .rafly-hero__desc {
+        font-size: 14.5px;
+    }
+
+    .rafly-hero__metrics {
+        justify-content: center;
+    }
+
+    .rafly-hero__right {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .rafly-hero__stage {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .rafly-hero__connections {
+        display: none;
+    }
+
+    .rafly-hub {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        margin: 20px 0;
+    }
+
+    .rafly-card {
+        position: relative;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100%;
+        max-width: 360px;
+        opacity: 1 !important;
+    }
+
+    .rafly-card--commerce {
+        transform: none !important;
+    }
+}
 .rafly-card--content .rafly-card__num { color: #2563eb; }
 .rafly-card--commerce .rafly-card__num { color: #0230c6; }
 
@@ -1718,6 +2471,7 @@
     color: var(--blue, #0a63ff);
     background: linear-gradient(135deg, #0a63ff 0%, #4b8bff 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -3953,7 +4707,6 @@
     .sig-trust { justify-content: center; }
     .sig-scroll { display: none; }
 }
-}
 .dw-eyebrow__sep { color: var(--blue, #0a63ff); font-weight: bold; }
 .dw-eyebrow__tag { color: var(--ink); font-weight: 700; }
 
@@ -3996,6 +4749,7 @@
     display: inline-block;
     background: linear-gradient(135deg, #0a63ff 0%, #3b82f6 50%, #60a5fa 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 .dw-h-focus.is-sweeping::after {
@@ -6056,6 +6810,7 @@
 .rh-accent {
     background: linear-gradient(135deg, var(--blue-ink, #002277), var(--blue, #0a63ff));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -6693,6 +7448,7 @@
     margin: 0 0 1.5px 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     color: rgba(255, 255, 255, 0.95);
@@ -7244,6 +8000,7 @@
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -10631,6 +11388,7 @@
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

@@ -466,16 +466,25 @@ require __DIR__ . '/partials/social-rail.php';
         <?php /* ── 1. LIGHT ATMOSPHERIC ENVIRONMENT & FINE TECHNICAL GRID ── */ ?>
         <div class="rafly-hero__env" aria-hidden="true">
             <div class="rafly-hero__bg-base"></div>
-            <div class="rafly-hero__bg-glow"></div>
+            <div class="rafly-hero__bg-glows">
+                <div class="rafly-hero__glow rafly-hero__glow--center"></div>
+                <div class="rafly-hero__glow rafly-hero__glow--right"></div>
+                <div class="rafly-hero__glow rafly-hero__glow--left"></div>
+                <div class="rafly-hero__glow rafly-hero__glow--bottom"></div>
+            </div>
             <div class="rafly-hero__grid"></div>
-            <div class="rafly-hero__orbit-bg">
+            <div class="rafly-hero__grid-sec"></div>
+            <div class="rafly-hero__light-ribbons">
                 <svg viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
-                    <ellipse cx="720" cy="450" rx="580" ry="320" stroke="rgba(10, 99, 255, 0.035)" stroke-width="1" stroke-dasharray="4 8" />
-                    <ellipse cx="720" cy="450" rx="380" ry="210" stroke="rgba(8, 145, 178, 0.04)" stroke-width="1" />
+                    <path d="M -100 220 C 400 120 800 520 1540 320" stroke="rgba(23, 105, 255, 0.05)" stroke-width="28" filter="url(#raflyRibbonBlur)" />
+                    <path d="M 180 820 C 580 620 980 720 1600 420" stroke="rgba(124, 92, 255, 0.04)" stroke-width="20" filter="url(#raflyRibbonBlur)" />
+                    <filter id="raflyRibbonBlur">
+                        <feGaussianBlur stdDeviation="24" />
+                    </filter>
                 </svg>
             </div>
             <div class="rafly-hero__particles" data-hero-particles></div>
-            <div class="rafly-hero__beam" aria-hidden="true"></div>
+            <div class="rafly-hero__cursor-glow" data-hero-cursor-glow></div>
         </div>
 
         <?php /* ── 2. FRAMING: TOP LEFT SUBTLE BRANDING ── */ ?>
@@ -496,207 +505,360 @@ require __DIR__ . '/partials/social-rail.php';
             </div>
         </div>
 
-        <?php /* ── 4. THIN SUBTLE SVG CONNECTION PATHS ── */ ?>
-        <svg class="rafly-hero__connections" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-                <linearGradient id="raflyGradWeb" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0.15" />
-                </linearGradient>
-                <linearGradient id="raflyGradSec" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#0891b2" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
-                </linearGradient>
-                <linearGradient id="raflyGradMkt" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#6134c9" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
-                </linearGradient>
-                <linearGradient id="raflyGradCnt" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0.15" />
-                </linearGradient>
-                <linearGradient id="raflyGradCmr" x1="0%" y1="100%" x2="0%" y2="0%">
-                    <stop offset="0%" stop-color="#0230c6" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="#0a63ff" stop-opacity="0.15" />
-                </linearGradient>
-                <filter id="raflyPathGlow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
+        <?php /* ── 4. ASYMMETRIC MAIN CONTAINER: LEFT CONTENT + RIGHT ECOSYSTEM ── */ ?>
+        <div class="rafly-hero__container">
 
-            <g class="rafly-path-group" data-path="web">
-                <path class="rafly-path__base" d="M 450,180 C 557,180 610,394 664,394" stroke="rgba(10, 99, 255, 0.1)" stroke-width="1.5" fill="none" />
-                <path class="rafly-path__glow" d="M 450,180 C 557,180 610,394 664,394" stroke="url(#raflyGradWeb)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
-                <path class="rafly-path__core" d="M 450,180 C 557,180 610,394 664,394" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
-                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
-            </g>
+            <?php /* ── LEFT COLUMN: COMPACT EDITORIAL MARKETING CONTENT (35% width) ── */ ?>
+            <div class="rafly-hero__left" data-hero-left>
+                <!-- Eyebrow Pill -->
+                <div class="rafly-hero__eyebrow" data-hero-reveal="eyebrow">
+                    <span class="rafly-hero__sparkle">✦</span>
+                    <span class="rafly-hero__eyebrow-text">DIGITAL SOLUTIONS ECOSYSTEM</span>
+                </div>
 
-            <g class="rafly-path-group" data-path="security">
-                <path class="rafly-path__base" d="M 420,450 C 530,450 585,450 640,450" stroke="rgba(8, 145, 178, 0.1)" stroke-width="1.5" fill="none" />
-                <path class="rafly-path__glow" d="M 420,450 C 530,450 585,450 640,450" stroke="url(#raflyGradSec)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
-                <path class="rafly-path__core" d="M 420,450 C 530,450 585,450 640,450" stroke="#22d3ee" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
-                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
-            </g>
+                <!-- Main Headline with 4-Line Staggered Reveal -->
+                <h1 class="rafly-hero__title">
+                    <span class="rafly-hero__title-line" data-hero-reveal="title-1">
+                        <span class="rafly-hero__title-text">TURN</span>
+                    </span>
+                    <span class="rafly-hero__title-line" data-hero-reveal="title-2">
+                        <span class="rafly-hero__title-text">IDEAS INTO</span>
+                    </span>
+                    <span class="rafly-hero__title-line" data-hero-reveal="title-3">
+                        <span class="rafly-hero__title-text rafly-hero__title-text--blue">REAL DIGITAL</span>
+                    </span>
+                    <span class="rafly-hero__title-line" data-hero-reveal="title-4">
+                        <span class="rafly-hero__title-text rafly-hero__title-text--blue">IMPACT</span>
+                    </span>
+                </h1>
 
-            <g class="rafly-path-group" data-path="marketing">
-                <path class="rafly-path__base" d="M 990,180 C 883,180 830,394 776,394" stroke="rgba(97, 52, 201, 0.1)" stroke-width="1.5" fill="none" />
-                <path class="rafly-path__glow" d="M 990,180 C 883,180 830,394 776,394" stroke="url(#raflyGradMkt)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
-                <path class="rafly-path__core" d="M 990,180 C 883,180 830,394 776,394" stroke="#c084fc" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
-                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
-            </g>
+                <!-- Short Description -->
+                <p class="rafly-hero__desc" data-hero-reveal="desc">
+                    We build high-performance digital solutions that help businesses grow, secure and scale — from web and security to marketing, content and commerce.
+                </p>
 
-            <g class="rafly-path-group" data-path="content">
-                <path class="rafly-path__base" d="M 1020,450 C 910,450 855,450 800,450" stroke="rgba(37, 99, 235, 0.1)" stroke-width="1.5" fill="none" />
-                <path class="rafly-path__glow" d="M 1020,450 C 910,450 855,450 800,450" stroke="url(#raflyGradCnt)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
-                <path class="rafly-path__core" d="M 1020,450 C 910,450 855,450 800,450" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
-                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
-            </g>
+                <!-- CTA Actions -->
+                <div class="rafly-hero__actions" data-hero-reveal="cta">
+                    <a href="#contact" class="rafly-hero__cta-primary">
+                        <span>GET STARTED</span>
+                        <span class="rafly-hero__cta-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <a href="/services" class="rafly-hero__cta-secondary">
+                        <span>EXPLORE SERVICES</span>
+                        <span class="rafly-hero__cta-subarrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                </div>
 
-            <g class="rafly-path-group" data-path="commerce">
-                <path class="rafly-path__base" d="M 720,700 C 720,615 720,560 720,530" stroke="rgba(2, 48, 198, 0.1)" stroke-width="1.5" fill="none" />
-                <path class="rafly-path__glow" d="M 720,700 C 720,615 720,560 720,530" stroke="url(#raflyGradCmr)" stroke-width="2" filter="url(#raflyPathGlow)" fill="none" />
-                <path class="rafly-path__core" d="M 720,700 C 720,615 720,560 720,530" stroke="#93c5fd" stroke-width="1.2" stroke-dasharray="5 7" fill="none" />
-                <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
-            </g>
-        </svg>
-
-        <?php /* ── 5. SPATIAL STAGE: DOMINANT CENTRAL HUB + 5 SUPPORTING SERVICE CARDS ── */ ?>
-        <div class="rafly-hero__stage" data-hero-stage>
-
-            <!-- CENTRAL RAFly LOGO HUB (DOMINANT HERO ELEMENT) -->
-            <div class="rafly-hub" data-hero-hub>
-                <div class="rafly-hub__halo"></div>
-                <div class="rafly-hub__orbit rafly-hub__orbit--1"></div>
-                <div class="rafly-hub__orbit rafly-hub__orbit--2"></div>
-                <div class="rafly-hub__sphere">
-                    <div class="rafly-hub__sphere-shine"></div>
-                    <div class="rafly-hub__logo-wrap">
-                        <img src="<?= e(asset('assets/logo-mark.png')) ?>" alt="RAFly Core" class="rafly-hub__logo" width="72" height="72">
+                <!-- Compact Metrics Bar -->
+                <div class="rafly-hero__metrics" data-hero-reveal="metrics">
+                    <div class="rafly-hero__metric">
+                        <span class="rafly-hero__metric-val">5+</span>
+                        <span class="rafly-hero__metric-lbl">CORE SERVICES</span>
+                    </div>
+                    <div class="rafly-hero__metric-sep"></div>
+                    <div class="rafly-hero__metric">
+                        <span class="rafly-hero__metric-val">100+</span>
+                        <span class="rafly-hero__metric-lbl">PROJECTS</span>
+                    </div>
+                    <div class="rafly-hero__metric-sep"></div>
+                    <div class="rafly-hero__metric">
+                        <span class="rafly-hero__metric-val">98%</span>
+                        <span class="rafly-hero__metric-lbl">SATISFACTION</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 01 WEB CARD (Upper-Left) -->
-            <a href="/services/web-development" class="rafly-card rafly-card--web" data-hero-card="web" aria-label="01 WEB - Web Development">
-                <div class="rafly-card__inner">
-                    <div class="rafly-card__icon-box rafly-card__icon-box--blue">
-                        <?= icon('code') ?>
-                    </div>
-                    <div class="rafly-card__content">
-                        <div class="rafly-card__header">
-                            <span class="rafly-card__num">01</span>
-                            <h3 class="rafly-card__title">WEB</h3>
+            <?php /* ── RIGHT COLUMN: DIGITAL ECOSYSTEM (65% width) ── */ ?>
+            <div class="rafly-hero__right" data-hero-right>
+                <div class="rafly-hero__stage" data-hero-stage>
+
+                    <!-- SVG CONNECTION RIBBONS (3 LAYERS PER PATH) -->
+                    <svg class="rafly-hero__connections" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="raflyGradWeb" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1769ff" stop-opacity="0.75" />
+                                <stop offset="100%" stop-color="#21b7d3" stop-opacity="0.2" />
+                            </linearGradient>
+                            <linearGradient id="raflyGradSec" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#21b7d3" stop-opacity="0.75" />
+                                <stop offset="100%" stop-color="#1769ff" stop-opacity="0.2" />
+                            </linearGradient>
+                            <linearGradient id="raflyGradMkt" x1="100%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#7b61ff" stop-opacity="0.75" />
+                                <stop offset="100%" stop-color="#1769ff" stop-opacity="0.2" />
+                            </linearGradient>
+                            <linearGradient id="raflyGradCnt" x1="100%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#3e82ff" stop-opacity="0.75" />
+                                <stop offset="100%" stop-color="#21b7d3" stop-opacity="0.2" />
+                            </linearGradient>
+                            <linearGradient id="raflyGradCmr" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" stop-color="#273d82" stop-opacity="0.75" />
+                                <stop offset="100%" stop-color="#1769ff" stop-opacity="0.2" />
+                            </linearGradient>
+                            <filter id="raflyPathGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="4" result="blur" />
+                                <feMerge>
+                                    <feMergeNode in="blur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <g class="rafly-path-group" data-path="web">
+                            <path class="rafly-path__glow" d="M 530,200 C 680,200 780,372 842,372" stroke="rgba(23, 105, 255, 0.08)" stroke-width="8" fill="none" />
+                            <path class="rafly-path__base" d="M 530,200 C 680,200 780,372 842,372" stroke="url(#raflyGradWeb)" stroke-width="2" fill="none" />
+                            <path class="rafly-path__core" d="M 530,200 C 680,200 780,372 842,372" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3 12" fill="none" />
+                            <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+                        </g>
+
+                        <g class="rafly-path-group" data-path="security">
+                            <path class="rafly-path__glow" d="M 500,430 C 660,430 740,430 818,430" stroke="rgba(33, 183, 211, 0.08)" stroke-width="8" fill="none" />
+                            <path class="rafly-path__base" d="M 500,430 C 660,430 740,430 818,430" stroke="url(#raflyGradSec)" stroke-width="2" fill="none" />
+                            <path class="rafly-path__core" d="M 500,430 C 660,430 740,430 818,430" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3 12" fill="none" />
+                            <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+                        </g>
+
+                        <g class="rafly-path-group" data-path="marketing">
+                            <path class="rafly-path__glow" d="M 1120,200 C 1040,200 990,372 958,372" stroke="rgba(123, 97, 255, 0.08)" stroke-width="8" fill="none" />
+                            <path class="rafly-path__base" d="M 1120,200 C 1040,200 990,372 958,372" stroke="url(#raflyGradMkt)" stroke-width="2" fill="none" />
+                            <path class="rafly-path__core" d="M 1120,200 C 1040,200 990,372 958,372" stroke="#c084fc" stroke-width="1" stroke-dasharray="3 12" fill="none" />
+                            <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+                        </g>
+
+                        <g class="rafly-path-group" data-path="content">
+                            <path class="rafly-path__glow" d="M 1150,430 C 1060,430 1020,430 982,430" stroke="rgba(23, 105, 255, 0.08)" stroke-width="8" fill="none" />
+                            <path class="rafly-path__base" d="M 1150,430 C 1060,430 1020,430 982,430" stroke="url(#raflyGradCnt)" stroke-width="2" fill="none" />
+                            <path class="rafly-path__core" d="M 1150,430 C 1060,430 1020,430 982,430" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3 12" fill="none" />
+                            <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+                        </g>
+
+                        <g class="rafly-path-group" data-path="commerce">
+                            <path class="rafly-path__glow" d="M 900,680 C 900,610 900,560 900,512" stroke="rgba(39, 61, 130, 0.08)" stroke-width="8" fill="none" />
+                            <path class="rafly-path__base" d="M 900,680 C 900,610 900,560 900,512" stroke="url(#raflyGradCmr)" stroke-width="2" fill="none" />
+                            <path class="rafly-path__core" d="M 900,680 C 900,610 900,560 900,512" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3 12" fill="none" />
+                            <circle class="rafly-path__packet" r="2.5" fill="#ffffff" filter="url(#raflyPathGlow)" />
+                        </g>
+                    </svg>
+
+                    <!-- CENTRAL RAFly LOGO HUB -->
+                    <div class="rafly-hub" data-hero-hub>
+                        <div class="rafly-hub__halo"></div>
+                        <div class="rafly-hub__orbit rafly-hub__orbit--1">
+                            <span class="rafly-hub__orbit-dot rafly-hub__orbit-dot--1"></span>
                         </div>
-                        <p class="rafly-card__desc">High-performance sites &amp; web apps</p>
-                    </div>
-                    <div class="rafly-card__action">
-                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- 02 SECURITY CARD (Middle-Left) -->
-            <a href="/services/web-security" class="rafly-card rafly-card--security" data-hero-card="security" aria-label="02 SECURITY - Web Security">
-                <div class="rafly-card__inner">
-                    <div class="rafly-card__icon-box rafly-card__icon-box--cyan">
-                        <?= icon('shield') ?>
-                    </div>
-                    <div class="rafly-card__content">
-                        <div class="rafly-card__header">
-                            <span class="rafly-card__num">02</span>
-                            <h3 class="rafly-card__title">SECURITY</h3>
+                        <div class="rafly-hub__orbit rafly-hub__orbit--2">
+                            <span class="rafly-hub__orbit-dot rafly-hub__orbit-dot--2"></span>
                         </div>
-                        <p class="rafly-card__desc">Cyber security &amp; threat hardening</p>
-                    </div>
-                    <div class="rafly-card__action">
-                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- 03 MARKETING CARD (Upper-Right) -->
-            <a href="/services/marketing-advertisement" class="rafly-card rafly-card--marketing" data-hero-card="marketing" aria-label="03 MARKETING - Growth & Ads">
-                <div class="rafly-card__inner">
-                    <div class="rafly-card__icon-box rafly-card__icon-box--violet">
-                        <?= icon('pie-chart') ?>
-                    </div>
-                    <div class="rafly-card__content">
-                        <div class="rafly-card__header">
-                            <span class="rafly-card__num">03</span>
-                            <h3 class="rafly-card__title">MARKETING</h3>
+                        <div class="rafly-hub__orbit rafly-hub__orbit--3"></div>
+                        <div class="rafly-hub__sphere">
+                            <div class="rafly-hub__sphere-shine"></div>
+                            <div class="rafly-hub__logo-wrap">
+                                <img src="<?= e(asset('assets/logo-mark.png')) ?>" alt="RAFly Core" class="rafly-hub__logo" width="74" height="74">
+                            </div>
                         </div>
-                        <p class="rafly-card__desc">Data-driven campaigns &amp; ROAS</p>
                     </div>
-                    <div class="rafly-card__action">
-                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                    </div>
-                </div>
-            </a>
 
-            <!-- 04 CONTENT CARD (Middle-Right) -->
-            <a href="/services/content-creation" class="rafly-card rafly-card--content" data-hero-card="content" aria-label="04 CONTENT - Copy & Media">
-                <div class="rafly-card__inner">
-                    <div class="rafly-card__icon-box rafly-card__icon-box--blue">
-                        <?= icon('file-pen') ?>
-                    </div>
-                    <div class="rafly-card__content">
-                        <div class="rafly-card__header">
-                            <span class="rafly-card__num">04</span>
-                            <h3 class="rafly-card__title">CONTENT</h3>
+                    <!-- 01 WEB SERVICE NODE -->
+                    <a href="/services/web-development" class="rafly-card rafly-card--web" data-hero-card="web" aria-label="01 WEB">
+                        <div class="rafly-card__inner">
+                            <div class="rafly-card__icon-box rafly-card__icon-box--blue">
+                                <?= icon('code') ?>
+                            </div>
+                            <div class="rafly-card__content">
+                                <div class="rafly-card__header">
+                                    <span class="rafly-card__num">01</span>
+                                    <h3 class="rafly-card__title">WEB</h3>
+                                </div>
+                                <p class="rafly-card__desc">High-performance sites &amp; web apps</p>
+                            </div>
+                            <div class="rafly-card__action">
+                                <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            </div>
                         </div>
-                        <p class="rafly-card__desc">High-intent copy &amp; brand media</p>
-                    </div>
-                    <div class="rafly-card__action">
-                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                    </div>
-                </div>
-            </a>
+                    </a>
 
-            <!-- 05 COMMERCE CARD (Bottom-Center) -->
-            <a href="/services/ecommerce-support" class="rafly-card rafly-card--commerce" data-hero-card="commerce" aria-label="05 COMMERCE - E-Commerce Support">
-                <div class="rafly-card__inner">
-                    <div class="rafly-card__icon-box rafly-card__icon-box--navy">
-                        <?= icon('shopping-cart') ?>
-                    </div>
-                    <div class="rafly-card__content">
-                        <div class="rafly-card__header">
-                            <span class="rafly-card__num">05</span>
-                            <h3 class="rafly-card__title">COMMERCE</h3>
+                    <!-- 02 SECURITY SERVICE NODE -->
+                    <a href="/services/web-security" class="rafly-card rafly-card--security" data-hero-card="security" aria-label="02 SECURITY">
+                        <div class="rafly-card__inner">
+                            <div class="rafly-card__icon-box rafly-card__icon-box--cyan">
+                                <?= icon('shield') ?>
+                            </div>
+                            <div class="rafly-card__content">
+                                <div class="rafly-card__header">
+                                    <span class="rafly-card__num">02</span>
+                                    <h3 class="rafly-card__title">SECURITY</h3>
+                                </div>
+                                <p class="rafly-card__desc">Cyber security &amp; threat hardening</p>
+                            </div>
+                            <div class="rafly-card__action">
+                                <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            </div>
                         </div>
-                        <p class="rafly-card__desc">Storefront &amp; checkout operations</p>
-                    </div>
-                    <div class="rafly-card__action">
-                        <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
-                    </div>
-                </div>
-            </a>
+                    </a>
 
-        </div><!-- /.rafly-hero__stage -->
+                    <!-- 03 MARKETING SERVICE NODE -->
+                    <a href="/services/marketing-advertisement" class="rafly-card rafly-card--marketing" data-hero-card="marketing" aria-label="03 MARKETING">
+                        <div class="rafly-card__inner">
+                            <div class="rafly-card__icon-box rafly-card__icon-box--violet">
+                                <?= icon('pie-chart') ?>
+                            </div>
+                            <div class="rafly-card__content">
+                                <div class="rafly-card__header">
+                                    <span class="rafly-card__num">03</span>
+                                    <h3 class="rafly-card__title">MARKETING</h3>
+                                </div>
+                                <p class="rafly-card__desc">Data-driven campaigns &amp; ROAS</p>
+                            </div>
+                            <div class="rafly-card__action">
+                                <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            </div>
+                        </div>
+                    </a>
 
-        <?php /* ── 6. FRAMING: BOTTOM LEFT SCROLL CUE ── */ ?>
+                    <!-- 04 CONTENT SERVICE NODE -->
+                    <a href="/services/content-creation" class="rafly-card rafly-card--content" data-hero-card="content" aria-label="04 CONTENT">
+                        <div class="rafly-card__inner">
+                            <div class="rafly-card__icon-box rafly-card__icon-box--blue">
+                                <?= icon('file-pen') ?>
+                            </div>
+                            <div class="rafly-card__content">
+                                <div class="rafly-card__header">
+                                    <span class="rafly-card__num">04</span>
+                                    <h3 class="rafly-card__title">CONTENT</h3>
+                                </div>
+                                <p class="rafly-card__desc">High-intent copy &amp; brand media</p>
+                            </div>
+                            <div class="rafly-card__action">
+                                <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- 05 COMMERCE SERVICE NODE -->
+                    <a href="/services/ecommerce-support" class="rafly-card rafly-card--commerce" data-hero-card="commerce" aria-label="05 COMMERCE">
+                        <div class="rafly-card__inner">
+                            <div class="rafly-card__icon-box rafly-card__icon-box--navy">
+                                <?= icon('shopping-cart') ?>
+                            </div>
+                            <div class="rafly-card__content">
+                                <div class="rafly-card__header">
+                                    <span class="rafly-card__num">05</span>
+                                    <h3 class="rafly-card__title">COMMERCE</h3>
+                                </div>
+                                <p class="rafly-card__desc">Storefront &amp; checkout operations</p>
+                            </div>
+                            <div class="rafly-card__action">
+                                <span class="rafly-card__arrow" aria-hidden="true"><?= icon('arrow-right') ?></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- FAR-RIGHT COMPACT FLOATING 3D DIGITAL SYSTEM MODULE -->
+                    <div class="rafly-hero__model3d" data-hero-model3d>
+                        <div class="rafly-model3d__viewport">
+                            <!-- Layer 1: Rear Translucent Glass Back Plate -->
+                            <div class="rafly-model3d__layer rafly-model3d__layer--back"></div>
+
+                            <!-- Layer 2: Inner Luminous Glass Plane & Outer Frame -->
+                            <div class="rafly-model3d__layer rafly-model3d__layer--mid">
+                                <div class="rafly-model3d__header">
+                                    <span class="rafly-model3d__dots">
+                                        <span class="rafly-model3d__dot red"></span>
+                                        <span class="rafly-model3d__dot yellow"></span>
+                                        <span class="rafly-model3d__dot green"></span>
+                                    </span>
+                                    <span class="rafly-model3d__title">RAFLY SYSTEM</span>
+                                    <span class="rafly-model3d__status">
+                                        <span class="rafly-model3d__status-dot"></span>LIVE
+                                    </span>
+                                </div>
+
+                                <!-- Layer 3: Data & Waveform Plane -->
+                                <div class="rafly-model3d__screen">
+                                    <div class="rafly-model3d__grid-bg"></div>
+                                    <!-- Multi-Waveform Active System Visualization -->
+                                    <div class="rafly-model3d__graph">
+                                        <svg viewBox="0 0 240 100" fill="none" class="rafly-model3d__waves-svg">
+                                            <defs>
+                                                <linearGradient id="raflyWaveGradPrimary" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stop-color="#1769ff" stop-opacity="0.30" />
+                                                    <stop offset="100%" stop-color="#1769ff" stop-opacity="0.0" />
+                                                </linearGradient>
+                                                <linearGradient id="raflyWaveGradCyan" x1="0" y1="0" x2="1" y2="0">
+                                                    <stop offset="0%" stop-color="#22b8d6" stop-opacity="0.8" />
+                                                    <stop offset="100%" stop-color="#1769ff" stop-opacity="0.3" />
+                                                </linearGradient>
+                                                <filter id="raflyGlowDot">
+                                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                                    <feMerge>
+                                                        <feMergeNode in="blur" />
+                                                        <feMergeNode in="SourceGraphic" />
+                                                    </feMerge>
+                                                </filter>
+                                            </defs>
+                                            <!-- Wave 3 (Tertiary Violet) -->
+                                            <path class="rafly-wave rafly-wave--violet" d="M 0 75 Q 60 85 120 60 T 240 45" stroke="rgba(124, 92, 255, 0.45)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" />
+                                            <!-- Wave 2 (Secondary Cyan) -->
+                                            <path class="rafly-wave rafly-wave--cyan" d="M 0 65 Q 50 40 110 55 T 240 25" stroke="url(#raflyWaveGradCyan)" stroke-width="1.5" fill="none" />
+                                            <!-- Wave 1 (Primary Blue Growth Waveform) -->
+                                            <path class="rafly-wave rafly-wave--primary-fill" d="M 0 70 Q 50 60 100 35 T 200 18 T 240 12 L 240 100 L 0 100 Z" fill="url(#raflyWaveGradPrimary)" />
+                                            <path class="rafly-wave rafly-wave--primary" d="M 0 70 Q 50 60 100 35 T 200 18 T 240 12" stroke="#1769ff" stroke-width="2.2" fill="none" />
+                                            
+                                            <!-- Micro Data Nodes & Particles -->
+                                            <circle cx="100" cy="35" r="3" fill="#1769ff" filter="url(#raflyGlowDot)" />
+                                            <circle cx="200" cy="18" r="3.5" fill="#38d39f" filter="url(#raflyGlowDot)" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Activity Bars & Indicator Controls -->
+                                    <div class="rafly-model3d__indicators">
+                                        <div class="rafly-model3d__bars">
+                                            <span class="rafly-bar rafly-bar--1"></span>
+                                            <span class="rafly-bar rafly-bar--2"></span>
+                                            <span class="rafly-bar rafly-bar--3"></span>
+                                            <span class="rafly-bar rafly-bar--4"></span>
+                                            <span class="rafly-bar rafly-bar--5"></span>
+                                        </div>
+                                        <div class="rafly-model3d__micro-label">SYS_CLK / 98.4%</div>
+                                    </div>
+
+                                    <!-- Layer 4: Dark Navy Foreground Status Capsule -->
+                                    <div class="rafly-model3d__panel">
+                                        <span class="rafly-model3d__badge">SYSTEM STATUS</span>
+                                        <span class="rafly-model3d__stat">+148% GROWTH</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Layer 6: Floating Detached Z-Process Pill -->
+                            <div class="rafly-hero__floating-tag" data-hero-floating-tag>
+                                <span>IDEA</span>
+                                <span class="rafly-tag__arr">&rarr;</span>
+                                <span>PRODUCT</span>
+                                <span class="rafly-tag__arr">&rarr;</span>
+                                <span class="rafly-tag__highlight">IMPACT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.rafly-hero__stage -->
+            </div><!-- /.rafly-hero__right -->
+
+        </div><!-- /.rafly-hero__container -->
+
+        <!-- SUBTLE SCROLL INDICATOR -->
         <div class="rafly-hero__bottom-left">
-            <a href="#approach" class="rafly-hero__scroll-cue" aria-label="Scroll to discover">
+            <a href="#about" class="rafly-hero__scroll-cue">
+                <div class="rafly-hero__scroll-track">
+                    <div class="rafly-hero__scroll-bar"></div>
+                </div>
                 <span class="rafly-hero__scroll-text">SCROLL TO DISCOVER</span>
-                <span class="rafly-hero__scroll-track">
-                    <i class="rafly-hero__scroll-bar"></i>
-                </span>
             </a>
         </div>
 
-        <?php /* ── 7. FRAMING: BOTTOM RIGHT PAGINATION DOTS ── */ ?>
-        <div class="rafly-hero__bottom-right" aria-hidden="true">
+        <!-- PAGINATION DOTS INDICATOR -->
+        <div class="rafly-hero__bottom-right">
             <div class="rafly-hero__dots">
-                <span class="rafly-hero__dot is-active" data-dot="web"></span>
-                <span class="rafly-hero__dot" data-dot="security"></span>
-                <span class="rafly-hero__dot" data-dot="marketing"></span>
-                <span class="rafly-hero__dot" data-dot="content"></span>
-                <span class="rafly-hero__dot" data-dot="commerce"></span>
-            </div>
-        </div>
 
     </section><!-- /.rafly-hero -->
     <section class="section statement manifesto-scene has-tex" id="approach" data-manifesto aria-label="The difference">
