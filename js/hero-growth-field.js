@@ -187,7 +187,7 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 2. Render Triangulated Geometric Mesh Facets & Facet Highlights */
+        /* 2. Render Triangulated Geometric Mesh Facets & Uniform Kinetic Waves */
         for (let r = 0; r < ROWS - 1; r++) {
             for (let c = 0; c < COLS - 1; c++) {
                 const n1 = grid[r][c];
@@ -195,28 +195,27 @@ export function initHeroGrowthField(host) {
                 const n3 = grid[r + 1][c + 1];
                 const n4 = grid[r][c + 1];
 
-                const centerDist = Math.hypot((n1.x + n3.x) / 2 - mouseX, (n1.y + n3.y) / 2 - mouseY);
-                if (centerDist < mouseRadius * 1.2) {
-                    const alpha = Math.max(0, (1 - centerDist / (mouseRadius * 1.2)) * 0.08);
+                const wave = Math.sin(t * 1.4 + (r * 0.30) + (c * 0.20)) * 0.5 + 0.5;
+                const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
+                const alpha = 0.012 + wave * 0.028 + Math.min(strain * 0.02, 0.08);
 
-                    // Triangle 1 Facet Fill
-                    ctx.beginPath();
-                    ctx.moveTo(n1.x, n1.y);
-                    ctx.lineTo(n2.x, n2.y);
-                    ctx.lineTo(n3.x, n3.y);
-                    ctx.closePath();
-                    ctx.fillStyle = `rgba(10, 99, 255, ${alpha})`;
-                    ctx.fill();
+                // Triangle 1 Facet Fill
+                ctx.beginPath();
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.lineTo(n3.x, n3.y);
+                ctx.closePath();
+                ctx.fillStyle = `rgba(10, 99, 255, ${alpha})`;
+                ctx.fill();
 
-                    // Triangle 2 Facet Fill
-                    ctx.beginPath();
-                    ctx.moveTo(n1.x, n1.y);
-                    ctx.lineTo(n3.x, n3.y);
-                    ctx.lineTo(n4.x, n4.y);
-                    ctx.closePath();
-                    ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.75})`;
-                    ctx.fill();
-                }
+                // Triangle 2 Facet Fill
+                ctx.beginPath();
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n3.x, n3.y);
+                ctx.lineTo(n4.x, n4.y);
+                ctx.closePath();
+                ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.70})`;
+                ctx.fill();
             }
         }
 
