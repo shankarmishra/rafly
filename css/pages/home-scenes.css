@@ -2819,24 +2819,7 @@
 }
 
 .sig-env__glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(110px);
-    will-change: transform, opacity;
-}
-
-.sig-env__glow.glow-primary {
-    width: 720px; height: 720px;
-    top: 50%; right: -6%;
-    transform: translateY(-50%);
-    background: radial-gradient(circle, rgba(10, 99, 255, 0.16) 0%, rgba(2, 48, 198, 0.06) 45%, transparent 72%);
-    animation: sigAuraPulse 9s ease-in-out infinite alternate;
-}
-
-.sig-env__glow.glow-secondary {
-    width: 520px; height: 520px;
-    top: 10%; left: 8%;
-    background: radial-gradient(circle, rgba(8, 145, 178, 0.12) 0%, rgba(97, 52, 201, 0.04) 50%, transparent 70%);
+    display: none !important;
 }
 
 @keyframes sigAuraPulse {

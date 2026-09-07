@@ -468,8 +468,6 @@ require __DIR__ . '/partials/social-rail.php';
             <div class="sig-env__grain"></div>
             <div class="sig-env__grid"></div>
             <div class="sig-env__dots"></div>
-            <div class="sig-env__glow glow-primary"></div>
-            <div class="sig-env__glow glow-secondary"></div>
             <div class="sig-env__scanbeam"></div>
             <svg class="sig-env__blueprint" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
                 <path class="sig-bp-line line-a" d="M -100,220 Q 380,120 780,440 T 1540,620" stroke="url(#sigBpGrad1)" stroke-width="1.5" />

@@ -105,81 +105,84 @@ export function initHeroGrowthField(host) {
        relative to the canvas centre (cx, cy).
        The ribbons animate by modulating control points with time.
     */
+    /* ── 5 Capability Ribbon Connection Definitions ─────────────────────
+       Each ribbon anchors precisely at one of the 5 floating capability tags
+       and flows into the central solid 'R' core disc (cx, cy).
+    */
     function getRibbons(cx, cy, r, t) {
-        const s = r * 0.72; // ribbon spread
+        const s = r * 0.78; // Ribbon anchor radius matching tag layout
         return [
-            /* 01 WEB — structured, geometric, top-left */
+            /* 01 WEB — Top-Left Tag */
             {
                 key: 'web',
                 pts: [
-                    cx - s * 0.92, cy - s * 0.78,
-                    cx - s * 0.42 + Math.sin(t * 0.4) * 8, cy - s * 0.38 + Math.cos(t * 0.35) * 6,
-                    cx - s * 0.18 + Math.sin(t * 0.3) * 5, cy - s * 0.15,
+                    cx - s * 0.75, cy - s * 0.75,
+                    cx - s * 0.40 + Math.sin(t * 0.45) * 6, cy - s * 0.35 + Math.cos(t * 0.40) * 5,
+                    cx - s * 0.16 + Math.sin(t * 0.3) * 4, cy - s * 0.12,
                     cx, cy,
                 ],
-                width: 2.2,
-                opacity: 0.72,
+                width: 2.4,
+                opacity: 0.85,
             },
-            /* 02 SECURITY — protective arc, left side */
+            /* 02 SECURITY — Mid-Left Tag */
             {
                 key: 'security',
                 pts: [
-                    cx - s * 1.02, cy - s * 0.05,
-                    cx - s * 0.62 + Math.sin(t * 0.28) * 10, cy - s * 0.22 + Math.cos(t * 0.32) * 8,
-                    cx - s * 0.28, cy - s * 0.08,
+                    cx - s * 0.90, cy + Math.sin(t * 0.35) * 4,
+                    cx - s * 0.52 + Math.sin(t * 0.30) * 8, cy - s * 0.18 + Math.cos(t * 0.35) * 6,
+                    cx - s * 0.22, cy - s * 0.05,
                     cx, cy,
                 ],
                 width: 2.8,
-                opacity: 0.80,
+                opacity: 0.90,
             },
-            /* 03 MARKETING — radiating energy, top-right */
+            /* 03 MARKETING — Top-Right Tag */
             {
                 key: 'marketing',
                 pts: [
-                    cx + s * 0.92, cy - s * 0.78,
-                    cx + s * 0.42 + Math.cos(t * 0.38) * 8, cy - s * 0.38 + Math.sin(t * 0.42) * 6,
-                    cx + s * 0.18, cy - s * 0.15 + Math.cos(t * 0.28) * 4,
+                    cx + s * 0.75, cy - s * 0.75,
+                    cx + s * 0.40 + Math.cos(t * 0.40) * 6, cy - s * 0.35 + Math.sin(t * 0.45) * 5,
+                    cx + s * 0.16, cy - s * 0.12 + Math.cos(t * 0.3) * 4,
                     cx, cy,
                 ],
-                width: 2.2,
-                opacity: 0.72,
+                width: 2.4,
+                opacity: 0.85,
             },
-            /* 04 CONTENT — organic flow, right side */
+            /* 04 CONTENT — Mid-Right Tag */
             {
                 key: 'content',
                 pts: [
-                    cx + s * 1.02, cy + s * 0.12,
-                    cx + s * 0.58 + Math.cos(t * 0.35) * 12, cy + s * 0.32 + Math.sin(t * 0.28) * 10,
-                    cx + s * 0.26, cy + s * 0.18 + Math.sin(t * 0.45) * 5,
+                    cx + s * 0.90, cy + Math.cos(t * 0.35) * 4,
+                    cx + s * 0.52 + Math.cos(t * 0.30) * 8, cy + s * 0.18 + Math.sin(t * 0.35) * 6,
+                    cx + s * 0.22, cy + s * 0.05,
                     cx, cy,
                 ],
-                width: 3.0,
-                opacity: 0.85,
+                width: 2.8,
+                opacity: 0.90,
             },
-            /* 05 COMMERCE — converging, bottom */
+            /* 05 COMMERCE — Bottom-Center Tag */
             {
                 key: 'commerce',
                 pts: [
-                    cx, cy + s * 1.0,
-                    cx + Math.sin(t * 0.30) * 14, cy + s * 0.58 + Math.cos(t * 0.25) * 8,
-                    cx + Math.sin(t * 0.42) * 6,  cy + s * 0.28,
+                    cx, cy + s * 0.85,
+                    cx + Math.sin(t * 0.35) * 10, cy + s * 0.50 + Math.cos(t * 0.30) * 6,
+                    cx + Math.sin(t * 0.45) * 4, cy + s * 0.22,
                     cx, cy,
                 ],
                 width: 2.6,
-                opacity: 0.78,
+                opacity: 0.88,
             },
         ];
     }
 
-    /* Ribbon gradient factory */
+    /* Ribbon gradient factory — Electric Royal Blue & Cyan Spectrum */
     function ribbonGradient(pts, color, alpha) {
         const [x0, y0, , , , , x3, y3] = pts;
         const grad = ctx.createLinearGradient(x0, y0, x3, y3);
-        const { h, s, l } = color;
-        grad.addColorStop(0.0,  `hsla(${h},${s}%,${l + 14}%,0)`);
-        grad.addColorStop(0.35, `hsla(${h},${s}%,${l + 8}%, ${alpha * 0.55})`);
-        grad.addColorStop(0.70, `hsla(${h},${s}%,${l}%,     ${alpha * 0.90})`);
-        grad.addColorStop(1.0,  `hsla(${h},${s}%,${l}%,     ${alpha * 1.00})`);
+        grad.addColorStop(0.00, `rgba(10, 99, 255, 0.05)`);
+        grad.addColorStop(0.25, `rgba(10, 99, 255, ${alpha * 0.65})`);
+        grad.addColorStop(0.70, `rgba(0, 180, 216, ${alpha * 0.90})`);
+        grad.addColorStop(1.00, `rgba(10, 99, 255, ${alpha * 1.00})`);
         return grad;
     }
 
@@ -194,29 +197,28 @@ export function initHeroGrowthField(host) {
 
         ctx.clearRect(0, 0, w, h);
 
-        // Active capability color
-        const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 220, s: 100, l: 52 };
+        // Active capability color (Electric Royal Blue Spectrum)
+        const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 217, s: 95, l: 54 };
 
-        /* ── Luminous Outer Radial Atmosphere ─────────────────────────── */
-        const atmo = ctx.createRadialGradient(cx, cy, r * 0.25, cx, cy, r * 1.35);
-        atmo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.28 : 0.16})`);
-        atmo.addColorStop(0.4, `hsla(${activeColor.h}, 85%, 55%, ${isSyncing ? 0.10 : 0.05})`);
-        atmo.addColorStop(0.8, `hsla(210, 90%, 60%, 0.02)`);
+        /* ── Clean Subtle Mono Atmosphere (No colored blob background) ── */
+        const atmo = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.3);
+        atmo.addColorStop(0.0, `rgba(10, 99, 255, ${isSyncing ? 0.10 : 0.06})`);
+        atmo.addColorStop(0.5, `rgba(10, 99, 255, ${isSyncing ? 0.04 : 0.02})`);
         atmo.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, r * 1.35, 0, Math.PI * 2);
+        ctx.arc(cx, cy, r * 1.3, 0, Math.PI * 2);
         ctx.fillStyle = atmo;
         ctx.fill();
 
-        /* ── Five Energy Connection Beams ────────────────────────────── */
+        /* ── 5 Energy Connection Beams & Data Flow Packets ────────────── */
         const ribbons = getRibbons(cx, cy, r, t);
         for (const rib of ribbons) {
             const isCap    = activeCap === rib.key;
             const isDimmed = activeCap && !isCap && !isSyncing;
-            const alpha    = isSyncing ? rib.opacity * 1.0 : (isDimmed ? rib.opacity * 0.28 : rib.opacity * (isCap ? 1.0 : 0.75));
-            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.7 : rib.width * (isCap ? 1.85 : 1.2));
+            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.22 : (isCap ? 1.0 : 0.70));
+            const lWidth   = isSyncing ? rib.width * 1.5 : (isDimmed ? rib.width * 0.7 : rib.width * (isCap ? 1.8 : 1.1));
 
-            const color  = CAP_COLORS[rib.key];
+            const color  = CAP_COLORS[rib.key] || { h: 217, s: 95, l: 54 };
             const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
 
             // Ambient outer glow pass
@@ -224,8 +226,8 @@ export function initHeroGrowthField(host) {
             ctx.beginPath();
             ctx.moveTo(x0, y0);
             ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.45);
-            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 5.2 : 3.8);
+            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.40);
+            ctx.lineWidth   = lWidth * (isCap || isSyncing ? 4.8 : 3.2);
             ctx.lineCap     = 'round';
             ctx.stroke();
 
@@ -238,59 +240,71 @@ export function initHeroGrowthField(host) {
             ctx.lineCap     = 'round';
             ctx.stroke();
 
-            // Connection node endpoints (luminous target rings)
+            // Connection node endpoint target rings at each card
             if (!isDimmed || isSyncing) {
+                // Outer pulse target ring
+                const targetPulseR = 6.0 + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.0;
                 ctx.beginPath();
-                ctx.arc(x0, y0, isCap ? 4.5 : 3.0, 0, Math.PI * 2);
-                ctx.fillStyle   = `hsla(${color.h},${color.s}%,80%,${isCap ? 1.0 : 0.7})`;
-                ctx.shadowBlur  = isCap ? 12 : 6;
-                ctx.shadowColor = `hsla(${color.h},${color.s}%,${color.l}%,0.9)`;
+                ctx.arc(x0, y0, targetPulseR, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.85 : 0.40})`;
+                ctx.lineWidth   = 1.0;
+                ctx.stroke();
+
+                // Solid center node dot
+                ctx.beginPath();
+                ctx.arc(x0, y0, isCap ? 4.2 : 3.0, 0, Math.PI * 2);
+                ctx.fillStyle   = isCap ? '#ffffff' : '#90c2ff';
+                ctx.shadowBlur  = isCap ? 14 : 6;
+                ctx.shadowColor = '#0a63ff';
                 ctx.fill();
             }
             ctx.restore();
 
-            // Travelling light energy particle with soft glowing trail
+            // Dual travelling light energy particles with glowing trails along path
             if (!isDimmed || isSyncing) {
-                const speedMult = (isCap || isSyncing) ? 0.72 : 0.48;
-                const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20) % 1.0;
-                const tp        = easeOut(phase);
+                const particlePhases = [0.0, 0.5]; // 2 packets per path
+                for (const pOffset of particlePhases) {
+                    const speedMult = (isCap || isSyncing) ? 0.65 : 0.42;
+                    const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20 + pOffset) % 1.0;
+                    const tp        = easeOut(phase);
 
-                // Sample particle head position via deCasteljau
-                const ax = lerp(x0, x1, tp), ay = lerp(y0, y1, tp);
-                const bx = lerp(x1, x2, tp), by = lerp(y1, y2, tp);
-                const cx2= lerp(x2, x3, tp), cy2= lerp(y2, y3, tp);
-                const dx = lerp(ax, bx, tp),  dy = lerp(ay, by, tp);
-                const ex = lerp(bx, cx2,tp),  ey = lerp(by, cy2,tp);
-                const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
+                    // Head position via deCasteljau
+                    const ax = lerp(x0, x1, tp), ay = lerp(y0, y1, tp);
+                    const bx = lerp(x1, x2, tp), by = lerp(y1, y2, tp);
+                    const cx2= lerp(x2, x3, tp), cy2= lerp(y2, y3, tp);
+                    const dx = lerp(ax, bx, tp),  dy = lerp(ay, by, tp);
+                    const ex = lerp(bx, cx2,tp),  ey = lerp(by, cy2,tp);
+                    const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
 
-                // Particle tail (slightly behind tp)
-                const tpTail = Math.max(0, tp - 0.05);
-                const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
-                const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
-                const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
-                const tdx = lerp(tax, tbx, tpTail), tdy = lerp(tay, tby, tpTail);
-                const tex = lerp(tbx, tcx2, tpTail), tey = lerp(tby, tcy2, tpTail);
-                const tfx = lerp(tdx, tex, tpTail), tfy = lerp(tdy, tey, tpTail);
+                    // Tail position
+                    const tpTail = Math.max(0, tp - 0.06);
+                    const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
+                    const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
+                    const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
+                    const tdx = lerp(tax, tbx, tpTail), tdy = lerp(tay, tby, tpTail);
+                    const tex = lerp(tbx, tcx2, tpTail), tey = lerp(tby, tcy2, tpTail);
+                    const tfx = lerp(tdx, tex, tpTail), tfy = lerp(tdy, tey, tpTail);
 
-                ctx.save();
-                // Glowing tail line
-                ctx.beginPath();
-                ctx.moveTo(tfx, tfy);
-                ctx.lineTo(fx, fy);
-                ctx.strokeStyle = `hsla(${color.h},${color.s}%,75%,${isCap || isSyncing ? 0.85 : 0.45})`;
-                ctx.lineWidth   = isCap || isSyncing ? 3.2 : 2.0;
-                ctx.lineCap     = 'round';
-                ctx.stroke();
+                    ctx.save();
+                    // Glowing tail line
+                    ctx.beginPath();
+                    ctx.moveTo(tfx, tfy);
+                    ctx.lineTo(fx, fy);
+                    ctx.strokeStyle = `rgba(90, 180, 255, ${isCap || isSyncing ? 0.90 : 0.50})`;
+                    ctx.lineWidth   = isCap || isSyncing ? 3.0 : 1.8;
+                    ctx.lineCap     = 'round';
+                    ctx.stroke();
 
-                // Particle head
-                const dotR = (isCap || isSyncing) ? 4.8 : 3.0;
-                ctx.beginPath();
-                ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
-                ctx.fillStyle   = '#ffffff';
-                ctx.shadowBlur  = isCap || isSyncing ? 18 : 8;
-                ctx.shadowColor = `hsla(${color.h},${color.s}%,70%,0.95)`;
-                ctx.fill();
-                ctx.restore();
+                    // Particle head
+                    const dotR = (isCap || isSyncing) ? 4.5 : 2.8;
+                    ctx.beginPath();
+                    ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
+                    ctx.fillStyle   = '#ffffff';
+                    ctx.shadowBlur  = isCap || isSyncing ? 18 : 8;
+                    ctx.shadowColor = 'rgba(10, 99, 255, 0.95)';
+                    ctx.fill();
+                    ctx.restore();
+                }
             }
         }
 
