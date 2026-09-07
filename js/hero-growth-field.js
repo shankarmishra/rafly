@@ -299,61 +299,79 @@ export function initHeroGrowthField(host) {
         const coreR   = r * 0.23 * breathe;
 
         // Luminous atmosphere halo
-        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.6, cx, cy, coreR * (isSyncing ? 2.6 : 2.2));
-        halo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.45 : 0.28})`);
-        halo.addColorStop(0.5, `hsla(${activeColor.h}, 90%, 55%, ${isSyncing ? 0.18 : 0.09})`);
+        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.5, cx, cy, coreR * (isSyncing ? 2.8 : 2.4));
+        halo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.48 : 0.32})`);
+        halo.addColorStop(0.4, `hsla(${activeColor.h}, 90%, 55%, ${isSyncing ? 0.20 : 0.12})`);
         halo.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, coreR * (isSyncing ? 2.6 : 2.2), 0, Math.PI * 2);
+        ctx.arc(cx, cy, coreR * (isSyncing ? 2.8 : 2.4), 0, Math.PI * 2);
         ctx.fillStyle = halo;
         ctx.fill();
+
+        // Dynamic Expanding Signal Wave Ripples emitting from core
+        const waveCount = 3;
+        for (let wIdx = 0; wIdx < waveCount; wIdx++) {
+            const wavePhase = ((t * 0.38) + (wIdx / waveCount)) % 1.0;
+            const waveR = coreR * (1.0 + wavePhase * 1.35);
+            const waveAlpha = (1.0 - wavePhase) * (isSyncing ? 0.55 : 0.35);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, waveR, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 68%, ${waveAlpha})`;
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+            ctx.restore();
+        }
 
         // 1. Outer rotating blueprint ring (clockwise)
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(t * 0.04);
+        ctx.rotate(t * 0.05);
         ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.85, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 70%, ${isSyncing ? 0.55 : 0.32})`;
+        ctx.arc(0, 0, coreR * 1.90, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 70%, ${isSyncing ? 0.60 : 0.38})`;
         ctx.lineWidth   = 1.0;
-        ctx.setLineDash([6, 10]);
+        ctx.setLineDash([5, 9]);
         ctx.stroke();
 
         // Crosshair tick marks
         for (let i = 0; i < 4; i++) {
             const ta = (i / 4) * Math.PI * 2;
-            const xA = Math.cos(ta) * (coreR * 1.76);
-            const yA = Math.sin(ta) * (coreR * 1.76);
-            const xB = Math.cos(ta) * (coreR * 1.94);
-            const yB = Math.sin(ta) * (coreR * 1.94);
+            const xA = Math.cos(ta) * (coreR * 1.80);
+            const yA = Math.sin(ta) * (coreR * 1.80);
+            const xB = Math.cos(ta) * (coreR * 2.00);
+            const yB = Math.sin(ta) * (coreR * 2.00);
             ctx.beginPath();
             ctx.moveTo(xA, yA);
             ctx.lineTo(xB, yB);
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 75%, ${isSyncing ? 0.75 : 0.45})`;
-            ctx.lineWidth   = 1.2;
+            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 75%, ${isSyncing ? 0.80 : 0.50})`;
+            ctx.lineWidth   = 1.4;
             ctx.stroke();
         }
         ctx.restore();
 
-        // 2. Middle precision ring (counter-clockwise)
+        // 2. Middle precision blueprint ring (counter-clockwise)
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(-t * 0.075);
+        ctx.rotate(-t * 0.08);
         ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.55, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.60 : 0.38})`;
+        ctx.arc(0, 0, coreR * 1.58, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.65 : 0.42})`;
         ctx.lineWidth   = 1.1;
         ctx.setLineDash([3, 6]);
         ctx.stroke();
 
-        // 8 node markers at 45 degree intervals
+        // 8 precision node markers at 45 degree intervals
         for (let i = 0; i < 8; i++) {
             const ta = (i / 8) * Math.PI * 2;
-            const px = Math.cos(ta) * (coreR * 1.55);
-            const py = Math.sin(ta) * (coreR * 1.55);
+            const px = Math.cos(ta) * (coreR * 1.58);
+            const py = Math.sin(ta) * (coreR * 1.58);
             ctx.beginPath();
-            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
+            ctx.arc(px, py, 2.0, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${activeColor.h}, 100%, 80%, 0.95)`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 70%, 0.8)`;
             ctx.fill();
         }
         ctx.restore();
@@ -361,33 +379,53 @@ export function initHeroGrowthField(host) {
         // 3. Inner rotating ring (clockwise fast)
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(t * 0.11);
+        ctx.rotate(t * 0.12);
         ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.28, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 80%, ${isSyncing ? 0.70 : 0.42})`;
+        ctx.arc(0, 0, coreR * 1.30, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 80%, ${isSyncing ? 0.75 : 0.48})`;
         ctx.lineWidth   = 1.2;
-        ctx.setLineDash([12, 18]);
+        ctx.setLineDash([10, 16]);
         ctx.stroke();
         ctx.restore();
 
-        // Luminous Frosted Glass Core Disc
-        const disc = ctx.createRadialGradient(cx - coreR * 0.3, cy - coreR * 0.3, 0, cx, cy, coreR);
-        disc.addColorStop(0.0, 'rgba(255, 255, 255, 0.99)');
-        disc.addColorStop(0.4, 'rgba(235, 245, 255, 0.94)');
-        disc.addColorStop(1.0, 'rgba(195, 222, 255, 0.82)');
+        // Solid High-Quality Porcelain/Ceramic 3D Disc (Multi-Layer Depth)
+        // 1. Soft Depth Drop Shadow
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy + 4, coreR + 1, 0, Math.PI * 2);
+        ctx.shadowBlur  = isSyncing ? 52 : 38;
+        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 45%, ${isSyncing ? 0.55 : 0.35})`;
+        ctx.fillStyle   = 'rgba(255, 255, 255, 0.98)';
+        ctx.fill();
+        ctx.restore();
+
+        // 2. Solid Porcelain 3D Disc Gradient Fill
+        const disc = ctx.createLinearGradient(cx - coreR, cy - coreR, cx + coreR, cy + coreR);
+        disc.addColorStop(0.00, '#ffffff');           // Pure top-left specular highlight
+        disc.addColorStop(0.35, '#f4f8ff');          // Soft luminous porcelain white
+        disc.addColorStop(0.75, '#e4effe');          // Soft cyan-blue tint
+        disc.addColorStop(1.00, '#d0e2fc');          // Soft depth shadow on bottom right
+
         ctx.save();
         ctx.beginPath();
         ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
         ctx.fillStyle = disc;
-        ctx.shadowBlur  = isSyncing ? 48 : 36;
-        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 60%, ${isSyncing ? 0.65 : 0.45})`;
+        ctx.shadowBlur  = isSyncing ? 40 : 25;
+        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.60 : 0.40})`;
         ctx.fill();
 
-        // Inner specular edge ring
+        // 3. Crisp Specular Outer Rim Highlight
         ctx.beginPath();
         ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 85%, 0.75)`;
-        ctx.lineWidth   = 1.6;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
+        ctx.lineWidth   = 2.2;
+        ctx.stroke();
+
+        // 4. Subtle Inset Border Ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, coreR - 2.5, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, 0.30)`;
+        ctx.lineWidth   = 1.0;
         ctx.stroke();
         ctx.restore();
 
@@ -397,13 +435,13 @@ export function initHeroGrowthField(host) {
             ctx.translate(cx, cy);
 
             // Dynamic breathing scale & floating pulse
-            const breatheScale = 1 + Math.sin(t * 0.85) * 0.04;
-            const logoW = coreR * 1.15 * breatheScale;
+            const breatheScale = 1 + Math.sin(t * 0.95) * 0.038;
+            const logoW = coreR * 1.14 * breatheScale;
             const logoH = logoW * (99 / 80);
 
             // Luminous Aura Glow behind the Logo Mark
-            ctx.shadowBlur  = isSyncing ? 45 : 30;
-            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 75%, ${0.90 + Math.sin(t * 1.2) * 0.10})`;
+            ctx.shadowBlur  = isSyncing ? 45 : 28;
+            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 70%, ${0.85 + Math.sin(t * 1.3) * 0.15})`;
 
             // Draw exact RAFly logo mark image centered at (cx, cy)
             ctx.drawImage(logoMarkImg, -logoW / 2, -logoH / 2, logoW, logoH);
@@ -413,9 +451,9 @@ export function initHeroGrowthField(host) {
             // Fallback while loading
             ctx.beginPath();
             ctx.arc(cx, cy, coreR * 0.4, 0, Math.PI * 2);
-            ctx.fillStyle   = '#ffffff';
+            ctx.fillStyle   = '#0a63ff';
             ctx.shadowBlur  = isSyncing ? 26 : 16;
-            ctx.shadowColor = '#ffffff';
+            ctx.shadowColor = '#0a63ff';
             ctx.fill();
         }
         ctx.restore();
