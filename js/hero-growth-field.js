@@ -88,11 +88,10 @@ export function initHeroGrowthField(host) {
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     function resizeCanvas() {
         const rect = canvas.getBoundingClientRect();
-        const w = rect.width  || 640;
-        const h = rect.height || 640;
-        canvas.width  = w * DPR;
-        canvas.height = h * DPR;
-        ctx.scale(DPR, DPR);
+        const w = Math.floor(rect.width  || 640);
+        const h = Math.floor(rect.height || 640);
+        canvas.width  = Math.floor(w * DPR);
+        canvas.height = Math.floor(h * DPR);
         // Store logical size
         canvas._w = w;
         canvas._h = h;
@@ -195,7 +194,11 @@ export function initHeroGrowthField(host) {
         const cy = h / 2;
         const r  = Math.min(w, h) * 0.42; // radius of the reactor field
 
+        // Reset transform to physical DPR pixels cleanly each frame to prevent scale accumulation & blurriness
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         ctx.clearRect(0, 0, w, h);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
         // Active capability color (Electric Royal Blue Spectrum)
         const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 217, s: 95, l: 54 };
@@ -312,13 +315,14 @@ export function initHeroGrowthField(host) {
         const breathe = (1 + Math.sin(t * 0.60) * 0.04) * (isSyncing ? 1.06 : 1.0);
         const coreR   = r * 0.23 * breathe;
 
-        // Luminous atmosphere halo
-        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.5, cx, cy, coreR * (isSyncing ? 2.8 : 2.4));
-        halo.addColorStop(0.0, `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.48 : 0.32})`);
-        halo.addColorStop(0.4, `hsla(${activeColor.h}, 90%, 55%, ${isSyncing ? 0.20 : 0.12})`);
-        halo.addColorStop(1.0, 'transparent');
+        // Rich Luminous Electric Neon Core Halo Glow
+        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.3, cx, cy, coreR * (isSyncing ? 3.0 : 2.5));
+        halo.addColorStop(0.00, `rgba(10, 99, 255, ${isSyncing ? 0.70 : 0.48})`);
+        halo.addColorStop(0.35, `rgba(0, 180, 216, ${isSyncing ? 0.40 : 0.24})`);
+        halo.addColorStop(0.70, `rgba(10, 99, 255, 0.08)`);
+        halo.addColorStop(1.00, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, coreR * (isSyncing ? 2.8 : 2.4), 0, Math.PI * 2);
+        ctx.arc(cx, cy, coreR * (isSyncing ? 3.0 : 2.5), 0, Math.PI * 2);
         ctx.fillStyle = halo;
         ctx.fill();
 
