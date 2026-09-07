@@ -2899,13 +2899,61 @@
     width: 100%;
 }
 
-/* LEFT SIDE — EDITORIAL CONTENT */
-.sig-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-width: 580px;
+/* FULL-VIEWPORT AMBIENT CANVAS BACKGROUND */
+.sig-canvas--full-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.85;
+}
+
+/* CENTERED EDITORIAL HERO CONTENT */
+.sig-content--centered {
+    align-items: center;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
     z-index: 5;
+}
+
+.sig-eyebrow--pill {
+    padding: 0.4rem 1.0rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.85);
+    background-image: linear-gradient(135deg, #ffffff, rgba(235, 244, 255, 0.90));
+    border: 1px solid rgba(10, 99, 255, 0.22);
+    box-shadow: 0 4px 16px rgba(10, 99, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 1.5rem;
+}
+
+.sig-headline--centered {
+    text-align: center;
+    font-size: clamp(3.8rem, 5.8vw, 6.2rem);
+    letter-spacing: -0.05em;
+    margin-bottom: 1.5rem;
+}
+
+.sig-body--centered {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 2.2rem;
+    font-size: clamp(1.1rem, 1.0rem + 0.5vw, 1.35rem);
+    color: #3b466d;
+}
+
+.sig-actions--centered {
+    justify-content: center;
+    margin-bottom: 2.2rem;
+}
+
+.sig-trust--centered {
+    justify-content: center;
 }
 
 .sig-eyebrow {

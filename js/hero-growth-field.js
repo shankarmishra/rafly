@@ -99,444 +99,121 @@ export function initHeroGrowthField(host) {
     resizeCanvas();
     new ResizeObserver(resizeCanvas).observe(canvas);
 
-    /* ── Ribbon definitions ─────────────────────────────────────────────
-       Each ribbon is described as a set of cubic bezier control points
-       relative to the canvas centre (cx, cy).
-       The ribbons animate by modulating control points with time.
-    */
-    /* ── 5 Capability Ribbon Connection Definitions ─────────────────────
-       Each ribbon anchors precisely at one of the 5 floating capability tags
-       and flows into the central solid 'R' core disc (cx, cy).
-    */
-    function getRibbons(cx, cy, r, t) {
-        const s = r * 0.78; // Ribbon anchor radius matching tag layout
-        return [
-            /* 01 WEB — Top-Left Tag */
-            {
-                key: 'web',
-                pts: [
-                    cx - s * 0.75, cy - s * 0.75,
-                    cx - s * 0.40 + Math.sin(t * 0.45) * 6, cy - s * 0.35 + Math.cos(t * 0.40) * 5,
-                    cx - s * 0.16 + Math.sin(t * 0.3) * 4, cy - s * 0.12,
-                    cx, cy,
-                ],
-                width: 2.4,
-                opacity: 0.85,
-            },
-            /* 02 SECURITY — Mid-Left Tag */
-            {
-                key: 'security',
-                pts: [
-                    cx - s * 0.90, cy + Math.sin(t * 0.35) * 4,
-                    cx - s * 0.52 + Math.sin(t * 0.30) * 8, cy - s * 0.18 + Math.cos(t * 0.35) * 6,
-                    cx - s * 0.22, cy - s * 0.05,
-                    cx, cy,
-                ],
-                width: 2.8,
-                opacity: 0.90,
-            },
-            /* 03 MARKETING — Top-Right Tag */
-            {
-                key: 'marketing',
-                pts: [
-                    cx + s * 0.75, cy - s * 0.75,
-                    cx + s * 0.40 + Math.cos(t * 0.40) * 6, cy - s * 0.35 + Math.sin(t * 0.45) * 5,
-                    cx + s * 0.16, cy - s * 0.12 + Math.cos(t * 0.3) * 4,
-                    cx, cy,
-                ],
-                width: 2.4,
-                opacity: 0.85,
-            },
-            /* 04 CONTENT — Mid-Right Tag */
-            {
-                key: 'content',
-                pts: [
-                    cx + s * 0.90, cy + Math.cos(t * 0.35) * 4,
-                    cx + s * 0.52 + Math.cos(t * 0.30) * 8, cy + s * 0.18 + Math.sin(t * 0.35) * 6,
-                    cx + s * 0.22, cy + s * 0.05,
-                    cx, cy,
-                ],
-                width: 2.8,
-                opacity: 0.90,
-            },
-            /* 05 COMMERCE — Bottom-Center Tag */
-            {
-                key: 'commerce',
-                pts: [
-                    cx, cy + s * 0.85,
-                    cx + Math.sin(t * 0.35) * 10, cy + s * 0.50 + Math.cos(t * 0.30) * 6,
-                    cx + Math.sin(t * 0.45) * 4, cy + s * 0.22,
-                    cx, cy,
-                ],
-                width: 2.6,
-                opacity: 0.88,
-            },
-        ];
-    }
-
-    /* Ribbon gradient factory — Electric Royal Blue & Cyan Spectrum */
-    function ribbonGradient(pts, color, alpha) {
-        const [x0, y0, , , , , x3, y3] = pts;
-        const grad = ctx.createLinearGradient(x0, y0, x3, y3);
-        grad.addColorStop(0.00, `rgba(10, 99, 255, 0.12)`);
-        grad.addColorStop(0.20, `rgba(10, 99, 255, ${alpha * 0.75})`);
-        grad.addColorStop(0.65, `rgba(56, 189, 248, ${alpha * 0.95})`);
-        grad.addColorStop(1.00, `rgba(10, 99, 255, ${alpha * 1.00})`);
-        return grad;
+    /* ── Ambient Constellation Node Particles ────────────────────────── */
+    const NODE_COUNT = 42;
+    const nodes = [];
+    for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+            x: Math.random(),
+            y: Math.random(),
+            vx: (Math.random() - 0.5) * 0.0004,
+            vy: (Math.random() - 0.5) * 0.0004,
+            radius: 1.5 + Math.random() * 2.2,
+            alpha: 0.25 + Math.random() * 0.50,
+            phase: Math.random() * Math.PI * 2,
+        });
     }
 
     /* ── Draw frame ─────────────────────────────────────────────────────── */
     function draw(ts) {
         const t  = (ts - t0) / 1000; // seconds since start
-        const w  = canvas._w || 640;
-        const h  = canvas._h || 640;
+        const w  = canvas._w || 1440;
+        const h  = canvas._h || 900;
         const cx = w / 2;
         const cy = h / 2;
-        const r  = Math.min(w, h) * 0.42; // radius of the reactor field
 
-        // Reset transform to physical DPR pixels cleanly each frame to prevent scale accumulation & blurriness
+        // Reset transform to physical DPR pixels cleanly each frame
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         ctx.clearRect(0, 0, w, h);
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
-        // Active capability color (Electric Royal Blue Spectrum)
-        const activeColor = activeCap ? CAP_COLORS[activeCap] : { h: 217, s: 95, l: 54 };
-
-        /* ── Clean Subtle Mono Atmosphere (No colored blob background) ── */
-        const atmo = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.3);
-        atmo.addColorStop(0.0, `rgba(10, 99, 255, ${isSyncing ? 0.10 : 0.06})`);
-        atmo.addColorStop(0.5, `rgba(10, 99, 255, ${isSyncing ? 0.04 : 0.02})`);
-        atmo.addColorStop(1.0, 'transparent');
+        /* 1. Fluid Aurora Mesh Background Orbs */
+        const orb1X = cx + Math.sin(t * 0.25) * (w * 0.25) + pxCurr * 40;
+        const orb1Y = cy + Math.cos(t * 0.20) * (h * 0.20) + pyCurr * 30;
+        const orb1  = ctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, w * 0.45);
+        orb1.addColorStop(0.0, 'rgba(10, 99, 255, 0.14)');
+        orb1.addColorStop(0.5, 'rgba(56, 189, 248, 0.06)');
+        orb1.addColorStop(1.0, 'transparent');
         ctx.beginPath();
-        ctx.arc(cx, cy, r * 1.3, 0, Math.PI * 2);
-        ctx.fillStyle = atmo;
+        ctx.arc(orb1X, orb1Y, w * 0.45, 0, Math.PI * 2);
+        ctx.fillStyle = orb1;
         ctx.fill();
 
-        /* ── 5 Energy Connection Beams & Data Flow Packets ────────────── */
-        const ribbons = getRibbons(cx, cy, r, t);
-        for (const rib of ribbons) {
-            const isCap    = activeCap === rib.key;
-            const isDimmed = activeCap && !isCap && !isSyncing;
-            const alpha    = isSyncing ? 0.95 : (isDimmed ? 0.18 : (isCap ? 1.0 : 0.75));
-            const lWidth   = isSyncing ? rib.width * 1.6 : (isDimmed ? rib.width * 0.70 : rib.width * (isCap ? 2.2 : 1.25));
+        const orb2X = cx - Math.cos(t * 0.22) * (w * 0.22) - pxCurr * 30;
+        const orb2Y = cy - Math.sin(t * 0.28) * (h * 0.22) - pyCurr * 25;
+        const orb2  = ctx.createRadialGradient(orb2X, orb2Y, 10, orb2X, orb2Y, w * 0.40);
+        orb2.addColorStop(0.0, 'rgba(99, 102, 241, 0.12)');
+        orb2.addColorStop(0.5, 'rgba(10, 99, 255, 0.05)');
+        orb2.addColorStop(1.0, 'transparent');
+        ctx.beginPath();
+        ctx.arc(orb2X, orb2Y, w * 0.40, 0, Math.PI * 2);
+        ctx.fillStyle = orb2;
+        ctx.fill();
 
-            const color  = CAP_COLORS[rib.key] || { h: 217, s: 95, l: 54 };
-            const [x0, y0, x1, y1, x2, y2, x3, y3] = rib.pts;
+        /* 2. Expanding System Wave Shockwave */
+        const pulsePhase = (t * 0.18) % 1.0;
+        const pulseR     = pulsePhase * (Math.max(w, h) * 0.70);
+        const pulseAlpha = (1.0 - pulsePhase) * 0.15;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx + pxCurr * 20, cy + pyCurr * 15, pulseR, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(10, 99, 255, ${pulseAlpha})`;
+        ctx.lineWidth   = 1.2;
+        ctx.stroke();
+        ctx.restore();
 
-            // Ambient outer glow pass
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha * 0.45);
-            ctx.lineWidth   = lWidth * (isCap ? 5.8 : (isSyncing ? 5.0 : 3.4));
-            ctx.lineCap     = 'round';
-            ctx.stroke();
+        /* 3. Constellation Node Network & Interconnecting Beams */
+        const mouseX = cx + pxCurr * w;
+        const mouseY = cy + pyCurr * h;
 
-            // Luminous core energy path
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-            ctx.strokeStyle = ribbonGradient(rib.pts, color, alpha);
-            ctx.lineWidth   = lWidth;
-            ctx.lineCap     = 'round';
-            ctx.stroke();
+        // Position nodes & calculate physical coordinates
+        const physNodes = nodes.map((node) => {
+            node.x += node.vx;
+            node.y += node.vy;
+            if (node.x < 0 || node.x > 1) node.vx *= -1;
+            if (node.y < 0 || node.y > 1) node.vy *= -1;
 
-            // Active Card Hyper-Beam Core Highlight
-            if (isCap) {
-                ctx.beginPath();
-                ctx.moveTo(x0, y0);
-                ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.90)';
-                ctx.lineWidth   = lWidth * 0.45;
-                ctx.shadowBlur  = 18;
-                ctx.shadowColor = '#0a63ff';
-                ctx.stroke();
-            }
+            const px = node.x * w + Math.sin(t * 0.4 + node.phase) * 8 + pxCurr * 15;
+            const py = node.y * h + Math.cos(t * 0.3 + node.phase) * 8 + pyCurr * 12;
+            return { px, py, radius: node.radius, alpha: node.alpha };
+        });
 
-            // Connection node endpoint target rings at each card
-            if (!isDimmed || isSyncing) {
-                // Outer pulse target ring
-                const targetPulseR = (isCap ? 8.0 : 6.5) + Math.sin(t * 3.0 + CAPS.indexOf(rib.key)) * 2.2;
-                ctx.beginPath();
-                ctx.arc(x0, y0, targetPulseR, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(10, 99, 255, ${isCap ? 0.95 : 0.45})`;
-                ctx.lineWidth   = isCap ? 1.4 : 1.1;
-                ctx.stroke();
+        // Interconnecting lines between close nodes
+        const maxDist = 170;
+        for (let i = 0; i < physNodes.length; i++) {
+            for (let j = i + 1; j < physNodes.length; j++) {
+                const n1 = physNodes[i];
+                const n2 = physNodes[j];
+                const dx = n1.px - n2.px;
+                const dy = n1.py - n2.py;
+                const dist = Math.sqrt(dx * dx + dy * dy);
 
-                // Solid center node dot
-                ctx.beginPath();
-                ctx.arc(x0, y0, isCap ? 4.8 : 3.2, 0, Math.PI * 2);
-                ctx.fillStyle   = isCap ? '#ffffff' : '#90c2ff';
-                ctx.shadowBlur  = isCap ? 18 : 8;
-                ctx.shadowColor = '#0a63ff';
-                ctx.fill();
-            }
-            ctx.restore();
-
-            // Triple travelling light energy packets with glowing trails & docking arrival splash pulses
-            if (!isDimmed || isSyncing) {
-                const particlePhases = [0.0, 0.33, 0.66]; // 3 packets per path
-                for (const pOffset of particlePhases) {
-                    const speedMult = isCap ? 0.95 : (isSyncing ? 0.75 : 0.45);
-                    const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20 + pOffset) % 1.0;
-                    const tp        = easeOut(phase);
-
-                    // Head position via deCasteljau
-                    const ax = lerp(x0, x1, tp), ay = lerp(y0, y1, tp);
-                    const bx = lerp(x1, x2, tp), by = lerp(y1, y2, tp);
-                    const cx2= lerp(x2, x3, tp), cy2= lerp(y2, y3, tp);
-                    const dx = lerp(ax, bx, tp),  dy = lerp(ay, by, tp);
-                    const ex = lerp(bx, cx2,tp),  ey = lerp(by, cy2,tp);
-                    const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
-
-                    // Tail position
-                    const tpTail = Math.max(0, tp - (isCap ? 0.09 : 0.07));
-                    const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
-                    const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
-                    const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
-                    const tdx = lerp(tax, tbx, tpTail), tdy = lerp(tay, tby, tpTail);
-                    const tex = lerp(tbx, tcx2, tpTail), tey = lerp(tby, tcy2, tpTail);
-                    const tfx = lerp(tdx, tex, tpTail), tfy = lerp(tdy, tey, tpTail);
-
-                    ctx.save();
-                    // Glowing tail line
+                if (dist < maxDist) {
+                    const lineAlpha = (1.0 - dist / maxDist) * 0.18;
                     ctx.beginPath();
-                    ctx.moveTo(tfx, tfy);
-                    ctx.lineTo(fx, fy);
-                    ctx.strokeStyle = `rgba(90, 180, 255, ${isCap || isSyncing ? 0.95 : 0.55})`;
-                    ctx.lineWidth   = isCap || isSyncing ? 3.8 : 2.0;
-                    ctx.lineCap     = 'round';
+                    ctx.moveTo(n1.px, n1.py);
+                    ctx.lineTo(n2.px, n2.py);
+                    ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
+                    ctx.lineWidth   = 1.0;
                     ctx.stroke();
-
-                    // Particle head
-                    const dotR = (isCap || isSyncing) ? 5.2 : 3.0;
-                    ctx.beginPath();
-                    ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
-                    ctx.fillStyle   = '#ffffff';
-                    ctx.shadowBlur  = isCap || isSyncing ? 22 : 10;
-                    ctx.shadowColor = 'rgba(10, 99, 255, 0.95)';
-                    ctx.fill();
-                    ctx.restore();
-
-                    // Arrival docking splash wave pulse at central core rim
-                    if (tp > 0.82) {
-                        const sPhase  = (tp - 0.82) / 0.18;
-                        const sRadius = (r * 0.23) + sPhase * 32;
-                        const sAlpha  = (1.0 - sPhase) * (isCap ? 0.85 : 0.35);
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(cx, cy, sRadius, 0, Math.PI * 2);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${sAlpha})`;
-                        ctx.lineWidth   = 1.6 * (1.0 - sPhase);
-                        ctx.stroke();
-                        ctx.restore();
-                    }
                 }
             }
         }
 
-        /* ── Central AI System Core ───────────────────────────────────── */
-        const breathe = (1 + Math.sin(t * 0.60) * 0.04) * (isSyncing ? 1.06 : 1.0);
-        const coreR   = r * 0.23 * breathe;
-
-        // Rich Luminous Electric Neon Core Halo Glow
-        const halo = ctx.createRadialGradient(cx, cy, coreR * 0.3, cx, cy, coreR * (isSyncing ? 3.0 : 2.5));
-        halo.addColorStop(0.00, `rgba(10, 99, 255, ${isSyncing ? 0.70 : 0.48})`);
-        halo.addColorStop(0.35, `rgba(0, 180, 216, ${isSyncing ? 0.40 : 0.24})`);
-        halo.addColorStop(0.70, `rgba(10, 99, 255, 0.08)`);
-        halo.addColorStop(1.00, 'transparent');
-        ctx.beginPath();
-        ctx.arc(cx, cy, coreR * (isSyncing ? 3.0 : 2.5), 0, Math.PI * 2);
-        ctx.fillStyle = halo;
-        ctx.fill();
-
-        // Bidirectional System Outbound Heartbeat Wave (Core → Cards every 4s)
-        const hbPhase = (t * 0.25) % 1.0;
-        const hbRadius = coreR + hbPhase * (r * 0.75 - coreR);
-        const hbAlpha  = (1.0 - hbPhase) * 0.30;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(cx, cy, hbRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(10, 99, 255, ${hbAlpha})`;
-        ctx.lineWidth = 1.2;
-        ctx.setLineDash([6, 6]);
-        ctx.stroke();
-        ctx.restore();
-
-        // Dynamic Expanding Signal Wave Ripples emitting from core
-        const waveCount = 3;
-        for (let wIdx = 0; wIdx < waveCount; wIdx++) {
-            const wavePhase = ((t * 0.38) + (wIdx / waveCount)) % 1.0;
-            const waveR = coreR * (1.0 + wavePhase * 1.35);
-            const waveAlpha = (1.0 - wavePhase) * (isSyncing ? 0.55 : 0.35);
-
+        // Draw individual glowing nodes
+        for (const n of physNodes) {
             ctx.save();
             ctx.beginPath();
-            ctx.arc(cx, cy, waveR, 0, Math.PI * 2);
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 68%, ${waveAlpha})`;
-            ctx.lineWidth = 1.4;
-            ctx.stroke();
+            ctx.arc(n.px, n.py, n.radius, 0, Math.PI * 2);
+            ctx.fillStyle   = '#ffffff';
+            ctx.shadowBlur  = 10;
+            ctx.shadowColor = 'rgba(10, 99, 255, 0.8)';
+            ctx.globalAlpha = n.alpha;
+            ctx.fill();
             ctx.restore();
         }
 
-        // 1. Outer rotating blueprint ring (clockwise)
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(t * 0.05);
-        ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.90, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 70%, ${isSyncing ? 0.60 : 0.38})`;
-        ctx.lineWidth   = 1.0;
-        ctx.setLineDash([5, 9]);
-        ctx.stroke();
-
-        // Crosshair tick marks
-        for (let i = 0; i < 4; i++) {
-            const ta = (i / 4) * Math.PI * 2;
-            const xA = Math.cos(ta) * (coreR * 1.80);
-            const yA = Math.sin(ta) * (coreR * 1.80);
-            const xB = Math.cos(ta) * (coreR * 2.00);
-            const yB = Math.sin(ta) * (coreR * 2.00);
-            ctx.beginPath();
-            ctx.moveTo(xA, yA);
-            ctx.lineTo(xB, yB);
-            ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 75%, ${isSyncing ? 0.80 : 0.50})`;
-            ctx.lineWidth   = 1.4;
-            ctx.stroke();
-        }
-        ctx.restore();
-
-        // 2. Middle precision blueprint ring (counter-clockwise)
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(-t * 0.08);
-        ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.58, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.65 : 0.42})`;
-        ctx.lineWidth   = 1.1;
-        ctx.setLineDash([3, 6]);
-        ctx.stroke();
-
-        // 8 precision node markers at 45 degree intervals
-        for (let i = 0; i < 8; i++) {
-            const ta = (i / 8) * Math.PI * 2;
-            const px = Math.cos(ta) * (coreR * 1.58);
-            const py = Math.sin(ta) * (coreR * 1.58);
-            ctx.beginPath();
-            ctx.arc(px, py, 2.0, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${activeColor.h}, 100%, 80%, 0.95)`;
-            ctx.shadowBlur = 6;
-            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 70%, 0.8)`;
-            ctx.fill();
-        }
-        ctx.restore();
-
-        // 3. Inner rotating ring (clockwise fast)
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(t * 0.12);
-        ctx.beginPath();
-        ctx.arc(0, 0, coreR * 1.30, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 80%, ${isSyncing ? 0.75 : 0.48})`;
-        ctx.lineWidth   = 1.2;
-        ctx.setLineDash([10, 16]);
-        ctx.stroke();
-        ctx.restore();
-
-        // Solid High-Quality Porcelain/Ceramic 3D Disc (Multi-Layer Depth)
-        // 1. Soft Depth Drop Shadow
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(cx, cy + 4, coreR + 1, 0, Math.PI * 2);
-        ctx.shadowBlur  = isSyncing ? 52 : 38;
-        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 45%, ${isSyncing ? 0.55 : 0.35})`;
-        ctx.fillStyle   = 'rgba(255, 255, 255, 0.98)';
-        ctx.fill();
-        ctx.restore();
-
-        // 2. Solid Porcelain 3D Disc Gradient Fill with Interactive Specular Mouse Parallax
-        const specularX = cx - coreR * 0.75 + pxCurr * 24;
-        const specularY = cy - coreR * 0.75 + pyCurr * 20;
-        const disc = ctx.createLinearGradient(specularX, specularY, cx + coreR, cy + coreR);
-        disc.addColorStop(0.00, '#ffffff');           // Pure dynamic top-left specular highlight
-        disc.addColorStop(0.35, '#f4f8ff');          // Soft luminous porcelain white
-        disc.addColorStop(0.75, '#e4effe');          // Soft cyan-blue tint
-        disc.addColorStop(1.00, '#d0e2fc');          // Soft depth shadow on bottom right
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-        ctx.fillStyle = disc;
-        ctx.shadowBlur  = isSyncing ? 40 : 25;
-        ctx.shadowColor = `hsla(${activeColor.h}, 100%, 65%, ${isSyncing ? 0.60 : 0.40})`;
-        ctx.fill();
-
-        // 3. Crisp Specular Outer Rim Highlight
-        ctx.beginPath();
-        ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.98)';
-        ctx.lineWidth   = 2.2;
-        ctx.stroke();
-
-        // 4. Subtle Inset Border Ring
-        ctx.beginPath();
-        ctx.arc(cx, cy, coreR - 2.5, 0, Math.PI * 2);
-        ctx.strokeStyle = `hsla(${activeColor.h}, 100%, 65%, 0.30)`;
-        ctx.lineWidth   = 1.0;
-        ctx.stroke();
-        ctx.restore();
-
-        // RAFly Official Real Brand Logo Mark (100% Exact Image from assets/logo-mark.png)
-        if (logoMarkImg && logoMarkImg.complete && logoMarkImg.naturalWidth > 0) {
-            ctx.save();
-            ctx.translate(cx, cy);
-
-            // Dynamic breathing scale & floating pulse
-            const breatheScale = 1 + Math.sin(t * 0.95) * 0.038;
-            const logoW = coreR * 1.14 * breatheScale;
-            const logoH = logoW * (99 / 80);
-
-            // Luminous Aura Glow behind the Logo Mark
-            ctx.shadowBlur  = isSyncing ? 45 : 28;
-            ctx.shadowColor = `hsla(${activeColor.h}, 100%, 70%, ${0.85 + Math.sin(t * 1.3) * 0.15})`;
-
-            // Draw exact RAFly logo mark image centered at (cx, cy)
-            ctx.drawImage(logoMarkImg, -logoW / 2, -logoH / 2, logoW, logoH);
-
-            ctx.restore();
-        } else {
-            // Fallback while loading
-            ctx.beginPath();
-            ctx.arc(cx, cy, coreR * 0.4, 0, Math.PI * 2);
-            ctx.fillStyle   = '#0a63ff';
-            ctx.shadowBlur  = isSyncing ? 26 : 16;
-            ctx.shadowColor = '#0a63ff';
-            ctx.fill();
-        }
-        ctx.restore();
-
-        /* ── Ambient Orbiting Micro-Particles ───────────────────────────── */
-        if (!reduced) {
-            const pCount = 16;
-            for (let i = 0; i < pCount; i++) {
-                const seed = i * 137.508; // golden angle
-                const a    = (seed * 0.0174533) + t * 0.07;
-                const dist = r * (0.45 + 0.55 * ((Math.sin(seed * 0.0837) + 1) / 2));
-                const px   = cx + Math.cos(a) * dist;
-                const py   = cy + Math.sin(a) * dist * 0.82;
-                const sz   = 1.2 + 1.5 * ((Math.sin(seed * 0.113 + t * 0.26) + 1) / 2);
-                const al   = 0.25 + 0.30 * ((Math.sin(seed * 0.077 + t * 0.22) + 1) / 2);
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(px, py, sz, 0, Math.PI * 2);
-                ctx.fillStyle   = `hsla(215, 100%, 70%, ${al})`;
-                ctx.shadowBlur  = 8;
-                ctx.shadowColor = 'rgba(10, 99, 255, 0.55)';
-                ctx.fill();
-                ctx.restore();
-            }
         }
     }
 
