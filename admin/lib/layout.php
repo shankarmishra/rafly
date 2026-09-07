@@ -61,15 +61,15 @@ function admin_head(array $page): void
    cache-buster, so the preload and the @font-face request are byte-identical
    and the browser does not download each face twice. */
 ?>
-    <link rel="preload" href="<?= e(site_path('/vendor/fonts/space-grotesk-var.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?= e(site_path('/vendor/fonts/inter-var.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="<?= e(asset('vendor/fonts/fonts.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset('admin/assets/admin.css')) ?>">
-    <link rel="icon" href="<?= e(asset('assets/favicon.svg')) ?>" type="image/svg+xml">
+    <link rel="preload" href="<?= e(admin_asset('vendor/fonts/space-grotesk-var.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?= e(admin_asset('vendor/fonts/inter-var.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="<?= e(admin_asset('vendor/fonts/fonts.css')) ?>">
+    <link rel="stylesheet" href="<?= e(admin_asset('admin/assets/admin.css')) ?>">
+    <link rel="icon" href="<?= e(admin_asset('assets/favicon.svg')) ?>" type="image/svg+xml">
 <?php /* Progressive enhancement only — toasts and a real confirm dialog. Served
          same-origin so the admin CSP (script-src 'self') allows it; deferred so
          it never blocks first paint. Every page works with it disabled. */ ?>
-    <script src="<?= e(asset('admin/assets/admin.js')) ?>" defer></script>
+    <script src="<?= e(admin_asset('admin/assets/admin.js')) ?>" defer></script>
 </head>
 <body>
 <?php
@@ -82,7 +82,7 @@ function admin_head(array $page): void
     <aside class="sidebar">
         <div class="sidebar-brand">
             <!-- Reversed variant: the sidebar is --dark. -->
-            <a href="<?= e(site_path('/admin/')) ?>"><img src="<?= e(asset('assets/logo-reversed.png')) ?>" alt="Rafly" width="107" height="33"></a>
+            <a href="<?= e(admin_path('/admin/')) ?>"><img src="<?= e(admin_asset('assets/logo-reversed.png')) ?>" alt="Rafly" width="107" height="33"></a>
             <span>Admin</span>
         </div>
 
@@ -92,8 +92,8 @@ function admin_head(array $page): void
           if ($group !== ''): ?>
             <div class="nav-group"><?= e($group) ?></div>
 <?php     endif;
-          $isActive = ($page['active'] ?? '') === $href; ?>
-            <a href="<?= e(site_path($href)) ?>"<?= $isActive ? ' class="is-active" aria-current="page"' : '' ?>><?= icon($ico) ?><span><?= e($label) ?></span></a>
+          $isActive = ($page['active'] ?? '') === $href || ($page['active'] ?? '') === admin_path($href); ?>
+            <a href="<?= e(admin_path($href)) ?>"<?= $isActive ? ' class="is-active" aria-current="page"' : '' ?>><?= icon($ico) ?><span><?= e($label) ?></span></a>
 <?php endforeach; ?>
         </nav>
 

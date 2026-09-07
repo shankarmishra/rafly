@@ -108,12 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>Sign in — Rafly Admin</title>
-    <link rel="stylesheet" href="<?= e(asset('admin/assets/admin.css')) ?>">
-    <link rel="icon" href="<?= e(asset('assets/favicon.svg')) ?>" type="image/svg+xml">
+    <link rel="stylesheet" href="<?= e(admin_asset('admin/assets/admin.css')) ?>">
+    <link rel="icon" href="<?= e(admin_asset('assets/favicon.svg')) ?>" type="image/svg+xml">
 </head>
 <body class="login">
     <form class="login-card" method="post" action="login.php">
-        <img src="<?= e(asset('assets/logo.png')) ?>" alt="Rafly" width="128" height="40">
+        <img src="<?= e(admin_asset('assets/logo.png')) ?>" alt="Rafly" width="128" height="40">
 
         <h1>Sign in</h1>
         <p class="sub">Rafly admin panel.</p>

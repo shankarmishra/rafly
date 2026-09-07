@@ -236,6 +236,50 @@ function asset(string $path): string
     return $cache[$path] = ($prefix === '' ? '/' : $prefix . '/') . $path . ($ver ? '?v=' . $ver : '');
 }
 
+/**
+ * Detect if the request host is an admin subdomain (e.g. admin.rafly.in).
+ */
+function is_admin_subdomain(): bool
+{
+    $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
+    return (bool)preg_match('/^admin\./i', $host);
+}
+
+/**
+ * Return site-relative path for admin URLs.
+ * Handles both admin.rafly.in (subdomain root) and rafly.in/admin (subfolder).
+ */
+function admin_path(string $path = '/'): string
+{
+    $path = '/' . ltrim($path, '/');
+    if (is_admin_subdomain()) {
+        if (strpos($path, '/admin/') === 0) {
+            $path = substr($path, 6);
+        } elseif ($path === '/admin') {
+            $path = '/';
+        }
+    } else {
+        if (strpos($path, '/admin/') !== 0 && $path !== '/admin') {
+            $path = '/admin' . $path;
+        }
+    }
+    return site_path($path);
+}
+
+/**
+ * Cache-busting asset URL for admin assets, aware of subdomain root.
+ */
+function admin_asset(string $path): string
+{
+    $path = ltrim($path, '/');
+    if (is_admin_subdomain()) {
+        if (strpos($path, 'admin/') === 0) {
+            $path = substr($path, 6);
+        }
+    }
+    return asset($path);
+}
+
 /** Returns the active class when $itemId is the current page. */
 function nav_active(string $itemId, ?string $currentId): string
 {

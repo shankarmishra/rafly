@@ -71,7 +71,7 @@ function admin_redirect(string $path, string $flash = '', string $type = 'ok'): 
 
     $target = $path;
     if (!preg_match('#^https?://#i', $path)) {
-        $target = site_path($path);
+        $target = admin_path($path);
     }
 
     header('Location: ' . $target, true, 303);
@@ -100,12 +100,12 @@ function admin_safe_next(?string $next, string $fallback = '/admin/'): string
     $basePath = $base === '' ? '' : '/' . ltrim($base, '/');
 
     if (!is_string($next) || $next === '') {
-        return site_path($fallback);
+        return admin_path($fallback);
     }
 
     $next = str_replace('\\', '/', $next);
     if (preg_match('#^https?://#i', $next) || str_starts_with($next, '//')) {
-        return site_path($fallback);
+        return admin_path($fallback);
     }
 
     $next = '/' . ltrim($next, '/');

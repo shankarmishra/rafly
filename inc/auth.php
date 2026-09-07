@@ -201,8 +201,8 @@ function require_login(): void
         return;
     }
 
-    $target = (string)($_SERVER['REQUEST_URI'] ?? '/admin/');
-    $loginPath = site_path('/admin/login.php');
+    $target = (string)($_SERVER['REQUEST_URI'] ?? (is_admin_subdomain() ? '/' : '/admin/'));
+    $loginPath = admin_path('/admin/login.php');
     header('Location: ' . $loginPath . '?next=' . rawurlencode($target), true, 302);
     exit;
 }
