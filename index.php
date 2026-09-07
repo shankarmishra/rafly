@@ -753,13 +753,10 @@ require __DIR__ . '/partials/social-rail.php';
                         </div>
                     </a>
 
-                    <!-- FAR-RIGHT COMPACT FLOATING 3D DIGITAL SYSTEM MODULE -->
+                    <!-- FAR-RIGHT COMPACT FLOATING DIGITAL ANALYTICS PANEL -->
                     <div class="rafly-hero__model3d" data-hero-model3d>
                         <div class="rafly-model3d__viewport">
-                            <!-- Layer 1: Rear Translucent Glass Back Plate -->
-                            <div class="rafly-model3d__layer rafly-model3d__layer--back"></div>
-
-                            <!-- Layer 2: Inner Luminous Glass Plane & Outer Frame -->
+                            <!-- Outer Glass Panel -->
                             <div class="rafly-model3d__layer rafly-model3d__layer--mid">
                                 <div class="rafly-model3d__header">
                                     <span class="rafly-model3d__dots">
@@ -767,26 +764,21 @@ require __DIR__ . '/partials/social-rail.php';
                                         <span class="rafly-model3d__dot yellow"></span>
                                         <span class="rafly-model3d__dot green"></span>
                                     </span>
-                                    <span class="rafly-model3d__title">RAFLY SYSTEM</span>
+                                    <span class="rafly-model3d__title">RAFLY PLATFORM</span>
                                     <span class="rafly-model3d__status">
-                                        <span class="rafly-model3d__status-dot"></span>LIVE
+                                        <span class="rafly-model3d__status-dot"></span>LIVE SYSTEM
                                     </span>
                                 </div>
 
-                                <!-- Layer 3: Data & Waveform Plane -->
+                                <!-- Screen & Graph Area -->
                                 <div class="rafly-model3d__screen">
                                     <div class="rafly-model3d__grid-bg"></div>
-                                    <!-- Multi-Waveform Active System Visualization -->
                                     <div class="rafly-model3d__graph">
                                         <svg viewBox="0 0 240 100" fill="none" class="rafly-model3d__waves-svg">
                                             <defs>
                                                 <linearGradient id="raflyWaveGradPrimary" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stop-color="#1769ff" stop-opacity="0.30" />
+                                                    <stop offset="0%" stop-color="#1769ff" stop-opacity="0.18" />
                                                     <stop offset="100%" stop-color="#1769ff" stop-opacity="0.0" />
-                                                </linearGradient>
-                                                <linearGradient id="raflyWaveGradCyan" x1="0" y1="0" x2="1" y2="0">
-                                                    <stop offset="0%" stop-color="#22b8d6" stop-opacity="0.8" />
-                                                    <stop offset="100%" stop-color="#1769ff" stop-opacity="0.3" />
                                                 </linearGradient>
                                                 <filter id="raflyGlowDot">
                                                     <feGaussianBlur stdDeviation="2" result="blur" />
@@ -796,33 +788,15 @@ require __DIR__ . '/partials/social-rail.php';
                                                     </feMerge>
                                                 </filter>
                                             </defs>
-                                            <!-- Wave 3 (Tertiary Violet) -->
-                                            <path class="rafly-wave rafly-wave--violet" d="M 0 75 Q 60 85 120 60 T 240 45" stroke="rgba(124, 92, 255, 0.45)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" />
-                                            <!-- Wave 2 (Secondary Cyan) -->
-                                            <path class="rafly-wave rafly-wave--cyan" d="M 0 65 Q 50 40 110 55 T 240 25" stroke="url(#raflyWaveGradCyan)" stroke-width="1.5" fill="none" />
-                                            <!-- Wave 1 (Primary Blue Growth Waveform) -->
-                                            <path class="rafly-wave rafly-wave--primary-fill" d="M 0 70 Q 50 60 100 35 T 200 18 T 240 12 L 240 100 L 0 100 Z" fill="url(#raflyWaveGradPrimary)" />
-                                            <path class="rafly-wave rafly-wave--primary" d="M 0 70 Q 50 60 100 35 T 200 18 T 240 12" stroke="#1769ff" stroke-width="2.2" fill="none" />
-                                            
-                                            <!-- Micro Data Nodes & Particles -->
-                                            <circle cx="100" cy="35" r="3" fill="#1769ff" filter="url(#raflyGlowDot)" />
-                                            <circle cx="200" cy="18" r="3.5" fill="#38d39f" filter="url(#raflyGlowDot)" />
+                                            <!-- Single Clean Primary Blue Growth Wave -->
+                                            <path class="rafly-wave rafly-wave--primary-fill" d="M 0 70 Q 60 58 120 42 T 240 16 L 240 100 L 0 100 Z" fill="url(#raflyWaveGradPrimary)" />
+                                            <path class="rafly-wave rafly-wave--primary" d="M 0 70 Q 60 58 120 42 T 240 16" stroke="#1769ff" stroke-width="2" fill="none" />
+                                            <circle cx="120" cy="42" r="3" fill="#1769ff" filter="url(#raflyGlowDot)" />
+                                            <circle cx="240" cy="16" r="3" fill="#1769ff" filter="url(#raflyGlowDot)" />
                                         </svg>
                                     </div>
 
-                                    <!-- Activity Bars & Indicator Controls -->
-                                    <div class="rafly-model3d__indicators">
-                                        <div class="rafly-model3d__bars">
-                                            <span class="rafly-bar rafly-bar--1"></span>
-                                            <span class="rafly-bar rafly-bar--2"></span>
-                                            <span class="rafly-bar rafly-bar--3"></span>
-                                            <span class="rafly-bar rafly-bar--4"></span>
-                                            <span class="rafly-bar rafly-bar--5"></span>
-                                        </div>
-                                        <div class="rafly-model3d__micro-label">SYS_CLK / 98.4%</div>
-                                    </div>
-
-                                    <!-- Layer 4: Dark Navy Foreground Status Capsule -->
+                                    <!-- Dark Navy Status Capsule -->
                                     <div class="rafly-model3d__panel">
                                         <span class="rafly-model3d__badge">SYSTEM STATUS</span>
                                         <span class="rafly-model3d__stat">+148% GROWTH</span>
@@ -830,7 +804,7 @@ require __DIR__ . '/partials/social-rail.php';
                                 </div>
                             </div>
 
-                            <!-- Layer 6: Floating Detached Z-Process Pill -->
+                            <!-- Floating Process Pill -->
                             <div class="rafly-hero__floating-tag" data-hero-floating-tag>
                                 <span>IDEA</span>
                                 <span class="rafly-tag__arr">&rarr;</span>

@@ -186,6 +186,7 @@ define('SITE_ORIGIN', (static function (): string {
     $allowed = [
         SITE_DOMAIN,
         'www.' . SITE_DOMAIN,
+        'admin.' . SITE_DOMAIN,
     ];
 
     // Local development hosts, with any port.
