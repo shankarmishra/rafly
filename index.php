@@ -463,7 +463,35 @@ require __DIR__ . '/partials/social-rail.php';
        ========================================================================== */ ?>
     <section class="section hero sig-hero sig-hero--entered grs-hero--entered" id="home" data-hero data-sig-hero aria-label="RAFly — Digital Growth Studio">
 
-        <?php /* Kinetic Matrix Spring-Mass Simulation Canvas (Full Hero Background) */ ?>
+        <?php /* Ambient Corner Light Glows (Fills all 4 corners) */ ?>
+        <div class="sig-corner-glow sig-corner-glow--tl" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--tr" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--bl" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--br" aria-hidden="true"></div>
+
+        <?php /* High-Tech Corner HUD Badges */ ?>
+        <div class="sig-corner-hud sig-corner-hud--tl" aria-hidden="true">
+            <span class="sig-corner-hud__bracket">┌</span>
+            <span class="sig-corner-hud__dot"></span>
+            <span class="sig-corner-hud__text">SYS.LOC [01, 01] • SIGNAL ACTIVE</span>
+        </div>
+        <div class="sig-corner-hud sig-corner-hud--tr" aria-hidden="true">
+            <span class="sig-corner-hud__text">100% OPERATIONAL • MATRIX 2.0</span>
+            <span class="sig-corner-hud__dot"></span>
+            <span class="sig-corner-hud__bracket">┐</span>
+        </div>
+        <div class="sig-corner-hud sig-corner-hud--bl" aria-hidden="true">
+            <span class="sig-corner-hud__bracket">└</span>
+            <span class="sig-corner-hud__dot"></span>
+            <span class="sig-corner-hud__text">LATENCY &lt; 12MS • HIGH VELOCITY</span>
+        </div>
+        <div class="sig-corner-hud sig-corner-hud--br" aria-hidden="true">
+            <span class="sig-corner-hud__text">NODES: 792 • IP OWNERSHIP</span>
+            <span class="sig-corner-hud__dot"></span>
+            <span class="sig-corner-hud__bracket">┘</span>
+        </div>
+
+        <?php /* Kinetic Matrix Spring-Mass Simulation Canvas (Full Hero Background Edge-to-Edge) */ ?>
         <canvas class="sig-canvas sig-canvas--full-bg" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
 
         <?php /* ── MAIN CONTAINER ── */ ?>

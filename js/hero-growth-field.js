@@ -99,17 +99,17 @@ export function initHeroGrowthField(host) {
     resizeCanvas();
     new ResizeObserver(resizeCanvas).observe(canvas);
 
-    /* ── Kinetic Matrix (Spring-Mass Lattice Grid) Setup ───────────── */
-    const COLS = 18;
-    const ROWS = 12;
+    /* ── Kinetic Matrix (Spring-Mass Micro-Grid) Setup ───────────── */
+    const COLS = 36;
+    const ROWS = 22;
     const grid = [];
 
     for (let r = 0; r < ROWS; r++) {
         grid[r] = [];
         for (let c = 0; c < COLS; c++) {
             grid[r][c] = {
-                xr: (c + 0.5) / COLS, // equilibrium ratio X (0..1)
-                yr: (r + 0.5) / ROWS, // equilibrium ratio Y (0..1)
+                xr: c / (COLS - 1), // edge-to-edge equilibrium ratio X (0.0 .. 1.0)
+                yr: r / (ROWS - 1), // edge-to-edge equilibrium ratio Y (0.0 .. 1.0)
                 x: 0,  // current physical X
                 y: 0,  // current physical Y
                 vx: 0,
