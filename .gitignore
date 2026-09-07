@@ -1,3 +1,9 @@
+# Markdown, documentation & planning files
+*.md
+*.pdf
+RAFLY_BUSINESS_DOCUMENTATION/
+docs/
+
 # Lead data — never commit customer PII
 private/
 *.csv
