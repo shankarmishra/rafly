@@ -263,11 +263,11 @@ export function initHeroGrowthField(host) {
             }
             ctx.restore();
 
-            // Dual travelling light energy particles with glowing trails along path
+            // Triple travelling light energy packets with glowing trails & docking arrival splash pulses
             if (!isDimmed || isSyncing) {
-                const particlePhases = [0.0, 0.5]; // 2 packets per path
+                const particlePhases = [0.0, 0.33, 0.66]; // 3 packets per path
                 for (const pOffset of particlePhases) {
-                    const speedMult = (isCap || isSyncing) ? 0.65 : 0.42;
+                    const speedMult = (isCap || isSyncing) ? 0.75 : 0.45;
                     const phase     = ((t * speedMult) + CAPS.indexOf(rib.key) * 0.20 + pOffset) % 1.0;
                     const tp        = easeOut(phase);
 
@@ -280,7 +280,7 @@ export function initHeroGrowthField(host) {
                     const fx = lerp(dx, ex, tp),  fy = lerp(dy, ey, tp);
 
                     // Tail position
-                    const tpTail = Math.max(0, tp - 0.06);
+                    const tpTail = Math.max(0, tp - 0.07);
                     const tax = lerp(x0, x1, tpTail), tay = lerp(y0, y1, tpTail);
                     const tbx = lerp(x1, x2, tpTail), tby = lerp(y1, y2, tpTail);
                     const tcx2= lerp(x2, x3, tpTail), tcy2= lerp(y2, y3, tpTail);
@@ -293,20 +293,34 @@ export function initHeroGrowthField(host) {
                     ctx.beginPath();
                     ctx.moveTo(tfx, tfy);
                     ctx.lineTo(fx, fy);
-                    ctx.strokeStyle = `rgba(90, 180, 255, ${isCap || isSyncing ? 0.90 : 0.50})`;
-                    ctx.lineWidth   = isCap || isSyncing ? 3.0 : 1.8;
+                    ctx.strokeStyle = `rgba(90, 180, 255, ${isCap || isSyncing ? 0.95 : 0.55})`;
+                    ctx.lineWidth   = isCap || isSyncing ? 3.5 : 2.0;
                     ctx.lineCap     = 'round';
                     ctx.stroke();
 
                     // Particle head
-                    const dotR = (isCap || isSyncing) ? 4.5 : 2.8;
+                    const dotR = (isCap || isSyncing) ? 4.8 : 3.0;
                     ctx.beginPath();
                     ctx.arc(fx, fy, dotR, 0, Math.PI * 2);
                     ctx.fillStyle   = '#ffffff';
-                    ctx.shadowBlur  = isCap || isSyncing ? 18 : 8;
+                    ctx.shadowBlur  = isCap || isSyncing ? 20 : 10;
                     ctx.shadowColor = 'rgba(10, 99, 255, 0.95)';
                     ctx.fill();
                     ctx.restore();
+
+                    // Arrival docking splash wave pulse at central core rim
+                    if (tp > 0.82) {
+                        const sPhase  = (tp - 0.82) / 0.18;
+                        const sRadius = (r * 0.23) + sPhase * 28;
+                        const sAlpha  = (1.0 - sPhase) * (isCap ? 0.75 : 0.35);
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, sRadius, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${sAlpha})`;
+                        ctx.lineWidth   = 1.5 * (1.0 - sPhase);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
                 }
             }
         }

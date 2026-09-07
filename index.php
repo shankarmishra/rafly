@@ -587,11 +587,11 @@ require __DIR__ . '/partials/social-rail.php';
 
                             <?php /* SVG leader overlay for sparse capability indicators */ ?>
                             <svg class="sig-annot-svg" viewBox="0 0 640 640" fill="none" aria-hidden="true">
-                                <path class="sig-leader sig-leader--web" data-leader="web" d="M 90,140 C 140,140 180,180 230,220" />
-                                <path class="sig-leader sig-leader--sec" data-leader="security" d="M 60,320 C 120,320 160,310 210,310" />
-                                <path class="sig-leader sig-leader--mkt" data-leader="marketing" d="M 550,140 C 500,140 460,180 410,220" />
-                                <path class="sig-leader sig-leader--cnt" data-leader="content" d="M 580,320 C 520,320 480,310 430,310" />
-                                <path class="sig-leader sig-leader--cmr" data-leader="commerce" d="M 320,570 C 320,510 320,460 320,410" />
+                                <path class="sig-leader sig-leader--web" data-leader="web" d="M 115,115 C 185,115 245,220 320,320" />
+                                <path class="sig-leader sig-leader--sec" data-leader="security" d="M 65,320 C 150,320 220,320 320,320" />
+                                <path class="sig-leader sig-leader--mkt" data-leader="marketing" d="M 525,115 C 455,115 395,220 320,320" />
+                                <path class="sig-leader sig-leader--cnt" data-leader="content" d="M 575,320 C 490,320 420,320 320,320" />
+                                <path class="sig-leader sig-leader--cmr" data-leader="commerce" d="M 320,545 C 320,465 320,395 320,320" />
                             </svg>
 
                             <?php /* Floating minimalist editorial labels (dimensional service nodes) */ ?>
