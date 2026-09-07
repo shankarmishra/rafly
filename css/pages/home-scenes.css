@@ -2791,31 +2791,30 @@
     mix-blend-mode: multiply;
 }
 
-/* 4 CORNER AMBIENT LIGHT GLOWS */
+/* 4 CORNER AMBIENT LIGHT FADES */
 .sig-corner-glow {
     position: absolute;
     width: 380px;
     height: 380px;
-    border-radius: 50%;
     pointer-events: none;
     z-index: 1;
     opacity: 0.85;
 }
 .sig-corner-glow--tl {
-    top: -120px; left: -120px;
-    background: radial-gradient(circle, rgba(10, 99, 255, 0.16) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 75%);
+    top: 0; left: 0;
+    background: linear-gradient(135deg, rgba(10, 99, 255, 0.14) 0%, rgba(56, 189, 248, 0.04) 45%, transparent 70%);
 }
 .sig-corner-glow--tr {
-    top: -120px; right: -120px;
-    background: radial-gradient(circle, rgba(10, 99, 255, 0.16) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 75%);
+    top: 0; right: 0;
+    background: linear-gradient(225deg, rgba(10, 99, 255, 0.14) 0%, rgba(56, 189, 248, 0.04) 45%, transparent 70%);
 }
 .sig-corner-glow--bl {
-    bottom: -120px; left: -120px;
-    background: radial-gradient(circle, rgba(10, 99, 255, 0.16) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 75%);
+    bottom: 0; left: 0;
+    background: linear-gradient(45deg, rgba(10, 99, 255, 0.14) 0%, rgba(56, 189, 248, 0.04) 45%, transparent 70%);
 }
 .sig-corner-glow--br {
-    bottom: -120px; right: -120px;
-    background: radial-gradient(circle, rgba(10, 99, 255, 0.16) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 75%);
+    bottom: 0; right: 0;
+    background: linear-gradient(315deg, rgba(10, 99, 255, 0.14) 0%, rgba(56, 189, 248, 0.04) 45%, transparent 70%);
 }
 
 /* 4 CORNER HIGH-TECH HUD BADGES */
@@ -3048,9 +3047,9 @@
 
 .sig-eyebrow--pill {
     padding: 0.4rem 1.0rem;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.85);
-    background-image: linear-gradient(135deg, #ffffff, rgba(235, 244, 255, 0.90));
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.88);
+    background-image: linear-gradient(135deg, #ffffff, rgba(235, 244, 255, 0.92));
     border: 1px solid rgba(10, 99, 255, 0.22);
     box-shadow: 0 4px 16px rgba(10, 99, 255, 0.08);
     backdrop-filter: blur(12px);
