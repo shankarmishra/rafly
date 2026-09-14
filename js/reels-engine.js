@@ -89,9 +89,160 @@ export function initReelsEngine(section) {
             isLiked = !isLiked;
             const icon = likeBtn.querySelector('.rau-icon') || likeBtn.querySelector('.ra-icon');
             if (icon) icon.classList.toggle('is-liked', isLiked);
-            likeCount.textContent = isLiked ? '48.9K' : '48.8K';
+            likeCount.textContent = isLiked ? '54.2K' : '54.1K';
         });
     }
+
+    // --- 2b. Instagram Reels Data & Interactive Switcher ---
+    const INSTAGRAM_REELS_DATA = [
+        {
+            id: 'DdGUNlyz6o_',
+            url: 'https://www.instagram.com/reel/DdGUNlyz6o_/',
+            mp4: '/assets/mockups/ig-reel-1.mp4',
+            title: 'Algorithmic Hook & Retention',
+            likes: '54.2K',
+            comments: '1,940',
+            shares: '14.8K',
+            caption: 'Viral Reels & Content, scripted, shot & edited to convert ⚡ Algorithmic hook formulas that capture high-intent audience attention in 3s flat.',
+            tags: '#ViralReels #RaflyGrowth #ContentEngine #PerformanceWeb',
+            audio: 'officialrafly.in • Original Audio • Trending Sound'
+        },
+        {
+            id: 'DdBEsLHzhZQ',
+            url: 'https://www.instagram.com/reel/DdBEsLHzhZQ/',
+            mp4: '/assets/mockups/ig-reel-2.mp4',
+            title: '4K Motion & Creative Studio',
+            likes: '41.8K',
+            comments: '1,280',
+            shares: '10.2K',
+            caption: 'Studio-grade 4K motion graphics, color grading & bespoke audio design 🎬 High-velocity production cuts engineered to stop the scroll.',
+            tags: '#StudioPolish #ShortFormVideo #CreativeProduction #Rafly',
+            audio: 'officialrafly.in • Studio Mix • High Retention Sound'
+        },
+        {
+            id: 'DdMKeQqzPvj',
+            url: 'https://www.instagram.com/reel/DdMKeQqzPvj/',
+            mp4: '/assets/mockups/ig-reel-3.mp4',
+            title: 'Attributed Conversion Funnel',
+            likes: '68.5K',
+            comments: '2,410',
+            shares: '19.3K',
+            caption: 'Turning social video views into direct-response store revenue 🚀 End-to-end DM & checkout funnels with 100% attributed performance.',
+            tags: '#AttributedROAS #ConversionEngine #EcommerceGrowth #Rafly',
+            audio: 'officialrafly.in • Revenue Audio • Performance Beats'
+        },
+        {
+            id: 'DcJCSPiMtjk',
+            url: 'https://www.instagram.com/reel/DcJCSPiMtjk/',
+            mp4: '/assets/mockups/ig-reel-4.mp4',
+            title: 'High-Impact Social Hook',
+            likes: '39.4K',
+            comments: '1,150',
+            shares: '9.4K',
+            caption: 'High-impact visual hooks engineered for social viral reach 💥 Direct-response copy & dynamic pacing that maximizes engagement.',
+            tags: '#SocialVelocity #ViralHooks #ContentStrategy #Rafly',
+            audio: 'officialrafly.in • Social Velocity • Viral Sound'
+        },
+        {
+            id: 'DbgAnezPxKK',
+            url: 'https://www.instagram.com/reel/DbgAnezPxKK/',
+            mp4: '/assets/mockups/ig-reel-5.mp4',
+            title: 'Brand Storytelling Cut',
+            likes: '46.1K',
+            comments: '1,620',
+            shares: '11.8K',
+            caption: 'Authentic brand storytelling & high-performing product showcase 🎥 Scaled seamlessly across Instagram Reels & ad funnels.',
+            tags: '#BrandStorytelling #ReelsShowcase #Omnichannel #Rafly',
+            audio: 'officialrafly.in • Brand Story • Cinematic Audio'
+        },
+        {
+            id: 'DdI-PFNzU5r',
+            url: 'https://www.instagram.com/reel/DdI-PFNzU5r/',
+            mp4: '/assets/mockups/ig-reel-6.mp4',
+            title: 'Omnichannel Ad Creative',
+            likes: '52.7K',
+            comments: '1,890',
+            shares: '13.5K',
+            caption: 'Synchronized ad creative rollout across performance channels 🚀 High-converting reel assets optimized for maximum ROAS.',
+            tags: '#AdCreative #PerformanceMarketing #ROAS #RaflyGrowth',
+            audio: 'officialrafly.in • Ad Matrix • Growth Audio'
+        }
+    ];
+
+    const rvsBtns = [...section.querySelectorAll('[data-reel-select]')];
+    const heroVideo = section.querySelector('[data-hero-video]');
+    const heroCaption = section.querySelector('[data-hero-caption]');
+    const heroTags = section.querySelector('[data-hero-tags]');
+    const heroAudio = section.querySelector('[data-hero-audio]');
+    const heroLikes = section.querySelector('[data-hero-likes]');
+    const heroComments = section.querySelector('[data-hero-comments]');
+    const heroShares = section.querySelector('[data-hero-shares]');
+    const heroLink = section.querySelector('[data-hero-link]');
+    const heroShare = section.querySelector('[data-hero-share]');
+    const heroFollow = section.querySelector('[data-hero-follow]');
+
+    function switchHeroReel(index) {
+        const reel = INSTAGRAM_REELS_DATA[index];
+        if (!reel) return;
+
+        rvsBtns.forEach((btn, i) => {
+            const isActive = i === index;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        if (heroVideo) {
+            heroVideo.style.opacity = '0.4';
+            setTimeout(() => {
+                let srcTag = heroVideo.querySelector('source');
+                if (srcTag) srcTag.src = reel.mp4;
+                heroVideo.src = reel.mp4;
+                heroVideo.load();
+                heroVideo.play().catch(() => {});
+                heroVideo.style.opacity = '1';
+            }, 150);
+        }
+
+        if (heroCaption) heroCaption.textContent = reel.caption;
+        if (heroTags) heroTags.textContent = reel.tags;
+        if (heroAudio) heroAudio.textContent = reel.audio;
+        if (heroLikes) heroLikes.textContent = reel.likes;
+        if (heroComments) heroComments.textContent = reel.comments;
+        if (heroShares) heroShares.textContent = reel.shares;
+
+        if (heroLink) heroLink.href = reel.url;
+        if (heroShare) heroShare.href = reel.url;
+        if (heroFollow) heroFollow.href = reel.url;
+    }
+
+    rvsBtns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => switchHeroReel(idx));
+    });
+
+    const reelCards = [...section.querySelectorAll('[data-reel-card]')];
+    reelCards.forEach((card) => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('a, button')) return;
+            const reelIdx = parseInt(card.getAttribute('data-reel-card'), 10);
+            if (!isNaN(reelIdx)) switchHeroReel(reelIdx);
+        });
+    });
+
+    // Sound toggle buttons
+    const soundBtns = [...section.querySelectorAll('[data-reel-sound]')];
+    soundBtns.forEach((sBtn) => {
+        sBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const video = sBtn.closest('.screen-reels')?.querySelector('video');
+            if (video) {
+                video.muted = !video.muted;
+                const isMutedIcon = sBtn.querySelector('.is-muted');
+                const isOnIcon = sBtn.querySelector('.is-on');
+                if (isMutedIcon) isMutedIcon.style.display = video.muted ? '' : 'none';
+                if (isOnIcon) isOnIcon.style.display = video.muted ? 'none' : '';
+            }
+        });
+    });
 
     // --- 3. Click-to-Scrub Navigation ---
     const phaseScrollTargets = [0.10, 0.35, 0.58, 0.78, 0.92];

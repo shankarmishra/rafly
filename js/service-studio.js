@@ -117,68 +117,61 @@ export function initServiceStudio(host) {
     function loadStageLottie(path, serviceKey) {
         if (!stageLottie) return;
 
-        stageLottie.style.opacity = '0';
-        stageLottie.style.transform = 'scale(0.96)';
         stageLottie.dataset.service = serviceKey || activeKey;
+        stageLottie.style.opacity = '1';
+        stageLottie.style.transform = 'scale(1)';
 
-        setTimeout(() => {
-            if (currentAnim) {
-                try { currentAnim.destroy(); } catch (e) {}
-                currentAnim = null;
-            }
+        if (currentAnim) {
+            try { currentAnim.destroy(); } catch (e) {}
+            currentAnim = null;
+        }
 
-            stageLottie.innerHTML = '';
+        stageLottie.innerHTML = '';
 
-            const box = document.createElement('div');
-            box.className = 'rafly-lottie-svg-box';
-            box.style.width = 'min(100%, 540px)';
-            box.style.height = 'min(100%, 380px)';
-            box.style.maxWidth = '540px';
-            box.style.maxHeight = '380px';
-            box.style.aspectRatio = '1.42';
-            box.style.display = 'flex';
-            box.style.justifyContent = 'center';
-            box.style.alignItems = 'center';
-            box.style.margin = '0 auto';
-            stageLottie.appendChild(box);
+        const box = document.createElement('div');
+        box.className = 'rafly-lottie-svg-box';
+        box.style.width = 'min(100%, 540px)';
+        box.style.height = 'min(100%, 380px)';
+        box.style.maxWidth = '540px';
+        box.style.maxHeight = '380px';
+        box.style.aspectRatio = '1.42';
+        box.style.display = 'flex';
+        box.style.justifyContent = 'center';
+        box.style.alignItems = 'center';
+        box.style.margin = '0 auto';
+        stageLottie.appendChild(box);
 
-            if (typeof window.lottie === 'undefined') {
-                console.warn('[ServiceStudio] Lottie runtime not ready yet; waiting for the next pass.');
-                stageLottie.style.opacity = '1';
-                stageLottie.style.transform = 'scale(1)';
-                return;
-            }
+        if (typeof window.lottie === 'undefined') {
+            console.warn('[ServiceStudio] Lottie runtime not ready yet; waiting for the next pass.');
+            return;
+        }
 
-            const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+        const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
 
-            tryFetch(path)
-                .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
-                .then((data) => {
-                    currentAnim = window.lottie.loadAnimation({
-                        container: box,
-                        renderer: 'svg',
-                        loop: true,
-                        autoplay: true,
-                        animationData: data,
-                        rendererSettings: {
-                            progressiveLoad: true,
-                            preserveAspectRatio: 'xMidYMid meet'
-                        }
-                    });
-                    stageLottie.style.opacity = '1';
-                    stageLottie.style.transform = 'scale(1)';
-                })
-                .catch((err) => {
-                    console.error('[ServiceStudio] Lottie load error:', path, err);
-                    stageLottie.style.opacity = '1';
-                    stageLottie.style.transform = 'scale(1)';
+        tryFetch(path)
+            .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
+            .then((data) => {
+                if (stageLottie.dataset.service !== serviceKey) return; // Discard if key changed
+                currentAnim = window.lottie.loadAnimation({
+                    container: box,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    animationData: data,
+                    rendererSettings: {
+                        progressiveLoad: true,
+                        preserveAspectRatio: 'xMidYMid meet'
+                    }
                 });
-        }, 140);
+            })
+            .catch((err) => {
+                console.error('[ServiceStudio] Lottie load error:', path, err);
+            });
     }
 
     /* ─── Switch Service Handler ───────────────────────────── */
     function switchService(key) {
-        if (key === activeKey && currentAnim) return;
+        if (key === activeKey && stageLottie && stageLottie.dataset.service === key) return;
         prevKey = activeKey;
         activeKey = key;
         morphProgress = 0.0;

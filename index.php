@@ -165,6 +165,97 @@ $REELS_CAPABILITIES = [
 $CONTENT_REELS_POINTS = array_column($REELS_CAPABILITIES, 'title');
 $APP_POINTS = &$CONTENT_REELS_POINTS;
 
+/**
+ * THE 6 INSTAGRAM REELS (FEATURING AUTHENTIC REELS MOCKUP UI)
+ * 1. https://www.instagram.com/reel/DdGUNlyz6o_/
+ * 2. https://www.instagram.com/reel/DdBEsLHzhZQ/
+ * 3. https://www.instagram.com/reel/DdMKeQqzPvj/
+ * 4. https://www.instagram.com/reel/DcJCSPiMtjk/
+ * 5. https://www.instagram.com/reel/DbgAnezPxKK/
+ * 6. https://www.instagram.com/reel/DdI-PFNzU5r/
+ */
+$INSTAGRAM_REELS = [
+    [
+        'id'       => 'DdGUNlyz6o_',
+        'url'      => 'https://www.instagram.com/reel/DdGUNlyz6o_/',
+        'mp4'      => '/assets/mockups/ig-reel-1.mp4',
+        'title'    => 'Algorithmic Hook & Retention',
+        'sub'      => '3-Second Hook Scripting',
+        'likes'    => '54.2K',
+        'comments' => '1,940',
+        'shares'   => '14.8K',
+        'caption'  => 'Viral Reels & Content, scripted, shot & edited to convert ⚡ Algorithmic hook formulas that capture high-intent audience attention in 3s flat.',
+        'audio'    => 'officialrafly.in • Original Audio • Trending Sound',
+        'tags'     => '#ViralReels #RaflyGrowth #ContentEngine #PerformanceWeb',
+    ],
+    [
+        'id'       => 'DdBEsLHzhZQ',
+        'url'      => 'https://www.instagram.com/reel/DdBEsLHzhZQ/',
+        'mp4'      => '/assets/mockups/ig-reel-2.mp4',
+        'title'    => '4K Motion & Creative Studio',
+        'sub'      => '60FPS Cinematic Production',
+        'likes'    => '41.8K',
+        'comments' => '1,280',
+        'shares'   => '10.2K',
+        'caption'  => 'Studio-grade 4K motion graphics, color grading & bespoke audio design 🎬 High-velocity production cuts engineered to stop the scroll.',
+        'audio'    => 'officialrafly.in • Studio Mix • High Retention Sound',
+        'tags'     => '#StudioPolish #ShortFormVideo #CreativeProduction #Rafly',
+    ],
+    [
+        'id'       => 'DdMKeQqzPvj',
+        'url'      => 'https://www.instagram.com/reel/DdMKeQqzPvj/',
+        'mp4'      => '/assets/mockups/ig-reel-3.mp4',
+        'title'    => 'Attributed Conversion Funnel',
+        'sub'      => 'Direct Store Checkout',
+        'likes'    => '68.5K',
+        'comments' => '2,410',
+        'shares'   => '19.3K',
+        'caption'  => 'Turning social video views into direct-response store revenue 🚀 End-to-end DM & checkout funnels with 100% attributed performance.',
+        'audio'    => 'officialrafly.in • Revenue Audio • Performance Beats',
+        'tags'     => '#AttributedROAS #ConversionEngine #EcommerceGrowth #Rafly',
+    ],
+    [
+        'id'       => 'DcJCSPiMtjk',
+        'url'      => 'https://www.instagram.com/reel/DcJCSPiMtjk/',
+        'mp4'      => '/assets/mockups/ig-reel-4.mp4',
+        'title'    => 'High-Impact Social Hook',
+        'sub'      => 'Viral Hook Architecture',
+        'likes'    => '39.4K',
+        'comments' => '1,150',
+        'shares'   => '9.4K',
+        'caption'  => 'High-impact visual hooks engineered for social viral reach 💥 Direct-response copy & dynamic pacing that maximizes engagement.',
+        'audio'    => 'officialrafly.in • Social Velocity • Viral Sound',
+        'tags'     => '#SocialVelocity #ViralHooks #ContentStrategy #Rafly',
+    ],
+    [
+        'id'       => 'DbgAnezPxKK',
+        'url'      => 'https://www.instagram.com/reel/DbgAnezPxKK/',
+        'mp4'      => '/assets/mockups/ig-reel-5.mp4',
+        'title'    => 'Brand Storytelling Cut',
+        'sub'      => 'Omnichannel Distribution',
+        'likes'    => '46.1K',
+        'comments' => '1,620',
+        'shares'   => '11.8K',
+        'caption'  => 'Authentic brand storytelling & high-performing product showcase 🎥 Scaled seamlessly across Instagram Reels & ad funnels.',
+        'audio'    => 'officialrafly.in • Brand Story • Cinematic Audio',
+        'tags'     => '#BrandStorytelling #ReelsShowcase #Omnichannel #Rafly',
+    ],
+    [
+        'id'       => 'DdI-PFNzU5r',
+        'url'      => 'https://www.instagram.com/reel/DdI-PFNzU5r/',
+        'mp4'      => '/assets/mockups/ig-reel-6.mp4',
+        'title'    => 'Omnichannel Ad Creative',
+        'sub'      => 'ROAS Performance Beats',
+        'likes'    => '52.7K',
+        'comments' => '1,890',
+        'shares'   => '13.5K',
+        'caption'  => 'Synchronized ad creative rollout across performance channels 🚀 High-converting reel assets optimized for maximum ROAS.',
+        'audio'    => 'officialrafly.in • Ad Matrix • Growth Audio',
+        'tags'     => '#AdCreative #PerformanceMarketing #ROAS #RaflyGrowth',
+    ],
+];
+
+
 
 /**
  * WHAT WE BUILD — FOUR KINDS OF BUILD, ONE CONNECTED TEAM
@@ -972,30 +1063,56 @@ require __DIR__ . '/partials/social-rail.php';
                         </div>
                     </div>
 
-                    <!-- 5 SYNCHRONIZED 3D PHONE SURFACES -->
+                    <!-- 5 SYNCHRONIZED 3D PHONE SURFACES WITH AUTHENTIC INSTAGRAM REELS UI -->
 
-                    <!-- PHONE 04: REAR-LEFT (4K Motion & Creative Studio) -->
-                    <div class="iphone-pro-surface phone-rear-left" data-surface-idx="3">
+                    <!-- PHONE 04: REAR-LEFT (Instagram Reel 4 - DcJCSPiMtjk) -->
+                    <div class="iphone-pro-surface phone-rear-left" data-surface-idx="3" data-reel-card="3">
                         <div class="surface-chassis">
                             <div class="surface-bezel">
                                 <div class="dynamic-island">
                                     <div class="di-content">
                                         <span class="di-camera"></span>
-                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">4K 60FPS</span></div>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Viral Hook</span></div>
                                     </div>
                                 </div>
                                 <div class="surface-status-bar">
                                     <span class="sb-time">9:41</span>
                                     <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
                                 </div>
-                                <div class="surface-screen screen-studio">
+                                <div class="surface-screen screen-reels">
+                                    <div class="screen-glare" aria-hidden="true"></div>
                                     <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
-                                        <source src="<?= e(site_path('/assets/mockups/reel-2.mp4')) ?>" type="video/mp4">
+                                        <source src="<?= e(site_path($INSTAGRAM_REELS[3]['mp4'])) ?>" type="video/mp4">
                                     </video>
-                                    <div class="studio-meta-overlay">
-                                        <div class="studio-hud-tag">HIGH-SPEED CREATIVE PRODUCTION</div>
-                                        <div class="studio-eq-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                                        <div class="studio-codec-tag">4K ULTRA HD &bull; 60FPS POLISH</div>
+                                    <div class="reels-header-meta">
+                                        <div class="reels-header-left">
+                                            <span class="reels-logo-text">Reels</span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[3]['url']) ?>" target="_blank" rel="noopener" class="reels-trend-pill">🔥 IG Reel ↗</a>
+                                    </div>
+                                    <div class="reels-sidebar-actions">
+                                        <div class="reels-action-unit like-unit is-active">
+                                            <span class="rau-icon is-liked"><?= icon('heart') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[3]['likes']) ?></span>
+                                        </div>
+                                        <div class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('message-circle') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[3]['comments']) ?></span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[3]['url']) ?>" target="_blank" rel="noopener" class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('send') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[3]['shares']) ?></span>
+                                        </a>
+                                        <div class="reels-spinning-vinyl">
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art" width="32" height="32" loading="lazy">
+                                        </div>
+                                    </div>
+                                    <div class="reels-content-footer">
+                                        <div class="reels-creator-row">
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic" width="32" height="32" loading="lazy"></div>
+                                            <div class="reels-handle"><strong>officialrafly.in</strong> <span class="verif-tag"><?= icon('verified') ?></span></div>
+                                        </div>
+                                        <p class="reels-caption"><?= e($INSTAGRAM_REELS[3]['caption']) ?></p>
                                     </div>
                                     <span class="home-indicator"></span>
                                 </div>
@@ -1004,8 +1121,8 @@ require __DIR__ . '/partials/social-rail.php';
                         <div class="surface-shadow" aria-hidden="true"></div>
                     </div>
 
-                    <!-- PHONE 02: LEFT SUPPORT (Instagram Story & 3s Retention Hook) -->
-                    <div class="iphone-pro-surface phone-mid-left" data-surface-idx="1">
+                    <!-- PHONE 02: LEFT SUPPORT (Instagram Reel 2 - DdBEsLHzhZQ) -->
+                    <div class="iphone-pro-surface phone-mid-left" data-surface-idx="1" data-reel-card="1">
                         <div class="surface-chassis">
                             <span class="hw-btn btn-action" aria-hidden="true"></span>
                             <span class="hw-btn btn-vol-up" aria-hidden="true"></span>
@@ -1014,50 +1131,66 @@ require __DIR__ . '/partials/social-rail.php';
                                 <div class="dynamic-island">
                                     <div class="di-content">
                                         <span class="di-camera"></span>
-                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Story &bull; 2h</span></div>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Reel &bull; Production</span></div>
                                     </div>
                                 </div>
                                 <div class="surface-status-bar">
                                     <span class="sb-time">9:41</span>
                                     <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
                                 </div>
-                                <div class="surface-screen screen-story">
+                                <div class="surface-screen screen-reels">
                                     <div class="screen-glare" aria-hidden="true"></div>
-                                    <div class="story-progress-strip">
-                                        <span class="sps-bar is-done"><i></i></span>
-                                        <span class="sps-bar is-active"><i></i></span>
-                                        <span class="sps-bar"><i></i></span>
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                        <source src="<?= e(site_path($INSTAGRAM_REELS[1]['mp4'])) ?>" type="video/mp4">
+                                    </video>
+                                    <div class="reels-header-meta">
+                                        <div class="reels-header-left">
+                                            <span class="reels-logo-text">Reels</span>
+                                            <span class="reels-header-caret">▾</span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[1]['url']) ?>" target="_blank" rel="noopener" class="reels-trend-pill">🔥 IG Reel ↗</a>
                                     </div>
-                                    <div class="story-profile-head">
-                                        <div class="story-author">
-                                            <div class="story-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="story-av" width="32" height="32" loading="lazy"></div>
-                                            <div class="story-user-meta">
-                                                <span class="story-name">officialrafly.in <?= icon('verified') ?></span>
-                                                <span class="story-age">2h ago</span>
+                                    <div class="reels-sidebar-actions">
+                                        <div class="reels-action-unit like-unit is-active">
+                                            <span class="rau-icon is-liked"><?= icon('heart') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[1]['likes']) ?></span>
+                                        </div>
+                                        <div class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('message-circle') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[1]['comments']) ?></span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[1]['url']) ?>" target="_blank" rel="noopener" class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('send') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[1]['shares']) ?></span>
+                                        </a>
+                                        <div class="reels-action-unit"><span class="rau-icon"><?= icon('bookmark') ?></span></div>
+                                        <div class="reels-spinning-vinyl" title="Spinning Original Audio">
+                                            <span class="vinyl-groove"></span>
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art" width="32" height="32" loading="lazy">
+                                        </div>
+                                    </div>
+                                    <div class="reels-content-footer">
+                                        <div class="reels-creator-row">
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic" width="32" height="32" loading="lazy"></div>
+                                            <div class="reels-handle">
+                                                <strong>officialrafly.in</strong>
+                                                <span class="verif-tag"><?= icon('verified') ?></span>
                                             </div>
+                                            <a href="<?= e($INSTAGRAM_REELS[1]['url']) ?>" target="_blank" rel="noopener" class="reels-follow-btn">Follow</a>
                                         </div>
-                                        <span class="story-close"><?= icon('x') ?></span>
-                                    </div>
-                                    <div class="story-media-view">
-                                        <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
-                                            <source src="<?= e(site_path('/assets/mockups/reel-instagram.mp4')) ?>" type="video/mp4">
-                                            <source src="<?= e(site_path('/assets/mockups/reel-1.mp4')) ?>" type="video/mp4">
-                                        </video>
-                                        <div class="story-stickers">
-                                            <div class="sticker-highlight">🔥 +248% Revenue Spurt</div>
-                                            <div class="sticker-quote">
-                                                <p>"Shipped full ecommerce rebuild in 14 days with zero downtime."</p>
-                                                <span class="sticker-verified">&check; Client Verified</span>
-                                            </div>
-                                            <div class="sticker-swipe"><span>Swipe Up To Scale <?= icon('arrow-up') ?></span></div>
+                                        <p class="reels-caption"><?= e($INSTAGRAM_REELS[1]['caption']) ?></p>
+                                        <div class="reels-tags"><?= e($INSTAGRAM_REELS[1]['tags']) ?></div>
+                                        <div class="reels-audio-badge">
+                                            <span class="audio-note"><?= icon('music') ?></span>
+                                            <span class="audio-title"><?= e($INSTAGRAM_REELS[1]['audio']) ?></span>
                                         </div>
                                     </div>
-                                    <div class="story-reply-bar">
-                                        <div class="story-input-fake"><span>Send message...</span></div>
-                                        <div class="story-btns">
-                                            <button type="button" class="story-btn is-heart" aria-label="Like story"><?= icon('heart') ?></button>
-                                            <button type="button" class="story-btn" aria-label="Share story"><?= icon('send') ?></button>
-                                        </div>
+                                    <div class="reels-bottom-tabbar" aria-hidden="true">
+                                        <span class="rnb-item"><?= icon('home') ?></span>
+                                        <span class="rnb-item"><?= icon('search') ?></span>
+                                        <span class="rnb-item rnb-add"><?= icon('plus') ?></span>
+                                        <span class="rnb-item is-active"><?= icon('play') ?></span>
+                                        <span class="rnb-item rnb-user"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="User" class="rnb-user-pic" width="16" height="16"></span>
                                     </div>
                                     <span class="home-indicator"></span>
                                 </div>
@@ -1066,8 +1199,8 @@ require __DIR__ . '/partials/social-rail.php';
                         <div class="surface-shadow" aria-hidden="true"></div>
                     </div>
 
-                    <!-- PHONE 01: HERO CENTER (Flagship Studio Creator Reel) -->
-                    <div class="iphone-pro-surface phone-hero-center is-dominant" data-surface-idx="0">
+                    <!-- PHONE 01: HERO CENTER (Flagship Instagram Reel 01 - DdGUNlyz6o_) -->
+                    <div class="iphone-pro-surface phone-hero-center is-dominant" data-surface-idx="0" data-hero-surface>
                         <div class="surface-chassis">
                             <span class="hw-btn btn-action" aria-hidden="true"></span>
                             <span class="hw-btn btn-vol-up" aria-hidden="true"></span>
@@ -1084,29 +1217,138 @@ require __DIR__ . '/partials/social-rail.php';
                                     <span class="sb-time">9:41</span>
                                     <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
                                 </div>
+                                <div class="surface-screen screen-reels" data-hero-screen>
+                                    <div class="screen-glare" aria-hidden="true"></div>
+                                    
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>" data-hero-video>
+                                        <source src="<?= e(site_path($INSTAGRAM_REELS[0]['mp4'])) ?>" type="video/mp4">
+                                    </video>
+
+                                    <!-- Tap Play/Pause Indicator -->
+                                    <div class="reels-play-overlay" aria-hidden="true" data-play-overlay>
+                                        <span class="rpo-icon"><?= icon('play') ?></span>
+                                    </div>
+
+                                    <!-- Instagram Top Header Bar -->
+                                    <div class="reels-header-meta">
+                                        <div class="reels-header-left">
+                                            <span class="reels-logo-text">Reels</span>
+                                            <span class="reels-header-caret">▾</span>
+                                        </div>
+                                        <div class="reels-header-right">
+                                            <button type="button" class="reels-sound-btn" data-reel-sound aria-label="Toggle Sound" title="Sound Mute/Unmute">
+                                                <span class="rsb-icon is-muted"><?= icon('volume-x') ?></span>
+                                                <span class="rsb-icon is-on" style="display:none;"><?= icon('volume-2') ?></span>
+                                            </button>
+                                            <a href="<?= e($INSTAGRAM_REELS[0]['url']) ?>" target="_blank" rel="noopener" class="reels-trend-pill" data-hero-link title="Open Reel on Instagram">
+                                                <span>🔥 IG Reel ↗</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Instagram Right Sidebar Action Column -->
+                                    <div class="reels-sidebar-actions">
+                                        <button type="button" class="reels-action-unit like-unit is-active" data-reel-like aria-label="Like reel">
+                                            <span class="rau-icon is-liked"><?= icon('heart') ?></span>
+                                            <span class="rau-val" data-hero-likes><?= e($INSTAGRAM_REELS[0]['likes']) ?></span>
+                                        </button>
+                                        <button type="button" class="reels-action-unit" aria-label="Comment on reel">
+                                            <span class="rau-icon"><?= icon('message-circle') ?></span>
+                                            <span class="rau-val" data-hero-comments><?= e($INSTAGRAM_REELS[0]['comments']) ?></span>
+                                        </button>
+                                        <a href="<?= e($INSTAGRAM_REELS[0]['url']) ?>" target="_blank" rel="noopener" class="reels-action-unit" data-hero-share aria-label="Share reel">
+                                            <span class="rau-icon"><?= icon('send') ?></span>
+                                            <span class="rau-val" data-hero-shares><?= e($INSTAGRAM_REELS[0]['shares']) ?></span>
+                                        </a>
+                                        <button type="button" class="reels-action-unit" data-reel-bookmark aria-label="Save reel">
+                                            <span class="rau-icon"><?= icon('bookmark') ?></span>
+                                        </button>
+                                        <button type="button" class="reels-action-unit" aria-label="More options">
+                                            <span class="rau-dots">&bull;&bull;&bull;</span>
+                                        </button>
+                                        <div class="reels-spinning-vinyl" title="Spinning Original Audio">
+                                            <span class="vinyl-groove"></span>
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art" width="32" height="32" loading="lazy">
+                                            <span class="vinyl-note-float" aria-hidden="true">🎵</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Instagram Bottom Metadata Bar -->
+                                    <div class="reels-content-footer">
+                                        <div class="reels-creator-row">
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic" width="32" height="32" loading="lazy"></div>
+                                            <div class="reels-handle">
+                                                <strong>officialrafly.in</strong>
+                                                <span class="verif-tag"><?= icon('verified') ?></span>
+                                            </div>
+                                            <a href="<?= e($INSTAGRAM_REELS[0]['url']) ?>" target="_blank" rel="noopener" class="reels-follow-btn" data-hero-follow>Follow</a>
+                                        </div>
+                                        <p class="reels-caption" data-hero-caption>
+                                            <?= e($INSTAGRAM_REELS[0]['caption']) ?>
+                                        </p>
+                                        <div class="reels-tags" data-hero-tags><?= e($INSTAGRAM_REELS[0]['tags']) ?></div>
+                                        <div class="reels-audio-badge">
+                                            <span class="audio-note"><?= icon('music') ?></span>
+                                            <span class="audio-title-marquee" data-hero-audio><?= e($INSTAGRAM_REELS[0]['audio']) ?></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Instagram Reels Bottom Navigation Bar -->
+                                    <div class="reels-bottom-tabbar" aria-hidden="true">
+                                        <span class="rnb-item"><?= icon('home') ?></span>
+                                        <span class="rnb-item"><?= icon('search') ?></span>
+                                        <span class="rnb-item rnb-add"><?= icon('plus') ?></span>
+                                        <span class="rnb-item is-active"><?= icon('play') ?></span>
+                                        <span class="rnb-item rnb-user"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="User" class="rnb-user-pic" width="16" height="16"></span>
+                                    </div>
+
+                                    <span class="home-indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="surface-shadow is-hero-shadow" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- PHONE 03: RIGHT SUPPORT (Instagram Reel 3 - DdMKeQqzPvj) -->
+                    <div class="iphone-pro-surface phone-mid-right" data-surface-idx="2" data-reel-card="2">
+                        <div class="surface-chassis">
+                            <span class="hw-btn btn-power" aria-hidden="true"></span>
+                            <div class="surface-bezel">
+                                <div class="dynamic-island">
+                                    <div class="di-content">
+                                        <span class="di-camera"></span>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Reel &bull; Conversion</span></div>
+                                    </div>
+                                </div>
+                                <div class="surface-status-bar">
+                                    <span class="sb-time">9:41</span>
+                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
+                                </div>
                                 <div class="surface-screen screen-reels">
                                     <div class="screen-glare" aria-hidden="true"></div>
-                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>" data-reel-video>
-                                        <source src="<?= e(site_path('/assets/mockups/reel-main.mp4')) ?>" type="video/mp4">
-                                        <source src="<?= e(site_path('/assets/mockups/reel-1.mp4')) ?>" type="video/mp4">
+                                    <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
+                                        <source src="<?= e(site_path($INSTAGRAM_REELS[2]['mp4'])) ?>" type="video/mp4">
                                     </video>
                                     <div class="reels-header-meta">
-                                        <span class="reels-logo-text">Reels</span>
-                                        <span class="reels-trend-pill">🔥 Trending</span>
+                                        <div class="reels-header-left">
+                                            <span class="reels-logo-text">Reels</span>
+                                            <span class="reels-header-caret">▾</span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[2]['url']) ?>" target="_blank" rel="noopener" class="reels-trend-pill">🔥 IG Reel ↗</a>
                                     </div>
                                     <div class="reels-sidebar-actions">
-                                        <div class="reels-action-unit like-unit is-active" data-reel-like>
+                                        <div class="reels-action-unit like-unit is-active">
                                             <span class="rau-icon is-liked"><?= icon('heart') ?></span>
-                                            <span class="rau-val" data-like-count>48.9K</span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[2]['likes']) ?></span>
                                         </div>
                                         <div class="reels-action-unit">
                                             <span class="rau-icon"><?= icon('message-circle') ?></span>
-                                            <span class="rau-val">1,842</span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[2]['comments']) ?></span>
                                         </div>
-                                        <div class="reels-action-unit">
+                                        <a href="<?= e($INSTAGRAM_REELS[2]['url']) ?>" target="_blank" rel="noopener" class="reels-action-unit">
                                             <span class="rau-icon"><?= icon('send') ?></span>
-                                            <span class="rau-val">12.4K</span>
-                                        </div>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[2]['shares']) ?></span>
+                                        </a>
                                         <div class="reels-action-unit"><span class="rau-icon"><?= icon('bookmark') ?></span></div>
                                         <div class="reels-spinning-vinyl" title="Spinning Original Audio">
                                             <span class="vinyl-groove"></span>
@@ -1120,76 +1362,21 @@ require __DIR__ . '/partials/social-rail.php';
                                                 <strong>officialrafly.in</strong>
                                                 <span class="verif-tag"><?= icon('verified') ?></span>
                                             </div>
-                                            <a href="https://www.instagram.com/officialrafly.in?igsh=MTMwYWZhb29waWZtbA==" target="_blank" rel="noopener" class="reels-follow-btn">Follow</a>
+                                            <a href="<?= e($INSTAGRAM_REELS[2]['url']) ?>" target="_blank" rel="noopener" class="reels-follow-btn">Follow</a>
                                         </div>
-                                        <p class="reels-caption">
-                                            Turning digital chaos into high-converting revenue systems 🚀 Full-stack web, security &amp; performance under one roof.
-                                        </p>
-                                        <div class="reels-tags">#RaflyGrowth #PerformanceWeb #DigitalSystems #Ecommerce</div>
+                                        <p class="reels-caption"><?= e($INSTAGRAM_REELS[2]['caption']) ?></p>
+                                        <div class="reels-tags"><?= e($INSTAGRAM_REELS[2]['tags']) ?></div>
                                         <div class="reels-audio-badge">
                                             <span class="audio-note"><?= icon('music') ?></span>
-                                            <span class="audio-title">officialrafly.in &bull; Original Audio &bull; Trending Sound</span>
+                                            <span class="audio-title"><?= e($INSTAGRAM_REELS[2]['audio']) ?></span>
                                         </div>
                                     </div>
-                                    <span class="home-indicator"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="surface-shadow is-hero-shadow" aria-hidden="true"></div>
-                    </div>
-
-                    <!-- PHONE 03: RIGHT SUPPORT (Performance Case Study & Feed Distribution) -->
-                    <div class="iphone-pro-surface phone-mid-right" data-surface-idx="2">
-                        <div class="surface-chassis">
-                            <span class="hw-btn btn-power" aria-hidden="true"></span>
-                            <div class="surface-bezel">
-                                <div class="dynamic-island">
-                                    <div class="di-content">
-                                        <span class="di-camera"></span>
-                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Case Study</span></div>
-                                    </div>
-                                </div>
-                                <div class="surface-status-bar">
-                                    <span class="sb-time">9:41</span>
-                                    <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
-                                </div>
-                                <div class="surface-screen screen-feed">
-                                    <div class="screen-glare" aria-hidden="true"></div>
-                                    <div class="feed-header-row">
-                                        <div class="feed-poster-info">
-                                            <div class="feed-av-wrap"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Rafly" class="feed-av" width="32" height="32" loading="lazy"></div>
-                                            <div>
-                                                <span class="feed-name">officialrafly.in <?= icon('verified') ?></span>
-                                                <span class="feed-sub">Sponsored &bull; Case Study</span>
-                                            </div>
-                                        </div>
-                                        <span class="feed-dots">&bull;&bull;&bull;</span>
-                                    </div>
-                                    <div class="feed-media-viewport">
-                                        <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
-                                            <source src="<?= e(site_path('/assets/mockups/reel-instagram-2.mp4')) ?>" type="video/mp4">
-                                            <source src="<?= e(site_path('/assets/mockups/reel-3.mp4')) ?>" type="video/mp4">
-                                        </video>
-                                        <div class="feed-kpi-badge">
-                                            <div class="kpi-card">
-                                                <span class="kpi-label">Conversion Velocity</span>
-                                                <strong>+310.8%</strong>
-                                                <span class="kpi-pill">Verified ROAS 4.8x</span>
-                                            </div>
-                                        </div>
-                                        <span class="feed-counter">1/3</span>
-                                    </div>
-                                    <div class="feed-actions-strip">
-                                        <div class="feed-left-btns">
-                                            <button type="button" class="feed-btn is-heart" aria-label="Like post"><?= icon('heart') ?></button>
-                                            <button type="button" class="feed-btn" aria-label="Comment on post"><?= icon('message-circle') ?></button>
-                                            <button type="button" class="feed-btn" aria-label="Share post"><?= icon('send') ?></button>
-                                        </div>
-                                        <button type="button" class="feed-btn" aria-label="Bookmark post"><?= icon('bookmark') ?></button>
-                                    </div>
-                                    <div class="feed-caption-box">
-                                        <div class="feed-likes">Liked by <strong>naveen.growth</strong> and <strong>18,340 others</strong></div>
-                                        <p class="feed-text"><strong>officialrafly.in</strong> Zero bloat. 100% custom architectures shipped directly to production.</p>
+                                    <div class="reels-bottom-tabbar" aria-hidden="true">
+                                        <span class="rnb-item"><?= icon('home') ?></span>
+                                        <span class="rnb-item"><?= icon('search') ?></span>
+                                        <span class="rnb-item rnb-add"><?= icon('plus') ?></span>
+                                        <span class="rnb-item is-active"><?= icon('play') ?></span>
+                                        <span class="rnb-item rnb-user"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="User" class="rnb-user-pic" width="16" height="16"></span>
                                     </div>
                                     <span class="home-indicator"></span>
                                 </div>
@@ -1198,31 +1385,54 @@ require __DIR__ . '/partials/social-rail.php';
                         <div class="surface-shadow" aria-hidden="true"></div>
                     </div>
 
-                    <!-- PHONE 05: REAR-RIGHT (Commerce & Growth Engine) -->
-                    <div class="iphone-pro-surface phone-rear-right" data-surface-idx="4">
+                    <!-- PHONE 05: REAR-RIGHT (Instagram Reel 5 - DbgAnezPxKK) -->
+                    <div class="iphone-pro-surface phone-rear-right" data-surface-idx="4" data-reel-card="4">
                         <div class="surface-chassis">
                             <div class="surface-bezel">
                                 <div class="dynamic-island">
                                     <div class="di-content">
                                         <span class="di-camera"></span>
-                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Revenue Sync</span></div>
+                                        <div class="di-live-pill"><span class="di-dot"></span><span class="di-text">Brand Story</span></div>
                                     </div>
                                 </div>
                                 <div class="surface-status-bar">
                                     <span class="sb-time">9:41</span>
                                     <div class="sb-icons"><span class="sb-bars"><i></i><i></i><i></i><i></i></span><span class="sb-wifi">5G</span><span class="sb-batt"><i></i></span></div>
                                 </div>
-                                <div class="surface-screen screen-ledger">
+                                <div class="surface-screen screen-reels">
+                                    <div class="screen-glare" aria-hidden="true"></div>
                                     <video class="surface-video" autoplay loop muted playsinline poster="<?= e(site_path('/assets/mockups/phone-screen.webp')) ?>">
-                                        <source src="<?= e(site_path('/assets/mockups/reel-3.mp4')) ?>" type="video/mp4">
+                                        <source src="<?= e(site_path($INSTAGRAM_REELS[4]['mp4'])) ?>" type="video/mp4">
                                     </video>
-                                    <div class="ledger-meta-overlay">
-                                        <div class="ledger-hud-tag">GROWTH &amp; REVENUE ANALYTICS</div>
-                                        <div class="ledger-metric-box">
-                                            <strong>1,420 Orders</strong>
-                                            <span>+412% Checkout Velocity</span>
+                                    <div class="reels-header-meta">
+                                        <div class="reels-header-left">
+                                            <span class="reels-logo-text">Reels</span>
                                         </div>
-                                        <div class="ledger-status-tag">🟢 100% Attributed Pipeline</div>
+                                        <a href="<?= e($INSTAGRAM_REELS[4]['url']) ?>" target="_blank" rel="noopener" class="reels-trend-pill">🔥 IG Reel ↗</a>
+                                    </div>
+                                    <div class="reels-sidebar-actions">
+                                        <div class="reels-action-unit like-unit is-active">
+                                            <span class="rau-icon is-liked"><?= icon('heart') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[4]['likes']) ?></span>
+                                        </div>
+                                        <div class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('message-circle') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[4]['comments']) ?></span>
+                                        </div>
+                                        <a href="<?= e($INSTAGRAM_REELS[4]['url']) ?>" target="_blank" rel="noopener" class="reels-action-unit">
+                                            <span class="rau-icon"><?= icon('send') ?></span>
+                                            <span class="rau-val"><?= e($INSTAGRAM_REELS[4]['shares']) ?></span>
+                                        </a>
+                                        <div class="reels-spinning-vinyl">
+                                            <img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="Disc" class="vinyl-art" width="32" height="32" loading="lazy">
+                                        </div>
+                                    </div>
+                                    <div class="reels-content-footer">
+                                        <div class="reels-creator-row">
+                                            <div class="reels-av-ring"><img src="<?= e(site_path('/assets/icon-192.png')) ?>" alt="officialrafly.in" class="reels-av-pic" width="32" height="32" loading="lazy"></div>
+                                            <div class="reels-handle"><strong>officialrafly.in</strong> <span class="verif-tag"><?= icon('verified') ?></span></div>
+                                        </div>
+                                        <p class="reels-caption"><?= e($INSTAGRAM_REELS[4]['caption']) ?></p>
                                     </div>
                                     <span class="home-indicator"></span>
                                 </div>
