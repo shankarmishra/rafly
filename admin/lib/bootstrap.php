@@ -117,7 +117,7 @@ function admin_safe_next(?string $next, string $fallback = '/admin/'): string
         }
         if ($segment === '..') {
             if (empty($parts)) {
-                return site_path($fallback);
+                return admin_path($fallback);
             }
             array_pop($parts);
             continue;
@@ -133,15 +133,15 @@ function admin_safe_next(?string $next, string $fallback = '/admin/'): string
         } elseif ($next === $basePath) {
             $next = '/';
         } else {
-            return site_path($fallback);
+            return admin_path($fallback);
         }
     }
 
     if ($next === '/admin' || str_starts_with($next, '/admin/')) {
-        return site_path($next);
+        return admin_path($next);
     }
 
-    return site_path($fallback);
+    return admin_path($fallback);
 }
 
 /**
