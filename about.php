@@ -53,58 +53,102 @@ require __DIR__ . '/partials/header.php';
                 </div>
             </div>
 
-            <!-- HERO VISUAL CONSOLE: RAFLY OPERATING SYSTEM -->
-            <div class="code-console-window" style="background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(20px); border: 1px solid rgba(10, 99, 255, 0.18); border-radius: 24px; padding: 1.5rem; box-shadow: 0 20px 50px rgba(10, 99, 255, 0.08), 0 2px 10px rgba(5, 15, 51, 0.03); position: relative;">
-                <!-- Window Topbar -->
-                <div class="code-console-bar" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.85rem; margin-bottom: 0.75rem; background: transparent;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
-                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
-                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-                        <span style="font-size: 0.75rem; font-weight: 700; color: #0a63ff; margin-left: 0.4rem; font-family: var(--font-mono, monospace); letter-spacing: 0.05em;">
-                            RAFLY_CORE // SYSTEM_ARCHITECTURE
-                        </span>
+            <!-- HERO VISUAL CONSOLE: RAFLY ECOSYSTEM ARCHITECTURE -->
+            <div class="rafly-eco-stage">
+                <!-- Header -->
+                <div class="rafly-eco-header">
+                    <div class="rafly-eco-title">
+                        <?= icon('layers') ?> RAFly Studio Ecosystem
                     </div>
-                    <span class="machined-badge machined-badge-green" style="font-size: 0.65rem; padding: 3px 10px; border-radius: 20px;">● ONLINE</span>
-                </div>
-                
-                <!-- Main Lottie Stage -->
-                <div style="display: flex; justify-content: center; align-items: center; padding: 0.5rem 0; width: 100%; min-height: 310px; background: radial-gradient(circle at 50% 50%, rgba(10, 99, 255, 0.06) 0%, rgba(2, 132, 199, 0.02) 50%, rgba(255, 255, 255, 0) 75%); border-radius: 16px; position: relative; overflow: hidden;">
-                    <!-- Ambient Grid Backdrop -->
-                    <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(10, 99, 255, 0.12) 1px, transparent 1px); background-size: 16px 16px; opacity: 0.4; pointer-events: none;"></div>
-
-                    <!-- Floating Micro Badges -->
-                    <div style="position: absolute; top: 12px; left: 14px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); border: 1px solid rgba(10, 99, 255, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; color: #0a63ff; font-family: var(--font-mono, monospace); box-shadow: 0 4px 12px rgba(10, 99, 255, 0.08); z-index: 2;">
-                        ⚡ 100/100 Core Vitals
-                    </div>
-                    <div style="position: absolute; bottom: 12px; right: 14px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); border: 1px solid rgba(22, 163, 74, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; color: #16a34a; font-family: var(--font-mono, monospace); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08); z-index: 2;">
-                        🛡️ Zero-Trust Active
-                    </div>
-
-                    <lottie-player
-                        src="/assets/lottie/system-arch.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 100%; max-width: 480px; height: 320px; transform: scale(1.05); z-index: 1;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
+                    <span class="rafly-eco-title-badge">STUDIO OPERATING SYSTEM</span>
                 </div>
 
-                <!-- Telemetry HUD Status Cards Footer -->
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.85rem; border-top: 1px dashed #e2e8f0;">
-                    <div style="background: #f8fafc; border: 1px solid rgba(10, 99, 255, 0.12); border-radius: 10px; padding: 0.6rem 0.5rem; text-align: center;">
-                        <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; font-family: var(--font-mono, monospace); text-transform: uppercase;">Engine</div>
-                        <div style="font-size: 0.8rem; font-weight: 800; color: #050f33; margin-top: 2px;">99.9% Uptime</div>
+                <!-- Canvas Visual Stage -->
+                <div class="rafly-eco-canvas-container">
+                    <!-- Background Grid -->
+                    <div class="rafly-eco-grid-bg"></div>
+
+                    <!-- Orbital Rings -->
+                    <div class="rafly-eco-ring-1"></div>
+                    <div class="rafly-eco-ring-2"></div>
+
+                    <!-- Vector Connecting Lines -->
+                    <svg class="rafly-eco-svg-lines" viewBox="0 0 460 330" fill="none">
+                        <line x1="120" y1="50" x2="230" y2="165" stroke="#0a63ff" stroke-width="1.5" stroke-opacity="0.35" class="rafly-eco-pulse-line" />
+                        <line x1="340" y1="50" x2="230" y2="165" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.35" class="rafly-eco-pulse-line" />
+                        <line x1="120" y1="280" x2="230" y2="165" stroke="#16a34a" stroke-width="1.5" stroke-opacity="0.35" class="rafly-eco-pulse-line" />
+                        <line x1="340" y1="280" x2="230" y2="165" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" class="rafly-eco-pulse-line" />
+
+                        <!-- Animated Light Pulses -->
+                        <circle r="3.5" fill="#0a63ff"><animateMotion path="M120,50 L230,165" dur="3s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#0284c7"><animateMotion path="M340,50 L230,165" dur="3.5s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#16a34a"><animateMotion path="M120,280 L230,165" dur="4s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#d97706"><animateMotion path="M340,280 L230,165" dur="4.2s" repeatCount="indefinite" /></circle>
+                    </svg>
+
+                    <!-- Central Core Node -->
+                    <div class="rafly-eco-core-hub">
+                        <div class="rafly-eco-core-title">RAFLY</div>
+                        <div class="rafly-eco-core-sub">ENGINE</div>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid rgba(2, 132, 199, 0.12); border-radius: 10px; padding: 0.6rem 0.5rem; text-align: center;">
-                        <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; font-family: var(--font-mono, monospace); text-transform: uppercase;">Perimeter</div>
-                        <div style="font-size: 0.8rem; font-weight: 800; color: #0284c7; margin-top: 2px;">Zero-Trust</div>
+
+                    <!-- 4 Studio Pillars Nodes -->
+                    <!-- Top Left: Digital Engineering -->
+                    <div class="rafly-eco-pillar-card pillar-top-left">
+                        <div class="rafly-eco-pillar-icon icon-blue">
+                            <?= icon('code') ?>
+                        </div>
+                        <div class="rafly-eco-pillar-info">
+                            <span class="rafly-eco-pillar-num">01 // ENGINEERING</span>
+                            <span class="rafly-eco-pillar-label">Software &amp; Web</span>
+                            <span class="rafly-eco-pillar-sub">Full-Stack Core</span>
+                        </div>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid rgba(22, 163, 74, 0.12); border-radius: 10px; padding: 0.6rem 0.5rem; text-align: center;">
-                        <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; font-family: var(--font-mono, monospace); text-transform: uppercase;">Edge Speed</div>
-                        <div style="font-size: 0.8rem; font-weight: 800; color: #16a34a; margin-top: 2px;">&lt; 12ms Response</div>
+
+                    <!-- Top Right: Zero-Trust Security -->
+                    <div class="rafly-eco-pillar-card pillar-top-right">
+                        <div class="rafly-eco-pillar-icon icon-cyan">
+                            <?= icon('shield') ?>
+                        </div>
+                        <div class="rafly-eco-pillar-info">
+                            <span class="rafly-eco-pillar-num">02 // SECURITY</span>
+                            <span class="rafly-eco-pillar-label">Perimeter Defense</span>
+                            <span class="rafly-eco-pillar-sub">Zero-Trust Protocol</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left: Performance Growth -->
+                    <div class="rafly-eco-pillar-card pillar-bot-left">
+                        <div class="rafly-eco-pillar-icon icon-green">
+                            <?= icon('trending-up') ?>
+                        </div>
+                        <div class="rafly-eco-pillar-info">
+                            <span class="rafly-eco-pillar-num">03 // GROWTH</span>
+                            <span class="rafly-eco-pillar-label">Acquisition Funnels</span>
+                            <span class="rafly-eco-pillar-sub">Attributed ROI</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: Core Web Vitals & Automation -->
+                    <div class="rafly-eco-pillar-card pillar-bot-right">
+                        <div class="rafly-eco-pillar-icon icon-amber">
+                            <?= icon('zap') ?>
+                        </div>
+                        <div class="rafly-eco-pillar-info">
+                            <span class="rafly-eco-pillar-num">04 // PERFORMANCE</span>
+                            <span class="rafly-eco-pillar-label">Core Web Vitals</span>
+                            <span class="rafly-eco-pillar-sub">Edge Acceleration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer: Studio Team & Accountability -->
+                <div class="rafly-eco-footer-bar">
+                    <div class="rafly-eco-footer-text">
+                        <?= icon('user') ?> Senior Engineers &amp; Growth Specialists
+                    </div>
+                    <div class="rafly-eco-footer-badge">
+                        ● Direct Engagement
                     </div>
                 </div>
             </div>
@@ -160,6 +204,20 @@ require __DIR__ . '/partials/header.php';
         </div>
     </section>
 
-</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const stage = document.querySelector('.rafly-eco-stage');
+    if (!stage || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stage.addEventListener('mousemove', function (e) {
+        const rect = stage.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        stage.style.transform = `perspective(1000px) rotateY(${x * 0.025}deg) rotateX(${-y * 0.025}deg) translateY(-4px)`;
+    });
+    stage.addEventListener('mouseleave', function () {
+        stage.style.transform = '';
+    });
+});
+</script>
 
 <?php require __DIR__ . '/partials/tail.php'; ?>

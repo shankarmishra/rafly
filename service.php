@@ -65,56 +65,74 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: DIGITAL PRODUCT ENGINE -->
-            <div class="code-console-window">
-                <div class="code-console-bar">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">DIGITAL PRODUCT ENGINE PIPELINE</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(16,185,129,0.15); color: #10b981; border-color: rgba(16,185,129,0.3);">LCP: 38ms</span>
+            <!-- HERO VISUAL CONSOLE: WEB DEVELOPMENT ENGINE -->
+            <div class="svc-eco-stage svc-web-stage">
+                <div class="svc-eco-header">
+                    <div class="svc-eco-title">
+                        <?= icon('code') ?> RAFly Web Engine
+                    </div>
+                    <span class="svc-eco-badge">APPLICATION ENGINE</span>
                 </div>
-                <div style="padding: 1rem; background: #0f172a; display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
-                    <lottie-player
-                        src="/assets/lottie/system-arch.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 150px; height: 150px;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <svg viewBox="0 0 420 220" fill="none" style="width: 100%;">
-                        <!-- Viewport frame -->
-                        <rect x="10" y="10" width="400" height="200" rx="10" stroke="#0a63ff" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.35" />
-                        <!-- Browser bar -->
-                        <rect x="20" y="20" width="380" height="24" rx="4" fill="#0a1746" stroke="#38bdf8" stroke-width="1" />
-                        <circle cx="34" cy="32" r="3" fill="#ef4444" />
-                        <circle cx="44" cy="32" r="3" fill="#eab308" />
-                        <circle cx="54" cy="32" r="3" fill="#22c55e" />
-                        <text x="70" y="35" font-family="monospace" font-size="9" fill="#94a3b8">https://api.rafly.in/v1/engine</text>
-                        
-                        <!-- Nodes & Flows -->
-                        <path d="M 40,110 H 120 C 140,110 140,65 170,65 H 250 C 280,65 280,110 310,110 H 380" stroke="#0a63ff" stroke-width="2" stroke-linecap="round" />
-                        <circle cx="40" cy="110" r="6" fill="#38bdf8" />
-                        <circle cx="170" cy="65" r="6" fill="#10b981" />
-                        <circle cx="250" cy="65" r="6" fill="#10b981" />
-                        <circle cx="380" cy="110" r="6" fill="#38bdf8" />
+                <div class="svc-eco-canvas">
+                    <div class="svc-eco-grid-bg"></div>
+                    <svg class="svc-eco-svg" viewBox="0 0 460 330" fill="none">
+                        <line x1="120" y1="50" x2="230" y2="165" stroke="#0a63ff" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="340" y1="50" x2="230" y2="165" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="120" y1="280" x2="230" y2="165" stroke="#16a34a" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="340" y1="280" x2="230" y2="165" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
 
-                        <!-- Flow signal packets -->
-                        <circle cx="120" cy="110" r="3" fill="#ffffff"><animate attributeName="cx" values="40;120;170;250;310;380" dur="3s" repeatCount="indefinite" /></circle>
-
-                        <!-- Labels -->
-                        <text x="40" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">CLIENT</text>
-                        <text x="120" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">EDGE CDN</text>
-                        <text x="210" y="52" font-family="monospace" font-size="9" fill="#38bdf8" text-anchor="middle" font-weight="bold">PHP 8.3 REST API</text>
-                        <text x="310" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">MYSQL VAULT</text>
-                        <text x="380" y="135" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">200 OK</text>
-
-                        <!-- Code preview overlay -->
-                        <rect x="120" y="150" width="180" height="45" rx="6" fill="#050f33" stroke="#10b981" stroke-width="1" />
-                        <text x="130" y="167" font-family="monospace" font-size="8" fill="#10b981">HTTP/2 200 OK [38ms]</text>
-                        <text x="130" y="182" font-family="monospace" font-size="8" fill="#94a3b8">Cache-Control: public, max-age=86400</text>
+                        <circle r="3.5" fill="#0a63ff"><animateMotion path="M120,50 L230,165" dur="3s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#0284c7"><animateMotion path="M340,50 L230,165" dur="3.5s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#16a34a"><animateMotion path="M120,280 L230,165" dur="4s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#d97706"><animateMotion path="M340,280 L230,165" dur="4.2s" repeatCount="indefinite" /></circle>
                     </svg>
+
+                    <div class="svc-eco-hub">
+                        <div class="svc-eco-hub-title">WEB</div>
+                        <div class="svc-eco-hub-sub">ENGINE</div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon icon-blue"><?= icon('layers') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">01 // FRONTEND</span>
+                            <span class="svc-node-label">React &amp; Next.js</span>
+                            <span class="svc-node-sub">Decoupled UI</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon icon-cyan"><?= icon('cpu') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">02 // BACKEND</span>
+                            <span class="svc-node-label">PHP 8.3 REST API</span>
+                            <span class="svc-node-sub">Sub-50ms Engine</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon icon-green"><?= icon('database') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">03 // VAULT</span>
+                            <span class="svc-node-label">MySQL &amp; Redis</span>
+                            <span class="svc-node-sub">Cached Queries</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon icon-amber"><?= icon('zap') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">04 // CDN EDGE</span>
+                            <span class="svc-node-label">Core Web Vitals</span>
+                            <span class="svc-node-sub">Sub-50ms LCP</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text"><?= icon('code') ?> PHP 8.3 • React • Next.js • MySQL</div>
+                    <div class="svc-eco-footer-badge" style="background:rgba(10,99,255,0.08); color:#0a63ff; border:1px solid rgba(10,99,255,0.2);">
+                        ● Full-Stack Core
+                    </div>
                 </div>
             </div>
         </div>
@@ -302,38 +320,81 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: DEFENSE PERIMETER -->
-            <div class="code-console-window" style="border-color: rgba(220,38,38,0.4);">
-                <div class="code-console-bar" style="background: #1e1b4b;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #fca5a5;">PERIMETER SHIELD ACTIVE GUARD</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(16,185,129,0.15); color: #10b981; border-color: rgba(16,185,129,0.3);">0 BREACH VECTORS</span>
-                <div style="padding: 1rem; background: linear-gradient(155deg, #0f172a 0%, #1e1b4b 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
-                    <lottie-player
-                        src="/assets/lottie/security-shield.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 140px; height: 140px;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
+            <!-- HERO VISUAL CONSOLE: WEB SECURITY STAGE -->
+            <div class="svc-eco-stage svc-sec-stage">
+                <div class="svc-eco-header">
+                    <div class="svc-eco-title">
+                        <?= icon('shield') ?> RAFly Cyber Shield
+                    </div>
+                    <span class="svc-eco-badge">DEFENSE PERIMETER</span>
                 </div>
-                <div style="padding: 1.5rem; background: linear-gradient(155deg, #0f172a 0%, #1e1b4b 100%);">
-                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
-                        <circle cx="210" cy="100" r="85" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4" />
-                        <circle cx="210" cy="100" r="55" stroke="#38bdf8" stroke-width="1.5" />
-                        <circle cx="210" cy="100" r="25" fill="#dc2626" fill-opacity="0.2" stroke="#dc2626" stroke-width="2" />
-                        <text x="210" y="104" font-family="sans-serif" font-weight="900" font-size="10" fill="#fff" text-anchor="middle">VAULT</text>
+                <div class="svc-eco-canvas">
+                    <div class="svc-eco-grid-bg"></div>
+                    <svg class="svc-eco-svg" viewBox="0 0 460 330" fill="none">
+                        <!-- Concentric Shield Rings -->
+                        <circle cx="230" cy="165" r="140" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 6" stroke-opacity="0.3" class="svc-eco-dash-pulse" />
+                        <circle cx="230" cy="165" r="95" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.35" />
 
-                        <!-- Threat vectors -->
-                        <line x1="30" y1="100" x2="125" y2="100" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4" />
-                        <polygon points="125,96 133,100 125,104" fill="#ef4444" />
-                        <text x="60" y="90" font-family="monospace" font-size="8" fill="#fca5a5">BLOCKED ATTACK</text>
+                        <!-- Connecting Laser Paths -->
+                        <line x1="120" y1="50" x2="230" y2="165" stroke="#dc2626" stroke-width="1.5" stroke-opacity="0.4" />
+                        <line x1="340" y1="50" x2="230" y2="165" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.4" />
+                        <line x1="120" y1="280" x2="230" y2="165" stroke="#16a34a" stroke-width="1.5" stroke-opacity="0.4" />
+                        <line x1="340" y1="280" x2="230" y2="165" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.4" />
 
-                        <!-- Laser scanning beam -->
-                        <line x1="210" y1="15" x2="210" y2="45" stroke="#10b981" stroke-width="2" />
-                        <text x="210" y="10" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">TLS 1.3 SAFE</text>
+                        <!-- Animated Intercept Pulses -->
+                        <circle r="3.5" fill="#dc2626"><animateMotion path="M120,50 L230,165" dur="2.5s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#0284c7"><animateMotion path="M340,50 L230,165" dur="3s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#16a34a"><animateMotion path="M120,280 L230,165" dur="3.8s" repeatCount="indefinite" /></circle>
                     </svg>
+
+                    <!-- Central Core Hub -->
+                    <div class="svc-eco-hub">
+                        <div class="svc-eco-hub-title">VAULT</div>
+                        <div class="svc-eco-hub-sub">ZERO-TRUST</div>
+                    </div>
+
+                    <!-- 4 Security Pillar Nodes -->
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon" style="background:rgba(220,38,38,0.08); color:#dc2626;"><?= icon('shield') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">01 // WAF PERIMETER</span>
+                            <span class="svc-node-label">Threat Interceptor</span>
+                            <span class="svc-node-sub">Blocked XSS / SQLi</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon icon-cyan"><?= icon('lock') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">02 // AUTH VAULT</span>
+                            <span class="svc-node-label">Argon2id &amp; TOTP</span>
+                            <span class="svc-node-sub">Session Guards</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon icon-green"><?= icon('check-circle') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">03 // TLS ENCRYPTION</span>
+                            <span class="svc-node-label">HTTPS TLS 1.3</span>
+                            <span class="svc-node-sub">AES-256-GCM</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon icon-amber"><?= icon('activity') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">04 // AUDIT LOOP</span>
+                            <span class="svc-node-label">Penetration Test</span>
+                            <span class="svc-node-sub">4-Stage Patching</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text"><?= icon('shield') ?> WAF Rules • Argon2id • TLS 1.3 • Audit</div>
+                    <div class="svc-eco-footer-badge" style="background:rgba(220,38,38,0.08); color:#dc2626; border:1px solid rgba(220,38,38,0.2);">
+                        ● Perimeter Guard
+                    </div>
                 </div>
             </div>
         </div>
@@ -497,39 +558,74 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: SIGNAL NETWORK -->
-            <div class="code-console-window" style="border-color: rgba(22,163,74,0.4);">
-                <div class="code-console-bar" style="background: #052e16;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #4ade80;">SIGNAL → CONVERSION BUS</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(74,222,128,0.15); color: #4ade80; border-color: rgba(74,222,128,0.3);">META CAPI SYNCED</span>
+            <!-- HERO VISUAL CONSOLE: PERFORMANCE MARKETING STAGE -->
+            <div class="svc-eco-stage svc-mkt-stage">
+                <div class="svc-eco-header">
+                    <div class="svc-eco-title">
+                        <?= icon('trending-up') ?> RAFly Growth Engine
+                    </div>
+                    <span class="svc-eco-badge">ACQUISITION FUNNEL</span>
                 </div>
-                <div style="padding: 1rem; background: linear-gradient(155deg, #052e16 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
-                    <lottie-player
-                        src="/assets/lottie/growth-chart.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 150px; height: 150px;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
-                </div>
-                <div style="padding: 1.5rem; background: linear-gradient(155deg, #052e16 0%, #050f33 100%);">
-                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
-                        <path d="M 30,100 C 100,30 200,170 300,100 T 390,100" stroke="#16a34a" stroke-width="2" stroke-linecap="round" fill="none" />
-                        <circle cx="30" cy="100" r="5" fill="#4ade80" />
-                        <circle cx="160" cy="120" r="5" fill="#4ade80" />
-                        <circle cx="300" cy="100" r="5" fill="#4ade80" />
-                        <circle cx="390" cy="100" r="6" fill="#16a34a" />
+                <div class="svc-eco-canvas">
+                    <div class="svc-eco-grid-bg"></div>
+                    <svg class="svc-eco-svg" viewBox="0 0 460 330" fill="none">
+                        <line x1="120" y1="50" x2="230" y2="165" stroke="#16a34a" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="340" y1="50" x2="230" y2="165" stroke="#0a63ff" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="120" y1="280" x2="230" y2="165" stroke="#0284c7" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
+                        <line x1="340" y1="280" x2="230" y2="165" stroke="#d97706" stroke-width="1.5" stroke-opacity="0.35" class="svc-eco-dash-pulse" />
 
-                        <!-- Animated particle along signal curve -->
-                        <circle cx="30" cy="100" r="3" fill="#ffffff"><animate attributeName="cx" values="30;160;300;390" dur="2.5s" repeatCount="indefinite" /></circle>
-
-                        <text x="30" y="125" font-family="monospace" font-size="8" fill="#94a3b8">AUDIENCE</text>
-                        <text x="160" y="145" font-family="monospace" font-size="8" fill="#4ade80">INTENT SIGNAL</text>
-                        <text x="300" y="125" font-family="monospace" font-size="8" fill="#94a3b8">CAMPAIGN</text>
-                        <text x="390" y="125" font-family="monospace" font-size="8" fill="#16a34a">CONVERSION</text>
+                        <circle r="3.5" fill="#16a34a"><animateMotion path="M120,50 L230,165" dur="2.8s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#0a63ff"><animateMotion path="M340,50 L230,165" dur="3.2s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#0284c7"><animateMotion path="M120,280 L230,165" dur="3.6s" repeatCount="indefinite" /></circle>
+                        <circle r="3.5" fill="#d97706"><animateMotion path="M340,280 L230,165" dur="4s" repeatCount="indefinite" /></circle>
                     </svg>
+
+                    <div class="svc-eco-hub">
+                        <div class="svc-eco-hub-title">ROI</div>
+                        <div class="svc-eco-hub-sub">ENGINE</div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon icon-green"><?= icon('trending-up') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">01 // TRAFFIC INGEST</span>
+                            <span class="svc-node-label">Meta &amp; Google Ads</span>
+                            <span class="svc-node-sub">High-Intent Traffic</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon icon-blue"><?= icon('activity') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">02 // CAPI SYNC</span>
+                            <span class="svc-node-label">Server GA4 &amp; CAPI</span>
+                            <span class="svc-node-sub">100% Attribution</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon icon-cyan"><?= icon('layers') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">03 // FUNNEL CONSOLE</span>
+                            <span class="svc-node-label">Frictionless Intake</span>
+                            <span class="svc-node-sub">Conversion Lift</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon icon-amber"><?= icon('zap') ?></div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">04 // ROAS OPTIMIZER</span>
+                            <span class="svc-node-label">Creative Varianting</span>
+                            <span class="svc-node-sub">Campaign Scale</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text"><?= icon('trending-up') ?> Meta CAPI • GA4 Telemetry • Funnels • ROAS</div>
+                    <div class="svc-eco-footer-badge" style="background:rgba(22,163,74,0.08); color:#16a34a; border:1px solid rgba(22,163,74,0.2);">
+                        ● Attributed ROI
+                    </div>
                 </div>
             </div>
         </div>
@@ -690,49 +786,107 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: NLE VIDEO TIMELINE -->
-            <div class="code-console-window" style="border-color: rgba(147,51,234,0.4);">
-                <div class="code-console-bar" style="background: #1e1b4b;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #c084fc;">NLE EDITING STUDIO TIMELINE</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(192,132,252,0.15); color: #c084fc; border-color: rgba(192,132,252,0.3);">4K HDR 120FPS</span>
+            <!-- HERO CUSTOM ECOSYSTEM STAGE: CONTENT EDITORIAL PRODUCTION PIPELINE -->
+            <div class="svc-eco-stage svc-cnt-stage" style="width:100%; max-width:540px; justify-self:center;">
+                <div class="svc-eco-header">
+                    <div>
+                        <div class="svc-eco-title">EDITORIAL PRODUCTION STAGE</div>
+                        <div class="svc-eco-sub">SHORT-FORM REELS, 4K SHOOTING &amp; NLE TIMELINES</div>
+                    </div>
+                    <div class="svc-eco-badge">
+                        <span class="glow-dot-active" style="background:#9333ea; box-shadow: 0 0 8px #9333ea;"></span> 4K HDR 120FPS
+                    </div>
                 </div>
-                <div style="padding: 1rem; background: linear-gradient(155deg, #1e1b4b 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
-                    <lottie-player
-                        src="/assets/lottie/video-reel.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 150px; height: 150px;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
-                </div>
-                <div style="padding: 1.5rem; background: linear-gradient(155deg, #1e1b4b 0%, #050f33 100%);">
-                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
-                        <!-- Aspect frames: 9:16, 16:9, 1:1 -->
-                        <rect x="20" y="30" width="45" height="80" rx="4" stroke="#c084fc" stroke-width="1.5" fill="none" />
-                        <text x="42" y="125" font-family="monospace" font-size="8" fill="#c084fc" text-anchor="middle">9:16</text>
 
-                        <rect x="80" y="45" width="90" height="50" rx="4" stroke="#38bdf8" stroke-width="1.5" fill="none" />
-                        <text x="125" y="110" font-family="monospace" font-size="8" fill="#38bdf8" text-anchor="middle">16:9</text>
+                <div class="svc-eco-canvas" style="position:relative; width:100%; height:340px;">
+                    <!-- Floating Pillar Cards (4 Nodes) -->
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon" style="background: rgba(147,51,234,0.1); color:#9333ea;">
+                            <?= icon('video') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">FORMAT 9:16</span>
+                            <span class="svc-node-label">Short-Form Hook</span>
+                            <span class="svc-node-sub">Pattern Interrupt</span>
+                        </div>
+                    </div>
 
-                        <rect x="185" y="40" width="60" height="60" rx="4" stroke="#10b981" stroke-width="1.5" fill="none" />
-                        <text x="215" y="115" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">1:1</text>
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon" style="background: rgba(147,51,234,0.1); color:#9333ea;">
+                            <?= icon('film') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">NLE TIMELINE</span>
+                            <span class="svc-node-label">DaVinci Master</span>
+                            <span class="svc-node-sub">ProRes 4444 LUTs</span>
+                        </div>
+                    </div>
 
-                        <!-- Timeline tracks -->
-                        <rect x="260" y="30" width="140" height="15" rx="3" fill="#9333ea" fill-opacity="0.4" />
-                        <rect x="260" y="50" width="140" height="15" rx="3" fill="#38bdf8" fill-opacity="0.4" />
-                        <rect x="260" y="70" width="140" height="15" rx="3" fill="#10b981" fill-opacity="0.4" />
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon" style="background: rgba(147,51,234,0.1); color:#9333ea;">
+                            <?= icon('disc') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">AUDIO MASTER</span>
+                            <span class="svc-node-label">Multi-Track SFX</span>
+                            <span class="svc-node-sub">Voice Leveling</span>
+                        </div>
+                    </div>
 
-                        <!-- Playhead -->
-                        <line x1="330" y1="20" x2="330" y2="100" stroke="#ef4444" stroke-width="2">
-                            <animate attributeName="x1" values="260;400;260" dur="4s" repeatCount="indefinite" />
-                            <animate attributeName="x2" values="260;400;260" dur="4s" repeatCount="indefinite" />
-                        </line>
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon" style="background: rgba(147,51,234,0.1); color:#9333ea;">
+                            <?= icon('share-2') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">DISTRIBUTION</span>
+                            <span class="svc-node-label">Multi-Frame Export</span>
+                            <span class="svc-node-sub">Insta / TikTok / Ads</span>
+                        </div>
+                    </div>
 
-                        <!-- Audio waveform preview -->
-                        <path d="M 20,160 Q 60,140 100,160 T 180,160 T 260,160 T 340,160 T 400,160" stroke="#9333ea" stroke-width="1.5" fill="none" />
+                    <!-- Central Core Hub -->
+                    <div class="svc-eco-hub" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:104px; height:104px; border-radius:50%; z-index:3; text-align:center; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <span class="svc-eco-hub-title" style="color:#ffffff;">NLE STUDIO</span>
+                        <span class="svc-eco-hub-sub" style="color:#c084fc;">CORE ENGINE</span>
+                    </div>
+
+                    <!-- Vector Laser Mesh -->
+                    <svg viewBox="0 0 520 340" fill="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+                        <defs>
+                            <linearGradient id="cnt-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#9333ea" stop-opacity="0.6" />
+                                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.1" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Node Connect Vectors -->
+                        <path id="cnt-path-tl" d="M 120,50 L 260,170" stroke="url(#cnt-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="cnt-path-tr" d="M 400,50 L 260,170" stroke="url(#cnt-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="cnt-path-bl" d="M 120,290 L 260,170" stroke="url(#cnt-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="cnt-path-br" d="M 400,290 L 260,170" stroke="url(#cnt-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+
+                        <!-- Animated Video Signal Pulse -->
+                        <circle r="3" fill="#c084fc"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#cnt-path-tl"/></animateMotion></circle>
+                        <circle r="3" fill="#c084fc"><animateMotion dur="2.8s" repeatCount="indefinite"><mpath href="#cnt-path-tr"/></animateMotion></circle>
+                        <circle r="3" fill="#c084fc"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#cnt-path-bl"/></animateMotion></circle>
+                        <circle r="3" fill="#c084fc"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#cnt-path-br"/></animateMotion></circle>
+
+                        <!-- Video Timeline Track Visualizer -->
+                        <rect x="180" y="115" width="160" height="8" rx="2" fill="#9333ea" fill-opacity="0.3" />
+                        <rect x="180" y="217" width="160" height="8" rx="2" fill="#38bdf8" fill-opacity="0.3" />
+
+                        <!-- Audio Waveform Line -->
+                        <path d="M 190,221 Q 210,213 230,221 T 270,221 T 310,221 T 330,221" stroke="#c084fc" stroke-width="1.5" fill="none" />
                     </svg>
+                </div>
+
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text">
+                        <?= icon('film') ?> 4K HDR Studio Capture → DaVinci Master → Multi-Channel
+                    </div>
+                    <div class="svc-eco-footer-badge" style="background: rgba(147,51,234,0.1); color:#9333ea;">
+                        PRORES 4444
+                    </div>
                 </div>
             </div>
         </div>
@@ -893,40 +1047,103 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: COMMERCE BUS -->
-            <div class="code-console-window" style="border-color: rgba(2,132,199,0.4);">
-                <div class="code-console-bar" style="background: #0c4a6e;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">COMMERCE ORDER PIPELINE</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(56,189,248,0.15); color: #38bdf8; border-color: rgba(56,189,248,0.3);">STRIPE / RAZORPAY API</span>
+            <!-- HERO CUSTOM ECOSYSTEM STAGE: COMMERCE ORDER PIPELINE ENGINE -->
+            <div class="svc-eco-stage svc-ecm-stage" style="width:100%; max-width:540px; justify-self:center;">
+                <div class="svc-eco-header">
+                    <div>
+                        <div class="svc-eco-title">COMMERCE ORDER PIPELINE</div>
+                        <div class="svc-eco-sub">SHOPIFY STOREFRONT &amp; HEADLESS API BUS</div>
+                    </div>
+                    <div class="svc-eco-badge">
+                        <span class="glow-dot-active" style="background:#0284c7; box-shadow: 0 0 8px #0284c7;"></span> STRIPE / RAZORPAY API
+                    </div>
                 </div>
-                <div style="padding: 1rem; background: linear-gradient(155deg, #0c4a6e 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
-                    <lottie-player
-                        src="/assets/lottie/ecommerce.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 150px; height: 150px;"
-                        loop
-                        autoplay
-                        aria-hidden="true">
-                    </lottie-player>
-                </div>
-                <div style="padding: 1.5rem; background: linear-gradient(155deg, #0c4a6e 0%, #050f33 100%);">
-                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
-                        <path d="M 30,100 H 120 C 140,100 140,50 170,50 H 250 C 280,50 280,100 300,100 H 390" stroke="#0284c7" stroke-width="2" />
-                        <circle cx="30" cy="100" r="6" fill="#38bdf8" />
-                        <circle cx="170" cy="50" r="6" fill="#10b981" />
-                        <circle cx="250" cy="50" r="6" fill="#10b981" />
-                        <circle cx="390" cy="100" r="6" fill="#38bdf8" />
 
-                        <!-- Animated order packet -->
-                        <circle cx="30" cy="100" r="3" fill="#ffffff"><animate attributeName="cx" values="30;120;170;250;300;390" dur="3s" repeatCount="indefinite" /></circle>
+                <div class="svc-eco-canvas" style="position:relative; width:100%; height:340px;">
+                    <!-- Floating Pillar Cards (4 Nodes) -->
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon" style="background: rgba(2,132,199,0.1); color:#0284c7;">
+                            <?= icon('shopping-bag') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">STOREFRONT</span>
+                            <span class="svc-node-label">Product Discovery</span>
+                            <span class="svc-node-sub">Fast Grid &amp; Swatches</span>
+                        </div>
+                    </div>
 
-                        <text x="30" y="125" font-family="monospace" font-size="8" fill="#94a3b8">STOREFRONT</text>
-                        <text x="120" y="125" font-family="monospace" font-size="8" fill="#94a3b8">CART</text>
-                        <text x="210" y="38" font-family="monospace" font-size="8" fill="#38bdf8" text-anchor="middle">PAYMENT GATEWAY BUS</text>
-                        <text x="300" y="125" font-family="monospace" font-size="8" fill="#94a3b8">ORDER STATE</text>
-                        <text x="390" y="125" font-family="monospace" font-size="8" fill="#10b981">FULFILLED</text>
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon" style="background: rgba(2,132,199,0.1); color:#0284c7;">
+                            <?= icon('shopping-cart') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">CART DRAWER</span>
+                            <span class="svc-node-label">Dynamic Ajax Cart</span>
+                            <span class="svc-node-sub">Cross-Sell Engine</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon" style="background: rgba(2,132,199,0.1); color:#0284c7;">
+                            <?= icon('credit-card') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">CHECKOUT BUS</span>
+                            <span class="svc-node-label">Fast Checkout</span>
+                            <span class="svc-node-sub">Address Autocomplete</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon" style="background: rgba(2,132,199,0.1); color:#0284c7;">
+                            <?= icon('box') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">FULFILLMENT</span>
+                            <span class="svc-node-label">6-State Order System</span>
+                            <span class="svc-node-sub">Logistics Webhooks</span>
+                        </div>
+                    </div>
+
+                    <!-- Central Core Hub -->
+                    <div class="svc-eco-hub" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:104px; height:104px; border-radius:50%; z-index:3; text-align:center; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <span class="svc-eco-hub-title" style="color:#ffffff;">COMMERCE</span>
+                        <span class="svc-eco-hub-sub" style="color:#38bdf8;">API BUS</span>
+                    </div>
+
+                    <!-- Vector Laser Mesh -->
+                    <svg viewBox="0 0 520 340" fill="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+                        <defs>
+                            <linearGradient id="ecm-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.6" />
+                                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.1" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Node Connect Vectors -->
+                        <path id="ecm-path-tl" d="M 120,50 L 260,170" stroke="url(#ecm-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="ecm-path-tr" d="M 400,50 L 260,170" stroke="url(#ecm-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="ecm-path-bl" d="M 120,290 L 260,170" stroke="url(#ecm-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="ecm-path-br" d="M 400,290 L 260,170" stroke="url(#ecm-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+
+                        <!-- Animated Order Flow Packets -->
+                        <circle r="3" fill="#38bdf8"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#ecm-path-tl"/></animateMotion></circle>
+                        <circle r="3" fill="#38bdf8"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#ecm-path-tr"/></animateMotion></circle>
+                        <circle r="3" fill="#38bdf8"><animateMotion dur="2.0s" repeatCount="indefinite"><mpath href="#ecm-path-bl"/></animateMotion></circle>
+                        <circle r="3" fill="#38bdf8"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#ecm-path-br"/></animateMotion></circle>
+
+                        <!-- Storefront Bus Ring -->
+                        <circle cx="260" cy="170" r="72" stroke="#38bdf8" stroke-width="1" stroke-dasharray="6,6" opacity="0.4" />
                     </svg>
+                </div>
+
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text">
+                        <?= icon('shopping-bag') ?> Storefront Cart → Gateway API → Webhook Sync → Order State
+                    </div>
+                    <div class="svc-eco-footer-badge" style="background: rgba(2,132,199,0.1); color:#0284c7;">
+                        SUB-50MS API
+                    </div>
                 </div>
             </div>
         </div>
@@ -1083,40 +1300,104 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </div>
             </div>
 
-            <!-- HERO CUSTOM SVG: ROUTING NETWORK -->
-            <div class="code-console-window" style="border-color: rgba(217,119,6,0.4);">
-                <div class="code-console-bar" style="background: #451a03;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #fbbf24;">LEAD ROUTING ENGINE DECISION TREE</span>
-                    <span class="telemetry-pill-mono" style="background: rgba(251,191,36,0.15); color: #fbbf24; border-color: rgba(251,191,36,0.3);">WHATSAPP API ACTIVE</span>
+            <!-- HERO CUSTOM ECOSYSTEM STAGE: LEAD OPERATIONS ROUTING ENGINE -->
+            <div class="svc-eco-stage svc-aut-stage" style="width:100%; max-width:540px; justify-self:center;">
+                <div class="svc-eco-header">
+                    <div>
+                        <div class="svc-eco-title">LEAD OPERATIONS ROUTING ENGINE</div>
+                        <div class="svc-eco-sub">MULTI-CHANNEL INTAKE &amp; CRM TRIAGE</div>
+                    </div>
+                    <div class="svc-eco-badge">
+                        <span class="glow-dot-active" style="background:#d97706; box-shadow: 0 0 8px #d97706;"></span> WHATSAPP API ACTIVE
+                    </div>
                 </div>
-                <div style="padding: 1.5rem; background: linear-gradient(155deg, #451a03 0%, #050f33 100%);">
-                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
-                        <!-- Multi-channel inputs -->
-                        <circle cx="40" cy="50" r="5" fill="#38bdf8" />
-                        <circle cx="40" cy="100" r="5" fill="#10b981" />
-                        <circle cx="40" cy="150" r="5" fill="#d97706" />
 
-                        <!-- Funnel lines to capture node -->
-                        <line x1="45" y1="50" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
-                        <line x1="45" y1="100" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
-                        <line x1="45" y1="150" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
+                <div class="svc-eco-canvas" style="position:relative; width:100%; height:340px;">
+                    <!-- Floating Pillar Cards (4 Nodes) -->
+                    <div class="svc-eco-node-card svc-node-top-left">
+                        <div class="svc-node-icon" style="background: rgba(217,119,6,0.1); color:#d97706;">
+                            <?= icon('inbox') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">INTAKE LAYER</span>
+                            <span class="svc-node-label">Multi-Channel Ingest</span>
+                            <span class="svc-node-sub">Web / Ads / Webhooks</span>
+                        </div>
+                    </div>
 
-                        <!-- Animated lead signals -->
-                        <circle cx="45" cy="50" r="3" fill="#ffffff"><animate attributeName="cx" values="45;140" dur="2s" repeatCount="indefinite" /><animate attributeName="cy" values="50;100" dur="2s" repeatCount="indefinite" /></circle>
+                    <div class="svc-eco-node-card svc-node-top-right">
+                        <div class="svc-node-icon" style="background: rgba(217,119,6,0.1); color:#d97706;">
+                            <?= icon('git-branch') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">DECISION TREE</span>
+                            <span class="svc-node-label">Qualification Engine</span>
+                            <span class="svc-node-sub">Rules &amp; Lead Scoring</span>
+                        </div>
+                    </div>
 
-                        <rect x="140" y="80" width="70" height="40" rx="6" fill="#d97706" fill-opacity="0.2" stroke="#d97706" stroke-width="1.5" />
-                        <text x="175" y="104" font-family="monospace" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold">QUALIFY</text>
+                    <div class="svc-eco-node-card svc-node-bot-left">
+                        <div class="svc-node-icon" style="background: rgba(217,119,6,0.1); color:#d97706;">
+                            <?= icon('message-square') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">WHATSAPP API</span>
+                            <span class="svc-node-label">Direct Messaging</span>
+                            <span class="svc-node-sub">Instant Triage Bot</span>
+                        </div>
+                    </div>
 
-                        <!-- Branching outputs -->
-                        <line x1="210" y1="100" x2="310" y2="50" stroke="#10b981" stroke-width="1.5" />
-                        <line x1="210" y1="100" x2="310" y2="150" stroke="#ef4444" stroke-width="1.5" />
+                    <div class="svc-eco-node-card svc-node-bot-right">
+                        <div class="svc-node-icon" style="background: rgba(217,119,6,0.1); color:#d97706;">
+                            <?= icon('database') ?>
+                        </div>
+                        <div class="svc-node-info">
+                            <span class="svc-node-tag">CRM STATE</span>
+                            <span class="svc-node-label">Real-Time Sync</span>
+                            <span class="svc-node-sub">HubSpot / Salesforce</span>
+                        </div>
+                    </div>
 
-                        <rect x="310" y="30" width="80" height="40" rx="6" fill="#050f33" stroke="#10b981" stroke-width="1.5" />
-                        <text x="350" y="54" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">HOT → SALES</text>
+                    <!-- Central Core Hub -->
+                    <div class="svc-eco-hub" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:104px; height:104px; border-radius:50%; z-index:3; text-align:center; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <span class="svc-eco-hub-title" style="color:#ffffff;">ROUTING</span>
+                        <span class="svc-eco-hub-sub" style="color:#fbbf24;">TRIAGE CORE</span>
+                    </div>
 
-                        <rect x="310" y="130" width="80" height="40" rx="6" fill="#050f33" stroke="#ef4444" stroke-width="1.5" />
-                        <text x="350" y="154" font-family="monospace" font-size="8" fill="#fca5a5" text-anchor="middle">NURTURE</text>
+                    <!-- Vector Laser Mesh -->
+                    <svg viewBox="0 0 520 340" fill="none" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;">
+                        <defs>
+                            <linearGradient id="aut-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#d97706" stop-opacity="0.6" />
+                                <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.1" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Node Connect Vectors -->
+                        <path id="aut-path-tl" d="M 120,50 L 260,170" stroke="url(#aut-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="aut-path-tr" d="M 400,50 L 260,170" stroke="url(#aut-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="aut-path-bl" d="M 120,290 L 260,170" stroke="url(#aut-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+                        <path id="aut-path-br" d="M 400,290 L 260,170" stroke="url(#aut-grad-1)" stroke-width="1.5" stroke-dasharray="4,4" />
+
+                        <!-- Animated Lead Ingestion Signals -->
+                        <circle r="3" fill="#fbbf24"><animateMotion dur="2.1s" repeatCount="indefinite"><mpath href="#aut-path-tl"/></animateMotion></circle>
+                        <circle r="3" fill="#fbbf24"><animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#aut-path-tr"/></animateMotion></circle>
+                        <circle r="3" fill="#fbbf24"><animateMotion dur="1.9s" repeatCount="indefinite"><mpath href="#aut-path-bl"/></animateMotion></circle>
+                        <circle r="3" fill="#fbbf24"><animateMotion dur="2.7s" repeatCount="indefinite"><mpath href="#aut-path-br"/></animateMotion></circle>
+
+                        <!-- Triage Decision Rays -->
+                        <line x1="260" y1="170" x2="260" y2="110" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3" />
+                        <text x="260" y="102" font-family="monospace" font-size="7" fill="#10b981" text-anchor="middle">QUALIFIED LEAD</text>
                     </svg>
+                </div>
+
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text">
+                        <?= icon('git-branch') ?> Multi-Channel Ingest → Qualification Rules → WhatsApp Router → CRM
+                    </div>
+                    <div class="svc-eco-footer-badge" style="background: rgba(217,119,6,0.1); color:#d97706;">
+                        ZERO LEAD LOSS
+                    </div>
                 </div>
             </div>
         </div>
@@ -1256,6 +1537,32 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
 
 <?php endif; ?>
 
-</main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    
+    const ecoStages = document.querySelectorAll('.svc-eco-stage');
+    ecoStages.forEach(function(stage) {
+        stage.style.transition = 'transform 0.15s ease-out';
+        
+        stage.addEventListener('mousemove', function(e) {
+            const rect = stage.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -6;
+            const rotateY = ((x - centerX) / centerX) * 6;
+            
+            stage.style.transform = 'perspective(1000px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) scale(1.01)';
+        });
+        
+        stage.addEventListener('mouseleave', function() {
+            stage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+    });
+});
+</script>
 
 <?php require __DIR__ . '/partials/tail.php'; ?>

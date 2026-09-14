@@ -793,3 +793,227 @@
 @media (max-width: 480px) {
     .svc-hud-node { display: none; }
 }
+
+/* ==========================================================================
+   RAFLY 6 SERVICE-SPECIFIC HERO ARCHITECTURE STAGES
+   ========================================================================== */
+
+/* Common Stage Base */
+.svc-eco-stage {
+    position: relative;
+    width: 100%;
+    max-width: 530px;
+    margin-inline: auto;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(10, 99, 255, 0.16);
+    border-radius: 24px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-shadow: 0 20px 50px rgba(10, 99, 255, 0.08), 0 2px 10px rgba(5, 15, 51, 0.03);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.svc-eco-stage:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 60px rgba(10, 99, 255, 0.12), 0 4px 15px rgba(5, 15, 51, 0.04);
+    border-color: rgba(10, 99, 255, 0.28);
+}
+
+.svc-eco-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+.svc-eco-title {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.725rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.svc-eco-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.svc-eco-canvas {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    border: 1px solid rgba(10, 99, 255, 0.08);
+    overflow: hidden;
+}
+
+/* Background animated grid */
+.svc-eco-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(10, 99, 255, 0.14) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* SVG Vector Lines */
+.svc-eco-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.svc-eco-dash-pulse {
+    stroke-dasharray: 6 6;
+    animation: svcDashPulse 25s linear infinite;
+}
+@keyframes svcDashPulse {
+    from { stroke-dashoffset: 200; }
+    to   { stroke-dashoffset: 0; }
+}
+
+/* Central Node */
+.svc-eco-hub {
+    position: relative;
+    z-index: 3;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(10, 99, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: default;
+}
+.svc-eco-hub:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 45px rgba(10, 99, 255, 0.5);
+}
+
+.svc-eco-hub-title { font-family: var(--font-mono, monospace); font-size: 0.7rem; font-weight: 900; letter-spacing: 0.08em; }
+.svc-eco-hub-sub   { font-family: var(--font-mono, monospace); font-size: 0.55rem; opacity: 0.85; text-transform: uppercase; margin-top: 1px; }
+
+/* Pillar Cards */
+.svc-eco-node-card {
+    position: absolute;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    box-shadow: 0 6px 18px rgba(5, 15, 51, 0.05), inset 0 1px 0 #ffffff;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.svc-eco-node-card:hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: rgba(10, 99, 255, 0.45);
+    box-shadow: 0 10px 25px rgba(10, 99, 255, 0.15), inset 0 1px 0 #ffffff;
+}
+
+.svc-node-top-left  { top: 12px; left: 12px; }
+.svc-node-top-right { top: 12px; right: 12px; }
+.svc-node-bot-left  { bottom: 12px; left: 12px; }
+.svc-node-bot-right { bottom: 12px; right: 12px; }
+
+.svc-node-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.svc-node-info  { display: flex; flex-direction: column; }
+.svc-node-tag   { font-family: var(--font-mono, monospace); font-size: 0.55rem; font-weight: 800; color: #64748b; letter-spacing: 0.04em; }
+.svc-node-label { font-family: var(--font-display, sans-serif); font-size: 0.75rem; font-weight: 800; color: #050f33; line-height: 1.2; }
+.svc-node-sub   { font-family: var(--font-mono, monospace); font-size: 0.6rem; color: #64748b; margin-top: 1px; }
+
+/* Stage Footer Bar */
+.svc-eco-footer {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.svc-eco-footer-text {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    color: #475569;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.svc-eco-footer-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono, monospace);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Service Theme Accents */
+/* Web Dev */
+.svc-web-stage .svc-eco-title { color: #0a63ff; }
+.svc-web-stage .svc-eco-badge { background: rgba(10,99,255,0.08); color: #0a63ff; border: 1px solid rgba(10,99,255,0.2); }
+.svc-web-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(10, 99, 255, 0.06) 0%, rgba(2, 132, 199, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-web-stage .svc-eco-hub { background: linear-gradient(135deg, #050f33, #0a63ff); }
+
+/* Web Security */
+.svc-sec-stage .svc-eco-title { color: #dc2626; }
+.svc-sec-stage .svc-eco-badge { background: rgba(220,38,38,0.08); color: #dc2626; border: 1px solid rgba(220,38,38,0.2); }
+.svc-sec-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.06) 0%, rgba(15, 23, 42, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-sec-stage .svc-eco-hub { background: linear-gradient(135deg, #1e1b4b, #dc2626); }
+
+/* Marketing */
+.svc-mkt-stage .svc-eco-title { color: #16a34a; }
+.svc-mkt-stage .svc-eco-badge { background: rgba(22,163,74,0.08); color: #16a34a; border: 1px solid rgba(22,163,74,0.2); }
+.svc-mkt-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(22, 163, 74, 0.06) 0%, rgba(10, 99, 255, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-mkt-stage .svc-eco-hub { background: linear-gradient(135deg, #052e16, #16a34a); }
+
+/* Content */
+.svc-cnt-stage .svc-eco-title { color: #9333ea; }
+.svc-cnt-stage .svc-eco-badge { background: rgba(147,51,234,0.08); color: #9333ea; border: 1px solid rgba(147,51,234,0.2); }
+.svc-cnt-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.06) 0%, rgba(56, 189, 248, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-cnt-stage .svc-eco-hub { background: linear-gradient(135deg, #1e1b4b, #9333ea); }
+
+/* Ecommerce */
+.svc-ecm-stage .svc-eco-title { color: #0284c7; }
+.svc-ecm-stage .svc-eco-badge { background: rgba(2,132,199,0.08); color: #0284c7; border: 1px solid rgba(2,132,199,0.2); }
+.svc-ecm-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.06) 0%, rgba(16, 185, 129, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-ecm-stage .svc-eco-hub { background: linear-gradient(135deg, #0c4a6e, #0284c7); }
+
+/* Automation */
+.svc-aut-stage .svc-eco-title { color: #d97706; }
+.svc-aut-stage .svc-eco-badge { background: rgba(217,119,6,0.08); color: #d97706; border: 1px solid rgba(217,119,6,0.2); }
+.svc-aut-stage .svc-eco-canvas { background: radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.06) 0%, rgba(16, 185, 129, 0.02) 50%, rgba(255, 255, 255, 0) 75%); }
+.svc-aut-stage .svc-eco-hub { background: linear-gradient(135deg, #451a03, #d97706); }
+

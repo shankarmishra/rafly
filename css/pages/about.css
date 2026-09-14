@@ -291,3 +291,285 @@
     .peace-orbit-ring li { transform: rotate(var(--a)) translate(108px) rotate(calc(var(--a) * -1)); }
     .peace-orbit-ring span { width: 40px; height: 40px; }
 }
+
+/* ==========================================================================
+   RAFLY ABOUT HERO VISUAL ARCHITECTURE STAGE (CUSTOM DESIGNED)
+   ========================================================================== */
+.rafly-eco-stage {
+    position: relative;
+    width: 100%;
+    max-width: 530px;
+    margin-inline: auto;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(10, 99, 255, 0.16);
+    border-radius: 24px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-shadow: 0 20px 50px rgba(10, 99, 255, 0.08), 0 2px 10px rgba(5, 15, 51, 0.03);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.rafly-eco-stage:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 60px rgba(10, 99, 255, 0.12), 0 4px 15px rgba(5, 15, 51, 0.04);
+    border-color: rgba(10, 99, 255, 0.28);
+}
+
+.rafly-eco-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.rafly-eco-title {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.725rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #0a63ff;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.rafly-eco-title-badge {
+    background: rgba(10, 99, 255, 0.08);
+    color: #0a63ff;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    font-weight: 800;
+}
+
+.rafly-eco-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 50% 50%, rgba(10, 99, 255, 0.06) 0%, rgba(2, 132, 199, 0.02) 50%, rgba(255, 255, 255, 0) 75%);
+    border-radius: 16px;
+    border: 1px solid rgba(10, 99, 255, 0.08);
+    overflow: hidden;
+}
+
+/* Background Animated Grid */
+.rafly-eco-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(10, 99, 255, 0.14) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* SVG Connection Lines */
+.rafly-eco-svg-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Pulse animation on connecting paths */
+.rafly-eco-pulse-line {
+    stroke-dasharray: 6 6;
+    animation: ecoDashPulse 25s linear infinite;
+}
+
+@keyframes ecoDashPulse {
+    from { stroke-dashoffset: 200; }
+    to   { stroke-dashoffset: 0; }
+}
+
+/* Central Hub Node */
+.rafly-eco-core-hub {
+    position: relative;
+    z-index: 3;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #050f33 0%, #0a63ff 100%);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(10, 99, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: default;
+}
+
+.rafly-eco-core-hub:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 45px rgba(10, 99, 255, 0.55), inset 0 1px 0 #ffffff;
+}
+
+.rafly-eco-core-title {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+}
+
+.rafly-eco-core-sub {
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-mono, monospace);
+    text-transform: uppercase;
+    margin-top: 1px;
+}
+
+/* Orbital Spinning Rings */
+.rafly-eco-ring-1,
+.rafly-eco-ring-2 {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.rafly-eco-ring-1 {
+    width: 170px;
+    height: 170px;
+    border: 1px dashed rgba(10, 99, 255, 0.25);
+    animation: ecoOrbitSpin 35s linear infinite;
+}
+
+.rafly-eco-ring-2 {
+    width: 240px;
+    height: 240px;
+    border: 1px solid rgba(10, 99, 255, 0.12);
+    animation: ecoOrbitSpin 60s linear infinite reverse;
+}
+
+@keyframes ecoOrbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Pillar Nodes Grid */
+.rafly-eco-pillar-card {
+    position: absolute;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    box-shadow: 0 6px 18px rgba(5, 15, 51, 0.05), inset 0 1px 0 #ffffff;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rafly-eco-pillar-card:hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: rgba(10, 99, 255, 0.45);
+    box-shadow: 0 10px 25px rgba(10, 99, 255, 0.15), inset 0 1px 0 #ffffff;
+}
+
+/* Pillar Card Positions */
+.pillar-top-left { top: 12px; left: 12px; }
+.pillar-top-right { top: 12px; right: 12px; }
+.pillar-bot-left { bottom: 12px; left: 12px; }
+.pillar-bot-right { bottom: 12px; right: 12px; }
+
+.rafly-eco-pillar-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.icon-blue { background: rgba(10, 99, 255, 0.08); color: #0a63ff; }
+.icon-cyan { background: rgba(2, 132, 199, 0.08); color: #0284c7; }
+.icon-green { background: rgba(22, 163, 74, 0.08); color: #16a34a; }
+.icon-amber { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+
+.rafly-eco-pillar-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.rafly-eco-pillar-num {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: 0.04em;
+}
+
+.rafly-eco-pillar-label {
+    font-family: var(--font-display, sans-serif);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #050f33;
+    line-height: 1.2;
+}
+
+.rafly-eco-pillar-sub {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.6rem;
+    color: #64748b;
+    margin-top: 1px;
+}
+
+/* Studio Team Accountability Footer Bar */
+.rafly-eco-footer-bar {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rafly-eco-footer-text {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    color: #475569;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.rafly-eco-footer-badge {
+    background: rgba(22, 163, 74, 0.08);
+    color: #16a34a;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono, monospace);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Responsive Scaling */
+@media (max-width: 640px) {
+    .rafly-eco-stage { padding: 1rem; }
+    .rafly-eco-canvas-container { height: 380px; }
+    .rafly-eco-pillar-card { padding: 0.45rem 0.65rem; }
+    .rafly-eco-pillar-label { font-size: 0.68rem; }
+    .rafly-eco-pillar-sub { font-size: 0.55rem; }
+    .pillar-top-left { top: 8px; left: 8px; }
+    .pillar-top-right { top: 8px; right: 8px; }
+    .pillar-bot-left { bottom: 8px; left: 8px; }
+    .pillar-bot-right { bottom: 8px; right: 8px; }
+    .rafly-eco-core-hub { width: 76px; height: 76px; }
+    .rafly-eco-footer-bar { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+}
