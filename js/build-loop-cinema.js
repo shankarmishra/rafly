@@ -57,15 +57,22 @@ export function initBuildLoopCinema(container) {
 }
 
     // Scroll progress listener for stage activation
+    var ticking = false;
     window.addEventListener('scroll', () => {
-        const rect = container.getBoundingClientRect();
-        const winH = window.innerHeight;
-        if (rect.top < winH * 0.7 && rect.bottom > winH * 0.3) {
-            const ratio = Math.min(0.99, Math.max(0, (winH * 0.7 - rect.top) / rect.height));
-            const calculatedStage = Math.floor(ratio * 4);
-            if (calculatedStage !== currentStage && calculatedStage >= 0 && calculatedStage < 4) {
-                setStage(calculatedStage);
-            }
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(() => {
+                const rect = container.getBoundingClientRect();
+                const winH = window.innerHeight;
+                if (rect.top < winH * 0.7 && rect.bottom > winH * 0.3) {
+                    const ratio = Math.min(0.99, Math.max(0, (winH * 0.7 - rect.top) / rect.height));
+                    const calculatedStage = Math.floor(ratio * 4);
+                    if (calculatedStage !== currentStage && calculatedStage >= 0 && calculatedStage < 4) {
+                        setStage(calculatedStage);
+                    }
+                }
+                ticking = false;
+            });
         }
     }, { passive: true });
 }

@@ -50,10 +50,10 @@ $footHours = setting('contact.hours', '');
                     <p class="footer-col-title">Locations</p>
                     <ul class="footer-links">
                         <li><a href="/locations">All Regional Hubs</a></li>
-                        <li><a href="/locations">Greater Noida (HQ)</a></li>
-                        <li><a href="/locations">Noida Tech Hub</a></li>
-                        <li><a href="/locations">Delhi Enterprise</a></li>
-                        <li><a href="/locations">Gurgaon Cyber City</a></li>
+                        <li><a href="/locations/greater-noida">Greater Noida (HQ)</a></li>
+                        <li><a href="/locations/noida">Noida Tech Hub</a></li>
+                        <li><a href="/locations/delhi">Delhi Enterprise</a></li>
+                        <li><a href="/locations/gurgaon">Gurgaon Cyber City</a></li>
                     </ul>
                 </div>
 

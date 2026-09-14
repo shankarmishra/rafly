@@ -335,6 +335,15 @@
     transform: translateY(0) !important;
 }
 
+@media (max-width: 480px) {
+    .loc-radar-console-light { padding: 0; border-radius: 16px; }
+    .loc-radar-bar-light { padding: 10px 14px; }
+    .loc-hub-card-light { padding: 1.5rem 1.25rem; }
+    .loc-stat-box-light, .loc-coverage-card-light { padding: 1.25rem 1.15rem; }
+    .loc-faq-head { padding: 1rem 1.15rem; font-size: 0.98rem; }
+    .loc-faq-body { padding: 0 1.15rem 1.15rem 1.15rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .loc-hub-card-light, .loc-stat-box-light, .loc-process-step {
         animation: none !important;
@@ -342,3 +351,4 @@
         transform: none !important;
     }
 }
+

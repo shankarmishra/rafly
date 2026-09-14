@@ -6,6 +6,20 @@
 (function() {
     'use strict';
 
+    var io = ('IntersectionObserver' in window)
+        ? new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                var anim = entry.target._lottieInstance;
+                if (!anim) return;
+                if (entry.isIntersecting) {
+                    anim.play();
+                } else {
+                    anim.pause();
+                }
+            });
+        }, { threshold: 0.05 })
+        : null;
+
     function initLotties() {
         if (typeof window.lottie === 'undefined') {
             console.warn('[RAFly Motion] Lottie engine not loaded yet. Retrying...');
@@ -49,7 +63,7 @@
                     return res.json();
                 })
                 .then(function(animationData) {
-                    window.lottie.loadAnimation({
+                    const anim = window.lottie.loadAnimation({
                         container: renderBox,
                         renderer: 'svg',
                         loop: true,
@@ -60,6 +74,9 @@
                             preserveAspectRatio: 'xMidYMid meet'
                         }
                     });
+
+                    renderBox._lottieInstance = anim;
+                    if (io) io.observe(renderBox);
                 })
                 .catch(function(err) {
                     console.error('[RAFly Motion] Failed to load Lottie JSON:', src, err);

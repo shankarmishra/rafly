@@ -844,6 +844,14 @@
     .ss-content {
         max-width: 100%;
     }
+    .ss-headline {
+        font-size: clamp(1.8rem, 6vw, 2.75rem);
+        word-break: break-word;
+    }
+    .bl-pa-head {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
     .ss-stage-wrapper {
         flex-direction: column-reverse;
         align-items: stretch;
@@ -11691,9 +11699,11 @@
         linear-gradient(135deg, rgba(10,99,255,0.04) 0%, rgba(255,255,255,0.85) 28%, rgba(225,239,255,0.9) 100%),
         #f6f8fc !important;
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     isolation: isolate;
 }
+
+
 .build-loop-section::before,
 .build-loop-section::after,
 .work-showcase-section::before,
@@ -12068,9 +12078,10 @@
 .work-showcase-section {
     padding-block: clamp(2.25rem, 4vw, 3.5rem) !important;
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     isolation: isolate;
 }
+
 
 .home-section-07 .ws-container,
 .work-showcase-section .container {

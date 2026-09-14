@@ -493,7 +493,7 @@ return [
     'lead-automation' => [
         'title' => 'Lead Automation',
         'icon'  => 'bot',
-        'key'   => 'marketing',
+        'key'   => 'automation',
         'wide'  => true,
         'badge' => '24/7 QUALIFICATION & RESPONSE SYSTEM',
         'tagline' => 'Engage inbound leads in under 60 seconds, filter qualified buyers, and sync directly with WhatsApp and CRM.',

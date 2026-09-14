@@ -27,6 +27,8 @@
             animation-range: entry 4% cover 40%;
             animation-fill-mode: both;
             animation-duration: 1ms;   /* required; the timeline supplies progress */
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         [data-r="rise"]  { animation-name: r-rise; }

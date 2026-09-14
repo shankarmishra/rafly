@@ -103,26 +103,37 @@ $ogImageUrl = SITE_ORIGIN . '/' . ltrim(asset($page['ogImage']), '/');
 $pixelId = !$page['noindex']
     ? setting('analytics.meta_pixel_id', defined('META_PIXEL_ID') ? META_PIXEL_ID : '')
     : '';
+$ga4Id   = !$page['noindex']
+    ? (defined('GA4_MEASUREMENT_ID') ? GA4_MEASUREMENT_ID : '')
+    : '';
+$gadsId  = !$page['noindex']
+    ? (defined('GADS_CONVERSION_ID') ? GADS_CONVERSION_ID : '')
+    : '';
+$gtmId   = !$page['noindex']
+    ? (defined('GTM_CONTAINER_ID') ? GTM_CONTAINER_ID : '')
+    : '';
 ?>
 <!DOCTYPE html>
 <html lang="en-IN">
 <head>
     <meta charset="UTF-8">
+    <script src="<?= e(asset('js/consent.js')) ?>"></script>
+<?php if ($pixelId !== '' || $ga4Id !== '' || $gadsId !== '' || $gtmId !== ''): ?>
+    <script src="<?= e(asset('js/pixel.js')) ?>"
+            data-pixel-id="<?= e($pixelId) ?>"
+            data-ga4-id="<?= e($ga4Id) ?>"
+            data-gads-id="<?= e($gadsId) ?>"
+            data-gtm-id="<?= e($gtmId) ?>"></script>
 <?php if ($pixelId !== ''): ?>
-    <!-- As early as possible in <head>, per Meta's own placement guidance —
-         this is the one script on the site NOT deferred to partials/tail.php,
-         deliberately: a deferred pixel under-reports short/bounced sessions,
-         which defeats the point of installing one. js/pixel.js is same-origin
-         (script-src 'self' already allows it); it fetches
-         connect.facebook.net itself, the only third-party origin this adds. -->
-    <script src="<?= e(asset('js/pixel.js')) ?>" data-pixel-id="<?= e($pixelId) ?>"></script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=<?= e(rawurlencode($pixelId)) ?>&ev=PageView&noscript=1" alt=""></noscript>
 <?php endif; ?>
+<?php endif; ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php if (!$page['noindex']): ?>
-    <!-- dns-prefetch for the one third-party origin the Pixel JS loads -->
-    <link rel="dns-prefetch" href="//connect.facebook.net">
+    <!-- dns-prefetch for telemetry third-party origins -->
+    <?php if ($pixelId !== ''): ?><link rel="dns-prefetch" href="//connect.facebook.net"><?php endif; ?>
+    <?php if ($ga4Id !== '' || $gtmId !== ''): ?><link rel="dns-prefetch" href="//www.googletagmanager.com"><?php endif; ?>
 <?php endif; ?>
     <title><?= e($page['title']) ?></title>
     <meta name="description" content="<?= e($page['desc']) ?>">
@@ -246,6 +257,12 @@ if (!$page['noindex']) {
 ?>
 </head>
 <body class="<?= e($page['bodyClass']) ?>">
+<?php if ($gtmId !== ''): ?>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= e(rawurlencode($gtmId)) ?>"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<?php endif; ?>
 <?= icon_sprite() ?>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="bg-field" aria-hidden="true"></div>

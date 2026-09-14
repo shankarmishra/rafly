@@ -16,18 +16,16 @@ export function initCaseReelCinema(container) {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-entering');
-                entry.target.style.transition = 'all 0.8s cubic-bezier(.16,1,.3,1)';
+                entry.target.style.transition = 'opacity 0.6s cubic-bezier(.16,1,.3,1), transform 0.6s cubic-bezier(.16,1,.3,1)';
                 entry.target.style.opacity = '1';
                 entry.target.style.transform = 'translate3d(0, 0, 0) scale(1)';
-                entry.target.style.filter = 'blur(0)';
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
 
     cards.forEach((card, i) => {
         card.style.opacity = '0';
-        card.style.transform = 'translate3d(0, 40px, 0) scale(0.95)';
-        card.style.filter = 'blur(10px)';
+        card.style.transform = 'translate3d(0, 30px, 0) scale(0.96)';
         observer.observe(card);
 
         // Hover perspective micro-interaction
@@ -44,18 +42,25 @@ export function initCaseReelCinema(container) {
     });
 
     // Update case study scroll progress indicator
+    var ticking = false;
     window.addEventListener('scroll', () => {
-        const rect = container.getBoundingClientRect();
-        const winH = window.innerHeight;
-        if (rect.top < winH && rect.bottom > 0) {
-            const progress = Math.min(1, Math.max(0, (winH - rect.top) / (rect.height + winH)));
-            const calculatedIdx = Math.min(cards.length - 1, Math.floor(progress * cards.length));
-            
-            if (calculatedIdx !== activeIdx) {
-                activeIdx = calculatedIdx;
-                if (indexText) indexText.textContent = `0${activeIdx + 1} / 0${cards.length}`;
-            }
-            if (indexBar) indexBar.style.width = (progress * 100) + '%';
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(() => {
+                const rect = container.getBoundingClientRect();
+                const winH = window.innerHeight;
+                if (rect.top < winH && rect.bottom > 0) {
+                    const progress = Math.min(1, Math.max(0, (winH - rect.top) / (rect.height + winH)));
+                    const calculatedIdx = Math.min(cards.length - 1, Math.floor(progress * cards.length));
+
+                    if (calculatedIdx !== activeIdx) {
+                        activeIdx = calculatedIdx;
+                        if (indexText) indexText.textContent = `0${activeIdx + 1} / 0${cards.length}`;
+                    }
+                    if (indexBar) indexBar.style.width = (progress * 100) + '%';
+                }
+                ticking = false;
+            });
         }
     }, { passive: true });
 }

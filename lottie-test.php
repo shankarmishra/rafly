@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>RAFly — 15 Premium Local Lottie Animations Suite</title>
     <!-- Core Lottie Web Engine (Airbnb / Bodymovin) -->
     <script src="js/vendor/lottie.min.js"></script>

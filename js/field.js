@@ -193,7 +193,9 @@ export function initField(canvas) {
                 p.y += ((p.y - my) / d) * f * 1.5;
             }
 
-            const key = ((p.x / GRID) | 0) + ':' + ((p.y / GRID) | 0);
+            const gx = ((p.x / GRID) | 0) + 1000;
+            const gy = ((p.y / GRID) | 0) + 1000;
+            const key = gx * 10000 + gy;
             let b = buckets.get(key);
             if (!b) { b = []; buckets.set(key, b); }
             b.push(p);
@@ -203,10 +205,12 @@ export function initField(canvas) {
         // the forward half of them, so no pair is considered twice.
         ctx.lineWidth = 1;
         for (const [key, cell] of buckets) {
-            const [bx, by] = key.split(':').map(Number);
+            const bx = (key / 10000) | 0;
+            const by = key % 10000;
             for (let dx = -1; dx <= 1; dx++) {
                 for (let dy = -1; dy <= 1; dy++) {
-                    const other = buckets.get((bx + dx) + ':' + (by + dy));
+                    const otherKey = (bx + dx) * 10000 + (by + dy);
+                    const other = buckets.get(otherKey);
                     if (!other) continue;
                     for (const a of cell) {
                         for (const b of other) {
@@ -238,7 +242,9 @@ export function initField(canvas) {
         drawTraces();
         drawPackets();
         drawNetwork();
-        raf = requestAnimationFrame(frame);
+        if (running) {
+            raf = requestAnimationFrame(frame);
+        }
     }
 
     /* ------------------------------------------------------------- wire */
@@ -247,6 +253,15 @@ export function initField(canvas) {
     const onResize = () => resize();
     const onVisibility = () => { document.hidden ? stop() : start(); };
 
+    var canvasIo = ('IntersectionObserver' in window)
+        ? new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) start();
+                else stop();
+            });
+        }, { threshold: 0.01 })
+        : null;
+
     function start() {
         if (running) return;
         running = true;
@@ -254,17 +269,22 @@ export function initField(canvas) {
     }
     function stop() {
         running = false;
-        cancelAnimationFrame(raf);
+        if (raf) {
+            cancelAnimationFrame(raf);
+            raf = 0;
+        }
     }
 
     resize();
     window.addEventListener('resize', onResize, { passive: true });
     window.addEventListener('mousemove', onMove, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
+    if (canvasIo) canvasIo.observe(canvas);
     start();
 
     return function destroy() {
         stop();
+        if (canvasIo) canvasIo.disconnect();
         window.removeEventListener('resize', onResize);
         window.removeEventListener('mousemove', onMove);
         document.removeEventListener('visibilitychange', onVisibility);

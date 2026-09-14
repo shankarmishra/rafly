@@ -168,8 +168,8 @@ require __DIR__ . '/partials/header.php';
                         <span class="loc-tag">Security Audit</span>
                         <span class="loc-tag">Media Studio</span>
                     </div>
-                    <div style="margin-top: 1.25rem; text-align: right;">
-                        <span style="font-family: var(--font-mono, monospace); font-size: 0.78rem; font-weight: 700; color: #0a63ff;">Click for Details &rarr;</span>
+                    <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                        <a href="/locations/greater-noida" style="font-family: var(--font-mono, monospace); font-size: 0.82rem; font-weight: 700; color: #0a63ff; text-decoration: none;">View Greater Noida HQ Page &rarr;</a>
                     </div>
                 </div>
 
@@ -187,8 +187,8 @@ require __DIR__ . '/partials/header.php';
                         <span class="loc-tag">Rapid Sprints</span>
                         <span class="loc-tag">On-Site Scoping</span>
                     </div>
-                    <div style="margin-top: 1.25rem; text-align: right;">
-                        <span style="font-family: var(--font-mono, monospace); font-size: 0.78rem; font-weight: 700; color: #0284c7;">Click for Details &rarr;</span>
+                    <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                        <a href="/locations/noida" style="font-family: var(--font-mono, monospace); font-size: 0.82rem; font-weight: 700; color: #0284c7; text-decoration: none;">View Noida Hub Page &rarr;</a>
                     </div>
                 </div>
 
@@ -206,8 +206,9 @@ require __DIR__ . '/partials/header.php';
                         <span class="loc-tag">Enterprise SOW</span>
                         <span class="loc-tag">CAPI Integration</span>
                     </div>
-                    <div style="margin-top: 1.25rem; text-align: right;">
-                        <span style="font-family: var(--font-mono, monospace); font-size: 0.78rem; font-weight: 700; color: #9333ea;">Click for Details &rarr;</span>
+                    <div style="margin-top: 1.25rem; display: flex; gap: 1rem; align-items: center;">
+                        <a href="/locations/delhi" style="font-family: var(--font-mono, monospace); font-size: 0.82rem; font-weight: 700; color: #9333ea; text-decoration: none;">Delhi &rarr;</a>
+                        <a href="/locations/gurgaon" style="font-family: var(--font-mono, monospace); font-size: 0.82rem; font-weight: 700; color: #9333ea; text-decoration: none;">Gurgaon &rarr;</a>
                     </div>
                 </div>
 
@@ -371,33 +372,5 @@ require __DIR__ . '/partials/header.php';
     </section>
 
 </main>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // 3D Tilt & Interaction on Hub Cards
-    const cards = document.querySelectorAll('.loc-hub-card-light');
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -5;
-            const rotateY = ((x - centerX) / centerX) * 5;
-            card.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
-        });
-        card.addEventListener('click', () => {
-            const intakeSection = document.getElementById('intake');
-            if (intakeSection) {
-                intakeSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-});
-</script>
 
 <?php require __DIR__ . '/partials/tail.php'; ?>

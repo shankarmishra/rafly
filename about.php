@@ -23,7 +23,7 @@ require __DIR__ . '/partials/header.php';
 
     <!-- 01 — HERO: THE STUDIO & RAFLY OPERATING SYSTEM (LIGHT THEME) -->
     <section class="section hero sig-hero blueprint-canvas" style="min-height: 85vh; display: flex; align-items: center; padding-block: 4rem; position: relative; background: #ffffff;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.25rem;">
                     <span class="glow-dot-active"></span> STUDIO OPERATING SYSTEM
@@ -202,22 +202,4 @@ require __DIR__ . '/partials/header.php';
             </div>
             <?php $formId = 'aboutLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
         </div>
-    </section>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const stage = document.querySelector('.rafly-eco-stage');
-    if (!stage || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    stage.addEventListener('mousemove', function (e) {
-        const rect = stage.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        stage.style.transform = `perspective(1000px) rotateY(${x * 0.025}deg) rotateX(${-y * 0.025}deg) translateY(-4px)`;
-    });
-    stage.addEventListener('mouseleave', function () {
-        stage.style.transform = '';
-    });
-});
-</script>
-
 <?php require __DIR__ . '/partials/tail.php'; ?>

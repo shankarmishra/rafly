@@ -14,10 +14,12 @@ if ($data === null) {
     exit;
 }
 
+$serviceUrl = service_url($service);
+
 $crumbs = [
     ['name' => 'Home',     'url' => '/'],
     ['name' => 'Services', 'url' => '/#services'],
-    ['name' => $data['title'], 'url' => '/services/' . ($service === 'ecommerce-support' ? 'ecommerce' : $service)],
+    ['name' => $data['title'], 'url' => $serviceUrl],
 ];
 
 $page = [
@@ -27,7 +29,7 @@ $page = [
     'bodyClass' => 'page-service svc-' . $data['key'],
     'styles'    => ['home', 'home-scenes', 'service'],
     'module'    => 'home',
-    'canonical' => 'services/' . ($service === 'ecommerce-support' ? 'ecommerce' : $service),
+    'canonical' => ltrim($serviceUrl, '/'),
     'schema'    => [
         schema_service($data['title'], $data['intro'], $data['highlights'], schema_id('service-' . $service)),
         schema_breadcrumbs($crumbs),
@@ -48,7 +50,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 HERO / SYSTEM INTRODUCTION -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; position: relative; overflow: hidden; display: flex; align-items: center;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active"></span> DIGITAL PRODUCT ENGINE
@@ -303,7 +305,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 SECURITY COMMAND CENTER HERO -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-red" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active" style="color:#dc2626;"></span> DEFENSE PERIMETER COMMAND CENTER
@@ -541,7 +543,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 SIGNAL ENGINE HERO -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-green" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active" style="color:#16a34a;"></span> SIGNAL → DEMAND → CONVERSION ENGINE
@@ -769,7 +771,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 CONTENT STUDIO HERO -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-purple" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active" style="color:#9333ea;"></span> EDITORIAL PRODUCTION NLE STUDIO
@@ -1030,7 +1032,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 COMMERCE ENGINE HERO -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-cyan" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active" style="color:#0284c7;"></span> COMMERCE OPERATING SYSTEM
@@ -1283,7 +1285,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
          ========================================================================= -->
     <!-- 01 LEAD OPERATIONS HERO -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-amber" style="margin-bottom: 1.2rem;">
                     <span class="glow-dot-active" style="color:#d97706;"></span> LEAD OPERATIONS ROUTING ENGINE
@@ -1537,32 +1539,24 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
 
 <?php endif; ?>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    
-    const ecoStages = document.querySelectorAll('.svc-eco-stage');
-    ecoStages.forEach(function(stage) {
-        stage.style.transition = 'transform 0.15s ease-out';
-        
-        stage.addEventListener('mousemove', function(e) {
-            const rect = stage.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -6;
-            const rotateY = ((x - centerX) / centerX) * 6;
-            
-            stage.style.transform = 'perspective(1000px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) scale(1.01)';
-        });
-        
-        stage.addEventListener('mouseleave', function() {
-            stage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-        });
-    });
-});
-</script>
+<?php if (!empty($data['landing_links'])): ?>
+    <section class="section" style="padding-block: 4rem; background: #f8fafc;">
+        <div class="container">
+            <div class="sec-head sec-head-center" style="margin-bottom: 2rem;">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">SPECIALIZED WORKFLOWS</span>
+                <h2 style="font-size: 1.8rem; font-weight: 800; color: #050f33;">DEDICATED SERVICE CONSOLES</h2>
+            </div>
+            <div class="grid grid-<?= count($data['landing_links']) > 1 ? '2' : '1' ?>" style="gap: 1.5rem; max-width: 900px; margin-inline: auto;">
+                <?php foreach ($data['landing_links'] as $ll): ?>
+                <a href="<?= e($ll['url']) ?>" class="machined-card" style="display: block; text-decoration: none; padding: 1.75rem;">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.75rem;"><?= e($ll['badge']) ?></span>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.5rem;"><?= e($ll['title']) ?></h3>
+                    <p style="font-size: 0.95rem; color: #475569; line-height: 1.55; margin: 0;"><?= e($ll['desc']) ?></p>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
 
 <?php require __DIR__ . '/partials/tail.php'; ?>

@@ -262,6 +262,23 @@
     transform: translateY(0) !important;
 }
 
+@media (max-width: 640px) {
+    .price-dimension-head {
+        padding: 1rem 1.15rem;
+    }
+    .price-dim-num {
+        margin-right: 0.6rem;
+        padding: 3px 8px;
+        font-size: 0.78rem;
+    }
+    .price-dimension-body {
+        padding: 0 1.15rem 1.25rem 1.15rem;
+    }
+    .price-tier-card-light {
+        padding: 1.75rem 1.25rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .price-tier-card-light, .price-dimension-item-light {
         animation: none !important;
@@ -269,3 +286,4 @@
         transform: none !important;
     }
 }
+

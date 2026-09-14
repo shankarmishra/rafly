@@ -1,4 +1,4 @@
-/* RAFly Unified Core Stylesheet Bundle — Generated 2026-09-14 11:12:35 */
+/* RAFly Unified Core Stylesheet Bundle — Generated 2026-09-14 14:30:15 */
 
 /* --- File: css/00-tokens.css --- */
 /* ==========================================================================
@@ -1447,6 +1447,21 @@ select.form-control {
     color: var(--ink-3);
     cursor: pointer;
 }
+
+/* Centralized Responsive Hero Grid */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 3.5vw, 3rem);
+    align-items: center;
+    width: 100%;
+}
+@media (max-width: 991px) {
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.25rem;
+    }
+}
 .check input[type="checkbox"] {
     appearance: none;
     width: 20px;
@@ -2554,13 +2569,15 @@ body.modal-open { overflow: hidden; }
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                 padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
+    will-change: transform;
+    transform: translateZ(0);
 }
 .site-header > * { pointer-events: auto; }
 
 /* Hide on scroll down, show on scroll up */
-.site-header.is-hidden { transform: translateY(calc(-100% - 24px)); }
+.site-header.is-hidden { transform: translateY(calc(-100% - 24px)) translateZ(0); }
 body.nav-open .site-header,
-body.modal-open .site-header { transform: none; }
+body.modal-open .site-header { transform: translateZ(0); }
 
 /* Apple iOS Liquid Glass Floating Pill */
 .nav-pill {
@@ -2587,6 +2604,7 @@ body.modal-open .site-header { transform: none; }
     transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(0);
 }
 
 .site-header.is-stuck .nav-pill {
@@ -2596,6 +2614,20 @@ body.modal-open .site-header { transform: none; }
         0 20px 50px rgba(0, 0, 0, 0.09),
         0 4px 12px rgba(0, 0, 0, 0.04),
         inset 0 1px 1px rgba(255, 255, 255, 1);
+}
+
+@media (max-width: 380px) {
+    .site-header {
+        padding: 0.65rem 0.5rem;
+    }
+    .nav-pill {
+        padding: 4px 6px 4px 10px;
+        gap: 0.4rem;
+        height: 52px;
+    }
+    .nav-logo img {
+        height: 26px;
+    }
 }
 
 /* Subtle Apple Specular Light Reflector (NO harsh blue background) */
@@ -3049,9 +3081,38 @@ body.nav-open { overflow: hidden; }
     .nav-actions .btn-quote { display: none; }
     .nav-pill { justify-content: space-between; padding-right: 7px; }
 }
+@media (max-width: 400px) {
+    .site-header {
+        padding: 0.4rem 0.25rem;
+    }
+    .nav-pill {
+        padding-inline: 8px 6px;
+        gap: 4px;
+    }
+    .nav-logo img {
+        height: 22px;
+        width: auto;
+    }
+    .nav-actions {
+        gap: 4px;
+    }
+    .nav-actions .btn-primary,
+    .nav-actions .btn-primary-sheen {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+    .nav-toggle {
+        width: 34px;
+        height: 34px;
+    }
+    .nav-brand .brand-name {
+        font-size: 1.05rem;
+    }
+}
 @media (min-width: 941px) {
     .drawer { display: none; }
 }
+
 
 /* ==========================================================================
    04.B — FLOATING SOCIAL RAIL (APPLE iOS MINIMAL SPATIAL DOCK)
@@ -3558,6 +3619,8 @@ body.nav-open { overflow: hidden; }
             animation-range: entry 4% cover 40%;
             animation-fill-mode: both;
             animation-duration: 1ms;   /* required; the timeline supplies progress */
+            backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         [data-r="rise"]  { animation-name: r-rise; }

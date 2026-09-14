@@ -155,6 +155,29 @@ if (!defined('META_PIXEL_ID')) {
 }
 
 /**
+ * Google Tag Manager container ID (GTM-XXXXXXX). When set, GTM loads as the primary container.
+ * Guarded so config.local.php can override per environment. Blank = disabled.
+ */
+if (!defined('GTM_CONTAINER_ID')) {
+    define('GTM_CONTAINER_ID', 'GTM-W9F3BH7B');
+}
+
+/**
+ * Google Analytics 4 measurement ID (G-XXXXXXXXXX). When set and GTM is absent, GA4 loads via gtag.js.
+ * Blank = disabled.
+ */
+if (!defined('GA4_MEASUREMENT_ID')) {
+    define('GA4_MEASUREMENT_ID', '402273334');
+}
+
+/**
+ * Google Ads conversion ID (AW-XXXXXXXXX). Blank = disabled.
+ */
+if (!defined('GADS_CONVERSION_ID')) {
+    define('GADS_CONVERSION_ID', '');
+}
+
+/**
  * Phone number.
  *
  * CONTACT_PHONE is what visitors see; WHATSAPP_NUMBER is the same line in E.164
@@ -189,8 +212,8 @@ define('SITE_ORIGIN', (static function (): string {
         'admin.' . SITE_DOMAIN,
     ];
 
-    // Local development hosts, with any port.
-    $isLocal = (bool)preg_match('/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/', $host);
+    // Local development hosts (only permitted when APP_DEBUG is enabled).
+    $isLocal = APP_DEBUG && (bool)preg_match('/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/', $host);
 
     if ($isLocal || in_array($host, $allowed, true)) {
         return (IS_HTTPS ? 'https://' : 'http://') . $host;

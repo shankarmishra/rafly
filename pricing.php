@@ -431,36 +431,4 @@ require __DIR__ . '/partials/header.php';
 
 </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Live Complexity Score Calculator
-    const checks = document.querySelectorAll('.calc-check');
-    const scoreText = document.getElementById('calcScoreText');
-    const tierText = document.getElementById('calcTierText');
-    const heroBadge = document.getElementById('heroScoreBadge');
-
-    function updateScore() {
-        let score = 20; // Base score
-        checks.forEach(chk => {
-            if (chk.checked) {
-                score += parseInt(chk.getAttribute('data-score') || '0', 10);
-            }
-        });
-        score = Math.min(score, 100);
-
-        if (scoreText) scoreText.textContent = `${score} / 100`;
-        if (heroBadge) heroBadge.textContent = `SCORE: ${score}/100`;
-
-        let tier = 'Starter Scope';
-        if (score >= 45 && score < 75) tier = 'Growth Build';
-        if (score >= 75) tier = 'Enterprise System';
-
-        if (tierText) tierText.textContent = tier;
-    }
-
-    checks.forEach(chk => chk.addEventListener('change', updateScore));
-    updateScore();
-});
-</script>
-
 <?php require __DIR__ . '/partials/tail.php'; ?>

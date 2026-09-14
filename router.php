@@ -123,13 +123,15 @@ if (isset($oldToClean[$path]) && $redirect('/' . $oldToClean[$path])) {
 }
 
 $bareServiceToCanonical = [
-    'web-development'         => 'services/web-development',
-    'web-security'            => 'services/web-security',
-    'marketing-advertisement' => 'services/performance-marketing',
-    'content-creation'        => 'services/content-creation',
-    'ecommerce-support'       => 'services/ecommerce',
-    'ecommerce'               => 'services/ecommerce',
-    'lead-automation'         => 'services/lead-automation',
+    'web-development'                  => 'services/web-development',
+    'web-security'                     => 'services/web-security',
+    'marketing-advertisement'          => 'services/performance-marketing',
+    'content-creation'                 => 'services/content-creation',
+    'ecommerce-support'                => 'services/ecommerce',
+    'ecommerce'                        => 'services/ecommerce',
+    'lead-automation'                  => 'services/lead-automation',
+    'services/marketing-advertisement' => 'services/performance-marketing',
+    'services/ecommerce-support'      => 'services/ecommerce',
 ];
 if (isset($bareServiceToCanonical[$path]) && $redirect('/' . $bareServiceToCanonical[$path])) {
     return true;

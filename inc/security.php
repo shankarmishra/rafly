@@ -43,7 +43,7 @@ function send_security_headers(string $mode = 'page'): void
         // bootstrap snippet is normally inline, so it was ported into a
         // same-origin file (js/pixel.js) instead of relaxing this directive;
         // connect.facebook.net is only what that file actually fetches.
-        "script-src 'self' https://connect.facebook.net https://unpkg.com https://cdn.lordicon.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
+        "script-src 'self' https://connect.facebook.net https://www.googletagmanager.com https://unpkg.com https://cdn.lordicon.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
 
         // style-src still needs 'unsafe-inline': the hero and illustration SVGs
         // drive their geometry from inline style="--a: …; offset-path: …",
@@ -56,10 +56,11 @@ function send_security_headers(string $mode = 'page'): void
         // SVG sprite, so no third-party origin is allowed anywhere any more.
         "font-src 'self'",
 
-        // facebook.com & connect.facebook.net: the Pixel's <noscript> fallback <img>,
-        // error logger and fbevents beacon target facebook.com and connect.facebook.net.
-        "img-src 'self' data: https://www.facebook.com https://connect.facebook.net",
-        "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://lottie.host https://unpkg.com https://assets1.lottiefiles.com https://assets2.lottiefiles.com https://assets3.lottiefiles.com https://assets4.lottiefiles.com https://assets5.lottiefiles.com https://assets6.lottiefiles.com https://assets7.lottiefiles.com https://assets8.lottiefiles.com https://assets9.lottiefiles.com https://assets10.lottiefiles.com https://cdn.lordicon.com",
+        "frame-src 'self' https://www.googletagmanager.com",
+
+        // facebook.com & connect.facebook.net & googletagmanager.com: fallback images & telemetry beacons.
+        "img-src 'self' data: https://www.facebook.com https://connect.facebook.net https://www.googletagmanager.com https://ssl.gstatic.com https://www.google-analytics.com",
+        "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://lottie.host https://unpkg.com https://assets1.lottiefiles.com https://assets2.lottiefiles.com https://assets3.lottiefiles.com https://assets4.lottiefiles.com https://assets5.lottiefiles.com https://assets6.lottiefiles.com https://assets7.lottiefiles.com https://assets8.lottiefiles.com https://assets9.lottiefiles.com https://assets10.lottiefiles.com https://cdn.lordicon.com",
         "media-src 'self'",
     ];
 

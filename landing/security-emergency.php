@@ -32,12 +32,12 @@ require_once dirname(__DIR__) . '/partials/social-rail.php';
         <div class="container" style="position: relative; z-index: 2;">
             <?= breadcrumbs($crumbs) ?>
             <div class="sec-head-split" style="align-items: flex-start; margin-top: 1rem;">
-                <div style="max-width: 680px;">
-                    <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; display: inline-block;">PROTECT PILLAR — 24/7 EMERGENCY RESPONSE</span>
-                    <h1 class="display" style="font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 800; color: #ffffff !important; line-height: 1.1;">
+                <div style="max-width: 680px; width: 100%;">
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; display: inline-block; max-width: 100%; white-space: normal;">PROTECT PILLAR — 24/7 EMERGENCY RESPONSE</span>
+                    <h1 class="display" style="font-size: clamp(1.6rem, 5vw, 3.5rem); font-weight: 800; color: #ffffff !important; line-height: 1.1; overflow-wrap: break-word; word-break: break-word;">
                         Hacked Site or Google Blacklist? <span style="color: #f87171 !important;">1-Hour Incident Triage SLA.</span>
                     </h1>
-                    <p class="lead" style="color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-top: 1rem;">
+                    <p class="lead" style="color: #94a3b8; font-size: clamp(0.95rem, 2.5vw, 1.1rem); line-height: 1.6; margin-top: 1rem;">
                         Don't lose customers, search traffic, or ad revenue. We quarantine malicious scripts, clean infected databases, resubmit Google security reviews, and harden your site against future attacks.
                     </p>
 
@@ -67,7 +67,7 @@ require_once dirname(__DIR__) . '/partials/social-rail.php';
                 </div>
 
                 <!-- EMERGENCY LEAD FORM CARD -->
-                <div style="width: 100%; max-width: 460px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--r-2xl); padding: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                <div style="width: 100%; max-width: 460px; box-sizing: border-box; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--r-2xl); padding: clamp(1.25rem, 4vw, 2rem); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                         <h2 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; margin: 0;">Emergency Cleanup Request</h2>
                         <span class="pulse-dot-red"></span>
@@ -146,13 +146,13 @@ require_once dirname(__DIR__) . '/partials/social-rail.php';
             </div>
 
             <!-- HOTLINE STRIP -->
-            <div style="margin-top: 3rem; padding: 2rem; background: #0f172a; color: #ffffff; border-radius: var(--r-2xl); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;">
+            <div style="margin-top: 3rem; padding: clamp(1.25rem, 4vw, 2rem); background: #0f172a; color: #ffffff; border-radius: var(--r-2xl); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; box-sizing: border-box; max-width: 100%;">
                 <div>
                     <h3 style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin: 0 0 0.4rem 0;">Prefer Immediate Direct Contact?</h3>
                     <p style="font-size: 0.95rem; color: #94a3b8; margin: 0;">24/7 Security Emergency Hotline: <strong>+91 8796882212</strong></p>
                 </div>
-                <div>
-                    <a class="btn btn-primary btn-lg" target="_blank" rel="noopener" href="<?= e(whatsapp_link('EMERGENCY: My website is hacked/flagged and I need urgent security assistance.')) ?>" style="background: #ef4444; border-color: #ef4444;">
+                <div style="max-width: 100%;">
+                    <a class="btn btn-primary btn-lg" target="_blank" rel="noopener" href="<?= e(whatsapp_link('EMERGENCY: My website is hacked/flagged and I need urgent security assistance.')) ?>" style="background: #ef4444; border-color: #ef4444; max-width: 100%; white-space: normal; text-align: center;">
                         <?= icon('whatsapp', 'icon-fill') ?> WhatsApp Security Hotline (24/7)
                     </a>
                 </div>

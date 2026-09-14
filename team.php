@@ -313,19 +313,4 @@ require __DIR__ . '/partials/header.php';
 
 </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Discipline card click to scroll to intake console
-    const discCards = document.querySelectorAll('.team-disc-card-light');
-    discCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const intakeSection = document.getElementById('intake');
-            if (intakeSection) {
-                intakeSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-});
-</script>
-
 <?php require __DIR__ . '/partials/tail.php'; ?>

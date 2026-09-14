@@ -457,49 +457,4 @@ require __DIR__ . '/partials/header.php';
 
 </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Custom Cursor Follower
-    const cursor = document.getElementById('workCursor');
-    if (cursor && window.matchMedia('(pointer: fine)').matches) {
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-        });
-
-        document.querySelectorAll('.work-card-light, .btn, .work-filter-btn').forEach(interactiveEl => {
-            interactiveEl.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
-            interactiveEl.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
-        });
-    }
-
-    // Category Filter Pills with Smooth Transitions
-    const filterBtns = document.querySelectorAll('.work-filter-btn');
-    const cards = document.querySelectorAll('.work-card-light');
-
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('is-active'));
-            btn.classList.add('is-active');
-
-            const filter = btn.getAttribute('data-filter');
-            cards.forEach(card => {
-                const categories = card.getAttribute('data-category');
-                if (filter === 'all' || categories.includes(filter)) {
-                    card.style.display = 'grid';
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 50);
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(15px)';
-                    setTimeout(() => card.style.display = 'none', 300);
-                }
-            });
-        });
-    });
-});
-</script>
-
 <?php require __DIR__ . '/partials/tail.php'; ?>

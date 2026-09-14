@@ -188,6 +188,174 @@
     }
 
     /* --------------------------------------------------------------------
+       5. Page Component Interactions (Tilt, Filtering, Calculators, Scroll)
+       -------------------------------------------------------------------- */
+    function initAboutEcoStage() {
+        var stage = doc.querySelector('.rafly-eco-stage');
+        if (!stage || reduced) return;
+        var ticking = false, rect = null;
+        stage.addEventListener('mouseenter', function() { rect = stage.getBoundingClientRect(); });
+        stage.addEventListener('mousemove', function (e) {
+            if (ticking) return;
+            ticking = true;
+            var clientX = e.clientX, clientY = e.clientY;
+            requestAnimationFrame(function() {
+                if (!rect) rect = stage.getBoundingClientRect();
+                var x = clientX - rect.left - rect.width / 2;
+                var y = clientY - rect.top - rect.height / 2;
+                stage.style.transform = 'perspective(1000px) rotateY(' + (x * 0.025) + 'deg) rotateX(' + (-y * 0.025) + 'deg) translateY(-4px)';
+                ticking = false;
+            });
+        });
+        stage.addEventListener('mouseleave', function () {
+            rect = null;
+            stage.style.transform = '';
+        });
+    }
+
+    function initSvcEcoStages() {
+        if (reduced) return;
+        var ecoStages = doc.querySelectorAll('.svc-eco-stage');
+        ecoStages.forEach(function (stage) {
+            stage.style.transition = 'transform 0.15s ease-out';
+            var ticking = false, rect = null;
+            stage.addEventListener('mouseenter', function() { rect = stage.getBoundingClientRect(); });
+            stage.addEventListener('mousemove', function (e) {
+                if (ticking) return;
+                ticking = true;
+                var clientX = e.clientX, clientY = e.clientY;
+                requestAnimationFrame(function() {
+                    if (!rect) rect = stage.getBoundingClientRect();
+                    var x = clientX - rect.left;
+                    var y = clientY - rect.top;
+                    var centerX = rect.width / 2;
+                    var centerY = rect.height / 2;
+                    var rotateX = ((y - centerY) / centerY) * -6;
+                    var rotateY = ((x - centerX) / centerX) * 6;
+                    stage.style.transform = 'perspective(1000px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) scale(1.01)';
+                    ticking = false;
+                });
+            });
+            stage.addEventListener('mouseleave', function () {
+                rect = null;
+                stage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        });
+    }
+
+    function initLocHubCards() {
+        var cards = doc.querySelectorAll('.loc-hub-card-light');
+        if (!cards.length) return;
+        cards.forEach(function (card) {
+            if (!reduced) {
+                card.addEventListener('mousemove', function (e) {
+                    var rect = card.getBoundingClientRect();
+                    var x = e.clientX - rect.left;
+                    var y = e.clientY - rect.top;
+                    var centerX = rect.width / 2;
+                    var centerY = rect.height / 2;
+                    var rotateX = ((y - centerY) / centerY) * -5;
+                    var rotateY = ((x - centerX) / centerX) * 5;
+                    card.style.transform = 'translateY(-6px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg)';
+                });
+                card.addEventListener('mouseleave', function () {
+                    card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+                });
+            }
+            card.addEventListener('click', function () {
+                var intakeSection = doc.getElementById('intake');
+                if (intakeSection) {
+                    intakeSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    function initTeamDiscCards() {
+        var discCards = doc.querySelectorAll('.team-disc-card-light');
+        discCards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                var intakeSection = doc.getElementById('intake');
+                if (intakeSection) {
+                    intakeSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    function initPricingCalculator() {
+        var checks = doc.querySelectorAll('.calc-check');
+        if (!checks.length) return;
+        var scoreText = doc.getElementById('calcScoreText');
+        var tierText = doc.getElementById('calcTierText');
+        var heroBadge = doc.getElementById('heroScoreBadge');
+
+        function updateScore() {
+            var score = 20;
+            checks.forEach(function (chk) {
+                if (chk.checked) {
+                    score += parseInt(chk.getAttribute('data-score') || '0', 10);
+                }
+            });
+            score = Math.min(score, 100);
+
+            if (scoreText) scoreText.textContent = score + ' / 100';
+            if (heroBadge) heroBadge.textContent = 'SCORE: ' + score + '/100';
+
+            var tier = 'Starter Scope';
+            if (score >= 45 && score < 75) tier = 'Growth Build';
+            if (score >= 75) tier = 'Enterprise System';
+
+            if (tierText) tierText.textContent = tier;
+        }
+
+        checks.forEach(function (chk) { chk.addEventListener('change', updateScore); });
+        updateScore();
+    }
+
+    function initCaseStudiesPage() {
+        var cursor = doc.getElementById('workCursor');
+        if (cursor && window.matchMedia('(pointer: fine)').matches) {
+            doc.addEventListener('mousemove', function (e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            doc.querySelectorAll('.work-card-light, .btn, .work-filter-btn').forEach(function (interactiveEl) {
+                interactiveEl.addEventListener('mouseenter', function () { cursor.classList.add('is-hovering'); });
+                interactiveEl.addEventListener('mouseleave', function () { cursor.classList.remove('is-hovering'); });
+            });
+        }
+
+        var filterBtns = doc.querySelectorAll('.work-filter-btn');
+        var cards = doc.querySelectorAll('.work-card-light');
+        if (!filterBtns.length || !cards.length) return;
+
+        filterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                filterBtns.forEach(function (b) { b.classList.remove('is-active'); });
+                btn.classList.add('is-active');
+
+                var filter = btn.getAttribute('data-filter');
+                cards.forEach(function (card) {
+                    var categories = card.getAttribute('data-category') || '';
+                    if (filter === 'all' || categories.indexOf(filter) !== -1) {
+                        card.style.display = 'grid';
+                        setTimeout(function () {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(15px)';
+                        setTimeout(function () { card.style.display = 'none'; }, 300);
+                    }
+                });
+            });
+        });
+    }
+
+    /* --------------------------------------------------------------------
        Utils
        -------------------------------------------------------------------- */
     function each(selector, fn) {
@@ -199,6 +367,12 @@
         initSplit();
         initCounters();
         initMarquees();
+        initAboutEcoStage();
+        initSvcEcoStages();
+        initLocHubCards();
+        initTeamDiscCards();
+        initPricingCalculator();
+        initCaseStudiesPage();
     }
 
     if (doc.readyState === 'loading') {
@@ -209,3 +383,4 @@
 
     window.RaflyMotion = { init: init, splitText: splitText, onceInView: onceInView };
 }());
+

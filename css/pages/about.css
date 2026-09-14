@@ -561,7 +561,8 @@
 
 /* Responsive Scaling */
 @media (max-width: 640px) {
-    .rafly-eco-stage { padding: 1rem; }
+    .rafly-eco-stage { padding: 1rem; overflow: hidden; max-width: 100%; box-sizing: border-box; }
+    .rafly-eco-header { flex-wrap: wrap; gap: 0.4rem; }
     .rafly-eco-canvas-container { height: 380px; }
     .rafly-eco-pillar-card { padding: 0.45rem 0.65rem; }
     .rafly-eco-pillar-label { font-size: 0.68rem; }
@@ -573,3 +574,38 @@
     .rafly-eco-core-hub { width: 76px; height: 76px; }
     .rafly-eco-footer-bar { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
+
+@media (max-width: 480px) {
+    .rafly-eco-canvas-container { height: 400px; }
+    .rafly-eco-core-hub { width: 68px; height: 68px; }
+    .rafly-eco-pillar-card { padding: 0.35rem 0.5rem; max-width: 125px; }
+    .rafly-eco-pillar-icon { display: none; }
+    .pillar-top-left { top: 6px; left: 6px; }
+    .pillar-top-right { top: 6px; right: 6px; }
+    .pillar-bot-left { bottom: 6px; left: 6px; }
+    .pillar-bot-right { bottom: 6px; right: 6px; }
+}
+
+@media (max-width: 430px) {
+    .branch-figure {
+        --branch-r: clamp(75px, 24vw, 95px);
+    }
+    .branch-item {
+        width: 86px;
+        margin-left: -43px;
+        margin-top: -22px;
+    }
+    .branch-dot {
+        width: 38px;
+        height: 38px;
+    }
+    .branch-dot .icon {
+        width: 16px;
+        height: 16px;
+    }
+    .branch-label {
+        font-size: 0.58rem;
+        padding: 1px 4px;
+    }
+}
+

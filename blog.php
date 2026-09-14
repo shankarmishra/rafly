@@ -1,6 +1,35 @@
 <?php
 require __DIR__ . '/inc/bootstrap.php';
 
+$crumbs = [
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Blog', 'url' => '/blog'],
+];
+
+// Fetch published posts
+$posts = [];
+if (db_available()) {
+    $posts = all(
+        "SELECT p.id, p.slug, p.title, p.tag, p.excerpt, p.meta_desc,
+                p.published_at, p.updated_at, p.read_minutes,
+                m.filename AS cover, m.alt AS cover_alt,
+                c.name AS category_name, c.slug AS category_slug
+           FROM posts p
+           LEFT JOIN media m ON m.id = p.cover_media_id
+           LEFT JOIN categories c ON c.id = (SELECT category_id FROM post_categories WHERE post_id = p.id LIMIT 1)
+          WHERE p.status = 'published'
+            AND p.published_at IS NOT NULL
+            AND p.published_at <= now()
+       ORDER BY p.published_at DESC"
+    );
+} elseif (seed_preview_enabled()) {
+    $posts = seed_preview_posts();
+}
+
+$schemaItems = array_map(function($p) {
+    return ['name' => (string)$p['title'], 'url' => '/blog/' . rawurlencode((string)$p['slug'])];
+}, $posts);
+
 $page = [
     'id'        => 'blog',
     'title'     => 'Editorial Intelligence Archive | RAFly Digital Growth Partner',
@@ -8,11 +37,10 @@ $page = [
     'bodyClass' => 'page-blog',
     'styles'    => ['home', 'home-scenes', 'blog'],
     'module'    => 'home',
-];
-
-$crumbs = [
-    ['name' => 'Home', 'url' => '/'],
-    ['name' => 'Blog', 'url' => '/blog'],
+    'schema'    => [
+        schema_breadcrumbs($crumbs),
+        schema_collection_list('RAFly Technical Insights Archive', '/blog', $schemaItems)
+    ],
 ];
 
 require __DIR__ . '/partials/head.php';
@@ -45,7 +73,7 @@ require __DIR__ . '/partials/header.php';
                 </lottie-player>
             </div>
             <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
-                <span class="telemetry-pill-mono">📚 40+ Technical Articles</span>
+                <span class="telemetry-pill-mono">📚 <?= count($posts) ?> Published Articles</span>
                 <span class="telemetry-pill-mono">⚙️ PHP 8.3 &amp; Redis Specs</span>
                 <span class="telemetry-pill-mono">🔒 Zero-Trust Audits</span>
             </div>
@@ -68,47 +96,55 @@ require __DIR__ . '/partials/header.php';
                 </div>
             </div>
 
-            <!-- FEATURED ARTICLE CARD -->
-            <div class="machined-card" style="padding: 2.5rem; margin-bottom: 3rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-                    <span class="machined-badge machined-badge-blue">FEATURED READ &bull; 8 MIN READ</span>
-                    <span class="telemetry-pill-mono">SEPTEMBER 2026</span>
-                </div>
-                <h3 style="font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: #050f33; margin-bottom: 1rem; line-height: 1.25;">
-                    Why Single-Page Applications Fail Without Edge Caching: A PHP 8.3 &amp; Redis Architecture Study
-                </h3>
-                <p style="font-size: 1.05rem; color: #475569; line-height: 1.65; margin-bottom: 1.75rem; max-width: 850px;">
-                    An in-depth technical analysis comparing traditional SPA client-rendering overhead against server-rendered PHP 8.3 decoupled caching. How sub-50ms LCP directly impacts conversion funnel metrics.
-                </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-                    <span class="telemetry-pill-mono">BY RAFLY CORE ENGINEERING TEAM</span>
-                    <a class="btn btn-primary" href="/blog">Read Article <?= icon('arrow-right') ?></a>
-                </div>
-            </div>
-
-            <!-- ARTICLE GRID -->
-            <div class="grid grid-3" style="gap: 1.5rem;">
-                <div class="machined-card">
-                    <span class="machined-badge machined-badge-red" style="margin-bottom: 0.75rem;">SECURITY &bull; 5 MIN READ</span>
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.6rem; line-height: 1.35;">Zero-Trust Password Hashing with Argon2id</h3>
-                    <p style="font-size: 0.9rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem;">Migrating legacy MD5/Bcrypt authentication tables to memory-hard Argon2id parameters.</p>
-                    <a href="/blog" style="font-family: var(--font-mono); font-size: 0.8rem; color: #0a63ff; font-weight: 700;">Read Article →</a>
+            <?php if (!empty($posts)): ?>
+                <?php $featured = $posts[0]; $gridPosts = array_slice($posts, 1); ?>
+                <!-- FEATURED ARTICLE CARD -->
+                <div class="machined-card" style="padding: 2.5rem; margin-bottom: 3rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <span class="machined-badge machined-badge-blue">FEATURED READ &bull; <?= (int)($featured['read_minutes'] ?? 5) ?> MIN READ</span>
+                        <span class="telemetry-pill-mono"><?= !empty($featured['published_at']) ? strtoupper(date('F Y', strtotime($featured['published_at']))) : 'FEATURED' ?></span>
+                    </div>
+                    <h3 style="font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: #050f33; margin-bottom: 1rem; line-height: 1.25;">
+                        <?= e($featured['title']) ?>
+                    </h3>
+                    <p style="font-size: 1.05rem; color: #475569; line-height: 1.65; margin-bottom: 1.75rem; max-width: 850px;">
+                        <?= e($featured['meta_desc'] ?: $featured['excerpt'] ?: '') ?>
+                    </p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                        <span class="telemetry-pill-mono">BY <?= e(strtoupper($featured['author_name'] ?? 'RAFLY CORE ENGINEERING TEAM')) ?></span>
+                        <a class="btn btn-primary" href="/blog/<?= e(rawurlencode($featured['slug'])) ?>">Read Article <?= icon('arrow-right') ?></a>
+                    </div>
                 </div>
 
-                <div class="machined-card">
-                    <span class="machined-badge machined-badge-green" style="margin-bottom: 0.75rem;">GROWTH &bull; 6 MIN READ</span>
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.6rem; line-height: 1.35;">Server-Side Meta CAPI vs Client-Side Pixel</h3>
-                    <p style="font-size: 0.88rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem;">How iOS 14.5+ ad blocking degrades attribution and how server webhooks restore signal accuracy.</p>
-                    <a href="/blog" style="font-family: var(--font-mono); font-size: 0.8rem; color: #0a63ff; font-weight: 700;">Read Article →</a>
+                <?php if ($gridPosts): ?>
+                    <!-- ARTICLE GRID -->
+                    <div class="grid grid-3" style="gap: 1.5rem;">
+                        <?php foreach ($gridPosts as $p): ?>
+                        <div class="machined-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                    <span class="machined-badge machined-badge-purple"><?= e(strtoupper($p['category_name'] ?? $p['tag'] ?? 'ARTICLE')) ?> &bull; <?= (int)($p['read_minutes'] ?? 5) ?> MIN</span>
+                                </div>
+                                <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.6rem; line-height: 1.35;">
+                                    <?= e($p['title']) ?>
+                                </h3>
+                                <p style="font-size: 0.9rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem;">
+                                    <?= e($p['meta_desc'] ?: $p['excerpt'] ?: '') ?>
+                                </p>
+                            </div>
+                            <div>
+                                <a href="/blog/<?= e(rawurlencode($p['slug'])) ?>" style="font-family: var(--font-mono); font-size: 0.82rem; color: #0a63ff; font-weight: 700; text-decoration: none;">Read Article &rarr;</a>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php else: ?>
+                <div class="machined-card text-center" style="padding: 4rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #050f33; margin-bottom: 0.5rem;">TECHNICAL BRIEFINGS COMING SOON</h3>
+                    <p style="font-size: 1rem; color: #475569; margin: 0;">Our engineering team is preparing in-depth architectural breakdowns. Subscribe below for launch updates.</p>
                 </div>
-
-                <div class="machined-card">
-                    <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.75rem;">CONTENT &bull; 4 MIN READ</span>
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.6rem; line-height: 1.35;">Optimizing 9:16 Video Pipelines for Retention</h3>
-                    <p style="font-size: 0.88rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem;">A visual breakdown of NLE editing timelines, sound design triggers, and 3-second hook structures.</p>
-                    <a href="/blog" style="font-family: var(--font-mono); font-size: 0.8rem; color: #0a63ff; font-weight: 700;">Read Article →</a>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
     </section>
 

@@ -45,15 +45,31 @@
 
         var last = window.scrollY;
         var ticking = false;
+        var isStuck = false;
+        var isHidden = false;
 
         function update() {
             var y = window.scrollY;
-            header.classList.toggle('is-stuck', y > 12);
+
+            var newStuck = y > 12;
+            if (newStuck !== isStuck) {
+                isStuck = newStuck;
+                header.classList.toggle('is-stuck', isStuck);
+            }
 
             var menuOpen = body.classList.contains('nav-open') ||
                            body.classList.contains('modal-open');
-            if (!menuOpen && y > 200 && y > last + 6) header.classList.add('is-hidden');
-            else if (y < last - 6 || y < 200) header.classList.remove('is-hidden');
+            var newHidden = isHidden;
+            if (!menuOpen && y > 200 && y > last + 8) {
+                newHidden = true;
+            } else if (y < last - 8 || y < 200) {
+                newHidden = false;
+            }
+
+            if (newHidden !== isHidden) {
+                isHidden = newHidden;
+                header.classList.toggle('is-hidden', isHidden);
+            }
 
             last = y;
             ticking = false;

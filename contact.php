@@ -23,7 +23,7 @@ require __DIR__ . '/partials/header.php';
 
     <!-- 01 — HERO: START A CONVERSATION & PROJECT INTAKE PIPELINE (LIGHT THEME) -->
     <section class="section hero sig-hero blueprint-canvas" style="min-height: 85vh; display: flex; align-items: center; padding-block: 4rem; position: relative; background: #ffffff;">
-        <div class="container hero-grid" style="display: grid; grid-template-columns: 48% 52%; gap: 2.5rem; align-items: center; width: 100%;">
+        <div class="container hero-grid">
             <div>
                 <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.25rem;">
                     <span class="glow-dot-active"></span> DIRECT BUILD CHANNEL
