@@ -372,6 +372,69 @@
         check();
     }
 
+    /* ====================================================================
+       Nav Pill Spotlight — cursor-following spotlight glow
+       ==================================================================== */
+    function initNavSpotlight() {
+        var pill = doc.querySelector('.nav-pill');
+        if (!pill) return;
+
+        pill.addEventListener('mousemove', function (e) {
+            var rect = pill.getBoundingClientRect();
+            var x = ((e.clientX - rect.left) / rect.width) * 100;
+            var y = ((e.clientY - rect.top) / rect.height) * 100;
+            pill.style.setProperty('--nav-x', x.toFixed(2) + '%');
+            pill.style.setProperty('--nav-y', y.toFixed(2) + '%');
+        });
+    }
+
+    /* ====================================================================
+       Social Rail Dock — macOS dock physical magnification scaling & 3D Tilt
+       ==================================================================== */
+    function initSocialDockEffects() {
+        var linksContainer = doc.querySelector('.social-rail-links');
+        if (!linksContainer) return;
+        var links = Array.prototype.slice.call(linksContainer.querySelectorAll('a'));
+
+        links.forEach(function (link, index) {
+            link.addEventListener('mouseenter', function () {
+                var prev = links[index - 1];
+                var next = links[index + 1];
+                if (prev) prev.style.transform = 'scale(1.14) translateY(-1px)';
+                if (next) next.style.transform = 'scale(1.14) translateY(-1px)';
+            });
+
+            link.addEventListener('mouseleave', function () {
+                links.forEach(function (l) { l.style.transform = ''; });
+            });
+        });
+    }
+
+    function initSocial3DTilt() {
+        var rail = doc.querySelector('.social-rail');
+        var glass = doc.querySelector('.social-rail-glass');
+        if (!rail || !glass) return;
+
+        doc.addEventListener('mousemove', function (e) {
+            var rect = rail.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+
+            var dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+            if (dist < 260) {
+                var tiltY = ((e.clientX - cx) / 260) * 16;
+                var tiltX = -((e.clientY - cy) / 260) * 16;
+                glass.style.transform = 'perspective(800px) rotateY(' + tiltY.toFixed(2) + 'deg) rotateX(' + tiltX.toFixed(2) + 'deg)';
+            } else {
+                glass.style.transform = '';
+            }
+        });
+
+        rail.addEventListener('mouseleave', function () {
+            glass.style.transform = '';
+        });
+    }
+
     /* ==================================================================== */
     function init() {
         initHeader();
@@ -382,6 +445,9 @@
         initToTop();
         initScrollSpy();
         initSocialRailFooterObserver();
+        initNavSpotlight();
+        initSocialDockEffects();
+        initSocial3DTilt();
     }
 
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init);

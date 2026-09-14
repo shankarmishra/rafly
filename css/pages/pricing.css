@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Pricing Page — 100% LIGHT THEME & 7-DIMENSION COMPLEXITY MATRIX
+   ========================================================================== */
+
+.page-pricing {
+    --price-accent-blue: #0a63ff;
+    --price-cyan: #0284c7;
+    --price-purple: #9333ea;
+    --price-green: #16a34a;
+    background-color: #f8fafc;
+}
+
+/* --- Hero Section (LIGHT THEME) --- */
+.price-hero-light {
+    position: relative;
+    background-color: #ffffff;
+    background-image: 
+        radial-gradient(color-mix(in srgb, var(--blue, #0a63ff) 12%, transparent) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(10, 99, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10, 99, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px, 48px 48px, 48px 48px;
+    color: #050f33;
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    overflow: hidden;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.price-hero-light::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: 10%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(10, 99, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.price-hero-grid {
+    display: grid;
+    grid-template-columns: 52% 48%;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 992px) {
+    .price-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.price-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #050f33;
+    margin-bottom: 1.2rem;
+}
+
+.price-hero-title span {
+    color: #0a63ff;
+    background: linear-gradient(135deg, #0a63ff 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Heptagon Radar Box (LIGHT THEME) */
+.price-radar-box-light {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 15px 40px rgba(10, 99, 255, 0.08);
+    position: relative;
+}
+
+/* --- 7 Dimensions Interactive Accordion --- */
+.price-accordion-list {
+    display: grid;
+    gap: 1rem;
+    max-width: 900px;
+    margin-inline: auto;
+    margin-block: 2.5rem;
+}
+
+.price-dimension-item-light {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(5, 15, 51, 0.03);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.price-dimension-item-light[open] {
+    border-color: #0a63ff;
+    box-shadow: 0 10px 25px rgba(10, 99, 255, 0.1);
+}
+
+.price-dimension-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.75rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    background: #ffffff;
+}
+
+.price-dimension-head::-webkit-details-marker {
+    display: none;
+}
+
+.price-dim-num {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0a63ff;
+    background: rgba(10, 99, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-right: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.price-dimension-item-light[open] .price-dim-num {
+    background: #0a63ff;
+    color: #ffffff;
+}
+
+.price-dim-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #050f33;
+    margin: 0;
+}
+
+.price-dim-arrow {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #0a63ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.price-dimension-item-light[open] .price-dim-arrow {
+    transform: rotate(180deg);
+    background: #0a63ff;
+    color: #ffffff;
+}
+
+.price-dimension-body {
+    padding: 0 1.75rem 1.5rem calc(0.85rem + 2.5rem);
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    background: #ffffff;
+}
+
+/* --- Engagement Tier Cards --- */
+.price-tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-block: 3rem;
+}
+
+@media (max-width: 992px) {
+    .price-tiers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.price-tier-card-light {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 2.25rem 1.75rem;
+    box-shadow: 0 8px 25px rgba(5, 15, 51, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.price-tier-card-light:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(10, 99, 255, 0.12);
+}
+
+.price-tier-card-light.is-recommended {
+    border-color: #0a63ff;
+    box-shadow: 0 12px 35px rgba(10, 99, 255, 0.15);
+}
+
+.price-tier-card-light.is-recommended::before {
+    content: 'RECOMMENDED MODEL';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a63ff;
+    color: #ffffff;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+
+.price-tier-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #050f33;
+    margin-bottom: 0.5rem;
+}
+
+.price-tier-scope {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.price-tier-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.price-tier-features li {
+    font-size: 0.9rem;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.price-tier-features li svg {
+    color: #0a63ff;
+    flex-shrink: 0;
+}
+
+.price-reveal {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .price-tier-card-light, .price-dimension-item-light {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}

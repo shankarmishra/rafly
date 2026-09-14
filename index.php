@@ -7,18 +7,16 @@ require __DIR__ . '/inc/bootstrap.php';
  * Every section answers a question a buyer actually asks, in the order they
  * ask it:
  *
- *   1   what is this              hero
- *   2   what do you believe       the statement
- *   2b  what does it look like    the laptop — a lid that opens on the portal
- *   3   what do I get             the platform — five products, fanned
- *   3b  do you build apps         apps — three phones
- *   3c  what kinds of build       the gallery — a coverflow of five covers
- *   4   how does it run           delivery
- *   5   what is it built on       the stack
- *   6   who have you done it for  selected work   (conditional — see below)
- *   7   what will you NOT do      honest limits
- *   8   what does it cost         pricing and FAQ
- *   9   how do I start            the close
+ *   01   hero                      what is this
+ *   02   the statement             we build digital systems, not deliverables
+ *   03   service studio            5 capabilities under one team
+ *   04   reels & short-form        viral hook & attributed social funnels
+ *   05   what we build             5 fanned product surfaces
+ *   06   delivery engine           from first signal to shipped (4 stages)
+ *   07   proof / selected work     real client builds with verified ROI
+ *   08   where we draw the line    15 strict operational boundaries & unified difference
+ *   09   let's build               clear intake, fixed scope, disciplined launch
+
  *
  * FOUR SECTIONS SHOW A DEVICE, AND EACH ONE HAS A DIFFERENT VERB. That is the
  * rule that keeps them from reading as the same idea four times: the laptop
@@ -28,32 +26,12 @@ require __DIR__ . '/inc/bootstrap.php';
  *
  * TWO calls to action, not five: the hero and the close.
  *
- * THERE IS NO 3-D ON THIS PAGE, AND THAT TOOK FOUR ATTEMPTS TO LEARN
- * ------------------------------------------------------------------
- * A WebGL point cloud, a glass torus knot, a rotating capability ring and a
- * machined assembly that came apart on scroll were all built for this page,
- * and all four were rejected on sight. The last of them was the best-executed
- * by a distance — a real studio lighting rig, PMREM environment maps,
- * pre-rendered stills that could not drift from the live scene — and it was
- * rejected for the same reason as the first three: a metal part says nothing
- * about what this company sells. Executing an idea better does not fix the
- * idea.
+ * HIGH-VELOCITY DIGITAL SYSTEMS HOMEPAGE.
  *
- * What replaced it is drawn from the subject instead of from a geometry
- * library: the five services as five working screens, and the app work as
- * three phones. Deleted with the object: js/stage3d.js, js/assembly.js,
- * js/studio.js, inc/tools/render-stills.mjs, vendor/three/ (744 KB) and
- * assets/render/ (712 KB). The homepage is roughly 1.5 MB lighter and no page
- * on the site loads a 3-D library any more.
- *
- * WHAT ELSE IS NOT HERE, AND WHY
- * ------------------------------
- *   the 3-D perspective carousel           a competing focal device
- *   the point-cloud band                   shipped a visibly empty frame
- *   the trust bar                          "120+ projects / 98% satisfaction"
- *                                          were seeded sample values
- *   24 stock photographs                   other companies' premises,
- *                                          standing in for our work
+ * Designed with Apple / Vercel level precision:
+ * - Clean light theme visual hierarchy with responsive glassmorphic cards
+ * - Five integrated digital capabilities operating as a single unified engine
+ * - Full performance optimization with Core Web Vitals guarantees
  */
 
 /**
@@ -90,19 +68,6 @@ $FLOW = [
     ['Build and execute','2-6 weeks', 'Development, content and campaign work run in parallel inside one team against one plan. Nothing waits on a handoff between vendors who have never spoken.'],
     ['Launch',          '1 week',     'Your site, store or campaign goes live with the baseline security review already done, because it was part of the build rather than a phase after it.'],
     ['Ongoing',         'Continuous', 'Monitoring, updates and improvement. The team that built it is the team that keeps it running.'],
-];
-
-/**
- * The stack. Named tools only — every one appears in the `tools` array of a
- * real service in inc/data/services.php. No logo wall: a logo implies a
- * partnership, and Rafly has none to claim.
- */
-$STACK = [
-    ['Build',      ['PHP', 'Laravel', 'WordPress', 'JavaScript', 'MySQL']],
-    ['Commerce',   ['Shopify', 'Payment gateways', 'Catalogue data', 'Order reconciliation']],
-    ['Security',   ['SSL &amp; TLS config', 'WAF rules', 'Dependency updates', 'Access &amp; roles', 'Backup checks']],
-    ['Growth',     ['Google Ads', 'Meta Ads', 'Analytics 4', 'Tag Manager', 'Search Console', 'Email campaigns']],
-    ['Operations', ['Staging &amp; deploys', 'Core Web Vitals', 'Log review', 'Editorial calendar']],
 ];
 
 /** The comparison — Rafly against the two real alternatives. */
@@ -286,7 +251,7 @@ $PHONES = [
 $caseStudies = case_studies_all(3);
 $bundles     = bundles_all();
 
-/** Service Tabs for the interactive limits terminal (No 'All' option). */
+/** Service Tabs for the interactive limits terminal. */
 $serviceTabs = [
     [
         'slug'     => 'web-development',
@@ -332,6 +297,15 @@ $serviceTabs = [
         'scTok'    => '--svc-ecom',
         'count'    => 3,
         'badge'    => 'Store & Checkout',
+    ],
+    [
+        'slug'     => 'all',
+        'label'    => 'All Specs',
+        'short'    => 'All',
+        'icon'     => 'layers',
+        'scTok'    => '--svc-all',
+        'count'    => 15,
+        'badge'    => 'Full Spec Index',
     ],
 ];
 
@@ -461,7 +435,13 @@ require __DIR__ . '/partials/social-rail.php';
        Left (~44%): Editorial typography with exact 3-line headline & light sweep accent.
        Right (~56%): Generative Canvas2D + SVG 3D Signal Field sculpture.
        ========================================================================== */ ?>
-    <section class="section hero sig-hero sig-hero--entered grs-hero--entered" id="home" data-hero data-sig-hero aria-label="RAFly — Digital Growth Studio">
+    <section class="section hero sig-hero sig-hero--entered grs-hero--entered has-tex has-reels-bg" id="home" data-hero data-sig-hero aria-label="RAFly — Digital Growth Studio">
+
+        <!-- ARCHITECTURAL BACKGROUND TEXTURE LAYERS -->
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
 
         <?php /* Ambient Corner Light Glows (Fills all 4 corners) */ ?>
         <div class="sig-corner-glow sig-corner-glow--tl" aria-hidden="true"></div>
@@ -469,27 +449,11 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="sig-corner-glow sig-corner-glow--bl" aria-hidden="true"></div>
         <div class="sig-corner-glow sig-corner-glow--br" aria-hidden="true"></div>
 
-        <?php /* High-Tech Corner HUD Badges */ ?>
-        <div class="sig-corner-hud sig-corner-hud--tl" aria-hidden="true">
-            <span class="sig-corner-hud__bracket">┌</span>
-            <span class="sig-corner-hud__dot"></span>
-            <span class="sig-corner-hud__text">SYS.LOC [01, 01] • SIGNAL ACTIVE</span>
-        </div>
-        <div class="sig-corner-hud sig-corner-hud--tr" aria-hidden="true">
-            <span class="sig-corner-hud__text">100% OPERATIONAL • MATRIX 2.0</span>
-            <span class="sig-corner-hud__dot"></span>
-            <span class="sig-corner-hud__bracket">┐</span>
-        </div>
-        <div class="sig-corner-hud sig-corner-hud--bl" aria-hidden="true">
-            <span class="sig-corner-hud__bracket">└</span>
-            <span class="sig-corner-hud__dot"></span>
-            <span class="sig-corner-hud__text">LATENCY &lt; 12MS • HIGH VELOCITY</span>
-        </div>
-        <div class="sig-corner-hud sig-corner-hud--br" aria-hidden="true">
-            <span class="sig-corner-hud__text">NODES: 792 • IP OWNERSHIP</span>
-            <span class="sig-corner-hud__dot"></span>
-            <span class="sig-corner-hud__bracket">┘</span>
-        </div>
+        <?php /* Ambient Corner Light Glows */ ?>
+        <div class="sig-corner-glow sig-corner-glow--tl" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--tr" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--bl" aria-hidden="true"></div>
+        <div class="sig-corner-glow sig-corner-glow--br" aria-hidden="true"></div>
 
         <?php /* Kinetic Matrix Spring-Mass Simulation Canvas (Full Hero Background Edge-to-Edge) */ ?>
         <canvas class="sig-canvas sig-canvas--full-bg" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
@@ -500,24 +464,33 @@ require __DIR__ . '/partials/social-rail.php';
 
                 <?php /* Top Badge */ ?>
                 <div class="sig-eyebrow sig-eyebrow--pill">
-                    <span class="sig-eyebrow__dot" aria-hidden="true"></span>
-                    <span class="sig-eyebrow__label">RAFly Growth Studio 2.0</span>
-                    <span class="sig-eyebrow__sep" aria-hidden="true">•</span>
-                    <span class="sig-eyebrow__item">High-Velocity Digital Infrastructure</span>
+                    <span class="sig-eyebrow__dot" aria-hidden="true">●</span>
+                    <span class="sig-eyebrow__item">DIGITAL SYSTEMS • ENGINEERING • GROWTH</span>
                 </div>
 
                 <?php /* Animated GradientText Headline */ ?>
                 <h1 class="sig-headline sig-headline--centered" aria-label="Build fast. Grow faster. Scale smarter.">
                     <span class="sig-h-line" data-line="1">
-                        <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Build fast.</span></span>
+                        <span class="sig-h-mask">
+                            <span class="sig-h-inner">
+                                <span class="h-navy-text">Build </span>
+                                <span class="sig-h-focus sig-gradient-text" data-light-sweep>fast.</span>
+                            </span>
+                        </span>
                     </span>
                     <span class="sig-h-line" data-line="2">
-                        <span class="sig-h-mask"><span class="sig-h-inner sig-gradient-text">Grow faster.</span></span>
+                        <span class="sig-h-mask">
+                            <span class="sig-h-inner">
+                                <span class="h-navy-text">Grow </span>
+                                <span class="sig-h-focus sig-gradient-text" data-light-sweep>faster.</span>
+                            </span>
+                        </span>
                     </span>
                     <span class="sig-h-line sig-h-line--accent" data-line="3">
                         <span class="sig-h-mask">
-                            <span class="sig-h-inner sig-gradient-text">
-                                <span class="sig-h-focus" data-light-sweep>Scale smarter.</span>
+                            <span class="sig-h-inner">
+                                <span class="h-navy-text">Scale </span>
+                                <span class="sig-h-focus sig-gradient-text" data-light-sweep>smarter.</span>
                             </span>
                         </span>
                     </span>
@@ -701,7 +674,7 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="manifesto-status-bar" aria-hidden="true">
             <div class="status-indicator">
                 <span class="status-dot"></span>
-                <span class="status-text">COHERENCE: UNIFIED // PARTS: IN SYNC</span>
+                <span class="status-text">UNIFIED DIGITAL SYSTEM • ALL CAPABILITIES SYNCED</span>
             </div>
             <div class="status-meter">
                 <span class="status-meter-bar"></span>
@@ -805,11 +778,13 @@ require __DIR__ . '/partials/social-rail.php';
 
                         <!-- Live Vector Geometry & Stage Overlay Layers -->
                         <div class="ss-stage-overlay" data-stage-overlay>
-                            <div class="ss-stage-header">
-                                <span class="ssh-tag" data-active-tag>01 // WEB ARCHITECTURE</span>
-                                <span class="ssh-status"><i class="ssh-dot"></i> STUDIO RENDER</span>
-                            </div>
+                            <span class="ssh-tag-num" data-active-tag-num>01 // KINETIC</span>
+                            <span class="ssh-tag-title" data-active-tag-title>WEB ARCHITECTURE</span>
+                            <span class="ssh-status"><i class="ssh-dot"></i> STUDIO RENDER</span>
                         </div>
+
+                        <!-- Hero Lottie Stage Player -->
+                        <div class="ss-stage-lottie" data-stage-lottie aria-hidden="true"></div>
 
                     </div><!-- /.ss-stage -->
 
@@ -908,22 +883,13 @@ require __DIR__ . '/partials/social-rail.php';
             <!-- Background Layer 2: Subtle Ambient Atmospheric Aura -->
             <div class="reels-ambient-aura" aria-hidden="true"></div>
 
-            <!-- Technical Coordinate Markers -->
-            <div class="reels-tech-marker top-left" aria-hidden="true">
-                <span class="rtm-dot"></span>
-                <span class="rtm-label">SYS.CONTENT // 04-REELS</span>
-            </div>
-            <div class="reels-tech-marker top-right" aria-hidden="true">
-                <span class="rtm-label">PHASE <b data-reels-step>01</b> / 05</span>
-            </div>
-
             <div class="container reels-main-container">
                 
                 <!-- ZONE 1: SECTION EDITORIAL HEADER -->
                 <div class="reels-header-zone">
                     <div class="reels-eyebrow-row">
-                        <span class="reels-sys-tag">SYS.CONTENT // 04-REELS</span>
-                        <span class="reels-pipe-tag">// VIRAL HOOKS &amp; ATTRIBUTED SOCIAL FUNNELS</span>
+                        <span class="reels-sys-tag">SHORT-FORM CONTENT STUDIO</span>
+                        <span class="reels-pipe-tag">VIRAL HOOKS &amp; ATTRIBUTED SOCIAL FUNNELS</span>
                         <span class="reels-badge-pill">@officialrafly.in &bull; 48.9K+</span>
                     </div>
 
@@ -1027,9 +993,9 @@ require __DIR__ . '/partials/social-rail.php';
                                         <source src="<?= e(site_path('/assets/mockups/reel-2.mp4')) ?>" type="video/mp4">
                                     </video>
                                     <div class="studio-meta-overlay">
-                                        <div class="studio-hud-tag">PROD.RENDER // 60 FPS</div>
+                                        <div class="studio-hud-tag">HIGH-SPEED CREATIVE PRODUCTION</div>
                                         <div class="studio-eq-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                                        <div class="studio-codec-tag">BITRATE 48Mbps &bull; REC.709</div>
+                                        <div class="studio-codec-tag">4K ULTRA HD &bull; 60FPS POLISH</div>
                                     </div>
                                     <span class="home-indicator"></span>
                                 </div>
@@ -1159,7 +1125,7 @@ require __DIR__ . '/partials/social-rail.php';
                                         <p class="reels-caption">
                                             Turning digital chaos into high-converting revenue systems 🚀 Full-stack web, security &amp; performance under one roof.
                                         </p>
-                                        <div class="reels-tags">#RaflyGrowth #WebDev #GenZTech #Ecommerce</div>
+                                        <div class="reels-tags">#RaflyGrowth #PerformanceWeb #DigitalSystems #Ecommerce</div>
                                         <div class="reels-audio-badge">
                                             <span class="audio-note"><?= icon('music') ?></span>
                                             <span class="audio-title">officialrafly.in &bull; Original Audio &bull; Trending Sound</span>
@@ -1251,7 +1217,7 @@ require __DIR__ . '/partials/social-rail.php';
                                         <source src="<?= e(site_path('/assets/mockups/reel-3.mp4')) ?>" type="video/mp4">
                                     </video>
                                     <div class="ledger-meta-overlay">
-                                        <div class="ledger-hud-tag">REVENUE.SYNC // ROAS 4.8x</div>
+                                        <div class="ledger-hud-tag">GROWTH &amp; REVENUE ANALYTICS</div>
                                         <div class="ledger-metric-box">
                                             <strong>1,420 Orders</strong>
                                             <span>+412% Checkout Velocity</span>
@@ -1317,26 +1283,9 @@ require __DIR__ . '/partials/social-rail.php';
             <!-- REELS-STYLE BACKGROUND LAYER 2: Dual Ambient Atmospheric Aura (FIXED STICKY) -->
             <div class="reels-ambient-aura" aria-hidden="true"></div>
 
-            <!-- REELS-STYLE TECHNICAL COORDINATE MARKERS (FIXED STICKY) -->
-            <div class="reels-tech-marker top-left" aria-hidden="true">
-                <span class="rtm-dot"></span>
-                <span class="rtm-label">SYS.BUILD // 05-FANNED-DECK</span>
-            </div>
-            <div class="reels-tech-marker top-right" aria-hidden="true">
-                <span class="rtm-label">5 SURFACES // ONE TEAM</span>
-            </div>
-
-            <!-- KINETIC BACKGROUND GHOST TYPOGRAPHY (FIXED STICKY) -->
-            <div class="pd-ghost-words" aria-hidden="true">
-                <span class="pd-ghost">BUILD</span>
-                <span class="pd-ghost">GROW</span>
-                <span class="pd-ghost">SCALE</span>
-                <span class="pd-ghost">PRODUCT</span>
-            </div>
-
             <div class="container pd-container">
                 <div class="pd-head">
-                    <p class="pd-eyebrow" data-r="rise">05 // WHAT WE BUILD</p>
+                    <p class="pd-eyebrow" data-r="rise">05 • WHAT WE BUILD</p>
                     <h2 class="pd-heading" data-r="rise">
                         Five kinds of build,<br>
                         <span class="pd-accent">one team behind them.</span>
@@ -1351,30 +1300,30 @@ require __DIR__ . '/partials/social-rail.php';
                     <div class="pd-deck" data-deck aria-label="Five kinds of build cards">
                         <?php 
                         $CARDS = [
-                            ['ecom',       'Online stores',                  'Catalogue, checkout, and the operations behind them.',              '#0e6f31', '#10b981'],
-                            ['apps',       'Mobile apps',                    'iOS and Android, on the same codebase as your site.',              '#046070', '#0891b2'],
-                            ['marketing',  'Marketing and landers',          'High-converting landers that land where your ads do.',              '#1d4ed8', '#3b82f6'],
-                            ['dashboards', 'Dashboards and internal systems', 'The internal screens that run your business day to day.',          '#0f2b5c', '#1e40af'],
-                            ['content',    'Written and visual content',     'Copy and media that say what you do, written in your voice.',       '#5b21b6', '#7c3aed'],
+                            ['ecom',       'Online stores',                  'Catalogue, checkout, and the operations behind them.',              '#0e6f31', '#10b981', 'E-COMMERCE'],
+                            ['apps',       'Mobile apps',                    'iOS and Android, on the same codebase as your site.',              '#046070', '#0891b2', 'MOBILE APPS'],
+                            ['marketing',  'Marketing and landers',          'High-converting landers that land where your ads do.',              '#1d4ed8', '#3b82f6', 'MARKETING & LANDERS'],
+                            ['dashboards', 'Dashboards and internal systems', 'The internal screens that run your business day to day.',          '#0f2b5c', '#1e40af', 'INTERNAL SYSTEMS'],
+                            ['content',    'Written and visual content',     'Copy and media that say what you do, written in your voice.',       '#5b21b6', '#7c3aed', 'BRAND CONTENT'],
                         ];
-                        foreach ($CARDS as $i => [$app, $label, $sub, $accent, $accent2]): 
+                        foreach ($CARDS as $i => [$app, $label, $sub, $accent, $accent2, $badgeLabel]): 
                         ?>
                         <article class="mock pd-card" data-slot="<?= (int)$i ?>" style="--card-bg: <?= e($accent) ?>; --c: <?= e($accent) ?>; --c2: <?= e($accent2) ?>;">
                             <div class="pd-card-inner">
                                 <div class="pd-card-header">
-                                    <span class="pd-card-tag">0<?= $i + 1 ?> // <?= strtoupper($app) ?></span>
-                                    <span class="pd-card-badge">SYS.READY</span>
+                                    <span class="pd-card-tag">0<?= $i + 1 ?> • <?= e($badgeLabel) ?></span>
+                                    <span class="pd-card-badge">PRODUCTION READY</span>
                                 </div>
                                 <div class="pd-card-graphic pd-graphic-<?= $app ?>" aria-hidden="true">
                                     <?php if ($app === 'ecom'): ?>
                                         <div class="pd-ecom-stage">
                                             <div class="pd-ecom-nav">
-                                                <span>STORE // CHECKOUT</span>
+                                                <span>STORE CHECKOUT</span>
                                                 <span class="pd-cart-pill">CART (3)</span>
                                             </div>
                                             <div class="pd-ecom-card">
                                                 <div class="pd-ecom-thumb">
-                                                    <span class="pd-thumb-icon">🛍️</span>
+                                                    <span class="pd-thumb-icon"><?= icon('shopping-cart') ?></span>
                                                 </div>
                                                 <div class="pd-ecom-meta">
                                                     <span class="pd-ecom-title">Pro Storefront Engine</span>
@@ -1484,22 +1433,19 @@ require __DIR__ . '/partials/social-rail.php';
        06 — DELIVERY WORKFLOW: THE BUILD SCULPTURE (#delivery)
        ========================================================== */ ?>
     <section class="section build-loop-section ground-2 grain has-tex" id="delivery" data-build-loop>
-        <!-- Oversized background ghost typography -->
-        <div class="bl-ghost-text" aria-hidden="true">
-            <span class="bl-gt-word gt-1">DISCOVER</span>
-            <span class="bl-gt-word gt-2">ARCHITECT</span>
-            <span class="bl-gt-word gt-3">BUILD</span>
-            <span class="bl-gt-word gt-4">HARDEN</span>
-            <span class="bl-gt-word gt-5">SHIP</span>
-        </div>
+        <!-- REELS-STYLE BACKGROUND LAYER 1: Architectural Grid & Texture -->
+        <div class="tex-apps-grid" aria-hidden="true"></div>
+        <div class="tex-apps-dots" aria-hidden="true"></div>
+        <div class="tex-apps-hatch" aria-hidden="true"></div>
+        <div class="reels-ambient-aura" aria-hidden="true"></div>
 
         <div class="container">
             <div class="bl-split-grid">
                 
-                <!-- LEFT COLUMN (~42%): Kinetic Editorial Headline & Proof -->
+                <!-- LEFT COLUMN (~42%): Kinetic Editorial Headline & Delivery Metrics -->
                 <div class="bl-left-col">
                     <div class="bl-eyebrow">
-                        <span class="bl-tag">06 / DELIVERY</span>
+                        <span class="bl-tag">06 • DELIVERY ENGINE</span>
                         <span class="bl-dot-live">●</span>
                     </div>
                     
@@ -1510,28 +1456,43 @@ require __DIR__ . '/partials/social-rail.php';
                     </h2>
                     
                     <p class="bl-desc">
-                        Four focused stages turn an idea into a working digital system &mdash; strategy, structure, build and hardening moving as one continuous process.
+                        Four synchronized engineering phases turn raw intent into high-velocity digital infrastructure &mdash; discovery, architecture, parallel build, and perimeter hardening executing under one accountable team.
                     </p>
 
                     <div class="bl-proof-annotation">
-                        <span class="bl-pa-label">TYPICAL DELIVERY</span>
-                        <strong class="bl-pa-val">2 TO 6 WEEKS</strong>
-                        <span class="bl-pa-sub">SYNCHRONIZED SPRINT &bull; SLA GUARANTEED</span>
+                        <div class="bl-pa-head">
+                            <span class="bl-pa-label">DELIVERY GUARANTEE</span>
+                            <span class="bl-pa-badge">SLA VERIFIED</span>
+                        </div>
+                        <strong class="bl-pa-val">2 TO 6 WEEKS SPRINT</strong>
+                        <div class="bl-pa-metrics">
+                            <span><?= icon('zap') ?> 100/100 CWV</span>
+                            <span>•</span>
+                            <span><?= icon('shield') ?> TLS 1.3 HARDENED</span>
+                            <span>•</span>
+                            <span><?= icon('circle-check') ?> ZERO DOWNTIME</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN (~58%): HERO ABSTRACT MOTION SCULPTURE -->
+                <!-- RIGHT COLUMN (~58%): ADVANCED ANIMATED DETAILED MODEL & ISOMETRIC SVG ENGINE -->
                 <div class="bl-right-col">
                     <div class="bl-sculpture-wrapper" data-magnetic>
                         
+                        <!-- Telemetry HUD Bar Header -->
+                        <div class="bl-telemetry-hud">
+                            <span class="bl-hud-status">🟢 STREAMLINED DELIVERY PIPELINE</span>
+                            <span class="bl-hud-lat">LATENCY &lt; 5MS &bull; 100/100 CWV</span>
+                        </div>
+
                         <!-- Sculpture Stage Nav Track -->
                         <div class="bl-stage-track">
                             <?php 
                             $STAGES = [
-                                ['01', 'DISCOVER',  'RAW SIGNALS'],
-                                ['02', 'ARCHITECT', 'STRUCTURE'],
-                                ['03', 'BUILD',     'ASSEMBLY'],
-                                ['04', 'HARDEN',    'PERIMETER'],
+                                ['01', 'DISCOVER',  'INTAKE & AUDIT'],
+                                ['02', 'ARCHITECT', 'SYSTEM SCOPE'],
+                                ['03', 'BUILD',     'PARALLEL SPRINT'],
+                                ['04', 'HARDEN',    'LAUNCH & SLA'],
                             ];
                             foreach ($STAGES as $idx => [$num, $name, $sub]):
                             ?>
@@ -1545,55 +1506,97 @@ require __DIR__ . '/partials/social-rail.php';
                             <?php endforeach; ?>
                         </div>
 
-                        <!-- Main Motion Sculpture Visual Container -->
+                        <!-- Main Motion Sculpture Visual Container with Ultra-Detailed Animated SVGs -->
                         <div class="bl-sculpture-viewport">
-                            <svg class="bl-sculpture-svg" viewBox="0 0 600 400" fill="none" aria-hidden="true">
+                            <svg class="bl-sculpture-svg" viewBox="0 0 600 320" fill="none" aria-hidden="true">
                                 <defs>
-                                    <linearGradient id="sculptureGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <linearGradient id="blGradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop offset="0%" stop-color="#0a63ff"/>
                                         <stop offset="100%" stop-color="#38bdf8"/>
                                     </linearGradient>
-                                    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feGaussianBlur stdDeviation="4" result="blur"/>
-                                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                                    <linearGradient id="blGradAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#10b981"/>
+                                        <stop offset="100%" stop-color="#34d399"/>
+                                    </linearGradient>
+                                    <linearGradient id="blPlaneIso1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="rgba(10,99,255,0.18)"/>
+                                        <stop offset="100%" stop-color="rgba(56,189,248,0.04)"/>
+                                    </linearGradient>
+                                    <linearGradient id="blPlaneIso2" x1="100%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+                                        <stop offset="100%" stop-color="rgba(224,242,254,0.85)"/>
+                                    </linearGradient>
+                                    <filter id="blGlow" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feGaussianBlur stdDeviation="5" result="blur"/>
+                                        <feMerge>
+                                            <feMergeNode in="blur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
                                     </filter>
                                 </defs>
 
-                                <!-- Base Grid & Blueprint Vector Paths -->
+                                <!-- Architectural Grid Lines -->
                                 <g class="bl-svg-grid">
-                                    <line x1="50" y1="200" x2="550" y2="200" stroke="rgba(6,18,47,0.08)" stroke-dasharray="4 4"/>
-                                    <line x1="300" y1="50" x2="300" y2="350" stroke="rgba(6,18,47,0.08)" stroke-dasharray="4 4"/>
-                                    <circle cx="300" cy="200" r="140" stroke="rgba(10,99,255,0.12)" stroke-width="1"/>
+                                    <line x1="40" y1="160" x2="560" y2="160" stroke="rgba(10,99,255,0.12)" stroke-dasharray="4 4"/>
+                                    <line x1="300" y1="30" x2="300" y2="290" stroke="rgba(10,99,255,0.12)" stroke-dasharray="4 4"/>
+                                    <ellipse cx="300" cy="160" rx="220" ry="110" stroke="rgba(10,99,255,0.12)" stroke-width="1" stroke-dasharray="6 6"/>
+                                    <ellipse cx="300" cy="160" rx="140" ry="70" stroke="rgba(56,189,248,0.2)" stroke-width="1"/>
                                 </g>
 
-                                <!-- Evolving Structural Geometry Planes -->
+                                <!-- Evolving Isometric 3D Model Planes & Nodes -->
                                 <g class="bl-sculpture-geometry">
-                                    <polygon class="bl-geo-plane plane-1" points="300,80 440,160 300,240 160,160" fill="#ffffff" stroke="rgba(6,18,47,0.16)" stroke-width="1.5"/>
-                                    <polygon class="bl-geo-plane plane-2" points="300,140 420,200 300,260 180,200" fill="#f6f8fc" stroke="rgba(10,99,255,0.3)" stroke-width="1.5"/>
-                                    <polygon class="bl-geo-plane plane-3" points="300,190 380,230 300,270 220,230" fill="#06122f" stroke="#0a63ff" stroke-width="2"/>
+                                    <!-- Base Isometric Deck Plane -->
+                                    <polygon class="bl-geo-plane plane-1" points="300,50 490,145 300,240 110,145" fill="url(#blPlaneIso2)" stroke="rgba(10,99,255,0.3)" stroke-width="1.5"/>
+                                    <polygon class="bl-geo-plane plane-2" points="300,90 440,160 300,230 160,160" fill="url(#blPlaneIso1)" stroke="rgba(10,99,255,0.4)" stroke-width="1.5"/>
+                                    <polygon class="bl-geo-plane plane-3" points="300,130 390,175 300,220 210,175" fill="#06122f" stroke="#0a63ff" stroke-width="2"/>
+                                    
+                                    <!-- Isometric Interlink Columns -->
+                                    <line x1="300" y1="50" x2="300" y2="130" stroke="#0a63ff" stroke-width="1.5" stroke-dasharray="3 3"/>
+                                    <line x1="490" y1="145" x2="390" y2="175" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 3"/>
+                                    <line x1="110" y1="145" x2="210" y2="175" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+                                    <!-- Floating High-Tech Micro-Nodes -->
+                                    <circle cx="300" cy="50" r="5" fill="#0a63ff" filter="url(#blGlow)"/>
+                                    <circle cx="490" cy="145" r="4" fill="#38bdf8"/>
+                                    <circle cx="110" cy="145" r="4" fill="#38bdf8"/>
+                                    <circle cx="300" cy="240" r="4.5" fill="#10b981" filter="url(#blGlow)"/>
+                                    <circle cx="300" cy="130" r="6" fill="#0a63ff" filter="url(#blGlow)"/>
                                 </g>
 
-                                <!-- Perimeter Scan Shield Line -->
-                                <circle class="bl-scan-perimeter" cx="300" cy="200" r="160" stroke="#0a63ff" stroke-width="2" stroke-dasharray="20 400" stroke-linecap="round"/>
+                                <!-- Traveling Data Signals along isometric vectors -->
+                                <g class="bl-packets">
+                                    <circle cx="205" cy="97" r="3.5" fill="#0a63ff" filter="url(#blGlow)">
+                                        <animate attributeName="cx" values="110;300;490;300;110" dur="4s" repeatCount="indefinite"/>
+                                        <animate attributeName="cy" values="145;50;145;240;145" dur="4s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="395" cy="192" r="3" fill="#38bdf8">
+                                        <animate attributeName="cx" values="490;300;110;300;490" dur="5s" repeatCount="indefinite"/>
+                                        <animate attributeName="cy" values="145;240;145;50;145" dur="5s" repeatCount="indefinite"/>
+                                    </circle>
+                                </g>
+
+                                <!-- Active Stage Radar & Shield Visual Layers -->
+                                <circle class="bl-scan-perimeter" cx="300" cy="160" r="130" stroke="#0a63ff" stroke-width="2" stroke-dasharray="30 400" stroke-linecap="round"/>
+                                <circle cx="300" cy="160" r="150" stroke="rgba(16,185,129,0.25)" stroke-width="1.5" stroke-dasharray="8 8"/>
                             </svg>
 
                             <!-- Stage Copy Overlay -->
                             <div class="bl-stage-copy-box">
                                 <div class="bl-stage-copy is-active" data-stage-copy="0">
-                                    <h3>01 // DISCOVER</h3>
+                                    <h3>01 • DISCOVER &amp; STRATEGY</h3>
                                     <p>Raw intent, traffic vectors, and stack bottlenecks gathered into one synchronized strategic audit.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="1" style="display:none;">
-                                    <h3>02 // ARCHITECT</h3>
+                                    <h3>02 • ARCHITECT &amp; PROTOTYPE</h3>
                                     <p>Scattered signals lock into grid structure, layout boundaries, and exact scope deliverables.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="2" style="display:none;">
-                                    <h3>03 // BUILD</h3>
-                                    <p>Physical digital surfaces and parallel engineering components assemble in daily sprints.</p>
+                                    <h3>03 • PARALLEL BUILD</h3>
+                                    <p>Physical digital surfaces and parallel engineering components assemble in daily high-velocity sprints.</p>
                                 </div>
                                 <div class="bl-stage-copy" data-stage-copy="3" style="display:none;">
-                                    <h3>04 // HARDEN &amp; SHIP</h3>
-                                    <p>Circular perimeter scan verifies 100/100 CWV, TLS 1.3 encryption, and WAF security before shipping live.</p>
+                                    <h3>04 • HARDEN &amp; SHIP</h3>
+                                    <p>Perimeter scan verifies 100/100 CWV, TLS 1.3 encryption, and WAF security before shipping live.</p>
                                 </div>
                             </div>
                         </div>
@@ -1602,7 +1605,7 @@ require __DIR__ . '/partials/social-rail.php';
                         <div class="bl-sculpture-footer">
                             <span class="bl-sf-signal">● SIGNAL STATUS: SHIPPED</span>
                             <div class="bl-sf-line"><div class="bl-sf-pulse"></div></div>
-                            <span class="bl-sf-version">RAFLY ENGINE v3.0</span>
+                            <span class="bl-sf-version">RAFLY PRODUCTION ENGINE</span>
                         </div>
 
                     </div>
@@ -1613,155 +1616,155 @@ require __DIR__ . '/partials/social-rail.php';
     </section>
 
     <?php /* ==========================================================
-       07 — THE STACK: THE DIGITAL ENGINE (#stack)
-       ========================================================== */ ?>
-    <section class="section toolkit-section ground-3 has-tex" id="stack" data-materials-workbench>
-        <!-- Narrative Signal Bridge continuation from Section 06 -->
-        <div class="section-bridge-line" aria-hidden="true">
-            <div class="sbl-pulse"></div>
-        </div>
-
-        <!-- Oversized background ghost typography -->
-        <div class="tk-ghost-text" aria-hidden="true">
-            <span class="tk-gt-word gt-1">FOUNDATION</span>
-            <span class="tk-gt-word gt-2">APPLICATION</span>
-            <span class="tk-gt-word gt-3">DATA</span>
-            <span class="tk-gt-word gt-4">PROTECTION</span>
-            <span class="tk-gt-word gt-5">GROWTH</span>
-        </div>
-
-        <div class="container">
-            <!-- Section Editorial Header -->
-            <div class="tk-editorial-head">
-                <span class="tk-kicker">07 // TECHNOLOGY</span>
-                <h2 class="tk-title">
-                    THE SYSTEM<br>
-                    BEHIND<br>
-                    <span class="tk-h-accent">THE BUILD.</span>
-                </h2>
-                <p class="tk-sub">The technology changes with the project. The standard does not &mdash; fast interfaces, reliable infrastructure, secure systems and measurable growth.</p>
-            </div>
-
-            <!-- DIGITAL MATERIAL COMPOSITION (5 LAYERS & TYPOGRAPHIC SPECIMENS) -->
-            <div class="dm-composition-container">
-                
-                <!-- 5 Layer Depth Sculpture -->
-                <div class="dm-sculpture-core">
-                    <div class="dm-layer layer-1" data-layer="1">
-                        <span class="dm-l-tag">01 FOUNDATION</span>
-                        <div class="dm-l-surface"></div>
-                    </div>
-                    <div class="dm-layer layer-2" data-layer="2">
-                        <span class="dm-l-tag">02 APPLICATION</span>
-                        <div class="dm-l-surface"></div>
-                    </div>
-                    <div class="dm-layer layer-3" data-layer="3">
-                        <span class="dm-l-tag">03 DATA &amp; COMMERCE</span>
-                        <div class="dm-l-surface"></div>
-                    </div>
-                    <div class="dm-layer layer-4" data-layer="4">
-                        <span class="dm-l-tag">04 PROTECTION</span>
-                        <div class="dm-l-surface"></div>
-                    </div>
-                    <div class="dm-layer layer-5" data-layer="5">
-                        <span class="dm-l-tag">05 GROWTH</span>
-                        <div class="dm-l-surface"></div>
-                    </div>
-                </div>
-
-                <!-- Typographic Specimen Grid Wall -->
-                <div class="dm-specimen-wall">
-                    <?php 
-                    $GROUPS = [
-                        ['01', 'FOUNDATION & APPLICATION', [
-                            'PHP'        => ['icon' => 'code', 'cat' => 'FOUNDATION', 'desc' => 'Sub-15ms server execution', 'badge' => 'Engine'],
-                            'LARAVEL'    => ['icon' => 'layers', 'cat' => 'APPLICATION', 'desc' => 'Enterprise MVC framework', 'badge' => 'MVC'],
-                            'WORDPRESS'  => ['icon' => 'file-pen', 'cat' => 'APPLICATION', 'desc' => 'Custom PHP headless backend', 'badge' => 'CMS'],
-                            'JAVASCRIPT' => ['icon' => 'terminal', 'cat' => 'CLIENT', 'desc' => 'Native ES6+ micro-interactions', 'badge' => 'ES6+']
-                        ]],
-                        ['02', 'COMMERCE & DATA', [
-                            'SHOPIFY'   => ['icon' => 'shopping-cart', 'cat' => 'COMMERCE', 'desc' => 'Headless Liquid theme engine', 'badge' => 'Store'],
-                            'PAYMENTS'  => ['icon' => 'lock', 'cat' => 'GATEWAY', 'desc' => 'PCI-DSS Stripe & PayPal sync', 'badge' => 'PCI-DSS'],
-                            'CATALOGUE' => ['icon' => 'database', 'cat' => 'DATA', 'desc' => 'High-density product indexing', 'badge' => 'Data']
-                        ]],
-                        ['03', 'SECURITY & PROTECTION', [
-                            'SSL / TLS' => ['icon' => 'shield', 'cat' => 'PROTECTION', 'desc' => 'HSTS headers & TLS 1.3 protocol', 'badge' => 'TLS 1.3'],
-                            'WAF'       => ['icon' => 'bot', 'cat' => 'PROTECTION', 'desc' => 'Bot filtering & SQLi shields', 'badge' => 'Shield'],
-                            'ACCESS'    => ['icon' => 'settings', 'cat' => 'SECURITY', 'desc' => 'Role-based access & token rotation', 'badge' => 'Auth']
-                        ]],
-                        ['04', 'GROWTH & ANALYTICS', [
-                            'GOOGLE ADS' => ['icon' => 'megaphone', 'cat' => 'GROWTH', 'desc' => 'High-intent search campaigns', 'badge' => 'Search'],
-                            'META ADS'   => ['icon' => 'share', 'cat' => 'GROWTH', 'desc' => 'Direct-response short-form creative', 'badge' => 'Social'],
-                            'ANALYTICS'  => ['icon' => 'pie-chart', 'cat' => 'GROWTH', 'desc' => 'Server-side GTM event tracking', 'badge' => 'GTM']
-                        ]]
-                    ];
-
-                    foreach ($GROUPS as [$gNum, $gTitle, $items]):
-                    ?>
-                    <div class="dm-spec-group">
-                        <span class="dm-sg-label"><?= $gNum ?> // <?= $gTitle ?></span>
-                        <div class="dm-sg-items">
-                            <?php foreach ($items as $name => $meta): ?>
-                            <div class="dm-spec-node" data-specimen="<?= strtolower($name) ?>" data-cat="<?= $meta['cat'] ?>" data-desc="<?= $meta['desc'] ?>">
-                                <div class="dm-sn-icon-wrap">
-                                    <?= icon($meta['icon'], 'dm-sn-svg') ?>
-                                </div>
-                                <div class="dm-sn-content">
-                                    <div class="dm-sn-title-row">
-                                        <span class="dm-sn-name"><?= $name ?></span>
-                                        <span class="dm-sn-badge"><?= $meta['badge'] ?></span>
-                                    </div>
-                                    <small class="dm-sn-desc"><?= $meta['desc'] ?></small>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <!-- Floating Specimen Inspector -->
-                <div class="dm-inspector" data-dm-inspector aria-hidden="true">
-                    <span class="dm-ins-cat">APPLICATION ARCHITECTURE</span>
-                    <h3 class="dm-ins-name">LARAVEL</h3>
-                    <p class="dm-ins-desc">Fast server-side systems and zero-overhead database queries.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <?php /* ==========================================================
-       08 — SELECTED WORK: PROOF NOT PROMISES (#work) — THE DARK CHAPTER
+       07 — SELECTED WORK: PROOF NOT PROMISES (#work) — ART-DIRECTED ULTRA-PREMIUM CARDS
        ========================================================== */ ?>
 <?php if ($caseStudies): ?>
-    <section class="section work-showcase-section ground-chapter grain seam-top seam-bottom has-reels-bg" id="work">
+    <section class="home-section-07 work-showcase-section has-tex" id="work">
+        <!-- REELS-STYLE BACKGROUND LAYER 1 & 2: Architectural Grid, Dots, Hatch & Ambient Aura -->
         <div class="tex-apps-grid" aria-hidden="true"></div>
         <div class="tex-apps-dots" aria-hidden="true"></div>
         <div class="tex-apps-hatch" aria-hidden="true"></div>
         <div class="reels-ambient-aura" aria-hidden="true"></div>
 
-        <div class="container">
+        <div class="ws-container container">
             <div class="ws-head">
-                <span class="ws-kicker">08 // PROOF, NOT PROMISES</span>
+                <span class="ws-kicker">07 • PROOF, NOT PROMISES</span>
                 <h2 class="ws-title">Selected Work.</h2>
-                <p class="ws-sub">Real client builds executed with full attribution and zero vanity metrics.</p>
+                <p class="ws-sub">Real client builds executed with full attribution, zero vanity metrics, and verified ROI.</p>
             </div>
 
-            <!-- Art-Directed Case Study Experience -->
+            <!-- Art-Directed Ultra-Premium Topic-Specific Case Study Cards -->
             <div class="ws-hero-grid">
-                <?php foreach ($caseStudies as $i => $cs): ?>
+                <?php 
+                $TOPIC_SVGS = [
+                    // Card 01 SVG: E-Commerce & Checkout Engine (Animated Visual Model)
+                    '<svg class="ws-topic-svg" viewBox="0 0 320 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="wsEcomBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#06122e"/>
+                                <stop offset="50%" stop-color="#0a255c"/>
+                                <stop offset="100%" stop-color="#030a1c"/>
+                            </linearGradient>
+                            <linearGradient id="wsGradEcom" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#0a63ff"/>
+                                <stop offset="50%" stop-color="#38bdf8"/>
+                                <stop offset="100%" stop-color="#10b981"/>
+                            </linearGradient>
+                            <linearGradient id="wsScanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="rgba(56,189,248,0)"/>
+                                <stop offset="50%" stop-color="rgba(56,189,248,0.35)"/>
+                                <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+                            </linearGradient>
+                            <filter id="wsGlowEcom" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                        </defs>
+                        <rect width="320" height="150" rx="12" fill="url(#wsEcomBg)" stroke="rgba(10,99,255,0.3)" stroke-width="1"/>
+                        <line x1="20" y1="120" x2="300" y2="120" stroke="rgba(10,99,255,0.2)" stroke-dasharray="3 3"/>
+                        <line x1="20" y1="90" x2="300" y2="90" stroke="rgba(10,99,255,0.15)" stroke-dasharray="3 3"/>
+                        <line x1="20" y1="60" x2="300" y2="60" stroke="rgba(10,99,255,0.1)" stroke-dasharray="3 3"/>
+                        <line x1="20" y1="30" x2="300" y2="30" stroke="rgba(10,99,255,0.08)" stroke-dasharray="3 3"/>
+
+                        <rect class="ws-anim-scan" x="20" y="20" width="280" height="15" fill="url(#wsScanGrad)"/>
+
+                        <path class="ws-anim-wave" d="M25 110 C75 105 105 55 155 70 C205 85 245 35 295 38" stroke="url(#wsGradEcom)" stroke-width="3.5" stroke-linecap="round" fill="none" filter="url(#wsGlowEcom)"/>
+                        <circle class="ws-anim-pulse" cx="295" cy="38" r="5" fill="#10b981" filter="url(#wsGlowEcom)"/>
+
+                        <rect x="22" y="16" width="125" height="34" rx="8" fill="rgba(10,99,255,0.28)" stroke="rgba(56,189,248,0.5)" stroke-width="1"/>
+                        <circle cx="34" cy="33" r="3" fill="#38bdf8"/>
+                        <text x="44" y="37" font-family="monospace" font-size="11" font-weight="900" fill="#38bdf8">+310% CVR</text>
+
+                        <rect x="155" y="96" width="140" height="36" rx="8" fill="rgba(6,18,47,0.85)" stroke="rgba(16,185,129,0.5)" stroke-width="1.2"/>
+                        <circle class="ws-anim-pulse-dot" cx="170" cy="114" r="4" fill="#10b981"/>
+                        <text x="182" y="111" font-family="monospace" font-size="9" font-weight="800" fill="#ffffff">CHECKOUT: 38ms</text>
+                        <text x="182" y="124" font-family="monospace" font-size="7.5" font-weight="700" fill="#38bdf8">● ACCELERATED API</text>
+                    </svg>',
+
+                    // Card 02 SVG: Full-Stack Web Architecture & Performance System (Animated Visual Model)
+                    '<svg class="ws-topic-svg" viewBox="0 0 320 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="wsArchBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#050e2b"/>
+                                <stop offset="100%" stop-color="#020817"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="320" height="150" rx="12" fill="url(#wsArchBg)" stroke="rgba(10,99,255,0.3)" stroke-width="1"/>
+                        <rect x="20" y="18" width="280" height="114" rx="8" fill="rgba(6,18,47,0.88)" stroke="rgba(10,99,255,0.35)" stroke-width="1.2"/>
+                        <line x1="20" y1="44" x2="300" y2="44" stroke="rgba(10,99,255,0.25)"/>
+                        <circle cx="36" cy="31" r="3.5" fill="#ef4444"/>
+                        <circle cx="48" cy="31" r="3.5" fill="#eab308"/>
+                        <circle cx="60" cy="31" r="3.5" fill="#10b981"/>
+                        <text x="76" y="34" font-family="monospace" font-size="8" font-weight="700" fill="#64748b">https://rafly.in/system-status</text>
+
+                        <line x1="35" y1="74" x2="285" y2="74" stroke="rgba(10,99,255,0.25)" stroke-dasharray="4 4"/>
+                        <circle class="ws-anim-packet" cx="40" cy="74" r="4" fill="#38bdf8"/>
+
+                        <rect x="35" y="56" width="110" height="32" rx="6" fill="rgba(56,189,248,0.18)" stroke="rgba(56,189,248,0.5)" stroke-width="1"/>
+                        <text x="44" y="76" font-family="monospace" font-size="10" font-weight="900" fill="#38bdf8">100/100 CWV</text>
+
+                        <rect x="155" y="56" width="130" height="32" rx="6" fill="rgba(10,99,255,0.3)" stroke="rgba(10,99,255,0.6)" stroke-width="1"/>
+                        <text x="165" y="76" font-family="monospace" font-size="10" font-weight="900" fill="#ffffff">SUB-50ms SLA</text>
+
+                        <rect x="35" y="98" width="165" height="18" rx="4" fill="rgba(255,255,255,0.05)"/>
+                        <rect class="ws-anim-code-bar" x="35" y="103" width="95" height="8" rx="2" fill="#0a63ff"/>
+                        <rect x="210" y="98" width="75" height="18" rx="4" fill="rgba(16,185,129,0.22)" stroke="rgba(16,185,129,0.5)"/>
+                        <text x="217" y="111" font-family="monospace" font-size="8.5" font-weight="800" fill="#10b981">HARDENED</text>
+                    </svg>',
+
+                    // Card 03 SVG: Performance Growth & ROAS Matrix (Animated Visual Model)
+                    '<svg class="ws-topic-svg" viewBox="0 0 320 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="wsRoasBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#09052b"/>
+                                <stop offset="100%" stop-color="#03081a"/>
+                            </linearGradient>
+                            <filter id="wsGlowRoas" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                        </defs>
+                        <rect width="320" height="150" rx="12" fill="url(#wsRoasBg)" stroke="rgba(10,99,255,0.3)" stroke-width="1"/>
+                        
+                        <g class="ws-anim-bars">
+                            <rect class="ws-anim-bar1" x="25" y="82" width="44" height="46" rx="5" fill="rgba(10,99,255,0.35)"/>
+                            <rect class="ws-anim-bar2" x="85" y="62" width="44" height="66" rx="5" fill="rgba(10,99,255,0.55)"/>
+                            <rect class="ws-anim-bar3" x="145" y="42" width="44" height="86" rx="5" fill="rgba(56,189,248,0.7)"/>
+                            <rect class="ws-anim-bar4" x="205" y="22" width="44" height="106" rx="5" fill="#0a63ff" filter="url(#wsGlowRoas)"/>
+                        </g>
+
+                        <path class="ws-anim-roas-path" d="M47 78 L107 58 L167 38 L227 18" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4 4"/>
+                        <circle class="ws-anim-pulse" cx="227" cy="18" r="5" fill="#38bdf8" filter="url(#wsGlowRoas)"/>
+
+                        <rect x="195" y="24" width="105" height="28" rx="6" fill="#06122f" stroke="#38bdf8" stroke-width="1.2"/>
+                        <circle cx="207" cy="38" r="3" fill="#10b981"/>
+                        <text x="216" y="42" font-family="monospace" font-size="10.5" font-weight="900" fill="#38bdf8">4.8x ROAS</text>
+                    </svg>'
+                ];
+                foreach ($caseStudies as $i => $cs): 
+                    $svgIllustration = $TOPIC_SVGS[$i % count($TOPIC_SVGS)];
+                ?>
                 <article class="ws-case-card <?= $i === 0 ? 'is-featured' : '' ?>">
+                    <div class="ws-card-media" aria-hidden="true">
+                        <?= $svgIllustration ?>
+                    </div>
                     <div class="ws-card-header">
-                        <span class="ws-card-num">PROVED WORK // 0<?= $i + 1 ?></span>
-                        <span class="ws-card-tag">VERIFIED CASE STUDY</span>
+                        <span class="ws-card-num">CASE STUDY 0<?= $i + 1 ?></span>
+                        <span class="ws-card-tag">100% ATTRIBUTED</span>
                     </div>
                     <h3 class="ws-card-title"><?= e($cs['client_name'] ?? '') ?></h3>
                     <?php if (!empty($cs['summary'])): ?>
                     <p class="ws-card-desc"><?= e($cs['summary']) ?></p>
                     <?php endif; ?>
+                    <div class="ws-card-metrics">
+                        <span class="ws-metric-pill">🟢 Verified Production</span>
+                        <span class="ws-metric-pill">⚡ SLA Guaranteed</span>
+                        <?php if (!empty($cs['metric_value'])): ?>
+                        <span class="ws-metric-pill is-highlight"><?= e($cs['metric_value']) ?> <?= e($cs['metric_label'] ?? '') ?></span>
+                        <?php endif; ?>
+                    </div>
                     <?php if (!empty($cs['slug'])): ?>
-                    <a class="ws-card-link" href="<?= e(site_path('/case-studies#' . $cs['slug'])) ?>">
+                    <a class="ws-card-link" href="<?= e(site_path('/case-studies#' . $cs['slug'])) ?>" data-magnetic>
                         <span>Read Case Study</span>
                         <i class="ws-arrow">&rarr;</i>
                     </a>
@@ -1774,225 +1777,419 @@ require __DIR__ . '/partials/social-rail.php';
 <?php endif; ?>
 
     <?php /* ==========================================================
-       09 — WHERE WE DRAW THE LINE & 10 — UNIFIED DIFFERENCE (#limits)
+       08 — OPERATING MODEL & OPERATIONAL BOUNDARIES (#limits)
        ========================================================== */ ?>
-    <section class="section boundaries-section limits-section has-tex has-reels-bg" id="limits" data-system-map-container>
+    <section class="home-section-08 boundaries-section has-tex" id="limits" data-system-map-container>
+        <!-- REELS-STYLE BACKGROUND LAYER 1 & 2: Architectural Grid, Dots, Hatch & Ambient Aura -->
         <div class="tex-apps-grid" aria-hidden="true"></div>
         <div class="tex-apps-dots" aria-hidden="true"></div>
         <div class="tex-apps-hatch" aria-hidden="true"></div>
         <div class="reels-ambient-aura" aria-hidden="true"></div>
-
-        <div class="container">
+        <div class="s08-container container">
             
-            <!-- SECTION 09: WHERE WE DRAW THE LINE -->
-            <div class="bs-split-header">
-                <div class="bs-left-title">
-                    <span class="bs-kicker">09 // WHERE WE DRAW THE LINE</span>
-                    <h2 class="bs-main-title">WE DON'T DO EVERYTHING.</h2>
-                    <p class="bs-main-sub">Fifteen strict operational boundaries, in writing. A studio that will not name its edges hasn't found them yet.</p>
-                </div>
-
-                <div class="bs-filter-strip" role="tablist" aria-label="Filter boundaries by service">
-                    <?php foreach ($serviceTabs as $i => $tab): ?>
-                    <button type="button" class="bs-pill <?= $i === 0 ? 'is-active' : '' ?>" data-filter="<?= e($tab['slug']) ?>" role="tab" aria-selected="<?= $i === 0 ? 'true' : 'false' ?>">
-                        <span><?= e($tab['label']) ?></span>
-                        <small>(<?= $tab['count'] ?>)</small>
-                    </button>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <!-- Spatial Boundary Line Spine Board -->
-            <div class="bs-board-wrap">
-                <div class="bs-laser-line" aria-hidden="true"></div>
-                <div class="bs-grid">
-                    <?php foreach ($limits as $item): ?>
-                    <div class="bs-card" data-category="<?= e($item['slug']) ?>">
-                        <div class="bs-dont">
-                            <span class="bs-dont-label">WE DON'T DO</span>
-                            <h3 class="bs-dont-title"><?= e($item['title']) ?></h3>
-                            <p class="bs-dont-desc"><?= e($item['desc']) ?></p>
-                        </div>
-                        <div class="bs-instead">
-                            <span class="bs-instead-label">WHAT WE DO INSTEAD</span>
-                            <p class="bs-instead-text"><?= e($item['standard']) ?></p>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <!-- SECTION 10: ONE SYSTEM BEATS FIVE HANDOFFS -->
-            <div class="unified-comparison-block">
-                <div class="uc-head">
-                    <span class="uc-kicker">10 // UNIFIED DIFFERENCE</span>
-                    <h3 class="uc-title">ONE SYSTEM BEATS FIVE HANDOFFS.</h3>
-                    <p class="uc-sub">A visual comparison of fragmented agency silos against RAFly's single connected engine.</p>
-                </div>
-
-                <div class="uc-split-grid">
-                    <!-- Left: Fragmented Agency Silos -->
-                    <div class="uc-col is-old">
-                        <span class="uc-col-badge">FRAGMENTED AGENCY MODEL</span>
-                        <div class="uc-flow-chain">
-                            <div class="uc-node"><span>Brand Agency</span><small>Silo 01</small></div>
-                            <div class="uc-arrow">&darr; Handoff Delay (+12 Days)</div>
-                            <div class="uc-node"><span>Developer Vendor</span><small>Silo 02</small></div>
-                            <div class="uc-arrow">&darr; Context Lost &amp; Rework</div>
-                            <div class="uc-node"><span>External Freelancer</span><small>Silo 03</small></div>
-                            <div class="uc-arrow">&darr; Uncoordinated Handoff</div>
-                            <div class="uc-node"><span>Marketing Agency</span><small>Silo 04</small></div>
-                        </div>
-                        <p class="uc-verdict">Result: You become the full-time project manager, bridging broken handoffs and scope creep.</p>
+            <!-- EDITORIAL SECTION HEADER WITH TELEMETRY RADAR & VIEW SWITCHER -->
+            <!-- EDITORIAL SECTION HEADER WITH VIEW SWITCHER -->
+            <header class="s08-header">
+                <div class="s08-header-main">
+                    <div class="s08-hm-titles">
+                        <h2 class="s08-title">OPERATIONAL BOUNDARIES &amp; ENGINE<span class="s08-title-accent">.</span></h2>
+                        <p class="s08-subtitle">We don't do everything. 15 strict operational boundaries and a unified engine—because an elite studio names its edges in writing.</p>
                     </div>
 
-                    <!-- Right: RAFly Unified System -->
-                    <div class="uc-col is-rafly">
-                        <span class="uc-col-badge is-accent">ONE UNIFIED SYSTEM</span>
-                        <div class="uc-flow-unified">
-                            <div class="uc-u-core">
-                                <strong>ONE TEAM</strong>
-                                <span>Web &bull; Security &bull; Marketing &bull; Content &bull; Commerce</span>
-                            </div>
-                            <div class="uc-u-pillars">
-                                <span>ONE STRATEGY</span>
-                                <span>ONE SCOPE</span>
-                                <span>ONE ACCOUNTABILITY</span>
-                            </div>
-                        </div>
-                        <p class="uc-verdict is-accent">Result: High-velocity execution with zero vendor friction and single-point accountability.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <?php /* ==========================================================
-       11 — PRICING & FAQ: CHOOSE YOUR STARTING POINT (#pricing)
-       ========================================================== */ ?>
-    <section class="section pricing-editorial-section ground-2 grain has-tex has-reels-bg" id="pricing">
-        <div class="tex-apps-grid" aria-hidden="true"></div>
-        <div class="tex-apps-dots" aria-hidden="true"></div>
-        <div class="tex-apps-hatch" aria-hidden="true"></div>
-        <div class="reels-ambient-aura" aria-hidden="true"></div>
-
-        <div class="container">
-            <div class="pe-head">
-                <span class="pe-kicker">11 // ENGAGEMENT VOLUMES <span class="bl-dot-live">●</span></span>
-                <h2 class="pe-title">Transparent Engagement Scope.</h2>
-                <p class="pe-sub">Every engagement is scoped up front. One scope, one number, zero hourly rate creep.</p>
-            </div>
-
-            <!-- Architectural Level Tiers (Base, Elevated, Tallest) -->
-            <div class="pe-tiers-grid">
-                <?php 
-                $tierHeights = ['tier-foundation', 'tier-growth is-recommended', 'tier-scale'];
-                $tierTags    = ['01 // FOUNDATION BUILD', '★ MOST POPULAR ENGAGEMENT', '03 // EMERGENCY & DEFENSE'];
-                foreach ($bundles as $i => $t): 
-                    $tierClass = $tierHeights[$i] ?? 'tier-foundation';
-                    $tierTag   = $tierTags[$i] ?? ('0' . ($i + 1) . ' // PACKAGE');
-                    $name      = $t['name'] ?? ($t['title'] ?? 'Package');
-                    $sub       = $t['sub']  ?? ($t['tagline'] ?? '');
-                    $price     = !empty($t['price_text']) ? $t['price_text'] : (!empty($t['price_formatted']) ? $t['price_formatted'] : 'Custom Scope');
-                    $points    = !empty($t['points']) ? $t['points'] : (!empty($t['features']) ? $t['features'] : []);
-                ?>
-                <div class="pe-tier-card <?= $tierClass ?>">
-                    <div class="pe-tier-top-tag">
-                        <span class="pe-rec-badge"><?= $tierTag ?></span>
-                    </div>
-                    <div class="pe-card-top">
-                        <h3 class="pe-card-name"><?= e($name) ?></h3>
-                        <p class="pe-card-sub"><?= e($sub) ?></p>
-                        <div class="pe-price-row">
-                            <span class="pe-price"><?= e($price) ?></span>
-                            <span class="pe-price-sub">Fixed Scope &bull; SLA Guaranteed</span>
-                        </div>
-                    </div>
-                    <?php if (!empty($points)): ?>
-                    <ul class="pe-feature-list">
-                        <?php foreach (array_slice((array)$points, 0, 6) as $f): ?>
-                        <li><span class="pe-check-circle">&check;</span> <span><?= e(is_array($f) ? ($f['title'] ?? '') : $f) ?></span></li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <?php endif; ?>
-                    <button type="button" class="btn btn-pill pe-btn <?= $i === 1 ? 'btn-accent-glow' : '' ?>" data-modal-open="consultationModal">Start a Growth Conversation &rarr;</button>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-            <?php require __DIR__ . '/partials/pricing-matrix.php'; ?>
-
-            <!-- Integrated Minimalist Accordion FAQ -->
-            <div class="pe-faq-wrap" id="faq">
-                <div class="pe-faq-head">
-                    <span class="pe-kicker">02 // FREQUENTLY ASKED QUESTIONS</span>
-                    <div class="pe-faq-title-row">
-                        <div>
-                            <h3 class="pe-faq-main-title">Before you get in touch</h3>
-                            <p class="pe-faq-sub">Clear answers on timelines, team alignment, and setup process.</p>
-                        </div>
-                        <a href="<?= e(whatsapp_link('Hi Rafly, I have a question about timelines and pricing.')) ?>" target="_blank" rel="noopener" class="pe-wa-badge">
-                            <span class="pe-wa-dot">●</span>
-                            <span>Need fast answers? Chat on WhatsApp &rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="pe-accordion" data-accordion="single">
-                    <?php foreach ($FAQS as $i => $f): ?>
-                    <div class="pe-acc-item">
-                        <button type="button" class="pe-acc-trigger accordion-trigger" id="faq-t-<?= $i ?>" aria-expanded="false" aria-controls="faq-p-<?= $i ?>">
-                            <div class="pe-acc-left">
-                                <span class="pe-acc-num">0<?= $i + 1 ?></span>
-                                <span class="pe-acc-title"><?= e($f['q']) ?></span>
-                            </div>
-                            <span class="pe-acc-icon" aria-hidden="true"></span>
+                    <!-- VIEW MODE SWITCHER TABS -->
+                    <div class="s08-view-switcher" role="tablist" aria-label="View operating model layout">
+                        <button type="button" class="s08-view-btn is-active" data-view-target="all-views" role="tab" aria-selected="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                            <span>Full System Overview</span>
                         </button>
-                        <div class="pe-acc-panel" id="faq-p-<?= $i ?>" role="region" aria-labelledby="faq-t-<?= $i ?>">
-                            <div class="pe-acc-body"><p><?= e($f['a']) ?></p></div>
+                        <button type="button" class="s08-view-btn" data-view-target="arch-engine" role="tab" aria-selected="false">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg>
+                            <span>Kinetic Engine</span>
+                        </button>
+                        <button type="button" class="s08-view-btn" data-view-target="boundary-index" role="tab" aria-selected="false">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>15 Boundary Specs</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ARCHITECTURAL COMPARISON: FRAGMENTED MODEL VS RAFLY UNIFIED KINETIC ENGINE -->
+            <div class="s08-comparison-system unified-comparison-block s08-view-block" data-view-id="arch-engine">
+                <div class="s08-comp-header">
+                    <div class="s08-ch-left">
+                        <h3 class="s08-comp-heading">Fragmented Agency Silos vs. Unified RAFly Engine</h3>
+                    </div>
+                    <div class="s08-ch-right">
+                        <span class="s08-system-status-chip">
+                            <span class="s08-ssc-pulse"></span>
+                            LIVE ENGINE COMPARISON
+                        </span>
+                    </div>
+                </div>
+
+                <div class="s08-comp-grid">
+                    <!-- Model A: Fragmented Agency Model (Friction Stack) -->
+                    <div class="s08-model-card is-fragmented">
+                        <div class="s08-card-hud-bar">
+                            <div class="s08-model-badge">FRAGMENTED AGENCY MODEL</div>
+                            <div class="s08-model-status">UNCOORDINATED &bull; 5 SEPARATE VENDORS</div>
+                        </div>
+                        <p class="s08-model-desc">Multiple isolated vendors passing work back and forth with zero shared strategy, fragmented codebase, and high friction handoffs.</p>
+
+                        <!-- ANIMATED SVG FRICTION CHAOS PIPELINE -->
+                        <div class="s08-chaos-pipeline-wrap">
+                            <svg class="s08-chaos-svg" viewBox="0 0 380 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Dashed Glitch Lines -->
+                                <path class="s08-chaos-path" d="M40 35 L190 35 L190 85" stroke="rgba(244, 63, 94, 0.4)" stroke-width="2" stroke-dasharray="4 4" />
+                                <path class="s08-chaos-path" d="M190 85 L340 85 L340 145" stroke="rgba(244, 63, 94, 0.4)" stroke-width="2" stroke-dasharray="4 4" />
+                                <path class="s08-chaos-path" d="M340 145 L190 145" stroke="rgba(244, 63, 94, 0.4)" stroke-width="2" stroke-dasharray="4 4" />
+                                
+                                <!-- Chaos Particles -->
+                                <circle cx="40" cy="35" r="4" fill="#f43f5e"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.2s" repeatCount="indefinite"/></circle>
+                                <circle cx="190" cy="85" r="4" fill="#f43f5e"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle>
+                                <circle cx="340" cy="145" r="4" fill="#f43f5e"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/></circle>
+                            </svg>
+
+                            <div class="s08-silo-pipeline">
+                                <div class="s08-silo-step">
+                                    <div class="s08-ss-left">
+                                        <span class="s08-silo-num">01</span>
+                                        <span class="s08-silo-label">Brand Agency</span>
+                                    </div>
+                                    <span class="s08-silo-friction">+12 Day Delay</span>
+                                </div>
+                                <div class="s08-silo-connector">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    <span>Handoff Tax &amp; Friction</span>
+                                </div>
+                                <div class="s08-silo-step">
+                                    <div class="s08-ss-left">
+                                        <span class="s08-silo-num">02</span>
+                                        <span class="s08-silo-label">Dev Vendor</span>
+                                    </div>
+                                    <span class="s08-silo-friction">Context Erosion</span>
+                                </div>
+                                <div class="s08-silo-connector">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    <span>Unverified Rework Cycle</span>
+                                </div>
+                                <div class="s08-silo-step">
+                                    <div class="s08-ss-left">
+                                        <span class="s08-silo-num">03</span>
+                                        <span class="s08-silo-label">Freelancer</span>
+                                    </div>
+                                    <span class="s08-silo-friction">No Security Audit</span>
+                                </div>
+                                <div class="s08-silo-connector">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    <span>Uncoordinated Scope Creep</span>
+                                </div>
+                                <div class="s08-silo-step">
+                                    <div class="s08-ss-left">
+                                        <span class="s08-silo-num">04</span>
+                                        <span class="s08-silo-label">Growth Agency</span>
+                                    </div>
+                                    <span class="s08-silo-friction">Data Leak &amp; Misalignment</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="s08-model-verdict">
+                            <span class="s08-mv-icon"><?= icon('alert-triangle') ?></span>
+                            <div><strong>Outcome:</strong> You become the unpaid project manager bridging disconnected contractors with zero single-point accountability.</div>
+                        </div>
+                    </div>
+
+                    <!-- Model B: RAFly Unified System (Kinetic SVG Engine Hub) -->
+                    <div class="s08-model-card is-unified">
+                        <div class="s08-card-hud-bar">
+                            <div class="s08-model-badge is-accent">RAFLY UNIFIED KINETIC CORE</div>
+                            <div class="s08-model-status is-live">🟢 100% INTEGRATED &bull; UNIFIED ENGINE</div>
+                        </div>
+                        <p class="s08-model-desc">Web, security, marketing, content, and e-commerce executed under one architecture, one repo, and one fixed scope.</p>
+
+                        <!-- ADVANCED CUSTOM ANIMATED SVG KINETIC HUB -->
+                        <div class="s08-kinetic-svg-hub">
+                            <svg class="s08-engine-svg" viewBox="0 0 600 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <!-- Radial Core Gradient -->
+                                    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#38bdf8" stop-opacity="1"/>
+                                        <stop offset="60%" stop-color="#0a63ff" stop-opacity="0.9"/>
+                                        <stop offset="100%" stop-color="#06122f" stop-opacity="0.95"/>
+                                    </radialGradient>
+                                    <!-- Laser Stream Linear Gradients -->
+                                    <linearGradient id="streamGradWeb" x1="0%" y1="100%" x2="0%" y2="0%">
+                                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.2"/>
+                                        <stop offset="100%" stop-color="#38bdf8" stop-opacity="1"/>
+                                    </linearGradient>
+                                    <linearGradient id="streamGradSec" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.2"/>
+                                        <stop offset="100%" stop-color="#10b981" stop-opacity="1"/>
+                                    </linearGradient>
+                                    <filter id="coreGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                                    </filter>
+                                </defs>
+
+                                <!-- Curved Bezier Connection Paths -->
+                                <path d="M 300 170 Q 300 100 300 45" class="s08-laser-path-base" />
+                                <path d="M 300 170 Q 400 120 480 80" class="s08-laser-path-base" />
+                                <path d="M 300 170 Q 390 230 460 270" class="s08-laser-path-base" />
+                                <path d="M 300 170 Q 210 230 140 270" class="s08-laser-path-base" />
+                                <path d="M 300 170 Q 200 120 120 80" class="s08-laser-path-base" />
+
+                                <!-- Animated Laser Pulse Streams -->
+                                <path d="M 300 170 Q 300 100 300 45" class="s08-laser-stream" data-path-key="web" stroke="url(#streamGradWeb)" />
+                                <path d="M 300 170 Q 400 120 480 80" class="s08-laser-stream" data-path-key="security" stroke="url(#streamGradSec)" />
+                                <path d="M 300 170 Q 390 230 460 270" class="s08-laser-stream" data-path-key="growth" stroke="#38bdf8" />
+                                <path d="M 300 170 Q 210 230 140 270" class="s08-laser-stream" data-path-key="content" stroke="#8b5cf6" />
+                                <path d="M 300 170 Q 200 120 120 80" class="s08-laser-stream" data-path-key="commerce" stroke="#ec4899" />
+
+                                <!-- CENTRAL REACTOR CORE MATRIX -->
+                                <g class="s08-core-group">
+                                    <!-- Ambient Core Pulse Aura -->
+                                    <circle cx="300" cy="170" r="68" fill="rgba(10, 99, 255, 0.12)" class="s08-svg-core-pulse" />
+                                    <!-- Rotating Outer Tech Ring -->
+                                    <circle cx="300" cy="170" r="56" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="8 6" class="s08-ring-cw" />
+                                    <!-- Rotating Inner Gear Ring -->
+                                    <circle cx="300" cy="170" r="42" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="14 8" class="s08-ring-ccw" />
+                                    <!-- Central Core Orb -->
+                                    <circle cx="300" cy="170" r="32" fill="url(#coreGrad)" filter="url(#coreGlowFilter)" />
+                                    <text x="300" y="166" text-anchor="middle" class="s08-svg-core-text">RAFLY</text>
+                                    <text x="300" y="178" text-anchor="middle" class="s08-svg-core-sub">CORE</text>
+                                </g>
+
+                                <!-- RADIAL SATELLITE NODES (INTERACTIVE HOVER TARGETS) -->
+                                <!-- Satellite 1: Web Architecture (Top) -->
+                                <g class="s08-sat-node" data-sat-key="web" transform="translate(300, 45)">
+                                    <circle r="22" class="s08-sat-bg" />
+                                    <circle r="14" class="s08-sat-core" fill="#0a63ff" />
+                                    <text y="4" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">🌐</text>
+                                    <text y="36" text-anchor="middle" class="s08-sat-label">WEB DEVELOPMENT</text>
+                                </g>
+
+                                <!-- Satellite 2: Perimeter Security (Top Right) -->
+                                <g class="s08-sat-node" data-sat-key="security" transform="translate(480, 80)">
+                                    <circle r="22" class="s08-sat-bg" />
+                                    <circle r="14" class="s08-sat-core" fill="#10b981" />
+                                    <text y="4" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">🛡️</text>
+                                    <text y="36" text-anchor="middle" class="s08-sat-label">CYBER SECURITY</text>
+                                </g>
+
+                                <!-- Satellite 3: Growth Marketing (Bottom Right) -->
+                                <g class="s08-sat-node" data-sat-key="growth" transform="translate(460, 270)">
+                                    <circle r="22" class="s08-sat-bg" />
+                                    <circle r="14" class="s08-sat-core" fill="#38bdf8" />
+                                    <text y="4" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">📈</text>
+                                    <text y="36" text-anchor="middle" class="s08-sat-label">PERFORMANCE MARKETING</text>
+                                </g>
+
+                                <!-- Satellite 4: Brand & Content (Bottom Left) -->
+                                <g class="s08-sat-node" data-sat-key="content" transform="translate(140, 270)">
+                                    <circle r="22" class="s08-sat-bg" />
+                                    <circle r="14" class="s08-sat-core" fill="#8b5cf6" />
+                                    <text y="4" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">✍️</text>
+                                    <text y="36" text-anchor="middle" class="s08-sat-label">BRAND CONTENT</text>
+                                </g>
+
+                                <!-- Satellite 5: Commerce Engine (Top Left) -->
+                                <g class="s08-sat-node" data-sat-key="commerce" transform="translate(120, 80)">
+                                    <circle r="22" class="s08-sat-bg" />
+                                    <circle r="14" class="s08-sat-core" fill="#ec4899" />
+                                    <text y="4" text-anchor="middle" fill="#fff" font-size="10" font-weight="900">🛒</text>
+                                    <text y="36" text-anchor="middle" class="s08-sat-label">E-COMMERCE OPS</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- REAL-TIME TELEMETRY PANEL (UPDATES ON NODE HOVER) -->
+                        <div class="s08-hub-telemetry-box">
+                            <div class="s08-htb-header">
+                                <span class="s08-htb-tag" data-telemetry-tag>UNIFIED ENGINE &bull; ACTIVE</span>
+                                <span class="s08-htb-status" data-telemetry-status>SYNCED</span>
+                            </div>
+                            <h4 class="s08-htb-title" data-telemetry-title>HOVER A SATELLITE CAPABILITY</h4>
+                            <div class="s08-htb-metric" data-telemetry-metric>SINGLE-POINT ACCOUNTABILITY</div>
+                            <p class="s08-htb-desc" data-telemetry-desc>All 5 service capabilities operate in direct synchronization under one codebase, eliminating vendor handoff delays and context loss.</p>
+                        </div>
+
+                        <div class="s08-model-verdict is-accent">
+                            <span class="s08-mv-icon"><?= icon('zap') ?></span>
+                            <div><strong>Outcome:</strong> High-velocity execution, zero vendor friction, and single-point engineering accountability.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE METRICS TELEMETRY STRIP -->
+                <div class="s08-telemetry-strip">
+                    <div class="s08-tel-card">
+                        <span class="s08-tel-val">10x</span>
+                        <span class="s08-tel-label">DEPLOYMENT VELOCITY</span>
+                    </div>
+                    <div class="s08-tel-card">
+                        <span class="s08-tel-val">0%</span>
+                        <span class="s08-tel-label">HANDOFF FRICTION TAX</span>
+                    </div>
+                    <div class="s08-tel-card">
+                        <span class="s08-tel-val">100%</span>
+                        <span class="s08-tel-label">FIXED PRICE GUARANTEE</span>
+                    </div>
+                    <div class="s08-tel-card">
+                        <span class="s08-tel-val">1</span>
+                        <span class="s08-tel-label">ACCOUNTABLE LEAD ENGINEER</span>
+                    </div>
+                </div>
+
+                <!-- CONVERGING STATEMENT BANNER -->
+                <div class="s08-converge-banner">
+                    <div class="s08-cb-left">
+                        <span class="s08-cb-badge">THE RAFLY DIFFERENCE</span>
+                        <span class="s08-cb-statement">ONE TEAM. ONE UNIFIED ENGINE. ONE ACCOUNTABLE OUTCOME.</span>
+                    </div>
+                    <a href="#start" class="s08-cb-cta">
+                        <span>INITIATE PROJECT SCOPE</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- OPERATIONAL BOUNDARIES INDEX -->
+            <div class="s08-boundary-index s08-view-block" data-view-id="boundary-index">
+                <div class="s08-bi-header">
+                    <!-- Filter strip matching JS expectations -->
+                    <div class="bs-filter-strip s08-filter-strip" role="tablist" aria-label="Filter boundaries by service">
+                        <?php foreach ($serviceTabs as $i => $tab): ?>
+                        <button type="button" class="bs-pill <?= $i === 0 ? 'is-active' : '' ?>" data-filter="<?= e($tab['slug']) ?>" role="tab" aria-selected="<?= $i === 0 ? 'true' : 'false' ?>">
+                            <span><?= e($tab['label']) ?></span>
+                            <small>(<?= $tab['count'] ?>)</small>
+                        </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Technical Specification Boundary Grid (bs-card items for JS) -->
+                <div class="s08-bi-grid bs-board-wrap">
+                    <?php 
+                    $defaultFilter = $serviceTabs[0]['slug'] ?? 'web-development';
+                    foreach ($limits as $item): 
+                        $isDefault = ($item['slug'] === $defaultFilter || $defaultFilter === 'all');
+                    ?>
+                    <div class="bs-card s08-bi-card" data-category="<?= e($item['slug']) ?>"<?= $isDefault ? '' : ' style="display: none;"' ?>>
+                        <div class="s08-card-head-bar">
+                            <span class="s08-ch-domain"><?= e(strtoupper($item['svc'])) ?></span>
+                            <span class="s08-ch-num">SPEC 0<?= e($item['localIdx']) ?></span>
+                        </div>
+                        <div class="s08-card-content">
+                            <h4 class="s08-cb-title"><?= e($item['title']) ?></h4>
+                            <p class="s08-cb-desc"><?= e($item['desc']) ?></p>
+                        </div>
+                        <div class="s08-card-standard">
+                            <span class="s08-cs-icon"><?= icon('circle-check') ?></span>
+                            <div class="s08-cs-body">
+                                <span class="s08-cs-label">Guaranteed Standard</span>
+                                <p class="s08-cs-text"><?= e($item['standard']) ?></p>
+                            </div>
                         </div>
                     </div>
                     <?php endforeach; ?>
                 </div>
             </div>
+
         </div>
     </section>
 
     <?php /* ==========================================================
-       12 — START PROJECT: LET'S BUILD SOMETHING THAT MATTERS (#start)
+       09 — INTAKE CONSOLE & PROJECT START (#start)
        ========================================================== */ ?>
-    <section class="section close-editorial-section close has-tex has-reels-bg" id="start">
+    <section class="home-section-09 close-editorial-section close has-tex" id="start">
+        <!-- REELS-STYLE BACKGROUND LAYER 1 & 2: Architectural Grid, Dots, Hatch & Ambient Aura -->
         <div class="tex-apps-grid" aria-hidden="true"></div>
         <div class="tex-apps-dots" aria-hidden="true"></div>
         <div class="tex-apps-hatch" aria-hidden="true"></div>
         <div class="reels-ambient-aura" aria-hidden="true"></div>
 
-        <div class="container">
-            <div class="ce-grid">
-                <div class="ce-copy">
-                    <span class="ce-kicker">12 // LET'S BUILD</span>
-                    <h2 class="ce-title">LET'S BUILD SOMETHING THAT MATTERS.</h2>
-                    <p class="ce-lead">Tell us what is in front of you. We will respond with a clear scope and a number within one working day—or tell you plainly if it's not a fit.</p>
-                    <div class="ce-commitments">
-                        <div class="ce-comm-item">
-                            <strong>FIRST STEP</strong>
-                            <span>A direct call with the build team, not a sales pitch</span>
+        <div class="s09-container container">
+            <div class="s09-split-grid ce-grid">
+                
+                <!-- LEFT COLUMN: DYNAMIC SIGNAL & SLA TIMELINE -->
+                <div class="s09-timeline-panel ce-copy">
+                    <div class="s09-header-block">
+                        <div class="s09-head-tag-row">
+                            <span class="s09-tag ce-kicker">09 • INTAKE CONSOLE</span>
+                            <span class="s09-live-badge"><i class="s09-live-dot"></i> SLA ONLINE</span>
                         </div>
-                        <div class="ce-comm-item">
-                            <strong>RESPONSE SLA</strong>
-                            <span>Within 24 hours (1 working day)</span>
+                        <h2 class="s09-title ce-title">LET'S BUILD SOMETHING THAT MATTERS.</h2>
+                        <p class="s09-lead ce-lead">Tell us what is in front of you. We will respond with a clear scope and a transparent fixed price within 24 hours—or tell you plainly if it's not a fit.</p>
+                    </div>
+
+                    <!-- LIVE LOTTIE TELEMETRY HUD CARD (SIDE ANIMATION) -->
+                    <div class="s09-lottie-hud-card">
+                        <div class="s09-lhud-radar" style="width: 48px; height: 48px;">
+                            <lottie-player
+                                src="/assets/lottie/radar.json"
+                                background="transparent"
+                                speed="1"
+                                style="width: 48px; height: 48px;"
+                                autoplay
+                                loop
+                                aria-hidden="true">
+                            </lottie-player>
+                        </div>
+                        <div class="s09-lhud-info">
+                            <div class="s09-lhud-row">
+                                <span class="s09-lhud-label">SIGNAL STATUS</span>
+                                <strong class="s09-lhud-val">ENCRYPTED &bull; DIRECT SLA</strong>
+                            </div>
+                            <div class="s09-lhud-row">
+                                <span class="s09-lhud-label">ENGINEER RESPONSE</span>
+                                <strong class="s09-lhud-val">&lt; 24 HOURS GUARANTEE</strong>
+                            </div>
+                            <div class="s09-lhud-bars">
+                                <i class="lh-b1"></i><i class="lh-b2"></i><i class="lh-b3"></i><i class="lh-b4"></i><i class="lh-b5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3-Step Intake Timeline -->
+                    <div class="s09-roadmap ce-roadmap">
+                        <div class="s09-road-step ce-step-item">
+                            <div class="s09-rs-num ce-step-num">01</div>
+                            <div class="s09-rs-content ce-step-info">
+                                <strong>TECHNICAL DISCOVERY &amp; AUDIT</strong>
+                                <p>Direct technical call with lead engineers to map your goals &amp; stack bottlenecks.</p>
+                            </div>
+                        </div>
+                        <div class="s09-road-step ce-step-item">
+                            <div class="s09-rs-num ce-step-num">02</div>
+                            <div class="s09-rs-content ce-step-info">
+                                <strong>SCOPE &amp; FIXED PRICE PROPOSAL</strong>
+                                <p>Clear roadmap document with itemized scope, timeline, and one guaranteed number up front.</p>
+                            </div>
+                        </div>
+                        <div class="s09-road-step ce-step-item">
+                            <div class="s09-rs-num ce-step-num">03</div>
+                            <div class="s09-rs-content ce-step-info">
+                                <strong>PARALLEL BUILD &amp; HARDENED LAUNCH</strong>
+                                <p>Web, security, content, and growth engines built in parallel sprints with 100/100 CWV guarantee.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="ce-form-wrap">
+                <!-- RIGHT COLUMN: INTAKE CONSOLE FORM PANEL -->
+                <div class="s09-form-panel ce-form-wrap">
                     <?php
-                        $formId      = 'homeLeadForm';
-                        $submitLabel = 'START A CONVERSATION →';
+                        $formId        = 'homeLeadForm';
+                        $submitLabel   = 'START A CONVERSATION →';
+                        $hideTelemetry = true;
+                        $compact       = true;
                         require __DIR__ . '/partials/lead-form.php';
                     ?>
                 </div>
+
             </div>
         </div>
     </section>

@@ -15,98 +15,21 @@ if ($data === null) {
 }
 
 $crumbs = [
-    ['name' => 'Home',         'url' => '/'],
-    ['name' => 'Services',     'url' => '/#services'],
+    ['name' => 'Home',     'url' => '/'],
+    ['name' => 'Services', 'url' => '/#services'],
     ['name' => $data['title'], 'url' => '/services/' . ($service === 'ecommerce-support' ? 'ecommerce' : $service)],
 ];
 
-$relatedArticles    = related_articles_for_service($service, 3);
-$relatedCaseStudies = related_case_studies_for_service($data['title'], 2);
-
-$signals = $data['signals'] ?? [];
-if (empty($signals) && !empty($data['diagnostics']) && is_array($data['diagnostics'])) {
-    $signals = [];
-    foreach ($data['diagnostics'] as $d) {
-        if (is_array($d)) {
-            $signals[] = $d['title'] . ': ' . $d['desc'];
-        } else {
-            $signals[] = (string)$d;
-        }
-    }
-}
-
-$deliverables = $data['deliverables'] ?? [];
-if (empty($deliverables) && !empty($data['bento']) && is_array($data['bento'])) {
-    $deliverables = [];
-    if (isset($data['bento']['main']) && is_array($data['bento']['main'])) {
-        $deliverables[] = [
-            'icon'  => 'layers',
-            'title' => $data['bento']['main']['title'],
-            'desc'  => $data['bento']['main']['desc']
-        ];
-    }
-    if (isset($data['bento']['medium']) && is_array($data['bento']['medium'])) {
-        foreach ($data['bento']['medium'] as $m) {
-            if (is_array($m)) {
-                $deliverables[] = [
-                    'icon'  => 'cpu',
-                    'title' => $m['title'],
-                    'desc'  => $m['desc']
-                ];
-            }
-        }
-    }
-    if (isset($data['bento']['compact']) && is_array($data['bento']['compact'])) {
-        foreach ($data['bento']['compact'] as $c) {
-            if (is_array($c)) {
-                $deliverables[] = [
-                    'icon'  => 'check-circle',
-                    'title' => $c['title'],
-                    'desc'  => $c['desc']
-                ];
-            }
-        }
-    }
-}
-
-$points = $data['points'] ?? [
-    'Direct communication with lead engineers',
-    'Written delivery milestones and timeline commitments',
-    'Zero hidden fees, transparent pricing structure',
-    'Full source code and IP ownership transfer'
-];
-
-$bannerImages = [
-    'web'       => '/assets/web_dev_hero_banner.webp',
-    'security'  => '/assets/security_hero_banner.webp',
-    'marketing' => '/assets/marketing_hero_banner.webp',
-    'content'   => '/assets/content_hero_banner.webp',
-    'ecom'      => '/assets/ecom_hero_banner.webp',
-];
-
-$telemetryChipsMap = [
-    'web'       => ['⚡ 38ms LCP · 100/100 Vitals', 'PHP 8.3 / ESNext', 'Zero-Bloat Stack'],
-    'security'  => ['🛡️ TLS 1.3 Shield · Active', 'Argon2id Auth Guard', '0 Threat Vectors'],
-    'marketing' => ['📈 ROAS +312% · GA4 Server-Side', 'Meta CAPI Synced', 'Attributed Revenue'],
-    'content'   => ['🎬 4K HDR · 120fps Timeline', 'ProRes 4444 XQ', 'Color Graded LUTs'],
-    'ecom'      => ['🛒 Stripe Verified · Sub-10ms', '100% Inventory Synced', 'Global CDN Hub'],
-];
-
-$currentBanner = $bannerImages[$data['key']] ?? '/assets/web_dev_hero_banner.webp';
-$currentChips  = $telemetryChipsMap[$data['key']] ?? ['⚡ 100/100 Vitals', 'Sub-second Load'];
-
 $page = [
     'id'        => 'services',
-    'title'     => $data['title'] . ' | RAFly Digital Growth',
+    'title'     => $data['title'] . ' | RAFly Digital Growth Partner',
     'desc'      => $data['intro'],
     'bodyClass' => 'page-service svc-' . $data['key'],
-    'styles'    => ['home', 'service'],
+    'styles'    => ['home', 'home-scenes', 'service'],
     'module'    => 'home',
     'canonical' => 'services/' . ($service === 'ecommerce-support' ? 'ecommerce' : $service),
-
     'schema'    => [
         schema_service($data['title'], $data['intro'], $data['highlights'], schema_id('service-' . $service)),
-        schema_faq($data['faqs']),
         schema_breadcrumbs($crumbs),
     ],
 ];
@@ -114,736 +37,1225 @@ $page = [
 require __DIR__ . '/partials/head.php';
 require __DIR__ . '/partials/header.php';
 require __DIR__ . '/partials/social-rail.php';
+
+$key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'automation'
 ?>
 <main id="main">
-    <?php /* ============================== 1. HERO ============================= */ ?>
-    <section class="section hero sig-hero svc-clean-hero" style="min-height: clamp(540px, 75vh, 680px); padding-block: clamp(2.5rem, 4vh, 4rem); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-        
-        <?php /* ── STATIC HOMEPAGE BACKGROUND TEXTURE SYSTEM (NO DISTRACTING ANIMATION) ── */ ?>
-        <div class="sig-env" aria-hidden="true" style="opacity: 0.75;">
-            <div class="sig-env__grain"></div>
-            <div class="sig-env__grid"></div>
-            <div class="sig-env__dots"></div>
-            <div class="sig-env__scanbeam" style="opacity: 0.15;"></div>
-            <svg class="sig-env__blueprint" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice" style="opacity: 0.4;">
-                <path class="sig-bp-line line-a" d="M -100,220 Q 380,120 780,440 T 1540,620" stroke="url(#sigBpGrad1)" stroke-width="1.5" />
-                <path class="sig-bp-line line-b" d="M -100,640 Q 420,780 780,440 T 1540,180" stroke="url(#sigBpGrad2)" stroke-width="1.5" />
-                <defs>
-                    <linearGradient id="sigBpGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#0a63ff" stop-opacity="0.35" />
-                        <stop offset="50%" stop-color="#0891b2" stop-opacity="0.20" />
-                        <stop offset="100%" stop-color="#0a63ff" stop-opacity="0" />
-                    </linearGradient>
-                    <linearGradient id="sigBpGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#0230c6" stop-opacity="0.30" />
-                        <stop offset="50%" stop-color="#6134c9" stop-opacity="0.15" />
-                        <stop offset="100%" stop-color="#0891b2" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-            </svg>
-        </div>
 
-        <div class="container hero-grid" style="position: relative; z-index: 2; width: 100%;">
-            <div class="hero-content svc-hero">
-                <p class="eyebrow" data-r="fade">
-                    <span class="pulse-dot-cyan"></span>
-                    UNIFIED ENGINE // <?= e($data['badge']) ?> v2.4
-                </p>
-
-                <h1 class="svc-title" data-r="rise">
-                    <?= e($data['title']) ?> <span class="grad-word rafly-underline">
-                        <?= $data['key'] === 'web' ? 'Engineering' : ($data['key'] === 'security' ? 'Perimeter' : ($data['key'] === 'marketing' ? 'Intelligence' : ($data['key'] === 'content' ? 'Studio' : 'Infrastructure'))) ?>
-                    </span>
+<?php if ($key === 'web'): ?>
+    <!-- =========================================================================
+         01. WEB DEVELOPMENT — DIGITAL PRODUCT ENGINE (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 HERO / SYSTEM INTRODUCTION -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; position: relative; overflow: hidden; display: flex; align-items: center;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active"></span> DIGITAL PRODUCT ENGINE
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    WEB ENGINE &amp; <span style="color: #0a63ff;">APPLICATION ARCHITECTURE</span>
                 </h1>
-
-                <p class="svc-tagline" data-r="rise" data-r-delay="1">
-                    <?= e($data['tagline']) ?>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Custom PHP 8.3 REST APIs, React &amp; Next.js applications, and decoupled web engines engineered for sub-50ms server response times and 100/100 Core Web Vitals.
                 </p>
-
-                <p class="svc-intro" data-r="rise" data-r-delay="2">
-                    <?= e($data['intro']) ?>
-                </p>
-
-                <div class="chips svc-pills" data-r="rise" data-r-delay="3">
-                    <?php foreach ($data['highlights'] as $highlight): ?>
-                        <span class="chip chip-sm">
-                            <span class="chip-dot"></span>
-                            <?= e($highlight) ?>
-                        </span>
-                    <?php endforeach; ?>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake">Start Web Build <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#topology">Explore Topology <?= icon('arrow-down') ?></a>
                 </div>
-
-                <div class="hero-actions svc-actions" data-r="rise" data-r-delay="4">
-                    <a class="btn btn-primary btn-lg" href="/contact">
-                        <span>Book a free consultation</span>
-                        <?= icon('arrow-up-right') ?>
-                    </a>
-                    <a class="btn btn-secondary btn-lg" href="#diagnostics">
-                        <span>System diagnostics</span>
-                        <?= icon('arrow-down') ?>
-                    </a>
-                </div>
-
-                <p class="svc-note" data-r="fade" data-r-delay="5">
-                    // RAFly UNIFIED ENGINE · 28.5355° N, 77.3910° E
-                </p>
             </div>
 
-            <div class="hero-visual" data-r="scale" data-service-host data-service-key="<?= e($data['key']) ?>">
-                
-                <!-- VISUAL MODE TAB SWITCHER -->
-                <div class="svc-visual-mode-bar">
-                    <button type="button" class="svc-visual-tab active" data-tab="matrix">
-                        <span>🌐 Architecture Matrix</span>
-                    </button>
-                    <button type="button" class="svc-visual-tab" data-tab="ide">
-                        <span>💻 Live IDE Studio</span>
-                    </button>
-                    <button type="button" class="svc-visual-tab" data-tab="vitals">
-                        <span>📊 Vitals Telemetry</span>
-                    </button>
+            <!-- HERO CUSTOM SVG: DIGITAL PRODUCT ENGINE -->
+            <div class="code-console-window">
+                <div class="code-console-bar">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">DIGITAL PRODUCT ENGINE PIPELINE</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(16,185,129,0.15); color: #10b981; border-color: rgba(16,185,129,0.3);">LCP: 38ms</span>
                 </div>
-
-                <!-- VIEW 1: RAFly ARCHITECTURE MATRIX -->
-                <div class="svc-visual-pane active" id="pane-matrix">
-                    <div class="hero-product-card svc-arch-matrix" style="position: relative; overflow: hidden; background: linear-gradient(145deg, #050f33 0%, #0a1746 100%); border: 1px solid rgba(10, 99, 255, 0.3); border-radius: var(--r-2xl); padding: 1.75rem; box-shadow: 0 20px 50px rgba(5, 15, 51, 0.3); color: #fff;">
-                        <!-- SVG Grid & System Nodes -->
-                        <div class="matrix-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.875rem;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span class="pulse-dot-cyan"></span>
-                                <span style="font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.08em; text-transform: uppercase;">RAFly SYSTEM ARCHITECTURE // <?= e($data['key']) ?></span>
-                            </div>
-                            <span style="font-family: var(--font-mono, monospace); font-size: 0.7rem; color: #10b981; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 10px; border-radius: 999px; font-weight: 600;">ACTIVE PIPELINE</span>
-                        </div>
-
-                        <div class="matrix-viewport" style="position: relative; min-height: 240px; background: rgba(5, 15, 51, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--r-lg); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
-                            <svg class="matrix-lines-svg" viewBox="0 0 500 160" fill="none" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.35;">
-                                <path d="M 40,80 L 160,80 C 200,80 220,40 260,40 L 360,40 C 400,40 420,80 460,80" stroke="#0a63ff" stroke-width="2" stroke-dasharray="4 4" />
-                                <path d="M 40,80 L 160,80 C 200,80 220,120 260,120 L 360,120 C 400,120 420,80 460,80" stroke="#0891b2" stroke-width="1.5" />
-                                <circle cx="40" cy="80" r="4" fill="#0a63ff" />
-                                <circle cx="260" cy="40" r="4" fill="#38bdf8" />
-                                <circle cx="260" cy="120" r="4" fill="#10b981" />
-                                <circle cx="460" cy="80" r="5" fill="#0a63ff" />
-                            </svg>
-
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; position: relative; z-index: 2;">
-                                <div style="background: rgba(10, 23, 70, 0.8); border: 1px solid rgba(10, 99, 255, 0.25); border-radius: var(--r); padding: 1rem; backdrop-filter: blur(8px);">
-                                    <span style="font-family: var(--font-mono, monospace); font-size: 0.68rem; color: #94a3b8; display: block; margin-bottom: 0.25rem;">STAGE 01</span>
-                                    <strong style="font-size: 0.95rem; color: #fff; display: block; margin-bottom: 0.25rem;">Core Surface</strong>
-                                    <span style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.4; display: block;">Optimized asset delivery &amp; edge caching</span>
-                                </div>
-                                <div style="background: rgba(10, 23, 70, 0.8); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--r); padding: 1rem; backdrop-filter: blur(8px);">
-                                    <span style="font-family: var(--font-mono, monospace); font-size: 0.68rem; color: #38bdf8; display: block; margin-bottom: 0.25rem;">STAGE 02</span>
-                                    <strong style="font-size: 0.95rem; color: #fff; display: block; margin-bottom: 0.25rem;">Security &amp; Logic</strong>
-                                    <span style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.4; display: block;">Session guard &amp; zero-trust data pipeline</span>
-                                </div>
-                                <div style="background: rgba(10, 23, 70, 0.8); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--r); padding: 1rem; backdrop-filter: blur(8px);">
-                                    <span style="font-family: var(--font-mono, monospace); font-size: 0.68rem; color: #10b981; display: block; margin-bottom: 0.25rem;">STAGE 03</span>
-                                    <strong style="font-size: 0.95rem; color: #fff; display: block; margin-bottom: 0.25rem;">Conversion SLA</strong>
-                                    <span style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.4; display: block;">Attributed lead routing &amp; instant response</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="matrix-chips-footer" style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem;">
-                            <?php foreach ($currentChips as $chip): ?>
-                                <span class="banner-telemetry-chip" style="font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 600; color: #e2e8f0; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); padding: 5px 12px; border-radius: 8px; backdrop-filter: blur(6px);"><?= e($chip) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
+                <div style="padding: 1rem; background: #0f172a; display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/system-arch.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 150px; height: 150px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
                 </div>
+                <div style="padding: 1.5rem;">
+                    <svg viewBox="0 0 420 220" fill="none" style="width: 100%;">
+                        <!-- Viewport frame -->
+                        <rect x="10" y="10" width="400" height="200" rx="10" stroke="#0a63ff" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.35" />
+                        <!-- Browser bar -->
+                        <rect x="20" y="20" width="380" height="24" rx="4" fill="#0a1746" stroke="#38bdf8" stroke-width="1" />
+                        <circle cx="34" cy="32" r="3" fill="#ef4444" />
+                        <circle cx="44" cy="32" r="3" fill="#eab308" />
+                        <circle cx="54" cy="32" r="3" fill="#22c55e" />
+                        <text x="70" y="35" font-family="monospace" font-size="9" fill="#94a3b8">https://api.rafly.in/v1/engine</text>
+                        
+                        <!-- Nodes & Flows -->
+                        <path d="M 40,110 H 120 C 140,110 140,65 170,65 H 250 C 280,65 280,110 310,110 H 380" stroke="#0a63ff" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="40" cy="110" r="6" fill="#38bdf8" />
+                        <circle cx="170" cy="65" r="6" fill="#10b981" />
+                        <circle cx="250" cy="65" r="6" fill="#10b981" />
+                        <circle cx="380" cy="110" r="6" fill="#38bdf8" />
 
-                <!-- VIEW 2: LIVE IDE & CODE STUDIO WITH INTERACTIVE FILE TABS -->
-                <div class="svc-visual-pane" id="pane-ide" style="display: none;">
-                    <div class="hero-product-card svc-ide-studio">
-                        <div class="studio-header">
-                            <div class="window-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
-                            <div class="window-tabs">
-                                <button type="button" class="ide-tab active" data-file="app">⚡ app.ts</button>
-                                <button type="button" class="ide-tab" data-file="api">🐘 api.php</button>
-                                <button type="button" class="ide-tab" data-file="db">🗄️ schema.sql</button>
-                            </div>
-                            <div class="window-badge">PHP 8.3 / ESNext</div>
-                        </div>
-                        <div class="studio-body">
-                            <div class="code-file-content" id="file-app">
-                                <div class="code-line"><span class="c-purple">import</span> { <span class="c-blue">createDecoupledApp</span> } <span class="c-purple">from</span> <span class="c-green">'@rafly/core'</span>;</div>
-                                <div class="code-line"><span class="c-purple">const</span> app = <span class="c-blue">createDecoupledApp</span>({ <span class="c-orange">target</span>: <span class="c-green">'#root'</span> });</div>
-                                <div class="code-line"><span class="c-comment">// Hydrating server-rendered edge cache...</span></div>
-                                <div class="code-line"><span class="c-purple">await</span> app.<span class="c-blue">mount</span>(); <span class="c-cyan">// LCP: 38ms</span></div>
-                            </div>
-                            <div class="code-file-content" id="file-api" style="display: none;">
-                                <div class="code-line"><span class="c-purple">&lt;?php</span></div>
-                                <div class="code-line"><span class="c-purple">declare</span>(strict_types=1);</div>
-                                <div class="code-line"><span class="c-purple">class</span> <span class="c-blue">ApiService</span> {</div>
-                                <div class="code-line">&nbsp;&nbsp;<span class="c-purple">public function</span> <span class="c-blue">handle</span>(): <span class="c-green">Response</span> { <span class="c-cyan">/* 200 OK */</span> }</div>
-                                <div class="code-line">}</div>
-                            </div>
-                            <div class="code-file-content" id="file-db" style="display: none;">
-                                <div class="code-line"><span class="c-purple">CREATE TABLE</span> <span class="c-blue">sessions</span> (</div>
-                                <div class="code-line">&nbsp;&nbsp;<span class="c-orange">id</span> <span class="c-purple">BIGINT PRIMARY KEY</span>,</div>
-                                <div class="code-line">&nbsp;&nbsp;<span class="c-orange">token</span> <span class="c-purple">VARCHAR(255) NOT NULL</span></div>
-                                <div class="code-line">); <span class="c-comment">-- B-Tree Indexed</span></div>
-                            </div>
-                            <div class="studio-footer">
-                                <span class="vitals-chip"><span class="chip-pulse"></span> ⚡ 38ms LCP · 100/100 Vitals</span>
-                                <span class="vitals-chip"><span class="chip-pulse green"></span> REST API: 200 OK</span>
-                            </div>
-                        </div>
-                    </div>
+                        <!-- Flow signal packets -->
+                        <circle cx="120" cy="110" r="3" fill="#ffffff"><animate attributeName="cx" values="40;120;170;250;310;380" dur="3s" repeatCount="indefinite" /></circle>
+
+                        <!-- Labels -->
+                        <text x="40" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">CLIENT</text>
+                        <text x="120" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">EDGE CDN</text>
+                        <text x="210" y="52" font-family="monospace" font-size="9" fill="#38bdf8" text-anchor="middle" font-weight="bold">PHP 8.3 REST API</text>
+                        <text x="310" y="135" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">MYSQL VAULT</text>
+                        <text x="380" y="135" font-family="monospace" font-size="9" fill="#10b981" text-anchor="middle">200 OK</text>
+
+                        <!-- Code preview overlay -->
+                        <rect x="120" y="150" width="180" height="45" rx="6" fill="#050f33" stroke="#10b981" stroke-width="1" />
+                        <text x="130" y="167" font-family="monospace" font-size="8" fill="#10b981">HTTP/2 200 OK [38ms]</text>
+                        <text x="130" y="182" font-family="monospace" font-size="8" fill="#94a3b8">Cache-Control: public, max-age=86400</text>
+                    </svg>
                 </div>
-
-                <!-- VIEW 3: REAL-TIME VITALS TELEMETRY GAUGES -->
-                <div class="svc-visual-pane" id="pane-vitals" style="display: none;">
-                    <div class="hero-product-card vitals-telemetry-card" style="padding: 1.5rem; background: rgba(15, 23, 42, 0.92); color: #fff; border-radius: var(--r-2xl); border: 1px solid rgba(56, 189, 248, 0.3);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.8rem;">
-                            <span style="font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 700; color: #38bdf8;">TELEMETRY / PERFORMANCE MATRIX</span>
-                            <span style="font-family: var(--font-mono, monospace); font-size: 0.7rem; color: #10b981; background: rgba(16, 185, 129, 0.12); padding: 3px 10px; border-radius: 6px;">100/100 LIGHTHOUSE</span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                            <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <span style="font-size: 1.8rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono, monospace);">38ms</span>
-                                <span style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-family: var(--font-mono, monospace);">LCP (Largest Contentful Paint)</span>
-                            </div>
-                            <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <span style="font-size: 1.8rem; font-weight: 800; color: #10b981; font-family: var(--font-mono, monospace);">12ms</span>
-                                <span style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-family: var(--font-mono, monospace);">FID (First Input Delay)</span>
-                            </div>
-                            <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <span style="font-size: 1.8rem; font-weight: 800; color: #c084fc; font-family: var(--font-mono, monospace);">0.00</span>
-                                <span style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-family: var(--font-mono, monospace);">CLS (Cumulative Layout Shift)</span>
-                            </div>
-                            <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1rem; text-align: center;">
-                                <span style="font-size: 1.8rem; font-weight: 800; color: #fbbf24; font-family: var(--font-mono, monospace);">99.8%</span>
-                                <span style="display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 4px; font-family: var(--font-mono, monospace);">Edge CDN Hit Ratio</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
-    <?php /* ========================= 2. SOUNDS FAMILIAR ======================= */ ?>
-    <section class="section band-soft" id="diagnostics">
-        <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">SYSTEM DIAGNOSTICS // SIGNALS</p>
-                    <h2>The situations <span class="soft">people call us about</span></h2>
-                </div>
-                <p class="lead">If more than one of these diagnostic traces lands, this is the exact service page you need.</p>
-            </div>
-
-            <div class="grid grid-4" data-r="group">
-                <?php if (!empty($data['diagnostics'])): ?>
-                    <?php foreach ($data['diagnostics'] as $diag): ?>
-                        <div class="signal-card">
-                            <span class="step-num" style="font-family: var(--font-mono, monospace); font-size: 0.72rem; font-weight: 700; color: #0a63ff; background: rgba(10, 99, 255, 0.08); padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 0.8rem;"><?= e($diag['code'] ?? '+01') ?></span>
-                            <h3 style="font-size: 1.1rem; font-weight: 700; color: #06122f; margin-bottom: 0.5rem;"><?= e($diag['title']) ?></h3>
-                            <p style="font-size: 0.9rem; color: #475569; margin: 0; line-height: 1.6;"><?= e($diag['desc']) ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= 1b. SERVICE AT A GLANCE ========================= */ ?>
-    <section class="section" style="padding-block: 1.5rem 1rem;">
-        <div class="container">
-            <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #cbd5e1; border-radius: var(--r-xl, 16px); padding: 1.5rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
-                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
-                    <span class="pulse-dot-cyan"></span>
-                    <span style="font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 700; color: #0a63ff; letter-spacing: 0.08em; text-transform: uppercase;">AT A GLANCE // <?= e($data['title']) ?></span>
-                </div>
-                <p style="font-size: 0.95rem; color: #334155; line-height: 1.6; margin: 0;">
-                    <?= e($data['intro']) ?> Executed directly by RAFly's engineering team with written milestone commitments, transparent pricing, and full intellectual property transfer upon project completion.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= 3. INTERACTIVE SYSTEM MAP ======================= */ ?>
-    <?php if (!empty($data['system_map'])): ?>
-    <section class="section section-blueprint" id="system-map">
+    <!-- 02 FRONTEND SYSTEM -->
+    <section class="section band-soft">
         <div class="container">
             <div class="sec-head sec-head-center">
-                <p class="eyebrow on-dark"><?= e($data['system_map']['eyebrow']) ?></p>
-                <h2><?= e($data['system_map']['title']) ?></h2>
-                <p class="lead muted" style="color: #94a3b8;"><?= e($data['system_map']['desc']) ?></p>
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">FRONTEND ARCHITECTURE</span>
+                <h2>EXPLODED PRODUCT INTERFACE SYSTEM</h2>
             </div>
-
-            <div class="system-diagram-container">
-                <svg class="system-pipeline-svg" viewBox="0 0 1000 60" fill="none" preserveAspectRatio="none">
-                    <path d="M 60,30 L 940,30" stroke="rgba(56, 189, 248, 0.2)" stroke-width="3" stroke-dasharray="6 6" />
-                    <path class="animated-packet-path" d="M 60,30 L 940,30" stroke="url(#sysPipeGrad)" stroke-width="4" stroke-linecap="round" />
-                    <defs>
-                        <linearGradient id="sysPipeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#0a63ff" />
-                            <stop offset="50%" stop-color="#38bdf8" />
-                            <stop offset="100%" stop-color="#10b981" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-
-                <div class="system-diagram-grid">
-                    <?php foreach ($data['system_map']['nodes'] as $idx => $node): ?>
-                        <div class="system-node-card <?= $idx === 0 ? 'is-active' : '' ?>" data-node-id="<?= e($node['id']) ?>">
-                            <div class="node-header">
-                                <span class="node-icon"><?= icon($node['icon']) ?></span>
-                                <span class="node-label"><?= e($node['label']) ?></span>
-                            </div>
-                            <h3 class="node-title"><?= e($node['name']) ?></h3>
-                            <p class="node-role"><?= e($node['role']) ?></p>
-                            <div class="node-tech">
-                                <span class="chip chip-sm"><?= e($node['tech']) ?></span>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">MODULE 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Enterprise Portals</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Decoupled single-page applications built with React and Next.js, utilizing server-side rendering for instant indexability.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">MODULE 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Subscription Dashboards</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Real-time metric telemetry, customer account authorization guards, subscription billing APIs, and interactive data grids.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">MODULE 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Internal Operations Tools</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Custom operational portals, administrative management panels, automated worker queues, and database inspection consoles.</p>
                 </div>
             </div>
         </div>
     </section>
-    <?php endif; ?>
 
-    <?php /* ========================= 4. TARGET FIT ======================= */ ?>
-    <?php if (!empty($data['who_it_is_for'])): ?>
+    <!-- 03 APPLICATION ARCHITECTURE -->
     <section class="section">
         <div class="container">
             <div class="sec-head sec-head-center">
-                <p class="eyebrow">TARGET FIT</p>
-                <h2>Who this service <span class="soft">is engineered for</span></h2>
-                <p class="lead">Built specifically for organizations where digital performance directly drives growth.</p>
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">BACKEND CONTROLLERS</span>
+                <h2>PHP 8.3 &amp; DECOUPLED BACKEND ARCHITECTURE</h2>
             </div>
-
-            <div class="grid grid-3" data-r="group">
-                <?php foreach ($data['who_it_is_for'] as $target): ?>
-                    <div class="card card-hover fit-card">
-                        <div class="card-body">
-                            <span class="badge-soft-blue"><?= e($target['fit']) ?></span>
-                            <h3 class="card-title" style="margin-top: 1rem; color: #06122f; font-weight: 700;"><?= e($target['title']) ?></h3>
-                            <p class="card-text" style="color: #475569; margin-top: 0.5rem; line-height: 1.6;"><?= e($target['desc']) ?></p>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <div class="code-console-window" style="padding: 1.75rem;">
+                <div style="font-size: 0.85rem; line-height: 1.8;">
+                    <div style="color:#10b981;">&lt;?php declare(strict_types=1);</div>
+                    <div><span style="color:#0a63ff;">namespace</span> Rafly\Engine\Controllers;</div>
+                    <div><span style="color:#0a63ff;">final class</span> <span style="color:#38bdf8;">ApplicationController</span> {</div>
+                    <div>&nbsp;&nbsp;<span style="color:#0a63ff;">public function</span> <span style="color:#10b981;">dispatch</span>(<span style="color:#38bdf8;">Request</span> $request): <span style="color:#38bdf8;">Response</span> {</div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#64748b;">// Sub-50ms response dispatch pipeline</span></div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#0a63ff;">return</span> <span style="color:#0a63ff;">new</span> <span style="color:#38bdf8;">JsonResponse</span>([<span style="color:#10b981">'status'</span> =&gt; <span style="color:#10b981">'200_OK'</span>, <span style="color:#10b981">'lcp'</span> =&gt; <span style="color:#10b981">'38ms'</span>, <span style="color:#10b981">'cache'</span> =&gt; <span style="color:#10b981">'HIT'</span>]);</div>
+                    <div>&nbsp;&nbsp;}</div>
+                    <div>}</div>
+                </div>
             </div>
         </div>
     </section>
-    <?php endif; ?>
 
-    <?php /* ========================= 5. WHAT'S INCLUDED (BENTO) ======================= */ ?>
-    <section class="section band-soft">
+    <!-- 04 API + DATA FLOW -->
+    <section class="section band-soft" id="topology">
         <div class="container">
             <div class="sec-head sec-head-center">
-                <p class="eyebrow">WHAT'S INCLUDED</p>
-                <h2>The scope, <span class="soft">written down</span></h2>
-                <p class="lead">Every engagement is scoped in writing before it starts. This is what that scope usually covers.</p>
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">TOPOLOGY</span>
+                <h2>DECOUPLED DATA FLOW &amp; SQL VAULT</h2>
             </div>
-
-            <div class="grid grid-3" data-r="group">
-                <?php if (isset($data['bento']['main'])): ?>
-                    <article class="card card-hover bento-card-main" style="grid-column: span 3 / span 3; background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(10, 99, 255, 0.2); box-shadow: 0 12px 32px rgba(10, 99, 255, 0.06);">
-                        <div class="card-body" style="padding: 2rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                <span class="icon-box" style="background: rgba(10, 99, 255, 0.1); color: #0a63ff; border-radius: 10px; padding: 10px; display: grid; place-items: center;"><?= icon('layers') ?></span>
-                                <span class="badge badge-soft-blue"><?= e($data['bento']['main']['handle'] ?? 'CORE FEATURE') ?></span>
-                            </div>
-                            <h3 class="card-title" style="font-size: 1.4rem; font-weight: 800; color: #06122f;"><?= e($data['bento']['main']['title']) ?></h3>
-                            <p class="card-text" style="font-size: 1rem; color: #475569; line-height: 1.6; margin-top: 0.5rem;"><?= e($data['bento']['main']['desc']) ?></p>
-                            <?php if (!empty($data['bento']['main']['specs'])): ?>
-                                <ul style="margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: 0.8rem; list-style: none; padding: 0;">
-                                    <?php foreach ($data['bento']['main']['specs'] as $spec): ?>
-                                        <li style="font-family: var(--font-mono, monospace); font-size: 0.78rem; font-weight: 700; color: #0a63ff; background: rgba(10, 99, 255, 0.06); padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(10, 99, 255, 0.15);">✓ <?= e($spec) ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php endif; ?>
-                        </div>
-                    </article>
-                <?php endif; ?>
-
-                <?php if (isset($data['bento']['medium']) && is_array($data['bento']['medium'])): ?>
-                    <?php foreach ($data['bento']['medium'] as $m): ?>
-                        <article class="card card-hover">
-                            <div class="card-body">
-                                <span class="icon-box"><?= icon('cpu') ?></span>
-                                <h3 class="card-title" style="font-weight: 700; margin-top: 0.8rem;"><?= e($m['title']) ?></h3>
-                                <p class="card-text" style="color: #475569; line-height: 1.6;"><?= e($m['desc']) ?></p>
-                            </div>
-                        </article>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-
-                <?php if (isset($data['bento']['compact']) && is_array($data['bento']['compact'])): ?>
-                    <?php foreach ($data['bento']['compact'] as $c): ?>
-                        <article class="card card-hover">
-                            <div class="card-body">
-                                <span class="icon-box"><?= icon('check-circle') ?></span>
-                                <h3 class="card-title" style="font-weight: 700; margin-top: 0.8rem;"><?= e($c['title']) ?></h3>
-                                <p class="card-text" style="color: #475569; line-height: 1.6;"><?= e($c['desc']) ?></p>
-                            </div>
-                        </article>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================= 6. DELIVERABLES & ARTIFACTS ======================= */ ?>
-    <?php if (!empty($data['artifacts'])): ?>
-    <section class="section">
-        <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">DELIVERABLES &amp; HANDOFF</p>
-                    <h2>Concrete outputs <span class="soft">you receive at launch</span></h2>
+            <div class="grid grid-2" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">DATA LAYER 01</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Normalized SQL Schema</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">B-Tree indexed MySQL tables, PDO prepared statements, foreign key enforcement, and ACID transaction compliance.</p>
                 </div>
-                <p class="lead">Every engagement leaves behind documented code, specs, and verifiable audit reports.</p>
-            </div>
-
-            <div class="artifact-stack">
-                <?php foreach ($data['artifacts'] as $art): ?>
-                    <div class="artifact-sheet">
-                        <div class="artifact-header">
-                            <span class="artifact-type">// <?= e($art['type']) ?></span>
-                            <span class="artifact-tag"><?= e($art['tag']) ?></span>
-                        </div>
-                        <h3 class="artifact-title"><?= e($art['title']) ?></h3>
-                        <p class="artifact-desc"><?= e($art['desc']) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php /* ======================= 6b. SPECIALIZED SOLUTIONS ===================== */ ?>
-    <?php if (!empty($data['landing_links'])): ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">SPECIALIZED WORKFLOWS</p>
-                <h2>Dedicated <span class="soft">Action Solutions</span></h2>
-                <p class="lead">Accelerated action plans and targeted tools for specific operational requirements.</p>
-            </div>
-            <div class="grid grid-2" data-r="group">
-                <?php foreach ($data['landing_links'] as $ll): ?>
-                    <div class="card card-hover" style="background: #ffffff; border: 1px solid rgba(10, 99, 255, 0.2); padding: 1.8rem; border-radius: var(--r-xl, 16px); position: relative;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <span class="badge badge-soft-blue" style="font-weight: 700; font-size: 0.75rem;"><?= e($ll['badge']) ?></span>
-                            <span style="color: #0a63ff; font-weight: 700;"><?= icon('arrow-right') ?></span>
-                        </div>
-                        <h3 style="font-size: 1.25rem; font-weight: 800; color: #06122f; margin-bottom: 0.5rem;"><?= e($ll['title']) ?></h3>
-                        <p style="font-size: 0.95rem; color: #475569; line-height: 1.6; margin-bottom: 1.2rem;"><?= e($ll['desc']) ?></p>
-                        <a class="btn btn-sm btn-outline-primary" href="<?= e($ll['url']) ?>">Access Solution <?= icon('arrow-right') ?></a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php /* =========================== 7. WHAT CHANGES =================------- */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="split split-wide-l split-top">
-                <div data-fx="in-left" style="--travel: 12%;">
-                    <p class="eyebrow">WHAT CHANGES</p>
-                    <h2>What you should <span class="soft">notice afterwards</span></h2>
-                    <p class="lead">Not a promise about numbers &mdash; we do not make those. These are the practical differences the work is meant to produce.</p>
-                    <ul class="list-check" style="margin-top:2rem">
-                        <?php foreach ($data['outcomes'] as $outcome): ?>
-                            <li style="display: flex; gap: 0.8rem; margin-bottom: 0.8rem; font-size: 1rem; color: #1e293b; line-height: 1.5;"><?= icon('check') ?><span><?= e($outcome) ?></span></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-
-                <div class="panel panel-line" data-fx="in-right" style="--travel: 16%; --turn: 3deg;">
-                    <h3>How we approach it</h3>
-                    <p class="muted">Every engagement is shaped around clarity, delivery reliability, and being straight with you about trade-offs.</p>
-                    <ul class="list-check" style="margin-top:1.5rem">
-                        <?php foreach ($points as $point): ?>
-                            <li style="display: flex; gap: 0.8rem; margin-bottom: 0.8rem; font-size: 0.95rem; color: #334155;"><?= icon('check') ?><span><?= e($point) ?></span></li>
-                        <?php endforeach; ?>
-                    </ul>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">DATA LAYER 02</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Redis In-Memory Caching</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Sub-millisecond session state management, key-value query result caching, and rate limiting buckets.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php /* ===================== 8. HOW THE ENGAGEMENT RUNS ==================== */ ?>
-    <section class="section band-ink band-round-t">
-        <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow on-dark">How it runs</p>
-                <h2>Four stages, <span class="soft">no mystery timelines</span></h2>
-                <p class="lead">The same delivery process behind every Rafly package, applied to this service.</p>
-            </div>
-
-            <div class="steps-row" data-r="group">
-                <?php foreach ($data['process'] as $i => $step): ?>
-                    <div class="step-item">
-                        <span class="step-num">+<?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        <span class="step-title"><?= e($step['title']) ?></span>
-                        <span class="step-time"><?= e($step['time']) ?></span>
-                        <p class="step-text"><?= e($step['desc']) ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ===================== 8b. SERVICE LEVEL COMMITMENT (SLA) ==================== */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="card" style="padding: 2.5rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: var(--r-xl, 16px); box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-                <div class="sec-head-split" style="margin-bottom: 1.5rem;">
-                    <div>
-                        <span class="badge badge-soft-blue" style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: inline-block;">SUPPORT &amp; RESPONSE SLA</span>
-                        <h2 style="font-size: 1.8rem; font-weight: 800; color: #0f172a; margin: 0;">Standardized Service Level Commitment</h2>
-                    </div>
-                    <div style="max-width: 440px;">
-                        <p style="font-size: 0.95rem; color: #475569; line-height: 1.6; margin: 0;">
-                            <strong>Core SLA Rule (Response ≠ Resolution):</strong> Initial Response &amp; Triage SLA governs how quickly our team acknowledges and begins technical diagnosis. Target resolution times are operational benchmarks dependent on technical issue complexity.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="grid grid-4" style="gap: 1.2rem; margin-top: 1.5rem;">
-                    <div style="padding: 1.2rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 0.4rem;">Standard Support</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 0.3rem;">Response &lt; 24 business hrs</div>
-                        <p style="font-size: 0.82rem; color: #64748b; margin: 0;">Triage &lt; 12 business hrs | Target resolution 48 hrs</p>
-                    </div>
-
-                    <div style="padding: 1.2rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 0.4rem;">Growth Retainer</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #1e40af; margin-bottom: 0.3rem;">Response &lt; 8 business hrs</div>
-                        <p style="font-size: 0.82rem; color: #3b82f6; margin: 0;">Triage &lt; 4 business hrs | Target resolution 24 hrs</p>
-                    </div>
-
-                    <div style="padding: 1.2rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 10px;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #7c3aed; text-transform: uppercase; margin-bottom: 0.4rem;">Enterprise SLA</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #5b21b6; margin-bottom: 0.3rem;">Response &lt; 2 business hrs</div>
-                        <p style="font-size: 0.82rem; color: #6d28d9; margin: 0;">Triage &lt; 1 business hr | Target resolution 8 hrs</p>
-                    </div>
-
-                    <div style="padding: 1.2rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px;">
-                        <div style="font-size: 0.8rem; font-weight: 700; color: #dc2626; text-transform: uppercase; margin-bottom: 0.4rem;">Emergency Incident (24/7)</div>
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #991b1b; margin-bottom: 0.3rem;">Response &lt; 1 hour (24/7)</div>
-                        <p style="font-size: 0.82rem; color: #ef4444; margin: 0;">Hotline Triage &lt; 1 hour | Target resolution 4 hrs</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <?php /* ========================== 9. TOOLS AND STACK ======================= */ ?>
+    <!-- 05 PERFORMANCE + ACCESSIBILITY -->
     <section class="section">
         <div class="container">
             <div class="sec-head sec-head-center">
-                <p class="eyebrow">Stack &amp; tooling</p>
-                <h2>What we use <span class="soft">to deliver this</span></h2>
-                <p class="lead">Industry-standard tools, tuned for speed, safety, and handoff clarity.</p>
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">TELEMETRY GAUGES</span>
+                <h2>PERFORMANCE &amp; ACCESSIBILITY METRICS</h2>
             </div>
-
-            <div class="chips chips-center" data-r="fade">
-                <?php foreach ($data['tools'] as $tool): ?>
-                    <span class="chip" style="font-size: 0.9rem; padding: 0.6rem 1.2rem; gap: 8px;"><?= icon($tool['icon']) ?><?= $tool['label'] ?></span>
-                <?php endforeach; ?>
+            <div class="grid grid-4" style="gap:1.25rem; text-align:center;">
+                <div class="machined-card">
+                    <strong style="font-size:2.2rem; color:#0a63ff; display:block; font-weight:800; font-family:var(--font-display);">100/100</strong>
+                    <span class="telemetry-pill-mono" style="margin-top:0.4rem; display:inline-block;">LIGHTHOUSE VITAL</span>
+                </div>
+                <div class="machined-card">
+                    <strong style="font-size:2.2rem; color:#10b981; display:block; font-weight:800; font-family:var(--font-display);">38ms</strong>
+                    <span class="telemetry-pill-mono" style="margin-top:0.4rem; display:inline-block;">LCP RESPONSE</span>
+                </div>
+                <div class="machined-card">
+                    <strong style="font-size:2.2rem; color:#38bdf8; display:block; font-weight:800; font-family:var(--font-display);">WCAG 2.1</strong>
+                    <span class="telemetry-pill-mono" style="margin-top:0.4rem; display:inline-block;">ARIA ACCESSIBLE</span>
+                </div>
+                <div class="machined-card">
+                    <strong style="font-size:2.2rem; color:#9333ea; display:block; font-weight:800; font-family:var(--font-display);">PSR-12</strong>
+                    <span class="telemetry-pill-mono" style="margin-top:0.4rem; display:inline-block;">CODE COMPLIANT</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <?php /* ========================== 10. HONEST LIMITS ========================= */ ?>
+    <!-- 06 QA / TESTING / DEPLOYMENT -->
     <section class="section band-soft">
         <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Honest limits</p>
-                    <h2>Where we would <span class="soft">point you elsewhere</span></h2>
-                </div>
-                <p class="lead">We would rather tell you now than three weeks into a project that was never a good fit.</p>
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">CI/CD DEPLOYMENT</span>
+                <h2>AUTOMATED QA &amp; DEPLOYMENT PIPELINE</h2>
             </div>
-
-            <div class="grid grid-3" data-r="group">
-                <?php foreach ($data['boundaries'] as $limit): ?>
-                    <div class="limit-card" style="background: #ffffff; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--r-xl); padding: 1.5rem;">
-                        <span class="icon-box icon-box-note" style="color: #ef4444; margin-bottom: 0.8rem;"><?= icon('alert-triangle') ?></span>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: #06122f; margin-bottom: 0.5rem;"><?= e($limit['title']) ?></h3>
-                        <p style="font-size: 0.92rem; color: #475569; line-height: 1.6; margin: 0;"><?= e($limit['desc']) ?></p>
-                    </div>
-                <?php endforeach; ?>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; display:flex; flex-direction:column; gap:0.8rem;">
+                <div><strong style="color:#0a63ff; font-weight:800;">STAGE 1:</strong> Automated Unit &amp; Integration Testing (<span style="color:#38bdf8;">PHPUnit / Jest</span>)</div>
+                <div><strong style="color:#0a63ff; font-weight:800;">STAGE 2:</strong> Static Security &amp; Type Analysis (<span style="color:#38bdf8;">PHPStan Level 9 / Psalm</span>)</div>
+                <div><strong style="color:#0a63ff; font-weight:800;">STAGE 3:</strong> Staging Build &amp; Visual Regression Verification (<span style="color:#38bdf8;">Playwright / Lighthouse</span>)</div>
+                <div><strong style="color:#0a63ff; font-weight:800;">STAGE 4:</strong> Zero-Downtime Atomic Deployment (<span style="color:#10b981;">Git / SSH Symlink Release</span>)</div>
             </div>
         </div>
     </section>
 
-    <?php /* ============================== 11. FAQ ============================== */ ?>
+    <!-- 07 BUILD SCENARIOS -->
     <section class="section">
         <div class="container">
-            <div class="faq-card" data-r="rise">
-                <div class="faq-aside">
-                    <p class="eyebrow">FAQ</p>
-                    <h2><?= e($data['title']) ?>, <span class="mark">answered</span></h2>
-                    <p class="muted">Something else on your mind? A person replies, usually the same working day.</p>
-                    <div class="faq-aside-actions">
-                        <a class="btn btn-pill" href="/contact">Ask us directly <?= icon('arrow-right') ?></a>
-                    </div>
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>TECHNICAL BUILD SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Legacy Monolith Modernization</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Refactored legacy portal into a decoupled PHP 8.3 REST API with Redis caching, cutting average page load times from 3.2s to 38ms under heavy traffic.
+                    </p>
                 </div>
-                <div class="faq-list">
-                    <div class="accordion" data-accordion="single">
-                        <?php foreach ($data['faqs'] as $i => $faq): ?>
-                            <div class="accordion-item">
-                                <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="svc-faq-<?= $i ?>" id="svc-faq-t-<?= $i ?>">
-                                    <span style="font-weight: 700; color: #06122f; font-size: 1.05rem;"><?= e($faq['q']) ?></span>
-                                    <span class="accordion-icon" aria-hidden="true"><?= icon('chevron-down') ?></span>
-                                </button>
-                                <div class="accordion-panel" id="svc-faq-<?= $i ?>" role="region" aria-labelledby="svc-faq-t-<?= $i ?>">
-                                    <div><p style="font-size: 0.95rem; color: #475569; line-height: 1.65;"><?= e($faq['a']) ?></p></div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">SaaS Customer Billing Portal</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Engineered React customer portal connected to Stripe webhooks, handling real-time usage metrics and automated subscription tier upgrades.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Operations Control Console</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Built custom administrative dashboard with role-based access controls, worker queue monitoring, and sub-100ms SQL query execution.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php /* ==================== 12. FURTHER READING ===================== */ ?>
-    <?php if ($relatedArticles || $relatedCaseStudies): ?>
-    <section class="section band-soft">
+    <!-- 08 START A PROJECT INTAKE -->
+    <section class="section band-soft" id="intake">
         <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Further reading</p>
-                    <h2>More on <span class="soft"><?= e($data['title']) ?></span></h2>
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">WEB INTAKE CONSOLE</span>
+                <h2>START A WEB DEVELOPMENT BRIEF</h2>
+            </div>
+            <?php $formId = 'webLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
+<?php elseif ($key === 'security'): ?>
+    <!-- =========================================================================
+         02. WEB SECURITY — DIGITAL DEFENSE PERIMETER (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 SECURITY COMMAND CENTER HERO -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-red" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active" style="color:#dc2626;"></span> DEFENSE PERIMETER COMMAND CENTER
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    CYBER SECURITY &amp; <span style="color: #dc2626;">PERIMETER HARDENING</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Zero-trust application architecture, vulnerability audits, WAF inspection rules, Argon2id authentication guards, and emergency breach recovery.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake" style="background:#dc2626; border-color:#dc2626;">Secure The Project <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#audit">Audit Surface <?= icon('arrow-down') ?></a>
                 </div>
             </div>
 
-            <div class="grid grid-3" data-r="group">
-                <?php foreach ($relatedArticles as $a): ?>
-                    <article class="card card-hover">
-                        <div class="card-body card-body-sm">
-                            <span class="badge badge-soft">Article</span>
-                            <h3 class="card-title"><?= e((string)$a['title']) ?></h3>
-                            <p class="card-text"><?= e(str_cut((string)$a['excerpt'], 110)) ?></p>
-                            <div class="card-foot">
-                                <span class="blog-meta"><?= (int)$a['read_minutes'] ?> min read</span>
-                                <?= icon('arrow-up-right') ?>
-                            </div>
-                        </div>
-                        <a class="card-link" href="<?= e(site_path('/blog/' . rawurlencode((string)$a['slug']))) ?>" aria-label="<?= e((string)$a['title']) ?>"></a>
-                    </article>
-                <?php endforeach; ?>
-                <?php foreach ($relatedCaseStudies as $cs): ?>
-                    <article class="card card-hover">
-                        <div class="card-body card-body-sm">
-                            <span class="badge badge-soft">Case study</span>
-                            <h3 class="card-title"><?= e((string)$cs['client_name']) ?></h3>
-<?php if (trim((string)$cs['metric_value']) !== '' && trim((string)$cs['metric_label']) !== ''): ?>
-                            <p class="card-text"><strong><?= e((string)$cs['metric_value']) ?></strong> &mdash; <?= e((string)$cs['metric_label']) ?></p>
+            <!-- HERO CUSTOM SVG: DEFENSE PERIMETER -->
+            <div class="code-console-window" style="border-color: rgba(220,38,38,0.4);">
+                <div class="code-console-bar" style="background: #1e1b4b;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #fca5a5;">PERIMETER SHIELD ACTIVE GUARD</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(16,185,129,0.15); color: #10b981; border-color: rgba(16,185,129,0.3);">0 BREACH VECTORS</span>
+                <div style="padding: 1rem; background: linear-gradient(155deg, #0f172a 0%, #1e1b4b 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/security-shield.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 140px; height: 140px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(155deg, #0f172a 0%, #1e1b4b 100%);">
+                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
+                        <circle cx="210" cy="100" r="85" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4" />
+                        <circle cx="210" cy="100" r="55" stroke="#38bdf8" stroke-width="1.5" />
+                        <circle cx="210" cy="100" r="25" fill="#dc2626" fill-opacity="0.2" stroke="#dc2626" stroke-width="2" />
+                        <text x="210" y="104" font-family="sans-serif" font-weight="900" font-size="10" fill="#fff" text-anchor="middle">VAULT</text>
+
+                        <!-- Threat vectors -->
+                        <line x1="30" y1="100" x2="125" y2="100" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4" />
+                        <polygon points="125,96 133,100 125,104" fill="#ef4444" />
+                        <text x="60" y="90" font-family="monospace" font-size="8" fill="#fca5a5">BLOCKED ATTACK</text>
+
+                        <!-- Laser scanning beam -->
+                        <line x1="210" y1="15" x2="210" y2="45" stroke="#10b981" stroke-width="2" />
+                        <text x="210" y="10" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">TLS 1.3 SAFE</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 ATTACK SURFACE -->
+    <section class="section band-soft" id="audit">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">THREAT MAP</span>
+                <h2>ATTACK SURFACE &amp; VULNERABILITY MATRIX</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card" style="border-color: rgba(220,38,38,0.2);">
+                    <span class="telemetry-pill-mono" style="color:#dc2626; font-weight:700;">RISK 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Broken Auth &amp; Session Leak</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;"><strong style="color:#dc2626;">CONTROL:</strong> Argon2id password hashing, HttpOnly cookie flags, TOTP MFA, and single-use CSRF token rotation.</p>
+                </div>
+                <div class="machined-card" style="border-color: rgba(220,38,38,0.2);">
+                    <span class="telemetry-pill-mono" style="color:#dc2626; font-weight:700;">RISK 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">SQL &amp; Command Injection</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;"><strong style="color:#dc2626;">CONTROL:</strong> PDO prepared statements, strict parameter type-casting, and database user privilege minimization.</p>
+                </div>
+                <div class="machined-card" style="border-color: rgba(220,38,38,0.2);">
+                    <span class="telemetry-pill-mono" style="color:#dc2626; font-weight:700;">RISK 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Cross-Site Scripting (XSS)</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;"><strong style="color:#dc2626;">CONTROL:</strong> Contextual output HTML escaping, strict Content-Security-Policy headers, and input sanitization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 AUTH + IDENTITY -->
+    <section class="section">
+        <div class="container container-narrow">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">IDENTITY GUARDS</span>
+                <h2>AUTHENTICATION &amp; IDENTITY HARDENING</h2>
+                <p class="lead" style="margin-top:1rem; color:#475569;">
+                    Implementation of TOTP multi-factor authentication, Argon2id password hashing, single-use CSRF tokens, and zero-trust session revocation across every endpoint.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 APPLICATION HARDENING -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">DEFENSIVE LOOP</span>
+                <h2>4-STAGE SECURITY HARDENING LOOP</h2>
+            </div>
+            <div class="code-console-window" style="padding:1.5rem; display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; text-align:center;">
+                <div><span style="color:#ef4444; font-weight:800; font-size:1.2rem;">01</span><br><span style="font-size:0.8rem; font-weight:700;">DETECT VULNERABILITY</span></div>
+                <div><span style="color:#eab308; font-weight:800; font-size:1.2rem;">02</span><br><span style="font-size:0.8rem; font-weight:700;">REMEDIATE &amp; PATCH</span></div>
+                <div><span style="color:#38bdf8; font-weight:800; font-size:1.2rem;">03</span><br><span style="font-size:0.8rem; font-weight:700;">PENETRATION TEST</span></div>
+                <div><span style="color:#10b981; font-weight:800; font-size:1.2rem;">04</span><br><span style="font-size:0.8rem; font-weight:700;">VERIFY PROTECTION</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 DATA PROTECTION -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">VAULT PROTECTION</span>
+                <h2>DATA ENCRYPTION &amp; VAULT SHIELDING</h2>
+            </div>
+            <div class="grid grid-2" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#dc2626; font-family:var(--font-mono); font-size:0.8rem;">DATA AT REST</strong>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">AES-256 Storage Encryption</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Encrypted database backups, restricted file system permissions, and isolated environment secret vaults.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#dc2626; font-family:var(--font-mono); font-size:0.8rem;">DATA IN TRANSIT</strong>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">TLS 1.3 Transport Security</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Strict TLS 1.3 transport encryption, HSTS response headers, and Perfect Forward Secrecy key rotation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 MONITOR + INCIDENT RESPONSE -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">TELEMETRY STREAM</span>
+                <h2>24/7 INCIDENT RESPONSE &amp; TELEMETRY STREAM</h2>
+            </div>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.6;">
+                Emergency Incident SLA: <strong style="color:#dc2626;">&lt; 1 hour triage response</strong> for active security events. Real-time anomaly detection, automated IP blocking, and immutable audit logs.
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 SECURITY SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>REALISTIC SECURITY SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-red" style="margin-bottom:0.5rem;">SECURITY #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Emergency Breach Containment</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Contained session leak attempt within 45 minutes, patched input parameters, and deployed automated WAF IP block rules.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-red" style="margin-bottom:0.5rem;">SECURITY #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">API Authentication Hardening</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Migrated legacy API token system to Argon2id hashed keys with rate limiting buckets, stopping credential stuffing attacks.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-red" style="margin-bottom:0.5rem;">SECURITY #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Infrastructure Penetration Audit</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Audited public-facing endpoints, identified 4 header misconfigurations, and implemented strict Content-Security-Policy rules.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 SECURE THE PROJECT INTAKE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-red" style="margin-bottom: 0.5rem;">SECURITY INTAKE CONSOLE</span>
+                <h2>SECURE YOUR PROJECT WITH RAFLY</h2>
+            </div>
+            <?php $formId = 'securityLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
+<?php elseif ($key === 'marketing'): ?>
+    <!-- =========================================================================
+         03. PERFORMANCE MARKETING — SIGNAL CONVERSION NETWORK (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 SIGNAL ENGINE HERO -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-green" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active" style="color:#16a34a;"></span> SIGNAL → DEMAND → CONVERSION ENGINE
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    PERFORMANCE MARKETING &amp; <span style="color: #16a34a;">GROWTH TELEMETRY</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Server-side GA4 &amp; Meta CAPI signal tracking, intent-driven ad campaigns, friction-free conversion funnels, and attribution accuracy.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake" style="background:#16a34a; border-color:#16a34a;">Grow With RAFly <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#intent">Audience Intent <?= icon('arrow-down') ?></a>
+                </div>
+            </div>
+
+            <!-- HERO CUSTOM SVG: SIGNAL NETWORK -->
+            <div class="code-console-window" style="border-color: rgba(22,163,74,0.4);">
+                <div class="code-console-bar" style="background: #052e16;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #4ade80;">SIGNAL → CONVERSION BUS</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(74,222,128,0.15); color: #4ade80; border-color: rgba(74,222,128,0.3);">META CAPI SYNCED</span>
+                </div>
+                <div style="padding: 1rem; background: linear-gradient(155deg, #052e16 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/growth-chart.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 150px; height: 150px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(155deg, #052e16 0%, #050f33 100%);">
+                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
+                        <path d="M 30,100 C 100,30 200,170 300,100 T 390,100" stroke="#16a34a" stroke-width="2" stroke-linecap="round" fill="none" />
+                        <circle cx="30" cy="100" r="5" fill="#4ade80" />
+                        <circle cx="160" cy="120" r="5" fill="#4ade80" />
+                        <circle cx="300" cy="100" r="5" fill="#4ade80" />
+                        <circle cx="390" cy="100" r="6" fill="#16a34a" />
+
+                        <!-- Animated particle along signal curve -->
+                        <circle cx="30" cy="100" r="3" fill="#ffffff"><animate attributeName="cx" values="30;160;300;390" dur="2.5s" repeatCount="indefinite" /></circle>
+
+                        <text x="30" y="125" font-family="monospace" font-size="8" fill="#94a3b8">AUDIENCE</text>
+                        <text x="160" y="145" font-family="monospace" font-size="8" fill="#4ade80">INTENT SIGNAL</text>
+                        <text x="300" y="125" font-family="monospace" font-size="8" fill="#94a3b8">CAMPAIGN</text>
+                        <text x="390" y="125" font-family="monospace" font-size="8" fill="#16a34a">CONVERSION</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 AUDIENCE & INTENT -->
+    <section class="section band-soft" id="intent">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">INTENT MATRIX</span>
+                <h2>AUDIENCE INTENT STAGES</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#16a34a; font-weight:700;">STAGE 01. DISCOVERY</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">High-Retention Hooks</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Capturing audience attention across Meta Ads, Google Search, and LinkedIn with targeted problem statements.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#16a34a; font-weight:700;">STAGE 02. CONSIDERATION</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Editorial Proof Content</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Technical scenario breakdowns, architectural comparison grids, and verified client deliverables.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#16a34a; font-weight:700;">STAGE 03. PURCHASE</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Frictionless Intake</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">High-converting landing page consoles, sub-50ms page load speeds, and 3-step intake consoles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 CREATIVE SYSTEM -->
+    <section class="section">
+        <div class="container container-narrow">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">CREATIVE VARIANTS</span>
+                <h2>BRANCHING CREATIVE VARIANT ARCHITECTURE</h2>
+                <p class="lead" style="margin-top:1rem; color:#475569;">
+                    Systematic testing of visual angles, hook scripts, and ad formats to identify top-performing campaign variants without budget waste.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 CAMPAIGN ARCHITECTURE -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">OPERATING BLUEPRINT</span>
+                <h2>CAMPAIGN OPERATING ARCHITECTURE</h2>
+            </div>
+            <div class="code-console-window" style="padding:1.5rem; text-align:center; background:#052e16;">
+                AD PLATFORM → CAMPAIGN → CREATIVE VARIANT → LANDING PAGE CONSOLE → GA4 CAPI → CRM ATTRIBUTION
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 CONVERSION SYSTEM -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">POST-CLICK JOURNEY</span>
+                <h2>CONVERSION EXPERIENCE &amp; FRICTION REMOVAL</h2>
+            </div>
+            <div class="grid grid-2" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#16a34a; font-family:var(--font-mono); font-size:0.8rem;">PAGE SPEED OPTIMIZATION</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Sub-50ms LCP Response</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Sub-50ms server response times eliminate bounce rate spikes on high-intent paid ad traffic.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#16a34a; font-family:var(--font-mono); font-size:0.8rem;">FORM CONVERSION CONSOLE</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Multi-Step Intake Console</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Multi-step intake consoles increase submission completion rates while capturing rich project context.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 MEASUREMENT LOOP -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">ANALYTICS LOOP</span>
+                <h2>SERVER-SIDE CAPI &amp; MEASUREMENT LOOP</h2>
+            </div>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.6;">
+                Server-side Meta Conversions API (CAPI) &amp; GA4 event telemetry for 100% accurate lead attribution and first-party data capture.
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 CAMPAIGN SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>CAMPAIGN BUILD SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-green" style="margin-bottom:0.5rem;">MARKETING #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">B2B Lead Acquisition Funnel</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Implemented server-side CAPI tracking and redesigned landing page intake form, eliminating 35% unallocated lead drop-offs.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-green" style="margin-bottom:0.5rem;">MARKETING #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">High-Intent Search Campaign</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Structured Google Search campaign hierarchy with exact-match negative keyword filters and targeted landing page consoles.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-green" style="margin-bottom:0.5rem;">MARKETING #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">E-Commerce Retargeting Engine</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Deployed dynamic catalog ads linked to custom cart drawer events, recovering abandoned checkout sessions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 GROW WITH RAFLY INTAKE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-green" style="margin-bottom: 0.5rem;">MARKETING INTAKE CONSOLE</span>
+                <h2>GROW WITH RAFLY</h2>
+            </div>
+            <?php $formId = 'marketingLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
+<?php elseif ($key === 'content'): ?>
+    <!-- =========================================================================
+         04. CONTENT CREATION — EDITORIAL PRODUCTION PIPELINE (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 CONTENT STUDIO HERO -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-purple" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active" style="color:#9333ea;"></span> EDITORIAL PRODUCTION NLE STUDIO
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    CONTENT STUDIO &amp; <span style="color: #9333ea;">VIDEO PIPELINE</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Short-form Reels, 4K product shooting, NLE video editing timelines, sound design, and multi-format asset distribution engines.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake" style="background:#9333ea; border-color:#9333ea;">Create With RAFly <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#formats">Format System <?= icon('arrow-down') ?></a>
+                </div>
+            </div>
+
+            <!-- HERO CUSTOM SVG: NLE VIDEO TIMELINE -->
+            <div class="code-console-window" style="border-color: rgba(147,51,234,0.4);">
+                <div class="code-console-bar" style="background: #1e1b4b;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #c084fc;">NLE EDITING STUDIO TIMELINE</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(192,132,252,0.15); color: #c084fc; border-color: rgba(192,132,252,0.3);">4K HDR 120FPS</span>
+                </div>
+                <div style="padding: 1rem; background: linear-gradient(155deg, #1e1b4b 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/video-reel.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 150px; height: 150px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(155deg, #1e1b4b 0%, #050f33 100%);">
+                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
+                        <!-- Aspect frames: 9:16, 16:9, 1:1 -->
+                        <rect x="20" y="30" width="45" height="80" rx="4" stroke="#c084fc" stroke-width="1.5" fill="none" />
+                        <text x="42" y="125" font-family="monospace" font-size="8" fill="#c084fc" text-anchor="middle">9:16</text>
+
+                        <rect x="80" y="45" width="90" height="50" rx="4" stroke="#38bdf8" stroke-width="1.5" fill="none" />
+                        <text x="125" y="110" font-family="monospace" font-size="8" fill="#38bdf8" text-anchor="middle">16:9</text>
+
+                        <rect x="185" y="40" width="60" height="60" rx="4" stroke="#10b981" stroke-width="1.5" fill="none" />
+                        <text x="215" y="115" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">1:1</text>
+
+                        <!-- Timeline tracks -->
+                        <rect x="260" y="30" width="140" height="15" rx="3" fill="#9333ea" fill-opacity="0.4" />
+                        <rect x="260" y="50" width="140" height="15" rx="3" fill="#38bdf8" fill-opacity="0.4" />
+                        <rect x="260" y="70" width="140" height="15" rx="3" fill="#10b981" fill-opacity="0.4" />
+
+                        <!-- Playhead -->
+                        <line x1="330" y1="20" x2="330" y2="100" stroke="#ef4444" stroke-width="2">
+                            <animate attributeName="x1" values="260;400;260" dur="4s" repeatCount="indefinite" />
+                            <animate attributeName="x2" values="260;400;260" dur="4s" repeatCount="indefinite" />
+                        </line>
+
+                        <!-- Audio waveform preview -->
+                        <path d="M 20,160 Q 60,140 100,160 T 180,160 T 260,160 T 340,160 T 400,160" stroke="#9333ea" stroke-width="1.5" fill="none" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 STORY ARCHITECTURE -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">NARRATIVE FLOW</span>
+                <h2>STORY &amp; HOOK ARCHITECTURE</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#9333ea; font-weight:700;">STAGE 01. THE HOOK</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">First 3 Seconds</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Visual pattern interruption, high-contrast motion text, and immediate problem statement to stop the scroll.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#9333ea; font-weight:700;">STAGE 02. NARRATIVE</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Core Value Story</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Concise storytelling, dynamic motion graphics overlays, multi-track sound effects, and product feature highlights.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#9333ea; font-weight:700;">STAGE 03. CALL TO ACTION</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Action Trigger</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Clear conversion prompt directing traffic to landing page intake consoles and booking links.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 FORMAT SYSTEM -->
+    <section class="section" id="formats">
+        <div class="container container-narrow">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">MULTI-FORMAT</span>
+                <h2>SIX VISUAL CONTENT FORMATS</h2>
+                <p class="lead" style="margin-top:1rem; color:#475569;">
+                    Instagram Reels (9:16), YouTube Shorts (9:16), 4K Widescreen (16:9), Feed Visuals (1:1), Product Video Cuts &amp; High-Retention Performance Ads.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 PRODUCTION PIPELINE -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">TIMELINE</span>
+                <h2>PRODUCTION TIMELINE &amp; WORKFLOW</h2>
+            </div>
+            <div class="code-console-window" style="padding:1.5rem; text-align:center; background:#1e1b4b;">
+                PRE-PROD → SCRIPTING → 4K SHOOTING → NLE EDITING → SOUND DESIGN → MOTION GRAPHICS → EXPORT
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 EDITING SYSTEM -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">NLE TIMELINE</span>
+                <h2>ADVANCED NLE EDITING &amp; MOTION GRAPHICS</h2>
+            </div>
+            <div class="grid grid-2" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#9333ea; font-family:var(--font-mono); font-size:0.8rem;">COLOR GRADING</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">ProRes 4444 Color Mastering</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Custom studio LUTs, DaVinci Resolve color mastering, and HDR 10-bit export curves.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#9333ea; font-family:var(--font-mono); font-size:0.8rem;">SOUND DESIGN</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Multi-Track Audio Mixing</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Multi-track voiceover leveling, background score ducking, and punchy impact SFX design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 DISTRIBUTION -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">MULTI-CHANNEL</span>
+                <h2>MULTI-FRAME DISTRIBUTION ENGINE</h2>
+            </div>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.6;">
+                Master video cut rendered into platform-specific aspect ratios (9:16, 16:9, 1:1) and frame rates for Instagram, TikTok, YouTube &amp; Meta Ads.
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 CONTENT SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>PRODUCTION SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-purple" style="margin-bottom:0.5rem;">CONTENT #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Short-Form Product Launch</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Produced 12 multi-angle short-form Reels with motion graphics overlays, achieving 84% average 3-second hook retention.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-purple" style="margin-bottom:0.5rem;">CONTENT #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Founder Story Brand Video</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Filmed 4K studio interview with B-roll overlays and motion typography, establishing founder authority across social channels.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-purple" style="margin-bottom:0.5rem;">CONTENT #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">SaaS Feature Explainer Cut</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Created animated screen recording walkthrough with voiceover and UI callout graphics, driving landing page conversion lifts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 CREATE WITH RAFLY INTAKE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-purple" style="margin-bottom: 0.5rem;">CONTENT INTAKE CONSOLE</span>
+                <h2>CREATE WITH RAFLY</h2>
+            </div>
+            <?php $formId = 'contentLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
+<?php elseif ($key === 'ecom'): ?>
+    <!-- =========================================================================
+         05. E-COMMERCE — COMMERCE OPERATING SYSTEM (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 COMMERCE ENGINE HERO -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center; position: relative;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-cyan" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active" style="color:#0284c7;"></span> COMMERCE OPERATING SYSTEM
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    E-COMMERCE ENGINE &amp; <span style="color: #0284c7;">STORE ARCHITECTURE</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Custom Shopify storefronts, headless commerce API buses, friction-free checkout flows, and 6-state order operations engines.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake" style="background:#0284c7; border-color:#0284c7;">Build Store With RAFly <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#checkout">Checkout System <?= icon('arrow-down') ?></a>
+                </div>
+            </div>
+
+            <!-- HERO CUSTOM SVG: COMMERCE BUS -->
+            <div class="code-console-window" style="border-color: rgba(2,132,199,0.4);">
+                <div class="code-console-bar" style="background: #0c4a6e;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">COMMERCE ORDER PIPELINE</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(56,189,248,0.15); color: #38bdf8; border-color: rgba(56,189,248,0.3);">STRIPE / RAZORPAY API</span>
+                </div>
+                <div style="padding: 1rem; background: linear-gradient(155deg, #0c4a6e 0%, #050f33 100%); display: flex; justify-content: center; align-items: center; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/ecommerce.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 150px; height: 150px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(155deg, #0c4a6e 0%, #050f33 100%);">
+                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
+                        <path d="M 30,100 H 120 C 140,100 140,50 170,50 H 250 C 280,50 280,100 300,100 H 390" stroke="#0284c7" stroke-width="2" />
+                        <circle cx="30" cy="100" r="6" fill="#38bdf8" />
+                        <circle cx="170" cy="50" r="6" fill="#10b981" />
+                        <circle cx="250" cy="50" r="6" fill="#10b981" />
+                        <circle cx="390" cy="100" r="6" fill="#38bdf8" />
+
+                        <!-- Animated order packet -->
+                        <circle cx="30" cy="100" r="3" fill="#ffffff"><animate attributeName="cx" values="30;120;170;250;300;390" dur="3s" repeatCount="indefinite" /></circle>
+
+                        <text x="30" y="125" font-family="monospace" font-size="8" fill="#94a3b8">STOREFRONT</text>
+                        <text x="120" y="125" font-family="monospace" font-size="8" fill="#94a3b8">CART</text>
+                        <text x="210" y="38" font-family="monospace" font-size="8" fill="#38bdf8" text-anchor="middle">PAYMENT GATEWAY BUS</text>
+                        <text x="300" y="125" font-family="monospace" font-size="8" fill="#94a3b8">ORDER STATE</text>
+                        <text x="390" y="125" font-family="monospace" font-size="8" fill="#10b981">FULFILLED</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 STOREFRONT EXPERIENCE -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">STOREFRONT</span>
+                <h2>STOREFRONT EXPERIENCE MODULES</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0284c7; font-weight:700;">MODULE 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Product Discovery</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Fast grid filtering, instant search autocomplete, variant swatch selectors, and high-res media viewports.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0284c7; font-weight:700;">MODULE 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Dynamic Cart Drawer</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Instant quantity updates, free shipping progress indicators, and cross-sell recommendation chips.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0284c7; font-weight:700;">MODULE 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Optimized Checkout</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Friction-free single-page checkout flow with address autocomplete and instant payment gateway validation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 HEADLESS ARCHITECTURE -->
+    <section class="section">
+        <div class="container container-narrow">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">HEADLESS API</span>
+                <h2>DECOUPLED HEADLESS COMMERCE API</h2>
+                <p class="lead" style="margin-top:1rem; color:#475569;">
+                    Separating storefront UI from backend order systems via REST/GraphQL API connectors for maximum speed, security, and design freedom.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 CHECKOUT SYSTEM -->
+    <section class="section band-soft" id="checkout">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">FRICTION MAP</span>
+                <h2>CHECKOUT FRICTION REMOVAL SYSTEM</h2>
+            </div>
+            <div class="code-console-window" style="padding:1.5rem; text-align:center; background:#0c4a6e;">
+                CART → ADDRESS AUTOCOMPLETE → LOGISTICS SHIPPING API → PAYMENT GATEWAY → INSTANT CONFIRMATION
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 ORDER OPERATIONS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">ORDER PIPELINE</span>
+                <h2>6-STATE ORDER OPERATIONS PIPELINE</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.25rem; text-align:center;">
+                <div class="machined-card"><strong style="color:#0284c7; font-family:var(--font-mono);">01. PLACED</strong><p style="font-size:0.8rem; color:#64748b; margin-top:0.3rem;">Order Received</p></div>
+                <div class="machined-card"><strong style="color:#0284c7; font-family:var(--font-mono);">02. CONFIRMED</strong><p style="font-size:0.8rem; color:#64748b; margin-top:0.3rem;">Payment Verified</p></div>
+                <div class="machined-card"><strong style="color:#0284c7; font-family:var(--font-mono);">03. PAID</strong><p style="font-size:0.8rem; color:#64748b; margin-top:0.3rem;">Funds Settled</p></div>
+                <div class="machined-card"><strong style="color:#0284c7; font-family:var(--font-mono);">04. PROCESSING</strong><p style="font-size:0.8rem; color:#64748b; margin-top:0.3rem;">Warehouse Allocated</p></div>
+                <div class="machined-card"><strong style="color:#0284c7; font-family:var(--font-mono);">05. SHIPPED</strong><p style="font-size:0.8rem; color:#64748b; margin-top:0.3rem;">Tracking Assigned</p></div>
+                <div class="machined-card"><strong style="color:#10b981; font-family:var(--font-mono);">06. DELIVERED</strong><p style="font-size:0.8rem; color:#10b981; margin-top:0.3rem;">Customer Handoff</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 INTEGRATION LAYER -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">INTEGRATIONS</span>
+                <h2>THIRD-PARTY INTEGRATION MATRIX</h2>
+            </div>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.6;">
+                Payment Gateways (Stripe, Razorpay, PayU), ERP Systems, Logistics Webhooks (Shiprocket, Delhivery) &amp; Automated Inventory Sync APIs.
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 COMMERCE SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>COMMERCE BUILD SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-cyan" style="margin-bottom:0.5rem;">COMMERCE #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Shopify Storefront &amp; Cart Rebuild</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Rebuilt storefront theme and integrated Ajax cart drawer, reducing checkout completion time from 48s to 12s.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-cyan" style="margin-bottom:0.5rem;">COMMERCE #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Headless Storefront Migration</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Migrated legacy monolithic store to Next.js storefront with Shopify Storefront API, achieving 100/100 Lighthouse performance.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-cyan" style="margin-bottom:0.5rem;">COMMERCE #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Multi-Currency Payment API</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Integrated multi-currency Stripe and Razorpay gateways with geo-IP location detection and localized checkout flows.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 BUILD THE STORE INTAKE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.5rem;">COMMERCE INTAKE CONSOLE</span>
+                <h2>BUILD THE STORE WITH RAFLY</h2>
+            </div>
+            <?php $formId = 'ecomLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
+<?php elseif ($key === 'automation'): ?>
+    <!-- =========================================================================
+         06. LEAD AUTOMATION — LEAD ROUTING NETWORK (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 LEAD OPERATIONS HERO -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; display: flex; align-items: center;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-amber" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active" style="color:#d97706;"></span> LEAD OPERATIONS ROUTING ENGINE
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    LEAD AUTOMATION &amp; <span style="color: #d97706;">CRM ROUTING</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    Multi-channel lead capture, automated qualification decision trees, WhatsApp API routing, and real-time CRM state synchronization.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake" style="background:#d97706; border-color:#d97706;">Automate Pipeline <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#qualification">Decision Trees <?= icon('arrow-down') ?></a>
+                </div>
+            </div>
+
+            <!-- HERO CUSTOM SVG: ROUTING NETWORK -->
+            <div class="code-console-window" style="border-color: rgba(217,119,6,0.4);">
+                <div class="code-console-bar" style="background: #451a03;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #fbbf24;">LEAD ROUTING ENGINE DECISION TREE</span>
+                    <span class="telemetry-pill-mono" style="background: rgba(251,191,36,0.15); color: #fbbf24; border-color: rgba(251,191,36,0.3);">WHATSAPP API ACTIVE</span>
+                </div>
+                <div style="padding: 1.5rem; background: linear-gradient(155deg, #451a03 0%, #050f33 100%);">
+                    <svg viewBox="0 0 420 200" fill="none" style="width: 100%;">
+                        <!-- Multi-channel inputs -->
+                        <circle cx="40" cy="50" r="5" fill="#38bdf8" />
+                        <circle cx="40" cy="100" r="5" fill="#10b981" />
+                        <circle cx="40" cy="150" r="5" fill="#d97706" />
+
+                        <!-- Funnel lines to capture node -->
+                        <line x1="45" y1="50" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
+                        <line x1="45" y1="100" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
+                        <line x1="45" y1="150" x2="140" y2="100" stroke="#d97706" stroke-width="1.5" />
+
+                        <!-- Animated lead signals -->
+                        <circle cx="45" cy="50" r="3" fill="#ffffff"><animate attributeName="cx" values="45;140" dur="2s" repeatCount="indefinite" /><animate attributeName="cy" values="50;100" dur="2s" repeatCount="indefinite" /></circle>
+
+                        <rect x="140" y="80" width="70" height="40" rx="6" fill="#d97706" fill-opacity="0.2" stroke="#d97706" stroke-width="1.5" />
+                        <text x="175" y="104" font-family="monospace" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold">QUALIFY</text>
+
+                        <!-- Branching outputs -->
+                        <line x1="210" y1="100" x2="310" y2="50" stroke="#10b981" stroke-width="1.5" />
+                        <line x1="210" y1="100" x2="310" y2="150" stroke="#ef4444" stroke-width="1.5" />
+
+                        <rect x="310" y="30" width="80" height="40" rx="6" fill="#050f33" stroke="#10b981" stroke-width="1.5" />
+                        <text x="350" y="54" font-family="monospace" font-size="8" fill="#10b981" text-anchor="middle">HOT → SALES</text>
+
+                        <rect x="310" y="130" width="80" height="40" rx="6" fill="#050f33" stroke="#ef4444" stroke-width="1.5" />
+                        <text x="350" y="154" font-family="monospace" font-size="8" fill="#fca5a5" text-anchor="middle">NURTURE</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 CAPTURE LAYER -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">UNIFIED INBOX</span>
+                <h2>MULTI-CHANNEL INTAKE CAPTURE</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#d97706; font-weight:700;">CHANNEL 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Website Intake Consoles</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">AJAX 3-step intake consoles with real-time field validation and scope context capture.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#d97706; font-weight:700;">CHANNEL 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">WhatsApp Business API</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Direct message routing, automated greeting triggers, and instant lead notification webhooks.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#d97706; font-weight:700;">CHANNEL 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Paid Ad Lead Webhooks</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Instant lead ingestion from Meta lead forms and Google Ads webhook integrations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 QUALIFICATION ENGINE -->
+    <section class="section" id="qualification">
+        <div class="container container-narrow">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">DECISION TREE</span>
+                <h2>QUALIFICATION ENGINE &amp; TRIAGE NODES</h2>
+                <p class="lead" style="margin-top:1rem; color:#475569;">
+                    Automated evaluation of budget bracket, service interest, and urgency to route high-intent leads directly to senior engineers.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 ROUTING LOGIC -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">DECISION MATRIX</span>
+                <h2>ROUTING LOGIC MATRIX</h2>
+            </div>
+            <div class="code-console-window" style="padding:1.5rem; text-align:center; background:#451a03;">
+                INTAKE SIGNAL → BUDGET EVALUATION → SERVICE TAGGING → DISPATCH SLA (&lt; 24 HRS)
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 FOLLOW-UP ENGINE -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">ENGAGEMENT</span>
+                <h2>STAGED FOLLOW-UP &amp; SLA ENGAGEMENT</h2>
+            </div>
+            <div class="grid grid-2" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#d97706; font-family:var(--font-mono); font-size:0.8rem;">AUTOMATED ACKNOWLEDGMENT</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Instant Project Receipt</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Instant email and WhatsApp confirmation containing a unique project reference ID and scope summary.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#d97706; font-family:var(--font-mono); font-size:0.8rem;">HUMAN TRIAGE HANDOFF</strong>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Engineering Lead Review</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Senior engineer reviews technical scope notes and returns a detailed milestone proposal within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 CRM DATA FLOW -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">CRM DATA STATE</span>
+                <h2>ANIMATED CRM DATA STATE MOVEMENT</h2>
+            </div>
+            <div class="machined-card" style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.6;">
+                NEW INTAKE → CONTACTED → QUALIFIED → PROPOSAL SENT → WON / NURTURE
+            </div>
+        </div>
+    </section>
+
+    <!-- 07 AUTOMATION SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>AUTOMATION SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-amber" style="margin-bottom:0.5rem;">AUTOMATION #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Multi-Channel Lead Triage</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Connected website intake console to WhatsApp API and CRM webhooks, accelerating lead triage acknowledgment from 14 hours to &lt;5 minutes.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-amber" style="margin-bottom:0.5rem;">AUTOMATION #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Automated Lead Scoring Engine</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Built lead scoring logic based on budget scale, project timeline, and domain fit, instantly flagging enterprise opportunities.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-amber" style="margin-bottom:0.5rem;">AUTOMATION #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">WhatsApp Triage Bot</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Deployed WhatsApp interactive menu bot to collect preliminary project requirements before handing off to discovery engineers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 08 AUTOMATE THE PIPELINE INTAKE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-amber" style="margin-bottom: 0.5rem;">AUTOMATION INTAKE CONSOLE</span>
+                <h2>AUTOMATE THE PIPELINE WITH RAFLY</h2>
+            </div>
+            <?php $formId = 'automationLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
 <?php endif; ?>
-                            <div class="card-foot">
-                                <span class="link-arrow">Read the write-up <?= icon('arrow-right') ?></span>
-                            </div>
-                        </div>
-                        <a class="card-link" href="/case-studies#case-study-<?= (int)$cs['index'] ?>" aria-label="<?= e((string)$cs['client_name']) ?> case study"></a>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
 
-    <?php /* ========================== 13. OTHER SERVICES ======================= */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">Also from Rafly</p>
-                    <h2>The other four</h2>
-                </div>
-                <p class="lead">Each works on its own. They work better bundled, which is the whole point.</p>
-            </div>
-
-            <div class="grid grid-4" data-r="group">
-                <?php foreach (services_all() as $slug => $other): ?>
-                    <?php if ($slug === $service) { continue; } ?>
-                    <article class="card card-hover svc-other">
-                        <div class="card-body card-body-sm">
-                            <span class="icon-box"><?= icon($other['icon']) ?></span>
-                            <h3 class="card-title"><?= e($other['title']) ?></h3>
-                            <p class="card-text"><?= e($other['tagline']) ?></p>
-                            <div class="card-foot">
-                                <span class="link-arrow">Explore <?= icon('arrow-right') ?></span>
-                            </div>
-                        </div>
-                        <a class="card-link" href="<?= e(service_url($slug)) ?>" aria-label="<?= e($other['title']) ?>"></a>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php
-    $ctaEyebrow = 'Next step';
-    $ctaTitle   = "Let's scope your " . $data['title'] . ' work.';
-    $ctaText    = 'Tell us what is slowing you down. We will come back with a scope, a timeline, and a straight answer about whether we are the right people for it.';
-    $ctaButton  = 'Book a free consultation';
-    require __DIR__ . '/partials/cta-band.php';
-    ?>
 </main>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Visual Mode Tab Switcher Logic
-    const visualTabs = document.querySelectorAll('.svc-visual-tab');
-    visualTabs.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            visualTabs.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const targetTab = btn.getAttribute('data-tab');
-            
-            document.querySelectorAll('.svc-visual-pane').forEach(pane => {
-                pane.style.display = 'none';
-            });
-            const activePane = document.getElementById('pane-' + targetTab);
-            if (activePane) {
-                activePane.style.display = 'block';
-            }
-        });
-    });
-
-    // 2. IDE File Tab Switcher Logic
-    const ideTabs = document.querySelectorAll('.ide-tab');
-    ideTabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            ideTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            const targetFile = tab.getAttribute('data-file');
-            
-            document.querySelectorAll('.code-file-content').forEach(file => {
-                file.style.display = 'none';
-            });
-            const activeFile = document.getElementById('file-' + targetFile);
-            if (activeFile) {
-                activeFile.style.display = 'block';
-            }
-        });
-    });
-
-    // 3. System Architecture Node Click Logic
-    const nodeCards = document.querySelectorAll('.system-node-card');
-    nodeCards.forEach(card => {
-        card.addEventListener('click', () => {
-            nodeCards.forEach(c => c.classList.remove('is-active'));
-            card.classList.add('is-active');
-        });
-    });
-});
-</script>
 
 <?php require __DIR__ . '/partials/tail.php'; ?>

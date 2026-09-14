@@ -244,23 +244,128 @@
 
             // Quick scope chip click handler for lead forms (CSP compliant)
             var chip = e.target.closest('.form-tag-chip');
-            if (!chip) return;
-            e.preventDefault();
-            var text = chip.getAttribute('data-chip');
-            var form = chip.closest('form');
-            if (!form) return;
-            var textarea = form.querySelector('textarea[name="description"]');
-            if (!textarea) return;
-            var val = textarea.value.trim();
-            var tagStr = '[Scope: ' + text + ']';
-            if (val.indexOf(tagStr) === -1) {
-                textarea.value = val ? val + '\n' + tagStr : tagStr + ' ';
-                chip.classList.add('is-selected');
-            } else {
-                textarea.value = val.replace(tagStr, '').trim();
-                chip.classList.remove('is-selected');
+            if (chip) {
+                e.preventDefault();
+                var text = chip.getAttribute('data-chip');
+                var form = chip.closest('form');
+                if (form) {
+                    var textarea = form.querySelector('textarea[name="description"]');
+                    if (textarea) {
+                        var val = textarea.value.trim();
+                        var tagStr = '[Scope: ' + text + ']';
+                        if (val.indexOf(tagStr) === -1) {
+                            textarea.value = val ? val + '\n' + tagStr : tagStr + ' ';
+                            chip.classList.add('is-selected');
+                        } else {
+                            textarea.value = val.replace(tagStr, '').trim();
+                            chip.classList.remove('is-selected');
+                        }
+                        textarea.focus();
+                    }
+                }
+                return;
             }
-            textarea.focus();
+
+            // 3-Step Intake Console Handlers
+            var stepBtn = e.target.closest('.intake-step-btn, .btn-next-step, .btn-prev-step');
+            if (stepBtn) {
+                var consoleWrap = stepBtn.closest('.intake-console-wrapper');
+                if (consoleWrap) {
+                    var targetStep = stepBtn.getAttribute('data-step') || stepBtn.getAttribute('data-goto');
+                    if (targetStep) {
+                        e.preventDefault();
+                        var currentPane = consoleWrap.querySelector('.intake-step-pane.active');
+                        var currentStepNum = currentPane ? parseInt(currentPane.getAttribute('data-step-pane'), 10) : 1;
+                        var targetStepNum = parseInt(targetStep, 10);
+
+                        // If advancing, validate current step fields first
+                        if (targetStepNum > currentStepNum && currentPane) {
+                            var inputs = currentPane.querySelectorAll('input, textarea, select');
+                            var stepValid = true;
+                            Array.prototype.forEach.call(inputs, function (input) {
+                                clearError(input);
+                                if (input.required && !(input.value || '').trim()) {
+                                    setError(input, MESSAGES.required);
+                                    stepValid = false;
+                                } else if (input.type === 'email' && input.value && !EMAIL.test(input.value.trim())) {
+                                    setError(input, MESSAGES.email);
+                                    stepValid = false;
+                                } else if (input.type === 'tel' && input.value && input.value.replace(/[^0-9]/g, '').length < 7) {
+                                    setError(input, MESSAGES.phone);
+                                    stepValid = false;
+                                }
+                            });
+                            if (!stepValid) return;
+                        }
+
+                        // Switch Active Tab and Pane
+                        Array.prototype.forEach.call(consoleWrap.querySelectorAll('.intake-step-btn'), function(b) {
+                            b.classList.toggle('active', b.getAttribute('data-step') === String(targetStepNum));
+                        });
+                        Array.prototype.forEach.call(consoleWrap.querySelectorAll('.intake-step-pane'), function(p) {
+                            p.classList.toggle('active', p.getAttribute('data-step-pane') === String(targetStepNum));
+                        });
+
+                        // Update Signal Diagram & Telemetry
+                        var stepNames = { 1: '01 / CONTACT', 2: '02 / SCOPE', 3: '03 / VERIFY' };
+                        var stepInd = consoleWrap.querySelector('.step-indicator');
+                        if (stepInd) stepInd.textContent = stepNames[targetStepNum] || ('0' + targetStepNum + ' / INTAKE');
+
+                        var svgNodes = consoleWrap.querySelectorAll('.signal-node');
+                        Array.prototype.forEach.call(svgNodes, function(n, idx) {
+                            if (idx + 1 <= targetStepNum) {
+                                n.setAttribute('fill', '#0a63ff');
+                                n.classList.add('active');
+                            } else {
+                                n.setAttribute('fill', '#cbd5e1');
+                                n.classList.remove('active');
+                            }
+                        });
+
+                        // If Step 3, populate Verification Summary
+                        if (targetStepNum === 3) {
+                            var nameVal = (consoleWrap.querySelector('input[name="contact_name"]') || {}).value || '';
+                            var emailVal = (consoleWrap.querySelector('input[name="contact_email"]') || {}).value || '';
+                            var compVal = (consoleWrap.querySelector('input[name="company_name"]') || {}).value || '';
+                            var phoneVal = (consoleWrap.querySelector('input[name="contact_number"]') || {}).value || '';
+                            var pillarInput = consoleWrap.querySelector('input[name="service_interest"]');
+                            var budgetSelect = consoleWrap.querySelector('select[name="budget_bracket"]');
+
+                            var vContact = consoleWrap.querySelector('[id$="-v-contact"]');
+                            var vComp = consoleWrap.querySelector('[id$="-v-company"]');
+                            var vPillar = consoleWrap.querySelector('[id$="-v-pillar"]');
+                            var vBudget = consoleWrap.querySelector('[id$="-v-budget"]');
+
+                            if (vContact) vContact.textContent = nameVal + (emailVal ? ' (' + emailVal + ')' : '');
+                            if (vComp) vComp.textContent = compVal + (phoneVal ? ' • ' + phoneVal : '');
+                            if (vPillar && pillarInput) vPillar.textContent = (pillarInput.value || 'WEB & APP').toUpperCase();
+                            if (vBudget && budgetSelect && budgetSelect.selectedIndex >= 0) {
+                                vBudget.textContent = budgetSelect.options[budgetSelect.selectedIndex].text;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Interactive Scope Cards Selection
+            var svcCard = e.target.closest('.intake-svc-card');
+            if (svcCard) {
+                var cardGroup = svcCard.closest('.intake-service-cards');
+                if (cardGroup) {
+                    Array.prototype.forEach.call(cardGroup.querySelectorAll('.intake-svc-card'), function(c) { c.classList.remove('active'); });
+                    svcCard.classList.add('active');
+                    var val = svcCard.getAttribute('data-val');
+                    var hiddenInput = cardGroup.parentElement.querySelector('input[name="service_interest"]');
+                    if (hiddenInput) hiddenInput.value = val;
+
+                    var consoleWrap = svcCard.closest('.intake-console-wrapper');
+                    if (consoleWrap) {
+                        var svcInd = consoleWrap.querySelector('.service-indicator');
+                        var titleText = (svcCard.querySelector('.svc-card-title') || {}).textContent || val;
+                        if (svcInd) svcInd.textContent = titleText.toUpperCase();
+                    }
+                }
+            }
         });
     }
 

@@ -49,8 +49,20 @@ require_once dirname(__DIR__) . '/partials/social-rail.php';
                             <?= icon('shield', 'text-accent') ?> <span>Google Blacklist Resubmission</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: #cbd5e1;">
-                            <?= icon('check', 'text-accent') ?> <span>WAF &amp; Header Hardening</span>
+                            <?= icon('check-circle', 'text-accent') ?> <span>100% Guaranteed Cleanup &amp; Restoration</span>
                         </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; width: 100%;">
+                        <lottie-player
+                            src="/assets/lottie/lock-shield.json"
+                            background="transparent"
+                            speed="1"
+                            style="width: 140px; height: 140px;"
+                            loop
+                            autoplay
+                            aria-hidden="true">
+                        </lottie-player>
                     </div>
                 </div>
 

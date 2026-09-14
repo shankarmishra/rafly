@@ -80,6 +80,19 @@ export function initHeroGrowthField(host) {
     host.classList.add('sig-hero--entered');
     host.classList.add('grs-hero--entered');
 
+    /* Kinetic headline mask-reveal stagger (100ms after first paint) */
+    const headline = host.querySelector('.sig-headline');
+    if (headline && !reduced) {
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                headline.classList.add('is-revealed');
+            }, 80);
+        });
+    } else if (headline) {
+        // Reduced motion: show immediately
+        headline.classList.add('is-revealed');
+    }
+
     /* ── Canvas setup ──────────────────────────────────────────────────── */
     if (!canvas) return () => {};
     const ctx = canvas.getContext('2d');
@@ -118,6 +131,17 @@ export function initHeroGrowthField(host) {
         }
     }
 
+    /* ── Floating Ambient Light Particles Setup ──────────────────────────── */
+    const NUM_PARTICLES = 32;
+    const particles = Array.from({ length: NUM_PARTICLES }, () => ({
+        x: Math.random(),
+        y: Math.random(),
+        r: 1.2 + Math.random() * 2.2,
+        speed: 0.015 + Math.random() * 0.035,
+        pulseSpeed: 0.8 + Math.random() * 1.5,
+        phase: Math.random() * Math.PI * 2,
+    }));
+
     let isGridInit = false;
 
     /* ── Draw frame ─────────────────────────────────────────────────────── */
@@ -133,6 +157,25 @@ export function initHeroGrowthField(host) {
         ctx.clearRect(0, 0, w, h);
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
+
+        // 0. Ambient Ethereal Light Glow Blobs (Subtle, clean, non-overpowering light paper background)
+        const glow1X = cx + Math.sin(t * 0.4) * (w * 0.28);
+        const glow1Y = cy + Math.cos(t * 0.5) * (h * 0.22);
+        const g1 = ctx.createRadialGradient(glow1X, glow1Y, 20, glow1X, glow1Y, w * 0.48);
+        g1.addColorStop(0, 'rgba(15, 23, 42, 0.02)');
+        g1.addColorStop(0.5, 'rgba(10, 99, 255, 0.015)');
+        g1.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = g1;
+        ctx.fillRect(0, 0, w, h);
+
+        const glow2X = cx + Math.cos(t * 0.55) * (w * 0.32);
+        const glow2Y = cy + Math.sin(t * 0.35) * (h * 0.26);
+        const g2 = ctx.createRadialGradient(glow2X, glow2Y, 20, glow2X, glow2Y, w * 0.42);
+        g2.addColorStop(0, 'rgba(2, 132, 199, 0.018)');
+        g2.addColorStop(0.6, 'rgba(15, 23, 42, 0.008)');
+        g2.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = g2;
+        ctx.fillRect(0, 0, w, h);
 
         // Initialize grid physical coordinates on first frame or window resize
         if (!isGridInit || canvas._prevW !== w || canvas._prevH !== h) {
@@ -150,10 +193,10 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 1. Physics Step — Hooke's Law Spring Restoring + Cursor Force Field */
-        const mouseX = cx + pxCurr * (w * 0.9);
-        const mouseY = cy + pyCurr * (h * 0.9);
-        const mouseRadius = 220;
+        /* 1. Physics Step — Hooke's Law Spring Restoring + Continuous Full-Hero Wave Field */
+        const mouseX = cx + pxCurr * (w * 0.95);
+        const mouseY = cy + pyCurr * (h * 0.95);
+        const mouseRadius = 520; // Full section edge-to-edge interaction radius
 
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
@@ -161,25 +204,29 @@ export function initHeroGrowthField(host) {
                 const baseX = n.xr * w;
                 const baseY = n.yr * h;
 
-                // Hooke's Law spring force pulling back to equilibrium
-                const springFx = (baseX - n.x) * 0.075;
-                const springFy = (baseY - n.y) * 0.075;
+                // Subtle full-screen ambient wave motion propagating edge-to-edge
+                const waveX = Math.sin(t * 1.1 + n.xr * 5.0 + n.yr * 3.5) * 3.4;
+                const waveY = Math.cos(t * 0.9 + n.xr * 3.5 + n.yr * 5.0) * 3.4;
 
-                // Cursor repulsion force field
+                // Hooke's Law spring force pulling back toward equilibrium + wave
+                const springFx = ((baseX + waveX) - n.x) * 0.055;
+                const springFy = ((baseY + waveY) - n.y) * 0.055;
+
+                // Cursor repulsion force field across wide radius
                 const dx = n.x - mouseX;
                 const dy = n.y - mouseY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 let repelFx = 0, repelFy = 0;
                 if (dist < mouseRadius && dist > 0.1) {
-                    const factor = Math.pow(1 - dist / mouseRadius, 2) * 18.0;
+                    const factor = Math.pow(1 - dist / mouseRadius, 2.2) * 11.0;
                     repelFx = (dx / dist) * factor;
                     repelFy = (dy / dist) * factor;
                 }
 
                 // Update velocity with spring force + cursor push + damping
-                n.vx = (n.vx + springFx + repelFx) * 0.83;
-                n.vy = (n.vy + springFy + repelFy) * 0.83;
+                n.vx = (n.vx + springFx + repelFx) * 0.85;
+                n.vy = (n.vy + springFy + repelFy) * 0.85;
 
                 // Integrate position
                 n.x += n.vx;
@@ -187,7 +234,7 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 2. Render Triangulated Geometric Mesh Facets & Full-Grid Wave Animation */
+        /* 2. Render Triangulated Geometric Mesh Facets (Ultra-Subtle Architectural Paper Translucency) */
         for (let r = 0; r < ROWS - 1; r++) {
             for (let c = 0; c < COLS - 1; c++) {
                 const n1 = grid[r][c];
@@ -195,9 +242,9 @@ export function initHeroGrowthField(host) {
                 const n3 = grid[r + 1][c + 1];
                 const n4 = grid[r][c + 1];
 
-                const wave = Math.sin(t * 1.5 + (r * 0.28) + (c * 0.18)) * 0.5 + 0.5;
+                const wave = Math.sin(t * 1.2 + (r * 0.22) + (c * 0.15)) * 0.5 + 0.5;
                 const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                const alpha = 0.035 + wave * 0.045 + Math.min(strain * 0.02, 0.08);
+                const alpha = 0.005 + wave * 0.008 + Math.min(strain * 0.004, 0.015);
 
                 // Triangle 1 Facet Fill
                 ctx.beginPath();
@@ -205,7 +252,7 @@ export function initHeroGrowthField(host) {
                 ctx.lineTo(n2.x, n2.y);
                 ctx.lineTo(n3.x, n3.y);
                 ctx.closePath();
-                ctx.fillStyle = `rgba(10, 99, 255, ${alpha})`;
+                ctx.fillStyle = `rgba(15, 23, 42, ${alpha})`;
                 ctx.fill();
 
                 // Triangle 2 Facet Fill
@@ -214,12 +261,12 @@ export function initHeroGrowthField(host) {
                 ctx.lineTo(n3.x, n3.y);
                 ctx.lineTo(n4.x, n4.y);
                 ctx.closePath();
-                ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.85})`;
+                ctx.fillStyle = `rgba(10, 99, 255, ${alpha * 0.65})`;
                 ctx.fill();
             }
         }
 
-        /* 3. Render Triangulated Mesh Spring Lines (Horizontal, Vertical, & Diagonal) */
+        /* 3. Render Triangulated Mesh Lines (Ultra-Thin, Crisp Charcoal/Black Architectural Lines) */
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
                 const n1 = grid[r][c];
@@ -227,103 +274,44 @@ export function initHeroGrowthField(host) {
                 // Horizontal Spring Line
                 if (c < COLS - 1) {
                     const n2 = grid[r][c + 1];
-                    const wave = Math.sin(t * 1.5 + (r * 0.22) + (c * 0.14)) * 0.5 + 0.5;
+                    const wave = Math.sin(t * 1.2 + (r * 0.18) + (c * 0.12)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.26 + wave * 0.18 + Math.min(strain * 0.03, 0.35);
+                    const lineAlpha = 0.08 + wave * 0.06 + Math.min(strain * 0.01, 0.08);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.1 + Math.min(strain * 0.02, 1.2);
+                    ctx.strokeStyle = `rgba(15, 23, 42, ${lineAlpha})`;
+                    ctx.lineWidth   = 0.55;
                     ctx.stroke();
                 }
 
                 // Vertical Spring Line
                 if (r < ROWS - 1) {
                     const n2 = grid[r + 1][c];
-                    const wave = Math.sin(t * 1.5 + (r * 0.14) + (c * 0.22)) * 0.5 + 0.5;
+                    const wave = Math.sin(t * 1.2 + (r * 0.12) + (c * 0.18)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.26 + wave * 0.18 + Math.min(strain * 0.03, 0.35);
+                    const lineAlpha = 0.08 + wave * 0.06 + Math.min(strain * 0.01, 0.08);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(10, 99, 255, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.1 + Math.min(strain * 0.02, 1.2);
+                    ctx.strokeStyle = `rgba(15, 23, 42, ${lineAlpha})`;
+                    ctx.lineWidth   = 0.55;
                     ctx.stroke();
                 }
 
                 // Diagonal Triangle Spring Line (Top-Left to Bottom-Right)
                 if (r < ROWS - 1 && c < COLS - 1) {
                     const n2 = grid[r + 1][c + 1];
-                    const wave = Math.sin(t * 1.5 + (r * 0.20) + (c * 0.20)) * 0.5 + 0.5;
+                    const wave = Math.sin(t * 1.2 + (r * 0.15) + (c * 0.15)) * 0.5 + 0.5;
                     const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.22 + wave * 0.16 + Math.min(strain * 0.025, 0.30);
+                    const lineAlpha = 0.045 + wave * 0.045 + Math.min(strain * 0.008, 0.06);
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(56, 189, 248, ${lineAlpha})`;
-                    ctx.lineWidth   = 1.0 + Math.min(strain * 0.015, 1.0);
+                    ctx.strokeStyle = `rgba(30, 41, 59, ${lineAlpha})`;
+                    ctx.lineWidth   = 0.45;
                     ctx.stroke();
                 }
-            }
-        }
-
-        /* 4. Render Mass Node Dots & Synaptic Data Pulses */
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                const n = grid[r][c];
-                const dx = n.x - n.xr * w;
-                const dy = n.y - n.yr * h;
-                const strain = Math.sqrt(dx * dx + dy * dy);
-
-                ctx.save();
-                ctx.beginPath();
-                const dotR = 2.2 + Math.min(strain * 0.08, 2.5);
-                ctx.arc(n.x, n.y, dotR, 0, Math.PI * 2);
-
-                const nodePulse = Math.sin(t * 2.2 + (r * 0.4) + (c * 0.3)) > 0.65;
-                if (strain > 5 || nodePulse) {
-                    ctx.fillStyle   = '#0a63ff';
-                    ctx.shadowBlur  = 10;
-                    ctx.shadowColor = 'rgba(10, 99, 255, 0.85)';
-                } else {
-                    ctx.fillStyle   = 'rgba(10, 99, 255, 0.50)';
-                }
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        /* 5. Traveling Synaptic Data Packets & Floating Geometric Triangles */
-        const packetCount = 6;
-        for (let p = 0; p < packetCount; p++) {
-            const pRow = (p * 2 + 1) % (ROWS - 1);
-            const phase = ((t * 0.30) + (p * 0.18)) % 1.0;
-            const pColFloat = phase * (COLS - 1);
-            const cIdx = Math.floor(pColFloat);
-            const subRatio = pColFloat - cIdx;
-
-            if (cIdx < COLS - 1) {
-                const nodeA = grid[pRow][cIdx];
-                const nodeB = grid[pRow + 1][cIdx + 1]; // Move along diagonal triangle spring!
-                const px = lerp(nodeA.x, nodeB.x, subRatio);
-                const py = lerp(nodeA.y, nodeB.y, subRatio);
-
-                // Draw kinetic triangle particle at packet position
-                ctx.save();
-                ctx.translate(px, py);
-                ctx.rotate(t * 1.5 + p);
-                ctx.beginPath();
-                const size = 6.0;
-                ctx.moveTo(0, -size);
-                ctx.lineTo(size * 0.866, size * 0.5);
-                ctx.lineTo(-size * 0.866, size * 0.5);
-                ctx.closePath();
-                ctx.fillStyle   = 'rgba(10, 99, 255, 0.95)';
-                ctx.shadowBlur  = 12;
-                ctx.shadowColor = '#38bdf8';
-                ctx.fill();
-                ctx.restore();
             }
         }
     }
@@ -370,11 +358,9 @@ export function initHeroGrowthField(host) {
                 a.style.setProperty('--ax', `${ax.toFixed(2)}px`);
                 a.style.setProperty('--ay', `${ay.toFixed(2)}px`);
             });
-            // Ghost words slow drift
+            // Ghost words slow drift (flows Left to Right)
             ghostWords.forEach((g, i) => {
-                const sign = i % 2 === 0 ? 1 : -1;
-                const gx   = pxCurr * (6 + i * 2) * sign
-                            + scrollProgress * (24 + i * 8) * sign;
+                const gx = pxCurr * (6 + i * 2) + scrollProgress * (24 + i * 8);
                 g.style.setProperty('--ghost-x', `${gx.toFixed(2)}px`);
             });
         }
@@ -430,7 +416,8 @@ export function initHeroGrowthField(host) {
         void focusWord.offsetWidth;
         focusWord.classList.add('is-sweeping');
     }
-    setTimeout(triggerSweep, 800);
+    // Fire first photon sweep after all 3 headline lines have revealed (~line3 delay = 2*120ms + 850ms = 1090ms)
+    setTimeout(triggerSweep, 1200);
 
     /* ── Annotation hover ───────────────────────────────────────────────── */
     annots.forEach((a) => {
@@ -454,10 +441,21 @@ export function initHeroGrowthField(host) {
 
     /* ── Mouse tracking ─────────────────────────────────────────────────── */
     if (isFine) {
+        let isTicking = false;
         document.addEventListener('mousemove', (e) => {
-            const rect = host.getBoundingClientRect();
-            pxTarget = clamp((e.clientX - rect.left) / rect.width  - 0.5, -0.5, 0.5);
-            pyTarget = clamp((e.clientY - rect.top)  / rect.height - 0.5, -0.5, 0.5);
+            if (!isTicking) {
+                requestAnimationFrame(() => {
+                    const rect = host.getBoundingClientRect();
+                    pxTarget = clamp((e.clientX - rect.left) / rect.width  - 0.5, -0.5, 0.5);
+                    pyTarget = clamp((e.clientY - rect.top)  / rect.height - 0.5, -0.5, 0.5);
+                    const mx = ((e.clientX - rect.left) / rect.width * 100).toFixed(2);
+                    const my = ((e.clientY - rect.top) / rect.height * 100).toFixed(2);
+                    host.style.setProperty('--mouse-x', `${mx}%`);
+                    host.style.setProperty('--mouse-y', `${my}%`);
+                    isTicking = false;
+                });
+                isTicking = true;
+            }
         }, { passive: true });
     }
 

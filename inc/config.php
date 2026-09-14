@@ -334,9 +334,9 @@ const BUNDLES = [
 
 /** Social links for the floating rail and the footer. */
 const SOCIAL_LINKS = [
-    ['key' => 'linkedin',  'label' => 'LinkedIn',  'icon' => 'linkedin',  'href' => 'https://www.linkedin.com/company/rafly-digital-growth-private-limited/'],
-    ['key' => 'instagram', 'label' => 'Instagram', 'icon' => 'instagram', 'href' => 'https://www.instagram.com/officialrafly.in?igsh=MTMwYWZhb29waWZtbA=='],
-    ['key' => 'facebook',  'label' => 'Facebook',  'icon' => 'facebook',  'href' => 'https://www.facebook.com/share/1Lmk1gqPSr/'],
-    ['key' => 'whatsapp',  'label' => 'WhatsApp',  'icon' => 'whatsapp',  'href' => 'https://wa.me/' . WHATSAPP_NUMBER . '?text=Hi%20Rafly%20team%2C%20I%27d%20like%20to%20know%20more%20about%20your%20bundle%20packages.'],
-    ['key' => 'youtube',   'label' => 'YouTube',   'icon' => 'youtube',   'href' => 'https://youtu.be/EbPOtjdrdHc?si=HIh_GJxllL8SPzPa'],
+    ['key' => 'linkedin',  'label' => 'LinkedIn',  'sub' => 'Rafly Digital Growth',  'icon' => 'linkedin',  'href' => 'https://www.linkedin.com/company/rafly-digital-growth-private-limited/'],
+    ['key' => 'instagram', 'label' => 'Instagram', 'sub' => '@officialrafly.in',     'icon' => 'instagram', 'href' => 'https://www.instagram.com/officialrafly.in?igsh=MTMwYWZhb29waWZtbA=='],
+    ['key' => 'facebook',  'label' => 'Facebook',  'sub' => 'Rafly Official Page',   'icon' => 'facebook',  'href' => 'https://www.facebook.com/share/1Lmk1gqPSr/'],
+    ['key' => 'whatsapp',  'label' => 'WhatsApp',  'sub' => 'Instant Lead Support',  'icon' => 'whatsapp',  'href' => 'https://wa.me/' . WHATSAPP_NUMBER . '?text=Hi%20Rafly%20team%2C%20I%27d%20like%20to%20know%20more%20about%20your%20bundle%20packages.'],
+    ['key' => 'youtube',   'label' => 'YouTube',   'sub' => 'Watch Case Studies',   'icon' => 'youtube',   'href' => 'https://youtu.be/EbPOtjdrdHc?si=HIh_GJxllL8SPzPa'],
 ];

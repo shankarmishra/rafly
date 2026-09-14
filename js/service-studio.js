@@ -19,33 +19,43 @@ const ease  = (t)          => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2,
 const SERVICES = {
     web: {
         idx: '01',
-        tag: '01 // WEB ARCHITECTURE',
+        num: '01 // KINETIC',
+        title: 'WEB ARCHITECTURE',
         accent: '#0a63ff',
-        glow: 'rgba(10, 99, 255, 0.18)'
+        glow: 'rgba(10, 99, 255, 0.18)',
+        lottie: '/assets/lottie/web-build.json'
     },
     security: {
         idx: '02',
-        tag: '02 // PERIMETER SECURITY',
+        num: '02 // ZERO TRUST',
+        title: 'PERIMETER SECURITY',
         accent: '#0d9488',
-        glow: 'rgba(13, 148, 136, 0.18)'
+        glow: 'rgba(13, 148, 136, 0.18)',
+        lottie: '/assets/lottie/security-shield.json'
     },
     marketing: {
         idx: '03',
-        tag: '03 // DEMAND MATRIX',
+        num: '03 // DEMAND MATRIX',
+        title: 'GROWTH MATRIX',
         accent: '#7c3aed',
-        glow: 'rgba(124, 58, 237, 0.18)'
+        glow: 'rgba(124, 58, 237, 0.18)',
+        lottie: '/assets/lottie/growth-chart.json'
     },
     content: {
         idx: '04',
-        tag: '04 // KINETIC CONTENT',
+        num: '04 // KINETIC',
+        title: 'CONTENT STUDIO',
         accent: '#d97706',
-        glow: 'rgba(217, 119, 6, 0.18)'
+        glow: 'rgba(217, 119, 6, 0.18)',
+        lottie: '/assets/lottie/video-reel.json'
     },
     commerce: {
         idx: '05',
-        tag: '05 // CONVERSION PIPELINE',
+        num: '05 // HIGH-SCALE',
+        title: 'CONVERSION PIPELINE',
         accent: '#0891b2',
-        glow: 'rgba(8, 145, 178, 0.18)'
+        glow: 'rgba(8, 145, 178, 0.18)',
+        lottie: '/assets/lottie/ecommerce.json'
     }
 };
 
@@ -60,7 +70,9 @@ export function initServiceStudio(host) {
     const ctx        = canvas ? canvas.getContext('2d') : null;
     const stageEl    = host.querySelector('[data-service-stage]');
     const railItems  = [...host.querySelectorAll('[data-service-target]')];
-    const tagEl      = host.querySelector('[data-active-tag]');
+    const tagNumEl   = host.querySelector('[data-active-tag-num]');
+    const tagTitleEl = host.querySelector('[data-active-tag-title]');
+    const stageLottie= host.querySelector('[data-stage-lottie]');
     const ghostWords = [...host.querySelectorAll('.ss-ghost')];
 
     /* ─── State Variables ──────────────────────────────────── */
@@ -73,6 +85,7 @@ export function initServiceStudio(host) {
     let time           = 0;
     let mouseX         = 0, mouseY = 0;
     let tgtMouseX      = 0, tgtMouseY = 0;
+    let currentAnim    = null;
 
     /* Set Canvas Resolution */
     function resizeCanvas() {
@@ -100,9 +113,72 @@ export function initServiceStudio(host) {
         window.addEventListener('mousemove', onMove, { passive: true });
     }
 
+    /* ─── Dynamic Lottie Swap ────────────────────────────── */
+    function loadStageLottie(path, serviceKey) {
+        if (!stageLottie) return;
+
+        stageLottie.style.opacity = '0';
+        stageLottie.style.transform = 'scale(0.96)';
+        stageLottie.dataset.service = serviceKey || activeKey;
+
+        setTimeout(() => {
+            if (currentAnim) {
+                try { currentAnim.destroy(); } catch (e) {}
+                currentAnim = null;
+            }
+
+            stageLottie.innerHTML = '';
+
+            const box = document.createElement('div');
+            box.className = 'rafly-lottie-svg-box';
+            box.style.width = 'min(100%, 540px)';
+            box.style.height = 'min(100%, 380px)';
+            box.style.maxWidth = '540px';
+            box.style.maxHeight = '380px';
+            box.style.aspectRatio = '1.42';
+            box.style.display = 'flex';
+            box.style.justifyContent = 'center';
+            box.style.alignItems = 'center';
+            box.style.margin = '0 auto';
+            stageLottie.appendChild(box);
+
+            if (typeof window.lottie === 'undefined') {
+                console.warn('[ServiceStudio] Lottie runtime not ready yet; waiting for the next pass.');
+                stageLottie.style.opacity = '1';
+                stageLottie.style.transform = 'scale(1)';
+                return;
+            }
+
+            const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+
+            tryFetch(path)
+                .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
+                .then((data) => {
+                    currentAnim = window.lottie.loadAnimation({
+                        container: box,
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: true,
+                        animationData: data,
+                        rendererSettings: {
+                            progressiveLoad: true,
+                            preserveAspectRatio: 'xMidYMid meet'
+                        }
+                    });
+                    stageLottie.style.opacity = '1';
+                    stageLottie.style.transform = 'scale(1)';
+                })
+                .catch((err) => {
+                    console.error('[ServiceStudio] Lottie load error:', path, err);
+                    stageLottie.style.opacity = '1';
+                    stageLottie.style.transform = 'scale(1)';
+                });
+        }, 140);
+    }
+
     /* ─── Switch Service Handler ───────────────────────────── */
     function switchService(key) {
-        if (key === activeKey) return;
+        if (key === activeKey && currentAnim) return;
         prevKey = activeKey;
         activeKey = key;
         morphProgress = 0.0;
@@ -116,15 +192,20 @@ export function initServiceStudio(host) {
         });
 
         // Sync Active Tag Text
-        if (tagEl && SERVICES[key]) {
-            tagEl.textContent = SERVICES[key].tag;
-        }
-
-        // Sync Host Accent Color
         if (SERVICES[key]) {
+            if (tagNumEl) tagNumEl.textContent = SERVICES[key].num;
+            if (tagTitleEl) tagTitleEl.textContent = SERVICES[key].title;
             host.style.setProperty('--ss-accent-color', SERVICES[key].accent);
             host.style.setProperty('--ss-glow-color', SERVICES[key].glow);
+
+            // Trigger Lottie Swap
+            loadStageLottie(SERVICES[key].lottie, key);
         }
+    }
+
+    // Initial Lottie Load using the active service so every capability starts with its own animation
+    if (SERVICES[activeKey]) {
+        loadStageLottie(SERVICES[activeKey].lottie, activeKey);
     }
 
     /* ─── Scroll-triggered Service Switching ───────── */
@@ -223,23 +304,43 @@ export function initServiceStudio(host) {
 
     /* ─── Scene Specific Graphics ──────────────────────────── */
     function drawServiceScene(key, ctx, w, h, cx, cy, t) {
-        switch (key) {
-            case 'web':
-                drawWebScene(ctx, w, h, cx, cy, t);
-                break;
-            case 'security':
-                drawSecurityScene(ctx, w, h, cx, cy, t);
-                break;
-            case 'marketing':
-                drawMarketingScene(ctx, w, h, cx, cy, t);
-                break;
-            case 'content':
-                drawContentScene(ctx, w, h, cx, cy, t);
-                break;
-            case 'commerce':
-                drawCommerceScene(ctx, w, h, cx, cy, t);
-                break;
-        }
+        const accent = SERVICES[key] ? SERVICES[key].accent : '#0a63ff';
+
+        ctx.save();
+        // Ambient Radial Background Glow
+        const bgGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, Math.max(w, h) * 0.65);
+        bgGlow.addColorStop(0, SERVICES[key] ? SERVICES[key].glow : 'rgba(10, 99, 255, 0.14)');
+        bgGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = bgGlow;
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtly Dashed Blueprint Frame
+        const bw = w * 0.88;
+        const bh = h * 0.82;
+        const bx = (w - bw) / 2;
+        const by = (h - bh) / 2 + 10;
+
+        ctx.strokeStyle = colorMixHex(accent, 0.25);
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 6]);
+        ctx.strokeRect(bx, by, bw, bh);
+        ctx.setLineDash([]);
+
+        // Technical Corner Ticks
+        const tickS = 12;
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 1.5;
+        [[bx, by], [bx + bw, by], [bx, by + bh], [bx + bw, by + bh]].forEach(([tx, ty], idx) => {
+            ctx.beginPath();
+            ctx.moveTo(tx, ty + (idx > 1 ? -tickS : tickS));
+            ctx.lineTo(tx, ty);
+            ctx.lineTo(tx + (idx % 2 === 1 ? -tickS : tickS), ty);
+            ctx.stroke();
+        });
+    }
+
+    function colorMixHex(hex, alpha) {
+        return hex + Math.round(alpha * 255).toString(16).padStart(2, '0');
     }
 
     /* 01 WEB ARCHITECTURE SCENE */

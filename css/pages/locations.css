@@ -1,0 +1,344 @@
+/* ==========================================================================
+   Locations Page — 100% LIGHT THEME & SPATIAL NETWORK MESH
+   ========================================================================== */
+
+:root {
+    --loc-paper: #f8fafc;
+    --loc-paper-2: #f1f5f9;
+    --loc-ink: #050f33;
+    --loc-ink-2: #334155;
+    --loc-blue: #0a63ff;
+    --loc-blue-ink: #0b52d8;
+    --loc-cyan: #0284c7;
+    --loc-green: #16a34a;
+    --loc-purple: #9333ea;
+    --loc-amber: #d97706;
+}
+
+/* --- Global Section Background Textures (Index Page Style) --- */
+.page-locations {
+    background-color: #f8fafc;
+}
+
+/* Hero Section */
+.loc-hero-light {
+    position: relative;
+    background-color: #ffffff;
+    background-image: 
+        radial-gradient(color-mix(in srgb, var(--loc-blue) 12%, transparent) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(10, 99, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10, 99, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px, 48px 48px, 48px 48px;
+    color: var(--loc-ink);
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    overflow: hidden;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.loc-hero-light::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: 15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(10, 99, 255, 0.08) 0%, rgba(2, 132, 199, 0.02) 50%, transparent 70%);
+    pointer-events: none;
+}
+
+.loc-hero-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 992px) {
+    .loc-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.loc-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--loc-ink);
+    margin-bottom: 1.2rem;
+}
+
+.loc-hero-title span {
+    color: var(--loc-blue);
+    background: linear-gradient(135deg, #0a63ff 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.loc-hero-desc {
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    color: #475569;
+    line-height: 1.6;
+    max-width: 520px;
+    margin-bottom: 2rem;
+}
+
+/* Radar Console Window (LIGHT THEME) */
+.loc-radar-console-light {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(10, 99, 255, 0.08), inset 0 1px 0 #ffffff;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.loc-radar-console-light:hover {
+    transform: translateY(-4px);
+    border-color: var(--loc-blue);
+    box-shadow: 0 20px 50px rgba(10, 99, 255, 0.15);
+}
+
+.loc-radar-bar-light {
+    background: #f8fafc;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* --- Section 02: Regional Hubs --- */
+.loc-hubs-section {
+    position: relative;
+    padding-block: 5.5rem;
+    background-color: #ffffff;
+    background-image: radial-gradient(rgba(10, 99, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.loc-hubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.loc-hub-card-light {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 2rem 1.75rem;
+    box-shadow: 0 8px 25px rgba(5, 15, 51, 0.04);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    overflow: hidden;
+}
+
+.loc-hub-card-light::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--card-accent, var(--loc-blue));
+    transition: height 0.3s ease;
+}
+
+.loc-hub-card-light:hover {
+    transform: translateY(-6px) rotateX(1deg) rotateY(-1deg);
+    border-color: var(--card-accent, var(--loc-blue));
+    box-shadow: 0 16px 35px rgba(10, 99, 255, 0.12);
+}
+
+.loc-hub-card-light:hover::before {
+    height: 6px;
+}
+
+.loc-hub-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(10, 99, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    color: var(--card-accent, var(--loc-blue));
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.loc-hub-card-light:hover .loc-hub-icon-box {
+    transform: scale(1.08) rotate(4deg);
+    background: var(--card-accent, var(--loc-blue));
+    color: #ffffff;
+}
+
+.loc-hub-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--loc-ink);
+    margin-bottom: 0.5rem;
+}
+
+.loc-hub-address {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+}
+
+/* --- Section 03: Coverage Matrix --- */
+.loc-coverage-section-light {
+    position: relative;
+    background: #f8fafc;
+    background-image: 
+        linear-gradient(to right, rgba(10, 99, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10, 99, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    padding-block: 5.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.loc-stat-box-light {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 16px rgba(5, 15, 51, 0.03);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.loc-stat-box-light:hover {
+    transform: translateX(6px);
+    border-color: var(--loc-blue);
+    box-shadow: 0 8px 20px rgba(10, 99, 255, 0.08);
+}
+
+.loc-coverage-card-light {
+    background: #ffffff;
+    border-left: 4px solid var(--loc-blue);
+    border-radius: 0 16px 16px 0;
+    border-top: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 16px rgba(5, 15, 51, 0.03);
+    transition: all 0.3s ease;
+}
+
+.loc-coverage-card-light:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(10, 99, 255, 0.08);
+    border-left-color: var(--loc-cyan);
+}
+
+/* --- Section 04: Process Timeline --- */
+.loc-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-block: 3rem 1rem;
+}
+
+@media (max-width: 992px) {
+    .loc-process-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .loc-process-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.loc-process-step {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    box-shadow: 0 4px 16px rgba(5, 15, 51, 0.03);
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.loc-process-step:hover {
+    transform: translateY(-4px);
+    border-color: var(--loc-blue);
+}
+
+.loc-step-badge {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--loc-blue);
+    background: rgba(10, 99, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    display: inline-block;
+}
+
+/* --- Section 05: FAQ Accordion --- */
+.loc-faq-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    margin-bottom: 0.85rem;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(5, 15, 51, 0.03);
+    transition: border-color 0.3s ease;
+}
+
+.loc-faq-item[open] {
+    border-color: var(--loc-blue);
+    box-shadow: 0 8px 25px rgba(10, 99, 255, 0.08);
+}
+
+.loc-faq-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.75rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--loc-ink);
+    list-style: none;
+}
+
+.loc-faq-head::-webkit-details-marker {
+    display: none;
+}
+
+.loc-faq-body {
+    padding: 0 1.75rem 1.25rem 1.75rem;
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.loc-reveal {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loc-hub-card-light, .loc-stat-box-light, .loc-process-step {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+}

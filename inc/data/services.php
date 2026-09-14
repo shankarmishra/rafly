@@ -68,7 +68,7 @@ return [
             ['step' => '04', 'title' => 'LAUNCH',   'time' => '1 Week',    'desc' => 'Production deployment, domain migration, baseline security check, and 30-day support.']
         ],
         'artifacts' => [
-            ['type' => 'SPEC SHEET',    'title' => 'Technical Architecture Blueprint', 'desc' => 'Comprehensive data schemas, component tree, and API route documentation.', 'tag' => 'v2.4 Final Spec'],
+            ['type' => 'SPEC SHEET',    'title' => 'Technical Architecture Blueprint', 'desc' => 'Comprehensive data schemas, component tree, and API route documentation.', 'tag' => 'Final Technical Spec'],
             ['type' => 'CODE REPO',     'title' => 'Git Repository & Deployment Pipeline', 'desc' => 'Version-controlled codebase with staging preview links and CI/CD scripts.', 'tag' => 'Branch: main'],
             ['type' => 'AUDIT REPORT',  'title' => 'Core Web Vitals Verification',     'desc' => 'Lighthouse performance report verifying sub-100ms FID and 95+ score.', 'tag' => 'Score: 98/100']
         ],

@@ -3,54 +3,59 @@ require __DIR__ . '/inc/bootstrap.php';
 
 $lastUpdated = 'July 18, 2026';
 
+$crumbs = [
+    ['name' => 'Home',    'url' => '/'],
+    ['name' => 'Privacy', 'url' => '/privacy'],
+];
+
 $page = [
-    'id'        => '',
-    'title'     => 'Privacy Policy | Rafly Digital Growth Partner',
-    'desc'      => 'How Rafly Digital Growth Partner collects, uses, stores and protects your information.',
+    'id'        => 'privacy',
+    'title'     => 'Privacy Policy | RAFly Digital Growth Partner',
+    'desc'      => 'How RAFly Digital Growth Partner collects, uses, stores and protects your information.',
     'bodyClass' => 'page-legal',
     'styles'    => ['home', 'home-scenes', 'legal'],
     'module'    => 'home',
-    'schema'    => [schema_breadcrumbs($crumbs = [
-        ['name' => 'Home',    'url' => '/'],
-        ['name' => 'Privacy', 'url' => '/privacy'],
-    ])],
+    'schema'    => [schema_breadcrumbs($crumbs)],
 ];
 require __DIR__ . '/partials/head.php';
 require __DIR__ . '/partials/header.php';
 ?>
 <main id="main">
-    <section class="section page-head band-soft">
+    <section class="section page-head blueprint-canvas" style="padding-block: 4rem 2rem;">
         <div class="container container-narrow">
             <?= breadcrumbs($crumbs) ?>
-            <p class="eyebrow">Legal</p>
-            <h1 class="display">Privacy Policy</h1>
-            <p class="policy-updated">Last updated: <?= e($lastUpdated) ?></p>
+            <div class="machined-badge machined-badge-blue" style="margin-bottom: 0.8rem; margin-top: 0.5rem;">
+                <span class="glow-dot-active"></span> LEGAL &amp; GOVERNANCE // COMPLIANCE
+            </div>
+            <h1 class="display" style="font-size: clamp(2.4rem, 4vw, 3.5rem); font-weight: 800; color: #050f33; margin-bottom: 0.5rem;">Privacy Policy</h1>
+            <p class="policy-updated" style="font-family: var(--font-mono); font-size: 0.82rem; color: #64748b;">Last updated: <?= e($lastUpdated) ?></p>
         </div>
     </section>
 
-    <div class="container container-narrow policy-wrap">
-        <div class="policy-notice">
+    <div class="container container-narrow policy-wrap" style="padding-block: 2rem 5rem;">
+        <div class="machined-card policy-notice" style="margin-bottom: 2rem; background: #ffffff; border-left: 4px solid #0a63ff;">
             This policy explains what information Rafly Digital Growth Partner ("Rafly", "we", "us") collects through this website, why we collect it, and the choices you have. It applies to <strong><?= e(SITE_DOMAIN) ?></strong> and the consultation and requirement forms hosted on it.
         </div>
 
-        <div class="policy-toc" data-r="rise">
-            <h2>On This Page</h2>
-            <ol>
-                <li><a href="#information-we-collect">1. Information We Collect</a></li>
-                <li><a href="#how-we-use-it">2. How We Use Your Information</a></li>
-                <li><a href="#cookies">3. Cookies &amp; Similar Technologies</a></li>
-                <li><a href="#security">4. How We Protect Your Information</a></li>
-                <li><a href="#retention">5. Data Retention</a></li>
-                <li><a href="#sharing">6. Sharing Your Information</a></li>
-                <li><a href="#rights">7. Your Rights &amp; Choices</a></li>
-                <li><a href="#children">8. Children's Privacy</a></li>
-                <li><a href="#changes">9. Changes to This Policy</a></li>
-                <li><a href="#contact-us">10. Contact Us</a></li>
+        <div class="machined-card policy-toc" data-r="rise" style="margin-bottom: 3rem; background: #ffffff;">
+            <div class="machined-badge machined-badge-cyan" style="margin-bottom: 0.75rem;">DOCUMENT INDEX</div>
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #050f33; margin-bottom: 1rem;">On This Page</h2>
+            <ol style="line-height: 1.8; color: #475569; font-size: 0.95rem;">
+                <li><a href="#information-we-collect" style="color: #0a63ff; font-weight: 600;">1. Information We Collect</a></li>
+                <li><a href="#how-we-use-it" style="color: #0a63ff; font-weight: 600;">2. How We Use Your Information</a></li>
+                <li><a href="#cookies" style="color: #0a63ff; font-weight: 600;">3. Cookies &amp; Similar Technologies</a></li>
+                <li><a href="#security" style="color: #0a63ff; font-weight: 600;">4. How We Protect Your Information</a></li>
+                <li><a href="#retention" style="color: #0a63ff; font-weight: 600;">5. Data Retention</a></li>
+                <li><a href="#sharing" style="color: #0a63ff; font-weight: 600;">6. Sharing Your Information</a></li>
+                <li><a href="#rights" style="color: #0a63ff; font-weight: 600;">7. Your Rights &amp; Choices</a></li>
+                <li><a href="#children" style="color: #0a63ff; font-weight: 600;">8. Children's Privacy</a></li>
+                <li><a href="#changes" style="color: #0a63ff; font-weight: 600;">9. Changes to This Policy</a></li>
+                <li><a href="#contact-us" style="color: #0a63ff; font-weight: 600;">10. Contact Us</a></li>
             </ol>
         </div>
 
         <section class="policy-section" data-r="rise" id="information-we-collect">
-            <h2><?= icon('database') ?>1. Information We Collect</h2>
+            <h2><?= icon('database') ?> 1. Information We Collect</h2>
             <p>We collect information you choose to submit through our "Get a Free Consultation" and requirement forms, including:</p>
             <ul>
                 <li><strong>Company name</strong> — to identify your business and personalise our response.</li>
@@ -61,7 +66,7 @@ require __DIR__ . '/partials/header.php';
         </section>
 
         <section class="policy-section" data-r="rise" id="how-we-use-it">
-            <h2><?= icon('settings') ?>2. How We Use Your Information</h2>
+            <h2><?= icon('settings') ?> 2. How We Use Your Information</h2>
             <p>We use the information you provide to:</p>
             <ul>
                 <li>Respond to your enquiry and follow up on your consultation request;</li>
@@ -73,24 +78,24 @@ require __DIR__ . '/partials/header.php';
         </section>
 
         <section class="policy-section" data-r="rise" id="cookies">
-            <h2><?= icon('cookie') ?>3. Cookies &amp; Similar Technologies</h2>
+            <h2><?= icon('cookie') ?> 3. Cookies &amp; Similar Technologies</h2>
             <p>This site uses a single strictly-necessary session cookie to keep your browsing session secure and to generate a CSRF (Cross-Site Request Forgery) token that protects our forms from being submitted by malicious third-party sites. This cookie does not track you across other websites and is not used for advertising.</p>
             <p>We use the <strong>Meta Pixel</strong> (from Meta, the company behind Facebook and Instagram) to understand how visitors reach and use this site and to measure the results of our advertising. When you visit, the Pixel can share with Meta: the pages you view, whether you submitted one of our enquiry forms (as a "Lead" event, without the content of what you wrote), and whether you clicked through to WhatsApp. It also sets its own cookies and may combine this with information Meta already has about you if you are logged into a Meta product in the same browser.</p>
             <p>This is separate from the browsing data Meta itself collects when its Pixel loads in your browser — that collection is governed by <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's own Privacy Policy</a>, not this one. You can limit or stop it at any time: use <a href="https://www.facebook.com/adpreferences/" target="_blank" rel="noopener">Meta's Ad Preferences</a> to control ad personalisation, or a browser extension / tracking-protection setting to block the Pixel outright — the site works identically either way, since nothing about the forms or pages depends on it.</p>
         </section>
 
         <section class="policy-section" data-r="rise" id="security">
-            <h2><?= icon('shield') ?>4. How We Protect Your Information</h2>
+            <h2><?= icon('shield') ?> 4. How We Protect Your Information</h2>
             <p>We apply reasonable technical safeguards to protect the information submitted through this site, including transport encryption (HTTPS), CSRF protection on all forms, input sanitisation, and restricted access to stored submissions. No method of transmission or storage is completely secure, so while we work to protect your information, we cannot guarantee its absolute security.</p>
         </section>
 
         <section class="policy-section" data-r="rise" id="retention">
-            <h2><?= icon('history') ?>5. Data Retention</h2>
+            <h2><?= icon('history') ?> 5. Data Retention</h2>
             <p>We retain form submissions for as long as reasonably necessary to respond to your enquiry, maintain business records, and comply with our legal obligations. If you would like your information deleted sooner, contact us using the details below and we will action your request within a reasonable timeframe.</p>
         </section>
 
         <section class="policy-section" data-r="rise" id="sharing">
-            <h2><?= icon('users') ?>6. Sharing Your Information</h2>
+            <h2><?= icon('users') ?> 6. Sharing Your Information</h2>
             <p>We do not sell or rent your personal information. We may share limited information with:</p>
             <ul>
                 <li>Our website hosting provider, solely to operate and secure this website;</li>
@@ -101,7 +106,7 @@ require __DIR__ . '/partials/header.php';
         </section>
 
         <section class="policy-section" data-r="rise" id="rights">
-            <h2><?= icon('shield') ?>7. Your Rights &amp; Choices</h2>
+            <h2><?= icon('shield') ?> 7. Your Rights &amp; Choices</h2>
             <p>Depending on your location, you may have the right to ask us to:</p>
             <ul>
                 <li>Confirm what personal information we hold about you;</li>
@@ -113,23 +118,23 @@ require __DIR__ . '/partials/header.php';
         </section>
 
         <section class="policy-section" data-r="rise" id="children">
-            <h2><?= icon('users') ?>8. Children's Privacy</h2>
+            <h2><?= icon('users') ?> 8. Children's Privacy</h2>
             <p>Our services are intended for businesses and individuals who are at least 18 years old. We do not knowingly collect personal information from children, and we ask that minors do not submit information through this website.</p>
         </section>
 
         <section class="policy-section" data-r="rise" id="changes">
-            <h2><?= icon('file-pen') ?>9. Changes to This Policy</h2>
+            <h2><?= icon('file-pen') ?> 9. Changes to This Policy</h2>
             <p>We may update this Privacy Policy from time to time to reflect changes to our practices or for legal, operational, or regulatory reasons. The "Last updated" date at the top of this page will always reflect the most recent version. We encourage you to review this page periodically.</p>
         </section>
 
         <section class="policy-section" data-r="rise" id="contact-us">
-            <h2><?= icon('mail-open') ?>10. Contact Us</h2>
+            <h2><?= icon('mail-open') ?> 10. Contact Us</h2>
             <p>If you have questions about this Privacy Policy or how we handle your information, reach out to us:</p>
-            <div class="contact-callout">
-                <h3>Rafly Digital Growth Partner</h3>
-                <p><?= e(setting('contact.address', 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, 201306')) ?><br>
+            <div class="machined-card contact-callout" style="background: #ffffff; padding: 1.75rem; margin-top: 1rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #050f33; margin-bottom: 0.5rem;">Rafly Digital Growth Partner</h3>
+                <p style="color: #475569; font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.6;"><?= e(setting('contact.address', 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, 201306')) ?><br>
                 <?= e(CONTACT_EMAIL) ?> &nbsp;•&nbsp; <?= e(CONTACT_PHONE) ?></p>
-                <a href="/contact" class="btn btn-pill">Contact Rafly <?= icon('arrow-right') ?></a>
+                <a href="/contact" class="btn btn-primary">Contact Rafly <?= icon('arrow-right') ?></a>
             </div>
         </section>
     </div>

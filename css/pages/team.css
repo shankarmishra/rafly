@@ -1,369 +1,182 @@
 /* ==========================================================================
-   Team.
-
-   Native <details> cards. Everything visual here is a state of the element the
-   browser already manages — no script, and nothing that breaks with JS off.
+   Team / Practitioner Network Page — 100% LIGHT THEME & 3D MATRIX
    ========================================================================== */
 
-.team-ecosystem-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+.page-team {
+    --team-paper: #f8fafc;
+    --team-paper-2: #f1f5f9;
+    --team-ink: #050f33;
+    --team-ink-2: #334155;
+    --team-blue: #0a63ff;
+    --team-cyan: #0284c7;
+    --team-green: #16a34a;
+    --team-purple: #9333ea;
+    --team-red: #dc2626;
+    background-color: #f8fafc;
 }
 
-.chip-mono {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: #0a63ff;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 3px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(10, 99, 255, 0.2);
-    box-shadow: inset 0 1px 0 #ffffff, 0 2px 6px rgba(6, 18, 47, 0.04);
-}
-
-.team-grid { gap: var(--sp-5); align-items: start; }
-
-.team-card {
-    background: #ffffff;
-    border: 1px solid rgba(6, 18, 47, 0.1);
-    border-radius: var(--r-lg);
-    box-shadow: inset 0 1px 0 #ffffff, 0 4px 16px rgba(6, 18, 47, 0.04);
+/* --- Hero Section (LIGHT THEME) --- */
+.team-hero-light {
+    position: relative;
+    background-color: #ffffff;
+    background-image: 
+        radial-gradient(color-mix(in srgb, var(--blue, #0a63ff) 12%, transparent) 1.2px, transparent 1.2px),
+        linear-gradient(to right, rgba(10, 99, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10, 99, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px, 48px 48px, 48px 48px;
+    color: #050f33;
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
     overflow: hidden;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-}
-.team-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(10, 99, 255, 0.28);
-    box-shadow: inset 0 1px 0 #ffffff, 0 12px 28px rgba(10, 99, 255, 0.1);
-}
-.team-card[open] {
-    border-color: rgba(10, 99, 255, 0.4);
-    box-shadow: inset 0 1px 0 #ffffff, 0 16px 36px rgba(10, 99, 255, 0.14);
+    border-bottom: 1px solid #e2e8f0;
 }
 
-.team-card-head {
+.team-hero-light::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: 12%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(10, 99, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.team-hero-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 992px) {
+    .team-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.team-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #050f33;
+    margin-bottom: 1.2rem;
+}
+
+.team-hero-title span {
+    color: #0a63ff;
+    background: linear-gradient(135deg, #0a63ff 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Console Box (LIGHT THEME) */
+.team-console-box-light {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(10, 99, 255, 0.18);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 15px 40px rgba(10, 99, 255, 0.08);
+    position: relative;
+}
+
+/* --- 8 Discipline Cards 3D Grid --- */
+.team-disciplines-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-block: 3rem;
+}
+
+@media (max-width: 1200px) {
+    .team-disciplines-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .team-disciplines-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.team-disc-card-light {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.75rem 1.35rem;
+    box-shadow: 0 8px 25px rgba(5, 15, 51, 0.04);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.team-disc-card-light:hover {
+    transform: translateY(-6px) rotateX(2deg) rotateY(-2deg);
+    border-color: var(--disc-accent, #0a63ff);
+    box-shadow: 0 16px 35px rgba(10, 99, 255, 0.12);
+}
+
+.team-disc-icon-wrap-light {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(10, 99, 255, 0.08);
     display: flex;
     align-items: center;
-    gap: var(--sp-4);
-    padding: var(--sp-5);
-    cursor: pointer;
-    list-style: none;
+    justify-content: center;
+    color: var(--disc-accent, #0a63ff);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
 }
-.team-card-head::-webkit-details-marker { display: none; }
-.team-card-head::marker { content: ''; }
-.team-card-head:focus-visible { outline: 3px solid #0a63ff; outline-offset: -3px; }
 
-.team-avatar {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: rgba(10, 99, 255, 0.05);
-    border: 2px solid rgba(10, 99, 255, 0.15);
-    box-shadow: inset 0 1px 0 #ffffff, 0 4px 12px rgba(6, 18, 47, 0.08);
+.team-disc-card-light:hover .team-disc-icon-wrap-light {
+    transform: scale(1.08) rotate(4deg);
+    background: var(--disc-accent, #0a63ff);
+    color: #ffffff;
 }
-.team-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.team-avatar .avatar { width: 64px; height: 64px; font-size: var(--fs-lg); box-shadow: none; }
 
-.team-card-id { flex: 1; min-width: 0; }
-.team-card-id strong {
-    display: block;
-    font-family: var(--font-display);
-    font-size: var(--fs-h4);
-    font-weight: 800;
-    color: #06122f;
-}
-.team-role {
-    display: inline-block;
+.team-disc-num {
     font-family: var(--font-mono, monospace);
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #0a63ff;
-    background: rgba(10, 99, 255, 0.08);
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-top: 4px;
-    letter-spacing: 0.04em;
-}
-.team-brief {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--disc-accent, #0a63ff);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.35rem;
     display: block;
-    font-size: var(--fs-xs);
+}
+
+.team-disc-title {
+    font-family: var(--font-display);
+    font-size: 1.18rem;
+    font-weight: 800;
+    color: #050f33;
+    margin-bottom: 0.45rem;
+}
+
+.team-disc-desc {
+    font-size: 0.88rem;
     color: #475569;
-    margin-top: var(--sp-2);
     line-height: 1.5;
 }
 
-.team-arrow {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(10, 99, 255, 0.06);
-    color: #0a63ff;
-    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
-}
-.team-card[open] .team-arrow {
-    transform: rotate(180deg);
-    background: #0a63ff;
-    color: #ffffff;
-}
-.team-arrow .icon { width: 15px; height: 15px; stroke-width: 2.25; }
-.team-card[open] .team-arrow { transform: rotate(180deg); background: var(--ink); color: #fff; }
-
-.team-card-body {
-    padding: 0 var(--sp-5) var(--sp-5);
-    border-top: 1px solid var(--line);
-    margin-top: var(--sp-1);
-    padding-top: var(--sp-5);
-}
-.team-card-body p {
-    font-size: var(--fs-sm);
-    line-height: 1.7;
-    color: var(--ink-2);
-    margin: 0;
-}
-.team-links { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-5); }
-.team-links .chip .icon { width: 14px; height: 14px; }
-
-.team-note {
-    margin: var(--sp-8) auto 0;
-    max-width: 62ch;
-    text-align: center;
-    font-size: var(--fs-sm);
-    color: var(--ink-3);
+.team-reveal {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }
 
-.team-empty { max-width: 46rem; margin-inline: auto; text-align: center; }
-.team-empty .lead { margin: var(--sp-4) auto var(--sp-6); }
-.team-empty .cluster { justify-content: center; }
-
-/* ==========================================================================
-   The profile overlay
-
-   One shared dialog rather than one per person, so stepping to the next member
-   is a re-render instead of a close-and-reopen. The <details> cards underneath
-   stay exactly as they are — this is layered on top of them by
-   js/pages/team.js, and with the script absent the cards still open in place.
-
-   THE FAN-OUT is the whole point of the effect: the detail card starts tucked
-   BEHIND the photo card, rotated a few degrees, and swings out to the right on
-   a spring. The negative margin is what makes that literal — a strip of the
-   panel is genuinely hidden behind the card in front of it, and the padding
-   puts the text back clear of the overlap.
-   ========================================================================== */
-.team-detail {
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-modal);
-    display: grid;
-    place-items: center;
-    padding: var(--sp-6);
-    opacity: 0;
-    transition: opacity var(--dur-2) var(--ease-out);
-}
-.team-detail.is-open { opacity: 1; }
-.team-detail[hidden] { display: none; }
-
-.team-detail-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 14, 26, .55);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-}
-
-.team-detail-stage {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    width: min(100%, 62rem);
-    transform: translateY(14px) scale(.985);
-    transition: transform var(--dur-3) var(--ease-out);
-}
-.team-detail.is-open .team-detail-stage { transform: none; }
-.team-detail-stage:focus { outline: none; }
-
-.team-detail-photo {
-    position: relative;
-    z-index: 2;
-    flex: none;
-    width: clamp(200px, 26vw, 268px);
-    display: grid;
-    align-content: center;
-    justify-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-6) var(--sp-5);
-    text-align: center;
-    background: linear-gradient(160deg, var(--blue-deep), var(--ink));
-    border-radius: var(--r-xl);
-    box-shadow: var(--sh-4);
-    color: #fff;
-}
-.team-detail-avatar {
-    width: 104px;
-    height: 104px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    background: rgba(255, 255, 255, .12);
-    margin-bottom: var(--sp-3);
-}
-.team-detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.team-detail-avatar-icon { width: 42px; height: 42px; color: rgba(255, 255, 255, .8); }
-.team-detail-avatar img[hidden],
-.team-detail-avatar .icon[hidden],
-.team-detail-links[hidden],
-.team-detail-brief[hidden],
-.team-detail-bio[hidden] { display: none; }
-
-.team-detail-photo strong {
-    font-family: var(--font-display);
-    font-size: var(--fs-h4);
-    line-height: var(--lh-heading);
-    color: #fff;
-}
-.team-detail-role {
-    font-size: var(--fs-xs);
-    font-weight: var(--fw-semi);
-    letter-spacing: var(--tr-eyebrow);
-    text-transform: uppercase;
-    color: var(--on-dark-2);
-}
-
-.team-detail-card {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    max-height: min(78vh, 620px);
-    margin-left: -52px;
-    padding: var(--sp-6) var(--sp-6) var(--sp-5) calc(52px + var(--sp-6));
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-xl);
-    box-shadow: var(--sh-4);
-
-    /* The fan-out. The 90ms delay lets the stage land first, so the two moves
-       read as sequential rather than as one blurred event. */
-    opacity: 0;
-    transform: translateX(-64px) rotate(-3.5deg);
-    transform-origin: left center;
-    transition: opacity var(--dur-2) var(--ease-out) 90ms,
-                transform var(--dur-3) var(--ease-out) 90ms;
-}
-.team-detail.is-open .team-detail-card { opacity: 1; transform: none; }
-
-.team-detail-close {
-    position: absolute;
-    top: var(--sp-4);
-    right: var(--sp-4);
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: var(--paper);
-    color: var(--ink-2);
-    cursor: pointer;
-}
-.team-detail-close:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
-.team-detail-close .icon { width: 17px; height: 17px; }
-
-.team-detail-scroll {
-    overflow-y: auto;
-    padding-right: var(--sp-2);
-    flex: 1;
-}
-.team-detail-brief {
-    font-size: var(--fs-lead);
-    line-height: var(--lh-heading);
-    color: var(--ink);
-    padding-right: var(--sp-8);
-    margin-bottom: var(--sp-4);
-}
-.team-detail-bio { color: var(--ink-2); line-height: var(--lh-body); }
-.team-detail-links { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-5); }
-.team-detail-links .icon { width: 14px; height: 14px; }
-
-.team-detail-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-3);
-    margin-top: var(--sp-5);
-    padding-top: var(--sp-4);
-    border-top: 1px solid var(--line);
-}
-.team-detail-step {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-2) var(--sp-4);
-    border: 1px solid var(--line);
-    border-radius: var(--r-pill);
-    background: var(--paper);
-    color: var(--ink-2);
-    font-size: var(--fs-sm);
-    font-weight: var(--fw-medium);
-    cursor: pointer;
-}
-.team-detail-step:hover { background: var(--paper-2); color: var(--ink); }
-.team-detail-step .icon { width: 15px; height: 15px; }
-.team-detail-step .is-flipped { transform: rotate(180deg); }
-.team-detail-count { font-size: var(--fs-xs); color: var(--ink-3); }
-
-/* Stepping between members: the two panels that carry text cross-fade in the
-   direction of travel, so ‹ and › feel like movement along a roster rather
-   than like the same card blinking. */
-@keyframes teamSwapNext {
-    from { opacity: 0; transform: translateX(30px); }
-    to   { opacity: 1; transform: none; }
-}
-@keyframes teamSwapPrev {
-    from { opacity: 0; transform: translateX(-30px); }
-    to   { opacity: 1; transform: none; }
-}
-.team-detail-stage.is-swap-next .team-detail-photo,
-.team-detail-stage.is-swap-next .team-detail-scroll { animation: teamSwapNext var(--dur-2) var(--ease-out); }
-.team-detail-stage.is-swap-prev .team-detail-photo,
-.team-detail-stage.is-swap-prev .team-detail-scroll { animation: teamSwapPrev var(--dur-2) var(--ease-out); }
-
-@media (max-width: 760px) {
-    /* Stacked: the fan-out needs a horizontal axis it does not have here, so
-       the card comes up from under the photo instead of out from behind it. */
-    .team-detail { padding: var(--sp-4); }
-    .team-detail-stage { flex-direction: column; width: 100%; }
-    .team-detail-photo {
-        width: auto;
-        padding: var(--sp-5);
-        grid-auto-flow: column;
-        justify-content: start;
-        justify-items: start;
-        align-items: center;
-        gap: var(--sp-4);
-        text-align: left;
+@media (prefers-reduced-motion: reduce) {
+    .team-disc-card-light, .team-console-box-light {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
     }
-    .team-detail-avatar { width: 64px; height: 64px; margin-bottom: 0; }
-    .team-detail-card {
-        margin-left: 0;
-        margin-top: -46px;
-        padding: calc(46px + var(--sp-5)) var(--sp-5) var(--sp-5);
-        transform: translateY(-34px) rotate(-2deg);
-        transform-origin: center top;
-        max-height: 72vh;
-    }
-    .team-detail-brief { padding-right: var(--sp-7); }
-    .team-detail-step span { display: none; }   /* arrows alone at this width */
 }

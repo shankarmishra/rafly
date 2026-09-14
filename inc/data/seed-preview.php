@@ -165,7 +165,7 @@ return [
         'trust.projects.verified'   => '1',
         'trust.satisfaction.value'  => '98',
         'trust.satisfaction.verified' => '1',
-        'contact.address'           => 'Bengaluru, Karnataka',
+        'contact.address'           => 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, Uttar Pradesh 201306',
         'contact.hours'             => 'Mon–Sat, 10:00–19:00 IST',
     ],
 ];

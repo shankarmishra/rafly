@@ -106,6 +106,7 @@ $oldToClean = [
     'team.php'         => 'team',
     'blog.php'         => 'blog',
     'privacy.php'      => 'privacy',
+    'terms.php'        => 'terms',
     'thank-you.php'    => 'thank-you',
     'submit.php'       => 'submit',
     'pricing.php'      => 'pricing',
@@ -189,6 +190,7 @@ $cleanToFile = [
     'team'         => 'team.php',
     'blog'         => 'blog.php',
     'privacy'      => 'privacy.php',
+    'terms'        => 'terms.php',
     'thank-you'    => 'thank-you.php',
     'submit'       => 'submit.php',
     'locations'               => 'locations.php',
@@ -200,6 +202,7 @@ $cleanToFile = [
     'landing/website-audit'       => 'landing/website-audit.php',
     'landing/whatsapp-automation' => 'landing/whatsapp-automation.php',
     'client-portal'               => 'client-portal.php',
+    'lottie-test'                 => 'lottie-test.php',
 ];
 if (isset($cleanToFile[$path])) {
     return $dispatch($cleanToFile[$path]);

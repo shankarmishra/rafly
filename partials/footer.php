@@ -1,25 +1,22 @@
 <?php
 /** Shared site footer. Styles live in css/05-footer.css. */
 
-/* contact.address is an admin-editable setting (seeded in inc/tools/seed.php);
-   the same string used to be hardcoded here, in index.php's contact block and
-   in privacy.php, so an address change in the admin altered nothing a visitor
-   could see. All three read the setting. */
 $footAddr  = setting('contact.address', 'A523, T3, NX-One, Tech Zone IV, Greater Noida West, 201306');
 $footHours = setting('contact.hours', '');
 ?>
 <footer class="site-footer">
+    <div class="footer-top-beam" aria-hidden="true"></div>
     <div class="container">
         <div class="footer-top">
             <div class="footer-brand">
                 <a class="footer-logo" href="/">
-                    <img src="<?= e(asset('assets/logo-reversed.png')) ?>" alt="<?= e(SITE_NAME) ?>" width="97" height="30">
+                    <img src="<?= e(asset('assets/logo.png')) ?>" alt="<?= e(SITE_NAME) ?>" width="110" height="34">
                 </a>
                 <p class="footer-statement">Digital growth, delivered as a system.</p>
                 <p class="footer-blurb">One partner, one bundled package — web development, content creation, digital marketing, web security, and e-commerce support, all working together instead of stitched together from five different vendors.</p>
                 <div class="footer-social">
                     <?php foreach (SOCIAL_LINKS as $s): ?>
-                        <a href="<?= e($s['href']) ?>" target="_blank" rel="noopener" aria-label="<?= e($s['label']) ?>">
+                        <a href="<?= e($s['href']) ?>" data-social="<?= e(strtolower($s['label'])) ?>" target="_blank" rel="noopener" aria-label="<?= e($s['label']) ?>">
                             <?= icon($s['icon'], 'icon-fill') ?>
                         </a>
                     <?php endforeach; ?>
@@ -53,10 +50,10 @@ $footHours = setting('contact.hours', '');
                     <p class="footer-col-title">Locations</p>
                     <ul class="footer-links">
                         <li><a href="/locations">All Regional Hubs</a></li>
-                        <li><a href="/locations/greater-noida">Greater Noida (HQ)</a></li>
-                        <li><a href="/locations/noida">Noida Tech Hub</a></li>
-                        <li><a href="/locations/delhi">Delhi Enterprise</a></li>
-                        <li><a href="/locations/gurgaon">Gurgaon Cyber City</a></li>
+                        <li><a href="/locations">Greater Noida (HQ)</a></li>
+                        <li><a href="/locations">Noida Tech Hub</a></li>
+                        <li><a href="/locations">Delhi Enterprise</a></li>
+                        <li><a href="/locations">Gurgaon Cyber City</a></li>
                     </ul>
                 </div>
 
@@ -90,12 +87,6 @@ $footHours = setting('contact.hours', '');
             <p>
                 &copy; <?= date('Y') ?> Rafly Digital Growth Partner. All rights reserved.
 <?php
-/**
- * Real registration numbers, not invented — both settings default to empty
- * (see inc/tools/seed.php) and simply don't render until an admin fills them
- * in via /admin/settings.php. A blank "CIN: " line would look worse than no
- * line at all.
- */
 $cin = setting('legal.cin', '');
 $gst = setting('legal.gst', '');
 if ($cin !== '' || $gst !== ''):

@@ -380,3 +380,12 @@
     .marquee-track { animation: none !important; }
     .scroll-progress { display: none; }
 }
+
+/* Lottie & DotLottie Web Component Sizing & Display Fix */
+dotlottie-player, lottie-player {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 40px;
+}
+

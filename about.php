@@ -8,198 +8,159 @@ $crumbs = [
 
 $page = [
     'id'        => 'about',
-    'title'     => 'About Rafly | Digital Growth',
-    'desc'      => 'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
+    'title'     => 'About Studio | RAFly Digital Growth Partner',
+    'desc'      => 'RAFly is an engineering and growth studio building web applications, hardening cyber perimeters, and scaling performance marketing.',
     'bodyClass' => 'page-about',
     'styles'    => ['home', 'home-scenes', 'about'],
     'module'    => 'home',
-    'schema'    => [
-        schema_webpage(
-            'about',
-            'About Rafly | Digital Growth',
-            'We build efficient digital systems and growth strategies for modern businesses — one partner across web, content, marketing, security and e-commerce.',
-            'AboutPage'
-        ),
-        schema_breadcrumbs($crumbs),
-    ],
+    'schema'    => [schema_breadcrumbs($crumbs)],
 ];
-
-$services = array_values(services_all());
 
 require __DIR__ . '/partials/head.php';
 require __DIR__ . '/partials/header.php';
-require __DIR__ . '/partials/social-rail.php';
 ?>
 <main id="main">
-    <section class="section page-head">
-        <?php require __DIR__ . '/partials/head-object.php'; ?>
-        <div class="container">
-            <?= breadcrumbs($crumbs) ?>
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">About Rafly</p>
-                    <h1 class="display">We build digital systems, <span class="soft">not deliverables.</span></h1>
-                </div>
-                <div>
-                    <p class="lead">
-                        Rafly is a digital growth partner based in <?= e(BUSINESS_GEO_LOCALITY) ?>,
-                        <?= e(BUSINESS_GEO_REGION) ?>, that bundles web development, content
-                        creation, digital marketing, web security, and e-commerce support into one
-                        coordinated team &mdash; so growing businesses get one accountable point of
-                        contact instead of five separate vendors.
-                    </p>
-                    <p style="margin-top:1.5rem">
-                        <a class="btn btn-pill" href="/case-studies">See our work <?= icon('arrow-right') ?></a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <?php /* ===================== THE BRANCHING FIGURE =====================
-       Rafly as one core with five branches: the company narrative, drawn.
-       The branch labels are the five services from the repository, so this
-       figure and the nav and the five detail pages can never disagree about
-       what the company does. It replaces a licensed stock photograph of
-       strangers around a table — a picture that said nothing about Rafly and
-       could have been on any agency site on earth. */ ?>
-    <section class="section-bot">
-        <div class="container">
-            <div class="split split-wide-r">
-                <div class="branch-figure" aria-hidden="true" data-fx="drift" style="--depth: 30px;">
-                    <span class="branch-core"><?= icon('layers') ?></span>
-                    <span class="branch-hud-tag tag-top">[SYSTEM INTEGRATION]</span>
-                    <span class="branch-hud-tag tag-bot">[5 CORE BRANCHES ACTIVE]</span>
-                    <ol class="branch-list">
-                        <?php foreach ($services as $n => $svc): ?>
-                            <li class="branch-item" style="--a:<?= -90 + $n * 72 ?>deg">
-                                <span class="branch-dot"><?= icon($svc['icon']) ?></span>
-                                <span class="branch-label"><?= e($svc['title']) ?></span>
-                            </li>
-                        <?php endforeach; ?>
-                    </ol>
+    <!-- 01 — HERO: THE STUDIO & RAFLY OPERATING SYSTEM (LIGHT THEME) -->
+    <section class="section hero sig-hero blueprint-canvas" style="min-height: 85vh; display: flex; align-items: center; padding-block: 4rem; position: relative; background: #ffffff;">
+        <div class="container hero-grid" style="display: grid; grid-template-columns: 50% 50%; gap: 2.5rem; align-items: center; width: 100%;">
+            <div>
+                <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.25rem;">
+                    <span class="glow-dot-active"></span> STUDIO OPERATING SYSTEM
                 </div>
-
-                <div data-fx="in-right" style="--travel: 12%;">
-                    <p class="eyebrow">Who we are</p>
-                    <h2>One core. <span class="soft">Five branches.</span></h2>
-                    <p class="lead">
-                        Rafly combines technical execution with business understanding. Instead of
-                        hiring separate people for your website, content, marketing, security, and
-                        store operations, you work with one team that already shares the same plan.
-                    </p>
-                    <ul class="list-check" style="margin-top:2rem">
-                        <li><?= icon('check') ?><span>Dedicated, bundled support for growing businesses</span></li>
-                        <li><?= icon('check') ?><span>Reliable web development and security guidance</span></li>
-                        <li><?= icon('check') ?><span>Strategy-led marketing, content, and e-commerce support</span></li>
-                    </ul>
+                <h1 style="font-size: clamp(2.2rem, 3.8vw, 3.4rem); font-weight: 850; color: #050f33; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.03em;">
+                    DIGITAL ENGINEERING + <span style="color: #0a63ff;">GROWTH STUDIO</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #475569; line-height: 1.6; margin-bottom: 1.75rem; max-width: 520px;">
+                    We operate at the intersection of technical software development, zero-trust security, and performance growth. One accountable team, zero agency proxy layers.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <a class="btn btn-primary btn-lg" href="#intake">Work With The Studio <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#principles">Operating Principles <?= icon('arrow-down') ?></a>
+                </div>
+                
+                <!-- Telemetry Row -->
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                    <span class="telemetry-pill-mono" style="background: rgba(10, 99, 255, 0.08); color: #0b52d8; border: 1px solid rgba(10, 99, 255, 0.2);">
+                        <?= icon('zap') ?> 100/100 Core Web Vitals
+                    </span>
+                    <span class="telemetry-pill-mono" style="background: rgba(2, 132, 199, 0.08); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.2);">
+                        <?= icon('shield') ?> Zero-Trust Architecture
+                    </span>
+                    <span class="telemetry-pill-mono" style="background: rgba(22, 163, 74, 0.08); color: #16a34a; border: 1px solid rgba(22, 163, 74, 0.2);">
+                        <?= icon('trending-up') ?> 100% Attributed ROI
+                    </span>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <?php /* ======================= MISSION & VISION ======================= */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="sec-head sec-head-center">
-                <p class="eyebrow">Our mission and vision</p>
-                <h2>Bundled growth, <span class="soft">not fragmented vendors</span></h2>
-                <p class="lead">Two commitments that shape how every package is scoped and delivered.</p>
-            </div>
-
-            <div class="grid grid-3 mv-grid" data-r="group">
-                <article class="mv-card">
-                    <span class="icon-box icon-box-lg"><?= icon('compass') ?></span>
-                    <h3>Our mission</h3>
-                    <p>To give growing businesses one accountable team for every part of their digital presence &mdash; website, content, marketing, security, and store operations &mdash; bundled into clear packages instead of scattered contracts. We focus on dependable delivery, transparent pricing, and outcomes you can actually measure.</p>
-                </article>
-                <article class="mv-card">
-                    <span class="icon-box icon-box-lg icon-box-heart"><?= icon('heart') ?></span>
-                    <h3>Our philosophy</h3>
-                    <p><strong>"Grahak Hamaare Liye Atithi Aur Bhagwan Hai."</strong> We treat your business like our own. 100% code ownership, zero hidden terms, and direct 24/7 support &mdash; because trust is the foundation of every long-term relationship.</p>
-                </article>
-                <article class="mv-card is-vision">
-                    <span class="icon-box icon-box-lg icon-box-ink"><?= icon('rocket') ?></span>
-                    <h3>Our vision</h3>
-                    <p>To become the go-to bundled growth partner for small and mid-sized businesses &mdash; the team you call once, instead of five different vendors, whenever something digital needs to get done.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <?php /* =========================== WHAT WE DO ==========================
-       From the repository, not a sixth hand-written list. This section once
-       carried six cards written separately from every other list of services on
-       the site, and one of them — "Operational Support" — was not a service
-       Rafly offers anywhere else; it existed only here. services_all() renders
-       it now: five services, the same five, in the same order, with the same
-       titles as the nav, the footer, the homepage and the detail pages. */ ?>
-    <section class="section">
-        <div class="container">
-            <div class="sec-head-split">
-                <div>
-                    <p class="eyebrow">What we do</p>
-                    <h2>Five services, <span class="soft">one team</span></h2>
-                </div>
-                <p class="lead">Every one of these is available on its own &mdash; and every one is designed to be bundled with the others.</p>
-            </div>
-
-            <ol class="rail" data-r="group">
-                <?php foreach ($services as $n => $svc): ?>
-                    <li class="rail-item">
-                        <span class="rail-num"><?= str_pad((string)($n + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        <span class="icon-box"><?= icon($svc['icon']) ?></span>
-                        <span class="rail-body">
-                            <span class="rail-title"><?= e($svc['title']) ?></span>
-                            <span class="rail-text"><?= e($svc['card']) ?></span>
+            <!-- HERO CUSTOM SVG: RAFLY OPERATING SYSTEM (LIGHT THEME) -->
+            <div class="code-console-window" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(10, 99, 255, 0.18); border-radius: 20px; padding: 1.5rem; box-shadow: 0 15px 40px rgba(10, 99, 255, 0.08);">
+                <div class="code-console-bar" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+                        <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #0a63ff; margin-left: 0.4rem; font-family: var(--font-mono, monospace);">
+                            RAFLY_CORE // OPERATING_SYSTEM
                         </span>
-                        <span class="rail-go"><?= icon('arrow-right') ?></span>
-                        <a class="card-link" href="/<?= e($svc['slug']) ?>" aria-label="<?= e($svc['title']) ?>"></a>
-                    </li>
-                <?php endforeach; ?>
-            </ol>
-        </div>
-    </section>
-
-    <?php /* ========================== OUR APPROACH ========================= */ ?>
-    <section class="section band-soft">
-        <div class="container">
-            <div class="split split-wide-l">
-                <div data-fx="in-left" style="--travel: 12%;">
-                    <p class="eyebrow">Our approach</p>
-                    <h2>Structured, <span class="soft">and boring on purpose</span></h2>
-                    <p class="lead">
-                        We work with a practical, structured method that aligns technology, content,
-                        marketing, and growth objectives across one bundled package. Every solution
-                        is shaped around clarity, delivery reliability, and business value.
-                    </p>
-                    <ul class="list-check" style="margin-top:2rem">
-                        <li><?= icon('check') ?><span>Understand goals before implementation</span></li>
-                        <li><?= icon('check') ?><span>Build systems that are scalable and maintainable</span></li>
-                        <li><?= icon('check') ?><span>Focus on measurable business impact, not just deliverables</span></li>
-                    </ul>
-                    <p style="margin-top:2rem"><a class="link-arrow" href="/#method">See the P.E.A.C.E. framework <?= icon('arrow-right') ?></a></p>
+                    </div>
+                    <span class="machined-badge machined-badge-green" style="font-size: 0.65rem; padding: 2px 8px;">● ONLINE</span>
                 </div>
+                <div style="display: flex; justify-content: center; align-items: center; padding: 0.5rem 0; width: 100%; height: 160px;">
+                    <lottie-player
+                        src="/assets/lottie/code-render.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 100%; max-width: 260px; height: 160px;"
+                        loop
+                        autoplay
+                        aria-hidden="true">
+                    </lottie-player>
+                </div>
+                <div style="padding: 1rem;">
+                    <svg viewBox="0 0 420 220" fill="none" style="width: 100%;">
+                        <circle cx="210" cy="110" r="75" stroke="#0a63ff" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.5">
+                            <animateTransform attributeName="transform" type="rotate" from="0 210 110" to="360 210 110" dur="20s" repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="210" cy="110" r="45" stroke="#0284c7" stroke-width="1.5" opacity="0.8" />
+                        <circle cx="210" cy="110" r="24" fill="#0a63ff" />
+                        <text x="210" y="114" font-family="monospace" font-weight="900" font-size="10" fill="#fff" text-anchor="middle">RAFLY</text>
 
-                <div class="peace-orbit" aria-hidden="true" data-fx="drift" style="--depth: 26px;">
-                    <span class="peace-orbit-core">P.E.A.C.E.</span>
-                    <ol class="peace-orbit-ring">
-                        <li style="--a:-90deg"><span>P</span></li>
-                        <li style="--a:-18deg"><span>E</span></li>
-                        <li style="--a:54deg"><span>A</span></li>
-                        <li style="--a:126deg"><span>C</span></li>
-                        <li style="--a:198deg"><span>E</span></li>
-                    </ol>
+                        <line x1="210" y1="65" x2="210" y2="49" stroke="#0284c7" stroke-width="1.5" />
+                        <line x1="250" y1="130" x2="275" y2="146" stroke="#dc2626" stroke-width="1.5" />
+                        <line x1="170" y1="130" x2="140" y2="146" stroke="#16a34a" stroke-width="1.5" />
+
+                        <circle r="3" fill="#0284c7"><animateMotion path="M210,65 L210,49" dur="1.5s" repeatCount="indefinite" /></circle>
+                        <circle r="3" fill="#dc2626"><animateMotion path="M250,130 L275,146" dur="1.8s" repeatCount="indefinite" /></circle>
+                        <circle r="3" fill="#16a34a"><animateMotion path="M170,130 L140,146" dur="2s" repeatCount="indefinite" /></circle>
+
+                        <g transform="translate(210, 35)">
+                            <rect x="-45" y="-14" width="90" height="28" rx="6" fill="#ffffff" stroke="#0a63ff" stroke-width="1.5" />
+                            <text y="4" font-family="monospace" font-size="9" fill="#0a63ff" text-anchor="middle" font-weight="700">BUILD</text>
+                        </g>
+                        <g transform="translate(325, 160)">
+                            <rect x="-50" y="-14" width="100" height="28" rx="6" fill="#ffffff" stroke="#dc2626" stroke-width="1.5" />
+                            <text y="4" font-family="monospace" font-size="9" fill="#dc2626" text-anchor="middle" font-weight="700">PROTECT</text>
+                        </g>
+                        <g transform="translate(95, 160)">
+                            <rect x="-45" y="-14" width="90" height="28" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" />
+                            <text y="4" font-family="monospace" font-size="9" fill="#16a34a" text-anchor="middle" font-weight="700">GROW</text>
+                        </g>
+                    </svg>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php
-    $ctaEyebrow = 'Ready to work with us?';
-    $ctaTitle   = 'Let\'s build a stronger digital foundation.';
-    $ctaText    = 'Tell us what you need and we will help you move forward with a clear plan and practical execution.';
-    require __DIR__ . '/partials/cta-band.php';
-    ?>
+    <!-- 02 WHY WE EXIST -->
+    <section class="section" style="padding-block: 5rem; background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+        <div class="container container-narrow text-center">
+            <div class="machined-badge machined-badge-cyan" style="margin-bottom: 0.8rem;">PURPOSE &amp; MISSION</div>
+            <h2 style="font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; color: #050f33;">WHY WE EXIST</h2>
+            <p class="lead" style="margin-top: 1rem; color: #475569; max-width: 680px; margin-inline: auto; line-height: 1.7;">
+                Traditional agencies split web development, security, and marketing across disconnected vendors who rarely speak. RAFly exists to unify engineering, perimeter protection, and acquisition under one single, accountable scope.
+            </p>
+        </div>
+    </section>
+
+    <!-- 03 OPERATING PRINCIPLES -->
+    <section class="section blueprint-canvas" id="principles" style="padding-block: 5rem; background: #f8fafc;">
+        <div class="container">
+            <div class="sec-head sec-head-center" style="margin-bottom: 3rem; text-align: center;">
+                <div class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">// OPERATING PRINCIPLES</div>
+                <h2 style="font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; color: #050f33;">HOW WE THINK &amp; BUILD</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.75rem 1.5rem; box-shadow: 0 4px 15px rgba(5,15,51,0.03);">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.75rem;">PRINCIPLE 01</span>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.4rem;">Code is the Contract</h3>
+                    <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin: 0;">No generic pitch decks. Every architecture design is backed by executable PHP, SQL schemas, and verified metrics.</p>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.75rem 1.5rem; box-shadow: 0 4px 15px rgba(5,15,51,0.03);">
+                    <span class="machined-badge machined-badge-cyan" style="margin-bottom: 0.75rem;">PRINCIPLE 02</span>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.4rem;">Zero Account Managers</h3>
+                    <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin: 0;">You talk directly with senior software engineers, security auditors, and growth specialists on Slack.</p>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.75rem 1.5rem; box-shadow: 0 4px 15px rgba(5,15,51,0.03);">
+                    <span class="machined-badge machined-badge-green" style="margin-bottom: 0.75rem;">PRINCIPLE 03</span>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #050f33; margin-bottom: 0.4rem;">100% Written IP Ownership</h3>
+                    <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin: 0;">Upon milestone signoff, all source code, design assets, and database schemas are transferred to you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 WORK WITH THE STUDIO INTAKE -->
+    <section class="section blueprint-canvas" id="intake" style="padding-block: 5rem;">
+        <div class="container">
+            <div class="sec-head sec-head-center" style="margin-bottom: 2.5rem; text-align: center;">
+                <div class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">// STUDIO INTAKE</div>
+                <h2 style="font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; color: #050f33;">START AN ENGAGEMENT</h2>
+            </div>
+            <?php $formId = 'aboutLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
 </main>
+
 <?php require __DIR__ . '/partials/tail.php'; ?>

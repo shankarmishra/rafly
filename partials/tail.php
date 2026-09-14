@@ -56,11 +56,16 @@ foreach ($tailScripts as $s):
 ?>
 <script src="<?= e(asset("js/{$s}.js")) ?>" defer></script>
 <?php endforeach; ?>
-<?php foreach (($page['scripts'] ?? []) as $s): ?>
-<script src="<?= e(asset("js/pages/{$s}.js")) ?>" defer></script>
-<?php endforeach; ?>
+<!-- Core Motion & Visual Libraries (GSAP, ScrollTrigger, Three.js, Lottie) -->
+<script src="<?= e(asset('js/vendor/gsap.min.js')) ?>"></script>
+<script src="<?= e(asset('js/vendor/ScrollTrigger.min.js')) ?>"></script>
+<script src="<?= e(asset('js/vendor/three.min.js')) ?>"></script>
+<script src="<?= e(asset('js/vendor/lottie.min.js')) ?>"></script>
+<script src="<?= e(asset('js/lottie-init.js')) ?>"></script>
+
 <?php if (!empty($page['module'])): ?>
 <script src="<?= e(asset("js/{$page['module']}.js")) ?>" type="module"></script>
 <?php endif; ?>
 </body>
 </html>
+

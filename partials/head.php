@@ -224,8 +224,13 @@ if ($twitterHandle !== ''):
 <?php endforeach; ?>
 <?php endif; ?>
 <?php foreach ($page['styles'] as $s): ?>
-    <link rel="stylesheet" href="<?= e(asset("css/pages/{$s}.css")) ?>">
+    <style>
+        <?= file_get_contents(dirname(__DIR__) . "/css/pages/{$s}.css") ?>
+    </style>
 <?php endforeach; ?>
+    <!-- Official Lottie Web Player Engine -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 
 <?php
 /* Structured data. Organization + WebSite are sitewide; pages contribute

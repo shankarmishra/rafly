@@ -101,8 +101,8 @@ if ((document.querySelector('[data-deck]') || document.querySelector('[data-phon
 
 /* ---------------------------------------------------- RAFLY MASTER MOTION ENGINE */
 
-import('./rafly-motion.js')
-    .then((m) => m.initRAFlyMotion())
+import('./master-visual-motion.js')
+    .then((m) => m.initMasterVisualMotion())
     .catch(() => {});
 
 /* ---------------------------------------------------- 06 BUILD LOOP CINEMA */
@@ -140,8 +140,25 @@ if (systemMapContainer) {
         .then((m) => m.initSystemMapCinema(systemMapContainer))
         .catch(() => {});
 
+    import('./operating-model-cinema.js')
+        .then((m) => m.initOperatingModelCinema(systemMapContainer))
+        .catch(() => {});
+
     const pills = systemMapContainer.querySelectorAll('.bs-pill');
     const bsCards = systemMapContainer.querySelectorAll('.bs-card');
+
+    const applyFilter = (filter) => {
+        bsCards.forEach((card) => {
+            const match = filter === 'all' || card.dataset.category === filter;
+            card.style.display = match ? 'flex' : 'none';
+        });
+    };
+
+    const activePill = systemMapContainer.querySelector('.bs-pill.is-active') || pills[0];
+    if (activePill && activePill.dataset.filter) {
+        applyFilter(activePill.dataset.filter);
+    }
+
     pills.forEach((pill) => {
         pill.addEventListener('click', () => {
             const filter = pill.dataset.filter;
@@ -151,10 +168,7 @@ if (systemMapContainer) {
                 p.classList.toggle('is-active', isActive);
                 p.setAttribute('aria-selected', isActive ? 'true' : 'false');
             });
-            bsCards.forEach((card) => {
-                const match = card.dataset.category === filter;
-                card.style.display = match ? 'flex' : 'none';
-            });
+            applyFilter(filter);
         });
     });
 }

@@ -43,7 +43,7 @@ function send_security_headers(string $mode = 'page'): void
         // bootstrap snippet is normally inline, so it was ported into a
         // same-origin file (js/pixel.js) instead of relaxing this directive;
         // connect.facebook.net is only what that file actually fetches.
-        "script-src 'self' https://connect.facebook.net",
+        "script-src 'self' https://connect.facebook.net https://unpkg.com https://cdn.lordicon.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
 
         // style-src still needs 'unsafe-inline': the hero and illustration SVGs
         // drive their geometry from inline style="--a: …; offset-path: …",
@@ -59,7 +59,7 @@ function send_security_headers(string $mode = 'page'): void
         // facebook.com & connect.facebook.net: the Pixel's <noscript> fallback <img>,
         // error logger and fbevents beacon target facebook.com and connect.facebook.net.
         "img-src 'self' data: https://www.facebook.com https://connect.facebook.net",
-        "connect-src 'self' https://www.facebook.com https://connect.facebook.net",
+        "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://lottie.host https://unpkg.com https://assets1.lottiefiles.com https://assets2.lottiefiles.com https://assets3.lottiefiles.com https://assets4.lottiefiles.com https://assets5.lottiefiles.com https://assets6.lottiefiles.com https://assets7.lottiefiles.com https://assets8.lottiefiles.com https://assets9.lottiefiles.com https://assets10.lottiefiles.com https://cdn.lordicon.com",
         "media-src 'self'",
     ];
 
