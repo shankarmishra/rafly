@@ -20,6 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'approval_response') {
     $notes      = trim((string)($_POST['notes'] ?? ''));
 
     if ($approvalId > 0 && in_array($status, ['approved', 'revision_requested'], true)) {
+        // The access code establishes the project boundary. Never allow an
+        // approval id from another project to be mutated with a valid code.
+        $approvalBelongsToProject = one(
+            'SELECT a.id
+               FROM approvals a
+               JOIN projects p ON p.id = a.project_id
+              WHERE a.id = ? AND UPPER(p.code) = UPPER(?)',
+            [$approvalId, $projectCode]
+        ) !== null;
+
+        if (!$approvalBelongsToProject) {
+            http_response_code(403);
+            $message = 'That deliverable does not belong to this project.';
+            $messageType = 'error';
+        } else {
         $approvedAt = ($status === 'approved') ? date('Y-m-d H:i:s') : null;
         q('UPDATE approvals SET status = ?, notes = ?, approved_at = ? WHERE id = ?',
           [$status, $notes, $approvedAt, $approvalId]);
@@ -28,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'approval_response') {
             ? 'Thank you! Deliverable has been approved successfully.' 
             : 'Revision request submitted. Our delivery team will review your feedback.';
         $messageType = ($status === 'approved') ? 'success' : 'warn';
+        }
     }
 }
 

@@ -204,7 +204,6 @@ $cleanToFile = [
     'landing/website-audit'       => 'landing/website-audit.php',
     'landing/whatsapp-automation' => 'landing/whatsapp-automation.php',
     'client-portal'               => 'client-portal.php',
-    'lottie-test'                 => 'lottie-test.php',
 ];
 if (isset($cleanToFile[$path])) {
     return $dispatch($cleanToFile[$path]);

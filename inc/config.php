@@ -167,7 +167,7 @@ if (!defined('GTM_CONTAINER_ID')) {
  * Blank = disabled.
  */
 if (!defined('GA4_MEASUREMENT_ID')) {
-    define('GA4_MEASUREMENT_ID', '402273334');
+    define('GA4_MEASUREMENT_ID', 'G-241V6BBX02');
 }
 
 /**

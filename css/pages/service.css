@@ -1,3 +1,20 @@
+@media (max-width: 620px) {
+    .page-whatsapp-automation .wa-demo-preview {
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+
+    .page-whatsapp-automation .wa-demo-copy,
+    .page-whatsapp-automation .wa-demo-action,
+    .page-whatsapp-automation .wa-demo-action .btn {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .page-whatsapp-automation .wa-demo-action .btn {
+        white-space: normal;
+    }
+}
 /* ==========================================================================
    Service Detail Pages — Complete Visual Rebuild & Art-Directed System
    ========================================================================== */

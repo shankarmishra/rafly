@@ -32,7 +32,6 @@ const ADMIN_NAV = [
     ['/admin/case-studies.php','Case studies',   'content.view',  '',          'trending-up'],
     ['/admin/testimonials.php','Testimonials',   'content.view',  '',          'star'],
     ['/admin/bundles.php',     'Packages',       'content.view',  '',          'package'],
-    ['/admin/services.php',    'Services',       'content.view',  '',          'layers'],
     ['/admin/team.php',        'Team',           'content.view',  'System',    'users'],
     ['/admin/media.php',       'Media',          'media.view',    '',          'image'],
     ['/admin/settings.php',    'Settings',       'settings.view', '',          'settings'],

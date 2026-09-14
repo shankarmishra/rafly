@@ -813,6 +813,7 @@ picture { display: contents; }
     margin-bottom: var(--sp-5);
 }
 .sec-head-split .lead { margin-top: 0; }
+.sec-head-split > * { min-width: 0; }
 @media (max-width: 860px) {
     .sec-head-split { grid-template-columns: 1fr; align-items: start; gap: var(--sp-4); }
 }

@@ -534,6 +534,7 @@
     flex-direction: column;
     align-items: flex-start;
     max-width: 460px;
+    min-width: 0;
 }
 
 .ss-eyebrow {
@@ -608,6 +609,7 @@
     align-items: center;
     gap: var(--sp-5);
     width: min(100%, 860px);
+    min-width: 0;
     justify-content: flex-end;
 }
 
@@ -843,6 +845,7 @@
     }
     .ss-content {
         max-width: 100%;
+        width: 100%;
     }
     .ss-headline {
         font-size: clamp(1.8rem, 6vw, 2.75rem);
@@ -855,23 +858,25 @@
     .ss-stage-wrapper {
         flex-direction: column-reverse;
         align-items: stretch;
+        width: 100%;
     }
     .ss-service-rail {
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         width: 100%;
-        overflow-x: auto;
+        overflow: visible;
         padding-bottom: var(--sp-2);
         gap: 12px;
     }
     .ss-rail-item {
-        flex-shrink: 0;
-        width: 140px;
+        width: auto;
+        min-width: 0;
     }
     .ss-rail-sep {
         display: none;
     }
     .ss-stage {
-        width: min(100%, 760px);
+        width: 100%;
         height: clamp(300px, 52vw, 420px);
         min-height: 300px;
         aspect-ratio: 1.38;

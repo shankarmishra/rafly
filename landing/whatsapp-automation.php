@@ -131,15 +131,15 @@ require_once dirname(__DIR__) . '/partials/social-rail.php';
             </div>
 
             <!-- DEMO PREVIEW CARD -->
-            <div style="margin-top: 3rem; padding: 2.2rem; background: #ffffff; border: 1px solid rgba(10,99,255,0.2); border-radius: var(--r-2xl); box-shadow: 0 10px 30px rgba(10,99,255,0.06); display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
-                <div style="max-width: 620px;">
+            <div class="wa-demo-preview" style="margin-top: 3rem; padding: 2.2rem; background: #ffffff; border: 1px solid rgba(10,99,255,0.2); border-radius: var(--r-2xl); box-shadow: 0 10px 30px rgba(10,99,255,0.06); display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+                <div class="wa-demo-copy" style="max-width: 620px;">
                     <span class="badge badge-soft-blue" style="font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">WHATSAPP WORKFLOW DEMO</span>
                     <h3 style="font-size: 1.35rem; font-weight: 800; color: #06122f; margin: 0 0 0.4rem 0;">Test the WhatsApp Automation Engine Live</h3>
                     <p style="font-size: 0.95rem; color: #475569; margin: 0; line-height: 1.6;">
                         Click below to chat with RAFly's automated WhatsApp system directly on your phone and experience the 60-second qualification flow.
                     </p>
                 </div>
-                <div>
+                <div class="wa-demo-action">
                     <a class="btn btn-primary btn-lg" target="_blank" rel="noopener" href="<?= e(whatsapp_link('Hi Rafly! I want to test the live 24/7 WhatsApp Lead Qualification demo.')) ?>">
                         <?= icon('whatsapp', 'icon-fill') ?> Test WhatsApp Demo Live
                     </a>
