@@ -266,54 +266,39 @@ export function initHeroGrowthField(host) {
             }
         }
 
-        /* 3. Render Triangulated Mesh Lines (Ultra-Thin, Crisp Charcoal/Black Architectural Lines) */
+        /* 3. Render Triangulated Mesh Lines (Batched into 2 path calls for 60fps performance) */
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.10)';
+        ctx.lineWidth   = 0.55;
+        ctx.beginPath();
         for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
                 const n1 = grid[r][c];
-
-                // Horizontal Spring Line
                 if (c < COLS - 1) {
                     const n2 = grid[r][c + 1];
-                    const wave = Math.sin(t * 1.2 + (r * 0.18) + (c * 0.12)) * 0.5 + 0.5;
-                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.08 + wave * 0.06 + Math.min(strain * 0.01, 0.08);
-                    ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(15, 23, 42, ${lineAlpha})`;
-                    ctx.lineWidth   = 0.55;
-                    ctx.stroke();
                 }
-
-                // Vertical Spring Line
                 if (r < ROWS - 1) {
                     const n2 = grid[r + 1][c];
-                    const wave = Math.sin(t * 1.2 + (r * 0.12) + (c * 0.18)) * 0.5 + 0.5;
-                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.08 + wave * 0.06 + Math.min(strain * 0.01, 0.08);
-                    ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(15, 23, 42, ${lineAlpha})`;
-                    ctx.lineWidth   = 0.55;
-                    ctx.stroke();
-                }
-
-                // Diagonal Triangle Spring Line (Top-Left to Bottom-Right)
-                if (r < ROWS - 1 && c < COLS - 1) {
-                    const n2 = grid[r + 1][c + 1];
-                    const wave = Math.sin(t * 1.2 + (r * 0.15) + (c * 0.15)) * 0.5 + 0.5;
-                    const strain = Math.abs(n1.x - n1.xr * w) + Math.abs(n1.y - n1.yr * h);
-                    const lineAlpha = 0.045 + wave * 0.045 + Math.min(strain * 0.008, 0.06);
-                    ctx.beginPath();
-                    ctx.moveTo(n1.x, n1.y);
-                    ctx.lineTo(n2.x, n2.y);
-                    ctx.strokeStyle = `rgba(30, 41, 59, ${lineAlpha})`;
-                    ctx.lineWidth   = 0.45;
-                    ctx.stroke();
                 }
             }
         }
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(30, 41, 59, 0.05)';
+        ctx.lineWidth   = 0.45;
+        ctx.beginPath();
+        for (let r = 0; r < ROWS - 1; r++) {
+            for (let c = 0; c < COLS - 1; c++) {
+                const n1 = grid[r][c];
+                const n2 = grid[r + 1][c + 1];
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n2.x, n2.y);
+            }
+        }
+        ctx.stroke();
     }
 
     let lastTs = performance.now();

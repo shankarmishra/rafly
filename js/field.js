@@ -154,28 +154,18 @@ export function initField(canvas) {
     }
 
     function drawPackets() {
+        ctx.fillStyle = `rgba(${A}, 0.35)`;
+        ctx.beginPath();
         for (const pk of packets) {
             pk.t += pk.sp;
             const p = paths[pk.path];
             if (!p) continue;
 
-            for (let k = 0; k < 9; k++) {
-                const pos = at(p, pk.t - k * 7);
-                ctx.fillStyle = `rgba(${A},${(1 - k / 9) * 0.55})`;
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, 2.4 - k * 0.16, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
             const head = at(p, pk.t);
-            const g = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, 14);
-            g.addColorStop(0, 'rgba(120,175,255,.65)');
-            g.addColorStop(1, `rgba(${A},0)`);
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.arc(head.x, head.y, 14, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(head.x + 3, head.y);
+            ctx.arc(head.x, head.y, 3, 0, Math.PI * 2);
         }
+        ctx.fill();
     }
 
     function drawNetwork() {
@@ -204,6 +194,7 @@ export function initField(canvas) {
         // Links. Only the nine buckets around each point are tested, and only
         // the forward half of them, so no pair is considered twice.
         ctx.lineWidth = 1;
+        ctx.beginPath();
         for (const [key, cell] of buckets) {
             const bx = (key / 10000) | 0;
             const by = key % 10000;
@@ -217,16 +208,15 @@ export function initField(canvas) {
                             if (a === b || (b.x < a.x) || (b.x === a.x && b.y <= a.y)) continue;
                             const d = Math.hypot(a.x - b.x, a.y - b.y);
                             if (d >= LINK) continue;
-                            ctx.strokeStyle = `rgba(${A},${0.11 * (1 - d / LINK)})`;
-                            ctx.beginPath();
                             ctx.moveTo(a.x, a.y);
                             ctx.lineTo(b.x, b.y);
-                            ctx.stroke();
                         }
                     }
                 }
             }
         }
+        ctx.strokeStyle = `rgba(${A},0.08)`;
+        ctx.stroke();
 
         ctx.fillStyle = `rgba(${A},.30)`;
         ctx.beginPath();
