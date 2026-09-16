@@ -81,15 +81,24 @@ function sitemap_urls(): array
         ['loc' => 'team',     'file' => 'team.php',     'freq' => 'monthly', 'pri' => '0.6'],
         ['loc' => 'contact',  'file' => 'contact.php',  'freq' => 'monthly', 'pri' => '0.8'],
         ['loc' => 'privacy',  'file' => 'privacy.php',  'freq' => 'yearly',  'pri' => '0.3'],
-        ['loc' => 'locations',               'file' => 'locations.php',               'freq' => 'monthly', 'pri' => '0.7'],
-        ['loc' => 'locations/greater-noida', 'file' => 'locations/greater-noida.php', 'freq' => 'monthly', 'pri' => '0.7'],
-        ['loc' => 'locations/noida',         'file' => 'locations/noida.php',         'freq' => 'monthly', 'pri' => '0.7'],
-        ['loc' => 'locations/delhi',         'file' => 'locations/delhi.php',         'freq' => 'monthly', 'pri' => '0.7'],
-        ['loc' => 'locations/gurgaon',       'file' => 'locations/gurgaon.php',       'freq' => 'monthly', 'pri' => '0.7'],
+        ['loc' => 'locations', 'file' => 'locations.php', 'freq' => 'monthly', 'pri' => '0.7'],
         ['loc' => 'landing/security-emergency',  'file' => 'landing/security-emergency.php',  'freq' => 'monthly', 'pri' => '0.7'],
         ['loc' => 'landing/website-audit',       'file' => 'landing/website-audit.php',       'freq' => 'monthly', 'pri' => '0.7'],
         ['loc' => 'landing/whatsapp-automation', 'file' => 'landing/whatsapp-automation.php', 'freq' => 'monthly', 'pri' => '0.7'],
     ];
+
+    // Dynamic location and service-location URLs passing Quality Engine threshold
+    if (function_exists('locations_sitemap_urls')) {
+        foreach (locations_sitemap_urls() as $locEntry) {
+            $entries[] = [
+                'loc'   => $locEntry['loc'],
+                'file'  => str_starts_with($locEntry['loc'], 'services/') ? 'service-location.php' : 'location.php',
+                'freq'  => $locEntry['freq'] ?? 'monthly',
+                'pri'   => $locEntry['pri'] ?? '0.7',
+                'images' => [],
+            ];
+        }
+    }
 
     // One entry per canonical service URL, driven by service_url($slug)
     $seenServices = [];

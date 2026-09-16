@@ -166,6 +166,9 @@ Options -Indexes
     RewriteRule ^locations/noida/?$ locations/noida.php [L]
     RewriteRule ^locations/delhi/?$ locations/delhi.php [L]
     RewriteRule ^locations/gurgaon/?$ locations/gurgaon.php [L]
+    RewriteCond %{DOCUMENT_ROOT}/locations/$1.php !-f
+    RewriteRule ^locations/([a-z0-9-]+)/?$ location.php?slug=$1 [L,QSA]
+    RewriteRule ^services/([a-z0-9-]+)/([a-z0-9-]+)/?$ service-location.php?service=$1&location=$2 [L,QSA]
 
     # Serve the generated sitemap at the conventional path.
     RewriteRule ^sitemap\.xml$ sitemap.php [L]

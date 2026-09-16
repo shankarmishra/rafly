@@ -256,6 +256,17 @@ if (preg_match('#^admin-gate/([A-Za-z0-9_-]+)$#', $path, $m)) {
     return $dispatch('admin/login.php', ['gate_key' => $m[1]]);
 }
 
+if (preg_match('#^services/([a-z0-9-]+)/([a-z0-9-]+)$#', $path, $m)) {
+    return $dispatch('service-location.php', ['service' => $m[1], 'location' => $m[2]]);
+}
+
+if (preg_match('#^locations/([a-z0-9-]+)$#', $path, $m)) {
+    if (is_file($root . '/locations/' . $m[1] . '.php')) {
+        return $dispatch('locations/' . $m[1] . '.php');
+    }
+    return $dispatch('location.php', ['slug' => $m[1]]);
+}
+
 // -----------------------------------------------------------------------
 // 4. Anything else that's a real file/dir — let the built-in server serve
 //    it as-is (CSS, JS, images, fonts, uploads, and every remaining

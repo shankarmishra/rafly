@@ -49,6 +49,7 @@ require_once __DIR__ . '/repo/content.php';
 require_once __DIR__ . '/repo/metrics.php';
 require_once __DIR__ . '/repo/seed.php';
 require_once __DIR__ . '/repo/links.php';
+require_once __DIR__ . '/repo/locations.php';
 
 
 // ---------------------------------------------------------------------------

@@ -115,7 +115,18 @@ function services_all(): array
  */
 function service_find(string $slug): ?array
 {
-    return services_all()[$slug] ?? null;
+    $all = services_all();
+    if (isset($all[$slug])) {
+        return $all[$slug];
+    }
+    $aliasMap = [
+        'ecommerce'             => 'ecommerce-support',
+        'performance-marketing' => 'marketing-advertisement',
+    ];
+    if (isset($aliasMap[$slug], $all[$aliasMap[$slug]])) {
+        return $all[$aliasMap[$slug]];
+    }
+    return null;
 }
 
 /**
