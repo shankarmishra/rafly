@@ -11,7 +11,15 @@ if (PHP_SAPI !== 'cli') {
     die("CLI execution only.\n");
 }
 
-$baseUrl = 'http://127.0.0.1:8899';
+$baseUrl = $argv[1] ?? (getenv('RAFLY_BASE_URL') ?: 'http://127.0.0.1:8899');
+if (!isset($argv[1]) && !getenv('RAFLY_BASE_URL')) {
+    $fp = @fsockopen('127.0.0.1', 8899, $errno, $errstr, 0.5);
+    if ($fp) {
+        fclose($fp);
+    } else {
+        $baseUrl = 'https://rafly.in';
+    }
+}
 $passed = 0;
 $failed = 0;
 $errors = [];
