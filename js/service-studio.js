@@ -141,32 +141,36 @@ export function initServiceStudio(host) {
         box.style.margin = '0 auto';
         stageLottie.appendChild(box);
 
-        if (typeof window.lottie === 'undefined') {
-            console.warn('[ServiceStudio] Lottie runtime not ready yet; waiting for the next pass.');
-            return;
-        }
+        const runLoad = () => {
+            if (typeof window.lottie === 'undefined') {
+                setTimeout(runLoad, 50);
+                return;
+            }
 
-        const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+            const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
 
-        tryFetch(path)
-            .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
-            .then((data) => {
-                if (stageLottie.dataset.service !== serviceKey) return; // Discard if key changed
-                currentAnim = window.lottie.loadAnimation({
-                    container: box,
-                    renderer: 'svg',
-                    loop: true,
-                    autoplay: true,
-                    animationData: data,
-                    rendererSettings: {
-                        progressiveLoad: true,
-                        preserveAspectRatio: 'xMidYMid meet'
-                    }
+            tryFetch(path)
+                .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
+                .then((data) => {
+                    if (stageLottie.dataset.service !== serviceKey) return; // Discard if key changed
+                    currentAnim = window.lottie.loadAnimation({
+                        container: box,
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: true,
+                        animationData: data,
+                        rendererSettings: {
+                            progressiveLoad: true,
+                            preserveAspectRatio: 'xMidYMid meet'
+                        }
+                    });
+                })
+                .catch((err) => {
+                    console.error('[ServiceStudio] Lottie load error:', path, err);
                 });
-            })
-            .catch((err) => {
-                console.error('[ServiceStudio] Lottie load error:', path, err);
-            });
+        };
+
+        runLoad();
     }
 
     /* ─── Switch Service Handler ───────────────────────────── */

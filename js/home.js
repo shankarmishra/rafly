@@ -29,7 +29,7 @@ import { allowCanvas, allowShader, finePointer, wideEnough, whenIdle, token, rgb
 /* ------------------------------------------------------- the background */
 
 if (allowCanvas()) {
-    const canvas = document.getElementById('field');
+    const canvas = document.getElementById('field') || document.querySelector('[data-signal-canvas]');
     if (canvas) {
         whenIdle(() => {
             import('./field.js')
