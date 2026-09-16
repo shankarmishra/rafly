@@ -97,17 +97,12 @@ $redirectTests = [
     '/ecommerce-support'                => '/services/ecommerce',
     '/ecommerce'                        => '/services/ecommerce',
     '/lead-automation'                  => '/services/lead-automation',
-    '/insights'                         => '/blog',
-    '/services/android-app-development'  => '/services/app-development',
-    '/services/ios-app-development'      => '/services/app-development',
-    '/services/react-native-development' => '/services/app-development',
-    '/services/flutter-development'      => '/services/app-development',
-    '/services/cross-platform-app-dev'   => '/services/app-development',
-    '/android-app-development'           => '/services/app-development',
-    '/ios-app-development'               => '/services/app-development',
-    '/react-native-development'          => '/services/app-development',
-    '/flutter-development'               => '/services/app-development',
-    '/cross-platform-app-dev'            => '/services/app-development',
+    '/insights'                          => '/blog',
+    '/android-app-development'           => '/services/android-app-development',
+    '/ios-app-development'               => '/services/ios-app-development',
+    '/react-native-development'          => '/services/react-native-development',
+    '/flutter-development'               => '/services/flutter-development',
+    '/cross-platform-app-dev'            => '/services/cross-platform-app-dev',
 ];
 
 foreach ($redirectTests as $from => $expectedTo) {

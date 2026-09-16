@@ -1,13 +1,8 @@
 <?php
 require __DIR__ . '/inc/bootstrap.php';
 
-// Slug validation against SERVICES (inc/config.php)
+// Slug validation against ServiceRepository
 $service = (string)($_GET['service'] ?? '');
-if (!array_key_exists($service, SERVICES)) {
-    require __DIR__ . '/404.php';
-    exit;
-}
-
 $data = service_find($service);
 if ($data === null) {
     require __DIR__ . '/404.php';

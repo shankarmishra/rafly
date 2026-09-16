@@ -103,8 +103,6 @@ Options -Indexes
     RewriteRule ^ecommerce-support/?$ /services/ecommerce [R=301,L]
     RewriteRule ^ecommerce/?$ /services/ecommerce [R=301,L]
     RewriteRule ^lead-automation/?$ /services/lead-automation [R=301,L]
-    RewriteRule ^(android-app-development|ios-app-development|react-native-development|flutter-development|cross-platform-app-dev)/?$ /services/app-development [R=301,L]
-    RewriteRule ^services/(android-app-development|ios-app-development|react-native-development|flutter-development|cross-platform-app-dev)/?$ /services/app-development [R=301,L]
 
     # service.php and blog-post.php take a query string rather than a bare
     # filename, so their old URLs need the query matched too, not just the

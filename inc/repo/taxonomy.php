@@ -60,7 +60,6 @@ function taxonomy_find_service(string $entityOrSlug): ?array
 function taxonomy_resolve_canonical(string $query): array
 {
     $q = strtolower(trim($query));
-    $matrix = taxonomy_all();
 
     // 1. Check for specific high-value specialized landing pages
     if (str_contains($q, 'malware') || str_contains($q, 'emergency security') || str_contains($q, 'hacked')) {
@@ -88,62 +87,68 @@ function taxonomy_resolve_canonical(string $query): array
         ];
     }
 
-    // 2. Check for sub-services with dedicated canonical routes
-    foreach ($matrix as $serviceSlug => $data) {
-        $subServices = (array)($data['sub_services'] ?? []);
-        foreach ($subServices as $subSlug) {
-            $subTitle = str_replace('-', ' ', $subSlug);
-            if (str_contains($q, $subSlug) || str_contains($q, $subTitle)) {
-                return [
-                    'target_url'   => '/services/' . $subSlug,
-                    'service_slug' => $serviceSlug,
-                    'intent_type'  => 'Commercial Sub-Service',
-                    'is_indexable' => true
-                ];
-            }
+    // 2. High-precision sub-service phrase matching
+    $phraseMap = [
+        'react native'          => ['url' => '/services/react-native-development', 'svc' => 'app-development'],
+        'flutter'               => ['url' => '/services/flutter-development', 'svc' => 'app-development'],
+        'ios'                   => ['url' => '/services/ios-app-development', 'svc' => 'app-development'],
+        'swift'                 => ['url' => '/services/ios-app-development', 'svc' => 'app-development'],
+        'android'               => ['url' => '/services/android-app-development', 'svc' => 'app-development'],
+        'kotlin'                => ['url' => '/services/android-app-development', 'svc' => 'app-development'],
+        'cross platform'        => ['url' => '/services/cross-platform-app-dev', 'svc' => 'app-development'],
+        'google ads'            => ['url' => '/services/google-ads-management', 'svc' => 'performance-marketing'],
+        'meta ads'              => ['url' => '/services/meta-ads-agency', 'svc' => 'performance-marketing'],
+        'facebook ads'          => ['url' => '/services/meta-ads-agency', 'svc' => 'performance-marketing'],
+        'conversion rate'       => ['url' => '/services/conversion-rate-optimization', 'svc' => 'performance-marketing'],
+        'reels'                 => ['url' => '/services/short-form-video', 'svc' => 'content-creation'],
+        'short form'            => ['url' => '/services/short-form-video', 'svc' => 'content-creation'],
+        'social media creative' => ['url' => '/services/social-media-creative', 'svc' => 'content-creation'],
+        'shopify'               => ['url' => '/services/shopify-development', 'svc' => 'ecommerce'],
+        'woocommerce'           => ['url' => '/services/woocommerce-development', 'svc' => 'ecommerce'],
+        'custom ecommerce'      => ['url' => '/services/custom-ecommerce-apps', 'svc' => 'ecommerce'],
+        'crm'                   => ['url' => '/services/crm-lead-routing', 'svc' => 'lead-automation'],
+        'email workflow'        => ['url' => '/services/email-workflow-automation', 'svc' => 'lead-automation'],
+        'api security'          => ['url' => '/services/api-security', 'svc' => 'web-security'],
+        'vulnerability'         => ['url' => '/services/vulnerability-assessment', 'svc' => 'web-security'],
+        'frontend'              => ['url' => '/services/frontend-development', 'svc' => 'web-development'],
+        'backend'               => ['url' => '/services/backend-development', 'svc' => 'web-development'],
+    ];
+
+    foreach ($phraseMap as $phrase => $info) {
+        if (str_contains($q, $phrase)) {
+            return [
+                'target_url'   => $info['url'],
+                'service_slug' => $info['svc'],
+                'intent_type'  => 'Commercial Sub-Service Intent',
+                'is_indexable' => true
+            ];
         }
     }
 
-    // 3. Match against tech entity keywords to map to main service hub
-    foreach ($matrix as $serviceSlug => $data) {
-        $entities = (array)($data['entities'] ?? []);
-        foreach ($entities as $entity) {
-            $entityTitle = str_replace('-', ' ', $entity);
-            if (str_contains($q, $entity) || str_contains($q, $entityTitle)) {
-                return [
-                    'target_url'   => '/services/' . $serviceSlug,
-                    'service_slug' => $serviceSlug,
-                    'intent_type'  => 'Commercial Technology Search',
-                    'is_indexable' => true
-                ];
-            }
-        }
+    // 3. Fallback to primary service hubs
+    if (str_contains($q, 'security') || str_contains($q, 'audit') || str_contains($q, 'owasp')) {
+        return ['target_url' => '/services/web-security', 'service_slug' => 'web-security', 'intent_type' => 'Commercial Security Search', 'is_indexable' => true];
     }
-
-    // 4. Default fallback to primary service hub or contact
-    if (str_contains($q, 'security') || str_contains($q, 'audit')) {
-        return ['target_url' => '/services/web-security', 'service_slug' => 'web-security', 'intent_type' => 'Commercial', 'is_indexable' => true];
-    }
-    if (str_contains($q, 'app') || str_contains($q, 'mobile') || str_contains($q, 'android') || str_contains($q, 'ios')) {
-        return ['target_url' => '/services/app-development', 'service_slug' => 'app-development', 'intent_type' => 'Commercial', 'is_indexable' => true];
+    if (str_contains($q, 'app') || str_contains($q, 'mobile')) {
+        return ['target_url' => '/services/app-development', 'service_slug' => 'app-development', 'intent_type' => 'Commercial App Search', 'is_indexable' => true];
     }
     if (str_contains($q, 'ad') || str_contains($q, 'ppc') || str_contains($q, 'marketing')) {
-        return ['target_url' => '/services/performance-marketing', 'service_slug' => 'performance-marketing', 'intent_type' => 'Commercial', 'is_indexable' => true];
+        return ['target_url' => '/services/performance-marketing', 'service_slug' => 'performance-marketing', 'intent_type' => 'Commercial Marketing Search', 'is_indexable' => true];
     }
-    if (str_contains($q, 'content') || str_contains($q, 'copy') || str_contains($q, 'reels')) {
-        return ['target_url' => '/services/content-creation', 'service_slug' => 'content-creation', 'intent_type' => 'Commercial', 'is_indexable' => true];
+    if (str_contains($q, 'content') || str_contains($q, 'copy') || str_contains($q, 'script')) {
+        return ['target_url' => '/services/content-creation', 'service_slug' => 'content-creation', 'intent_type' => 'Commercial Content Search', 'is_indexable' => true];
     }
     if (str_contains($q, 'ecom') || str_contains($q, 'shop') || str_contains($q, 'store')) {
-        return ['target_url' => '/services/ecommerce', 'service_slug' => 'ecommerce', 'intent_type' => 'Commercial', 'is_indexable' => true];
+        return ['target_url' => '/services/ecommerce', 'service_slug' => 'ecommerce', 'intent_type' => 'Commercial E-Commerce Search', 'is_indexable' => true];
     }
-    if (str_contains($q, 'lead') || str_contains($q, 'crm') || str_contains($q, 'automation')) {
-        return ['target_url' => '/services/lead-automation', 'service_slug' => 'lead-automation', 'intent_type' => 'Commercial', 'is_indexable' => true];
+    if (str_contains($q, 'lead') || str_contains($q, 'automation') || str_contains($q, 'form')) {
+        return ['target_url' => '/services/lead-automation', 'service_slug' => 'lead-automation', 'intent_type' => 'Commercial Lead Automation Search', 'is_indexable' => true];
     }
 
     return [
         'target_url'   => '/services/web-development',
         'service_slug' => 'web-development',
-        'intent_type'  => 'General Commercial',
+        'intent_type'  => 'General Web Development Search',
         'is_indexable' => true
     ];
 }
