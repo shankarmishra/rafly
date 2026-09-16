@@ -240,13 +240,19 @@ if (preg_match('#^blog/([a-z0-9-]+)$#', $path, $m)) {
 
 // Canonical service routes -> service.php
 $serviceAliases = [
-    'services/web-development'       => 'web-development',
-    'services/web-security'          => 'web-security',
-    'services/performance-marketing' => 'marketing-advertisement',
-    'services/content-creation'      => 'content-creation',
-    'services/ecommerce'             => 'ecommerce-support',
-    'services/lead-automation'       => 'lead-automation',
-    'services/ecommerce-support'     => 'ecommerce-support',
+    'services/web-development'          => 'web-development',
+    'services/app-development'          => 'app-development',
+    'services/android-app-development'  => 'app-development',
+    'services/ios-app-development'      => 'app-development',
+    'services/react-native-development' => 'app-development',
+    'services/flutter-development'      => 'app-development',
+    'services/cross-platform-app-dev'   => 'app-development',
+    'services/web-security'             => 'web-security',
+    'services/performance-marketing'    => 'marketing-advertisement',
+    'services/content-creation'         => 'content-creation',
+    'services/ecommerce'                => 'ecommerce-support',
+    'services/lead-automation'          => 'lead-automation',
+    'services/ecommerce-support'        => 'ecommerce-support',
 ];
 if (isset($serviceAliases[$path])) {
     return $dispatch('service.php', ['service' => $serviceAliases[$path]]);

@@ -274,9 +274,16 @@ define('LEAD_CSV_FILE',   LEAD_STORE_PATH . '/leads.csv');
 /** slug => display label. Drives the Services dropdown and validates ?service=. */
 const SERVICES = [
     'web-development'          => 'Web Development',
+    'app-development'          => 'App Development',
+    'android-app-development'  => 'Android App Development',
+    'ios-app-development'      => 'iOS App Development',
+    'react-native-development' => 'React Native App Development',
+    'flutter-development'      => 'Flutter App Development',
+    'cross-platform-app-dev'   => 'Cross-Platform App Development',
     'web-security'             => 'Web Security',
     'lead-automation'          => 'Lead Automation',
     'marketing-advertisement'  => 'Marketing & Advertisement',
+    'performance-marketing'    => 'Marketing & Advertisement',
     'content-creation'         => 'Content Creation',
     'ecommerce-support'        => 'E-Commerce Storefronts',
     'ecommerce'                => 'E-Commerce Storefronts',

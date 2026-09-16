@@ -589,6 +589,107 @@ return [
             ['q' => 'Can website forms sync directly with our CRM system?', 'a' => 'Yes. Forms connect to RAFly Team OS CRM out of the box and can also post webhooks to external platforms like HubSpot, Pipedrive, or Salesforce.'],
             ['q' => 'How does the lead system prevent spam and fake submissions?', 'a' => 'Every form includes multi-layer anti-spam protection: hidden honeypots, mathematical challenge verification, rate-limiting, and strict input sanitization.']
         ]
+    ],
+
+    'app-development' => [
+        'title' => 'App Development',
+        'icon'  => 'smartphone',
+        'key'   => 'app',
+        'wide'  => true,
+        'badge' => 'MOBILE APPLICATION ENGINE',
+        'tagline' => 'High-performance iOS, Android, React Native, and Flutter mobile applications engineered for speed, security, and App Store success.',
+        'intro' => 'We engineer custom cross-platform and native mobile applications with responsive UI/UX, robust REST/GraphQL API backends, offline sync, and production app store deployments.',
+        'highlights' => [
+            'React Native & Flutter Cross-Platform Builds',
+            'Native iOS (Swift) & Android (Kotlin) Development',
+            'Mobile UI/UX Design & Spatial Micro-Interactions',
+            'Firebase, Push Notifications & Real-Time Sync',
+            'App Store (iOS) & Google Play Deployment & Support'
+        ],
+        'sub_topics' => [
+            'android-app-development'     => 'Android App Development',
+            'ios-app-development'         => 'iOS App Development',
+            'react-native-development'    => 'React Native App Development',
+            'flutter-development'         => 'Flutter App Development',
+            'cross-platform-app-dev'      => 'Cross-Platform App Development',
+            'mobile-ui-ux'                => 'Mobile UI/UX Design'
+        ],
+        'diagnostics' => [
+            ['code' => 'ERR_SLUGGISH_UI',   'title' => 'Sluggish Frame Rates & Jank', 'desc' => 'Unoptimized state re-renders and heavy main-thread JS cause frame drops on mid-range devices.'],
+            ['code' => 'ERR_API_LATENCY',   'title' => 'High Network Request Latency','desc' => 'Mobile clients wait seconds for unstructured payload responses instead of lightweight compressed JSON endpoints.'],
+            ['code' => 'ERR_STORE_REJECT',  'title' => 'App Store Review Rejection',   'desc' => 'Missing privacy disclosures, broken Apple Sign-In flows, or unhandled permission prompts block store publishing.'],
+            ['code' => 'ERR_OFFLINE_FAIL',  'title' => 'Offline State Crashing',       'desc' => 'The app crashes or clears user input when network connectivity drops during active form submission.']
+        ],
+        'bento' => [
+            'main' => [
+                'handle' => 'MOBILE CORE',
+                'title'  => 'Native & Cross-Platform Mobile Architecture',
+                'desc'   => 'Bespoke React Native and Flutter codebases paired with typed PHP 8.3 / Node backends for lightning-fast performance across iOS and Android.',
+                'specs'  => ['60 FPS Smooth Render Loops', 'Typed REST/GraphQL Endpoints', 'Offline SQLite / Realm Cache']
+            ],
+            'medium' => [
+                ['handle' => 'PLATFORMS', 'title' => 'iOS & Android Native Integration', 'desc' => 'Leveraging native device features (Camera, Biometrics, Push Notifications, Bluetooth LE) safely.', 'specs' => ['Biometric Auth (FaceID / TouchID)', 'APNs & FCM Push Routing', 'Secure Keychain Storage']],
+                ['handle' => 'BACKEND',   'title' => 'Firebase & Cloud Backend Sync',    'desc' => 'Real-time database synchronization, cloud function hooks, and instant user session authorization.', 'specs' => ['Firestore Real-Time Data', 'Cloud Functions Integration', 'Argon2id JWT Tokens']]
+            ],
+            'compact' => [
+                ['handle' => 'STORE',     'title' => 'App Store Submission',    'desc' => 'Guaranteed App Store & Google Play guidelines compliance.'],
+                ['handle' => 'SECURITY',  'title' => 'Mobile Vault Hardening',  'desc' => 'SSL pinning, code obfuscation, and encrypted local storage.'],
+                ['handle' => 'OWNERSHIP', 'title' => 'Full Repository Transfer','desc' => 'Full source code ownership, provisioning profiles, and signing keys.']
+            ]
+        ],
+        'system_map' => [
+            'eyebrow' => '// MOBILE APP SYSTEM MAP',
+            'title'   => 'Living Mobile Application Engine',
+            'desc'    => 'An interactive visualization of data packets flowing between mobile viewports and API edge gateways.',
+            'nodes'   => [
+                ['id' => 'mobile',   'name' => 'MOBILE VIEWPORT',  'label' => '[CLIENT APP UI]',     'icon' => 'smartphone', 'role' => '60 FPS responsive UI rendering across iOS and Android devices.', 'tech' => 'React Native / Flutter'],
+                ['id' => 'bridge',   'name' => 'NATIVE BRIDGE',    'label' => '[DEVICE CAPABILITIES]','icon' => 'cpu',        'role' => 'Accessing hardware camera, biometrics, location, and local storage.', 'tech' => 'Swift / Kotlin'],
+                ['id' => 'api',      'name' => 'API GATEWAY',      'label' => '[REST / GRAPHQL]',    'icon' => 'layers',     'role' => 'Sanitized API endpoints with token auth and rate limiting.', 'tech' => 'PHP 8.3 / Node'],
+                ['id' => 'push',     'name' => 'PUSH ENGINE',      'label' => '[FCM / APNS ROUTER]', 'icon' => 'bell',       'role' => 'Delivering real-time transactional alerts and push notifications.', 'tech' => 'Firebase / Apple APNs'],
+                ['id' => 'db',       'name' => 'DATABASE NODE',    'label' => '[CLOUD DATA STORE]',  'icon' => 'database',   'role' => 'Relational database schemas with Redis key-value caching.', 'tech' => 'MySQL / Redis']
+            ]
+        ],
+        'process' => [
+            ['step' => '01', 'title' => 'DISCOVER', 'time' => '2-3 Days',  'desc' => 'We analyze target audience user journeys, technical API requirements, and device feature scope.'],
+            ['step' => '02', 'title' => 'PLAN',     'time' => '3-5 Days',  'desc' => 'We create interactive Figma mobile wireframes, API specs, and database data models.'],
+            ['step' => '03', 'title' => 'BUILD',    'time' => '3-8 Weeks', 'desc' => 'Iterative mobile app development with TestFlight & Android Beta staging builds.'],
+            ['step' => '04', 'title' => 'LAUNCH',   'time' => '1-2 Weeks', 'desc' => 'Final security audit, App Store & Google Play publishing, and 30-day post-launch support.']
+        ],
+        'artifacts' => [
+            ['type' => 'FIGMA DECK',   'title' => 'Mobile UI/UX Prototype & Specs',   'desc' => 'Complete screen designs, component library, and interaction animations.', 'tag' => 'Prototype Approved'],
+            ['type' => 'BUILD REPO',   'title' => 'Mobile App Git Repository',        'desc' => 'Clean React Native / Flutter codebase with CI/CD build pipelines.', 'tag' => 'Branch: main'],
+            ['type' => 'STORE DEPLOY', 'title' => 'App Store & Google Play Listing',  'desc' => 'Published mobile applications ready for public download in app stores.', 'tag' => 'App Live']
+        ],
+        'tools' => [
+            ['icon' => 'smartphone', 'label' => 'React Native &amp; Expo',  'role' => 'Cross-Platform Framework'],
+            ['icon' => 'layers',     'label' => 'Flutter &amp; Dart',      'role' => 'High-Performance UI Engine'],
+            ['icon' => 'cpu',        'label' => 'Swift &amp; Kotlin',       'role' => 'Native Module Bindings'],
+            ['icon' => 'database',   'label' => 'Firebase &amp; Firestore', 'role' => 'Cloud Data & Auth'],
+            ['icon' => 'bell',       'label' => 'FCM &amp; APNs Push',      'role' => 'Real-Time Notification System'],
+            ['icon' => 'shield',     'label' => 'Mobile Security Vault',   'role' => 'Biometrics & SSL Pinning']
+        ],
+        'outcomes' => [
+            'A high-speed mobile app published on both Apple App Store and Google Play Store.',
+            'Smooth 60 FPS user experience with offline state handling and push notifications.',
+            'Full source code ownership, certificates, and provisioning keys transferred to your team.',
+            'Clean backend API integration with rate-limiting, authentication, and data encryption.'
+        ],
+        'who_it_is_for' => [
+            ['title' => 'SaaS Companies',     'desc' => 'Platforms needing dedicated mobile app experiences to complement their web portal.', 'fit' => 'SaaS mobile extension'],
+            ['title' => 'On-Demand Services', 'desc' => 'Businesses requiring real-time booking, location tracking, and instant mobile alerts.', 'fit' => 'Real-time booking & push'],
+            ['title' => 'E-Commerce Brands',  'desc' => 'Storefronts seeking branded mobile apps to increase customer repeat purchases and loyalty.', 'fit' => 'D2C repeat purchase focus']
+        ],
+        'boundaries' => [
+            ['title' => '3D Gaming Engine Builds', 'desc' => 'We specialize in business, SaaS, and e-commerce mobile applications. 3D games (Unreal/Unity) require specialized game studios.'],
+            ['title' => 'Unsubstantiated Downloads','desc' => 'We engineer the app and store listing; app store ad campaigns are managed under Performance Marketing scopes.'],
+            ['title' => 'Third-Party SDK Abuse',   'desc' => 'We follow strict Apple and Google guidelines and exclude invasive tracking SDKs that jeopardize store approval.']
+        ],
+        'faqs' => [
+            ['q' => 'Do you build apps for both iOS and Android?', 'a' => 'Yes. Using cross-platform frameworks like React Native and Flutter, we deliver native-performing applications for both Apple iOS and Android from a unified codebase.'],
+            ['q' => 'Do you handle the App Store and Google Play submission process?', 'a' => 'Yes. We prepare all provisioning certificates, privacy disclosures, screenshot assets, and guide your app through Apple and Google review passes.'],
+            ['q' => 'Who owns the mobile app source code and certificates?', 'a' => 'You do. Full IP ownership, Git repository access, and signing keys are transferred directly to your team upon completion.'],
+            ['q' => 'How long does it take to develop a mobile application?', 'a' => 'Discovery takes 2-3 days, prototyping takes 3-5 days, and core app development typically runs 3-8 weeks depending on complexity.']
+        ]
     ]
 ];
 

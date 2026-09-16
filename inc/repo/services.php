@@ -120,11 +120,29 @@ function service_find(string $slug): ?array
         return $all[$slug];
     }
     $aliasMap = [
-        'ecommerce'             => 'ecommerce-support',
-        'performance-marketing' => 'marketing-advertisement',
+        'ecommerce'                  => 'ecommerce-support',
+        'performance-marketing'      => 'marketing-advertisement',
+        'android-app-development'  => 'app-development',
+        'ios-app-development'      => 'app-development',
+        'react-native-development' => 'app-development',
+        'flutter-development'      => 'app-development',
+        'cross-platform-app-dev'   => 'app-development',
     ];
     if (isset($aliasMap[$slug], $all[$aliasMap[$slug]])) {
-        return $all[$aliasMap[$slug]];
+        $svc = $all[$aliasMap[$slug]];
+        // Customize sub-topic titles if requested directly
+        $subTopicTitles = [
+            'android-app-development'  => 'Android App Development',
+            'ios-app-development'      => 'iOS App Development',
+            'react-native-development' => 'React Native App Development',
+            'flutter-development'      => 'Flutter App Development',
+            'cross-platform-app-dev'   => 'Cross-Platform App Development',
+        ];
+        if (isset($subTopicTitles[$slug])) {
+            $svc['title'] = $subTopicTitles[$slug];
+            $svc['sub_topic_slug'] = $slug;
+        }
+        return $svc;
     }
     return null;
 }

@@ -107,8 +107,13 @@ function site_path(string $path): string
 function service_url(string $slug): string
 {
     $aliasMap = [
-        'ecommerce-support'       => 'ecommerce',
-        'marketing-advertisement' => 'performance-marketing',
+        'ecommerce-support'        => 'ecommerce',
+        'marketing-advertisement'  => 'performance-marketing',
+        'android-app-development'  => 'app-development',
+        'ios-app-development'      => 'app-development',
+        'react-native-development' => 'app-development',
+        'flutter-development'      => 'app-development',
+        'cross-platform-app-dev'   => 'app-development',
     ];
     $cleanSlug = $aliasMap[$slug] ?? $slug;
     return site_path('/services/' . $cleanSlug);

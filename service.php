@@ -299,6 +299,154 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
         </div>
     </section>
 
+<?php elseif ($key === 'app'): ?>
+    <!-- =========================================================================
+         APP DEVELOPMENT — MOBILE APPLICATION ENGINE (EXACTLY 8 SECTIONS)
+         ========================================================================= -->
+    <!-- 01 HERO / SYSTEM INTRODUCTION -->
+    <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; position: relative; overflow: hidden; display: flex; align-items: center;">
+        <div class="container hero-grid">
+            <div>
+                <div class="machined-badge machined-badge-blue" style="margin-bottom: 1.2rem;">
+                    <span class="glow-dot-active"></span> MOBILE APPLICATION ENGINE
+                </div>
+                <h1 style="font-size: clamp(2.4rem, 4.2vw, 3.8rem); font-weight: 800; color: #050f33; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1rem;">
+                    <?= e(strtoupper($data['title'])) ?> &amp; <span style="color: #0a63ff;">MOBILE ARCHITECTURE</span>
+                </h1>
+                <p style="font-size: 1.05rem; color: #334155; line-height: 1.65; margin-bottom: 1.75rem; max-width: 520px;">
+                    <?= e($data['intro']) ?>
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a class="btn btn-primary btn-lg" href="#intake">Start App Build <?= icon('arrow-up-right') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#subtopics">Explore Frameworks <?= icon('arrow-down') ?></a>
+                </div>
+            </div>
+
+            <!-- HERO VISUAL CONSOLE: MOBILE APP STAGE -->
+            <div class="svc-eco-stage svc-app-stage">
+                <div class="svc-eco-header">
+                    <div class="svc-eco-title">
+                        <?= icon('smartphone') ?> RAFly Mobile App Engine
+                    </div>
+                    <span class="svc-eco-badge">60 FPS MOBILE CORE</span>
+                </div>
+                <div class="svc-eco-canvas">
+                    <div class="svc-eco-grid-bg"></div>
+                    <div style="padding: 2rem; display: grid; gap: 1rem;">
+                        <div class="machined-card" style="margin: 0; background: #ffffff;">
+                            <span class="telemetry-pill-mono" style="color: #0a63ff; font-weight: 700;">REACT NATIVE &amp; FLUTTER</span>
+                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">Cross-Platform Mobile Apps</h4>
+                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">Unified codebases for Apple App Store &amp; Google Play Store with 60 FPS UI rendering.</p>
+                        </div>
+                        <div class="machined-card" style="margin: 0; background: #ffffff;">
+                            <span class="telemetry-pill-mono" style="color: #10b981; font-weight: 700;">NATIVE MODULES</span>
+                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">Swift &amp; Kotlin Device Integration</h4>
+                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">Biometrics, FCM/APNs push notifications, camera hardware, and encrypted local storage.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="svc-eco-footer">
+                    <div class="svc-eco-footer-text"><?= icon('smartphone') ?> React Native • Flutter • Swift • Kotlin • Firebase</div>
+                    <div class="svc-eco-footer-badge" style="background:rgba(10,99,255,0.08); color:#0a63ff; border:1px solid rgba(10,99,255,0.2);">
+                        ● App Store Ready
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 SUB-TOPICS & FRAMEWORKS -->
+    <section class="section band-soft" id="subtopics">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">MOBILE SUB-TOPICS</span>
+                <h2>MOBILE APP DEVELOPMENT CAPABILITIES</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Android App Development</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Kotlin native app engineering and Google Play Store deployment optimized for multi-device performance.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">iOS App Development</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Swift iOS mobile apps meeting Apple Human Interface Guidelines and TestFlight distribution.</p>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">React Native &amp; Flutter</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Cross-platform frameworks delivering near-native performance across iOS and Android platforms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 DIAGNOSTICS & SOLUTIONS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">DIAGNOSTIC CONTROLS</span>
+                <h2>MOBILE APP PERFORMANCE DIAGNOSTICS</h2>
+            </div>
+            <div class="grid grid-2" style="gap: 1.5rem;">
+                <?php foreach ($data['diagnostics'] as $diag): ?>
+                <div class="machined-card">
+                    <strong style="color: #dc2626; font-family: var(--font-mono); font-size: 0.8rem;"><?= e($diag['code']) ?></strong>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #050f33; margin-block: 0.4rem;"><?= e($diag['title']) ?></h3>
+                    <p style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin: 0;"><?= e($diag['desc']) ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 PROCESS & STAGES -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">DEVELOPMENT TIMELINE</span>
+                <h2>APP DEVELOPMENT PROCESS &amp; STORE DEPLOYMENT</h2>
+            </div>
+            <div class="grid grid-4" style="gap: 1.25rem;">
+                <?php foreach ($data['process'] as $step): ?>
+                <div class="machined-card" style="text-align: center;">
+                    <span class="telemetry-pill-mono" style="color: #0a63ff; font-weight: 700;"><?= e($step['step']) ?> // <?= e($step['time']) ?></span>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.5rem;"><?= e($step['title']) ?></h3>
+                    <p style="font-size: 0.88rem; color: #475569; line-height: 1.55; margin: 0;"><?= e($step['desc']) ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 FAQS -->
+    <section class="section" style="padding-block: 5rem;">
+        <div class="container" style="max-width: 860px;">
+            <div class="sec-head sec-head-center" style="margin-bottom: 3rem;">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">FREQUENTLY ASKED QUESTIONS</span>
+                <h2>APP DEVELOPMENT FREQUENTLY ASKED QUESTIONS</h2>
+            </div>
+            <?php foreach ($data['faqs'] as $faq): ?>
+            <details class="loc-faq-item" style="margin-bottom: 1rem;" open>
+                <summary class="loc-faq-head"><?= e($faq['q']) ?></summary>
+                <div class="loc-faq-body"><?= e($faq['a']) ?></div>
+            </details>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <!-- 06 APP INTAKE CONSOLE -->
+    <section class="section band-soft" id="intake">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">APP INTAKE CONSOLE</span>
+                <h2>START AN APP DEVELOPMENT BRIEF</h2>
+            </div>
+            <?php $formId = 'appLeadForm'; require __DIR__ . '/partials/lead-form.php'; ?>
+        </div>
+    </section>
+
 <?php elseif ($key === 'security'): ?>
     <!-- =========================================================================
          02. WEB SECURITY — DIGITAL DEFENSE PERIMETER (EXACTLY 8 SECTIONS)
