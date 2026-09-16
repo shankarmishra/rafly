@@ -136,9 +136,10 @@ function service_location_quality_score(string $serviceSlug, string $locationSlu
         return max(85, $baseScore);
     }
 
-    // Check if the service is featured in the location's explicit service list
+    // Check if the service or parent service is featured in the location's explicit service list
     $featuredServices = (array)($location['featured_services'] ?? []);
-    if (in_array($serviceSlug, $featuredServices, true)) {
+    $parentSlug = $service['slug'] ?? $serviceSlug;
+    if (in_array($serviceSlug, $featuredServices, true) || in_array($parentSlug, $featuredServices, true)) {
         return max(78, $baseScore);
     }
 
