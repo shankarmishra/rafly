@@ -59,6 +59,11 @@ function admin_require_csrf(): void
     exit;
 }
 
+function csrf_verify(): void
+{
+    admin_require_csrf();
+}
+
 /**
  * Redirect after a successful POST, so a refresh cannot resubmit it.
  * The flash message survives one request.

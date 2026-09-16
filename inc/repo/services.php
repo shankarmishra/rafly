@@ -53,29 +53,31 @@ function services_all(): array
                 foreach ($rows as $row) {
                     $slug = (string)$row['slug'];
                     $out[$slug] = [
-                        'slug'       => $slug,
-                        'title'      => (string)$row['title'],
-                        'icon'       => (string)($row['icon']     ?? 'layers'),
-                        'key'        => (string)($row['key_name'] ?? 'web'),
-                        'tagline'    => (string)($row['tagline']  ?? ''),
-                        'intro'      => (string)($row['intro']    ?? ''),
-                        'card'       => (string)($row['card']     ?? ''),
-                        'wide'       => false,
-                        'scene'      => 'browser',
-                        // Fields below are not stored in DB yet — they require
-                        // the full seed data for service detail pages. Fall back
-                        // to seed for any slug we recognise, so that the detail
-                        // page still renders even before seed data is migrated.
+                        'slug'        => $slug,
+                        'title'       => (string)$row['title'],
+                        'icon'        => (string)($row['icon']     ?? 'layers'),
+                        'key'         => (string)($row['key_name'] ?? 'web'),
+                        'tagline'     => (string)($row['tagline']  ?? ''),
+                        'intro'       => (string)($row['intro']    ?? ''),
+                        'card'        => (string)($row['card']     ?? ''),
+                        'wide'        => false,
+                        'scene'       => 'browser',
+                        '_extra_data' => (string)($row['extra_data'] ?? ''),
                     ];
                 }
-                // Merge deep fields (faqs, process, deliverables …) from seed
-                // for any slug that has a DB row but no extended data in the DB.
+                // Merge deep fields from seed, then override with custom DB extra_data if present
                 $seed = require __DIR__ . '/../data/services.php';
                 foreach ($out as $slug => &$svc) {
                     if (isset($seed[$slug])) {
                         $svc = array_merge($seed[$slug], $svc);
-                        $svc['slug'] = $slug;
                     }
+                    if (!empty($svc['_extra_data'])) {
+                        $decoded = json_decode($svc['_extra_data'], true);
+                        if (is_array($decoded)) {
+                            $svc = array_merge($svc, $decoded);
+                        }
+                    }
+                    $svc['slug'] = $slug;
                 }
                 unset($svc);
                 return $cache = $out;

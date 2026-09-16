@@ -1,29 +1,9 @@
 <?php
 /**
- * Dashboard.
+ * RAFly Agency OS — Executive Command Dashboard.
  *
- * Answers the questions someone actually opens the admin to ask, in the order
- * they matter: is anything waiting on me, is the flow of enquiries going up or
- * down, where are they coming from, and what has been happening in here.
- *
- * It used to be five static counts. Counts alone answer none of those — "12
- * leads" does not tell you whether that is good, and it certainly does not tell
- * you that three of them have been sitting untouched since Tuesday. Everything
- * below comes from data the schema already holds; nothing is invented and there
- * are no sample figures.
- *
- * CROSS-DRIVER SQL
- *
- * The site develops on PostgreSQL and deploys to MySQL, so every query here
- * either is plain ANSI or goes through a bridge in inc/db.php. Two habits do
- * most of the work:
- *
- *   * Relative dates come from sql_now_minus_days()/sql_now_minus_secs(),
- *     never a literal `now() - interval '7 days'`.
- *   * Day-of-week/day bucketing is done in PHP from a plain timestamp column
- *     rather than in SQL. date_trunc() is PostgreSQL-only and its MySQL
- *     equivalent is a different function with different arguments, so the
- *     cheapest correct answer is to not ask the database for it at all.
+ * Provides real-time visibility into lead flow, active client projects, pending team tasks,
+ * content publishing readiness, and system audit events.
  */
 
 require __DIR__ . '/lib/bootstrap.php';
@@ -31,419 +11,402 @@ require_can('leads.view');
 require_once __DIR__ . '/lib/chart.php';
 require __DIR__ . '/lib/layout.php';
 
-const DASH_DAYS       = 30;      // Width of the trend chart.
-const DASH_STALE_SECS = 172800;  // 48 hours.
+$rangeDays = (int)($_GET['range'] ?? 30);
+if (!in_array($rangeDays, [1, 7, 30, 90], true)) {
+    $rangeDays = 30;
+}
 
 // ---------------------------------------------------------------------------
-// Headline counts and the week-on-week delta
+// Real Metrics & Data Lookups
 // ---------------------------------------------------------------------------
+$leadsTotal      = db_available() ? (int)scalar('SELECT count(*) FROM leads') : 0;
+$leadsNew        = db_available() ? (int)scalar("SELECT count(*) FROM leads WHERE status = 'new'") : 0;
 
-$leadsTotal = (int)scalar('SELECT count(*) FROM leads');
-$leadsNew   = (int)scalar("SELECT count(*) FROM leads WHERE status = 'new'");
+$leadsCurrentPeriod = db_available() ? (int)scalar('SELECT count(*) FROM leads WHERE created_at > ' . sql_now_minus_days($rangeDays)) : 0;
+$leadsPrevPeriod    = db_available() ? (int)scalar('SELECT count(*) FROM leads WHERE created_at > ' . sql_now_minus_days($rangeDays * 2) . ' AND created_at <= ' . sql_now_minus_days($rangeDays)) : 0;
+$leadsDelta         = $leadsCurrentPeriod - $leadsPrevPeriod;
+$leadsDeltaPct      = $leadsPrevPeriod > 0 ? (int)round(($leadsDelta / $leadsPrevPeriod) * 100) : null;
 
-$week = (int)scalar(
-    'SELECT count(*) FROM leads WHERE created_at > ' . sql_now_minus_days(7)
-);
+$activeProjectsCount = db_available() ? (int)scalar("SELECT count(*) FROM projects WHERE health_status <> 'completed'") : 0;
+$activeClientsCount  = db_available() ? (int)scalar("SELECT count(*) FROM clients WHERE status = 'active'") : 0;
+$pendingTasksCount   = db_available() ? (int)scalar("SELECT count(*) FROM tasks WHERE status NOT IN ('completed', 'done', 'approved')") : 0;
+$totalEnquiries      = db_available() ? (int)scalar('SELECT count(*) FROM leads') : 0;
 
-// The seven days before those seven, so the delta compares like with like. A
-// half-open window (> 14 days ago, <= 7 days ago) rather than BETWEEN, so a
-// lead landing exactly on the boundary is counted once and not twice.
-$prevWeek = (int)scalar(
-    'SELECT count(*) FROM leads
-      WHERE created_at >  ' . sql_now_minus_days(14) . '
-        AND created_at <= ' . sql_now_minus_days(7)
-);
-
-// Percentage change is meaningless against a zero base — "up 100%" from one
-// lead to two is technically true and completely unhelpful — so the tile shows
-// the absolute movement and only adds a percentage when there is something to
-// take a percentage of.
-$delta    = $week - $prevWeek;
-$deltaPct = $prevWeek > 0 ? (int)round(($delta / $prevWeek) * 100) : null;
-
-$postsPublished = (int)scalar("SELECT count(*) FROM posts WHERE status = 'published'");
-$postsDraft     = (int)scalar("SELECT count(*) FROM posts WHERE status = 'draft'");
-
-// ---------------------------------------------------------------------------
-// Trend — leads per day for the last 30 days
-//
-// The database returns raw timestamps and PHP buckets them. Days with no leads
-// are absent from the result set entirely, so the buckets are pre-seeded with
-// zero for every day in the window — otherwise a quiet week would compress the
-// x-axis and the chart would lie about the shape of the data.
-// ---------------------------------------------------------------------------
-
+// Trend buckets for area chart
 $buckets = [];
-for ($i = DASH_DAYS - 1; $i >= 0; $i--) {
+for ($i = $rangeDays - 1; $i >= 0; $i--) {
     $buckets[date('Y-m-d', strtotime("-{$i} days"))] = 0;
 }
-
-foreach (all('SELECT created_at FROM leads WHERE created_at > ' . sql_now_minus_days(DASH_DAYS)) as $row) {
-    $day = date('Y-m-d', strtotime((string)$row['created_at']));
-    if (isset($buckets[$day])) {
-        $buckets[$day]++;
-    }
+if (db_available()) {
+    try {
+        foreach (all('SELECT created_at FROM leads WHERE created_at > ' . sql_now_minus_days($rangeDays)) as $row) {
+            $day = date('Y-m-d', strtotime((string)$row['created_at']));
+            if (isset($buckets[$day])) {
+                $buckets[$day]++;
+            }
+        }
+    } catch (\Throwable $e) {}
 }
-
 $series = [];
 foreach ($buckets as $date => $count) {
     $series[] = ['date' => $date, 'count' => $count];
 }
 
-// ---------------------------------------------------------------------------
-// Pipeline
-// ---------------------------------------------------------------------------
+// Pipeline Breakdown
+$pipelineCounts = ['new' => 0, 'contacted' => 0, 'qualified' => 0, 'proposal' => 0, 'won' => 0, 'lost' => 0];
+if (db_available()) {
+    try {
+        foreach (all('SELECT status, count(*) AS n FROM leads GROUP BY status') as $row) {
+            $st = strtolower((string)$row['status']);
+            if (isset($pipelineCounts[$st])) {
+                $pipelineCounts[$st] = (int)$row['n'];
+            }
+        }
+    } catch (\Throwable $e) {}
+}
+$pipelineTotal = array_sum($pipelineCounts) ?: 1;
 
-$pipelineRaw = [];
-foreach (all('SELECT status, count(*) AS n FROM leads GROUP BY status') as $row) {
-    $pipelineRaw[(string)$row['status']] = (int)$row['n'];
+// Recent Leads
+$recentLeads = [];
+if (db_available()) {
+    try {
+        $recentLeads = all('SELECT id, company_name, contact_number, service_slug, source_page, status, created_at FROM leads ORDER BY created_at DESC LIMIT 6');
+    } catch (\Throwable $e) {}
 }
 
-// Driven by the canonical status list rather than by whatever the query
-// returned, so an empty stage still appears as a zero row. A pipeline that
-// hides its empty stages is the one place a funnel chart routinely misleads.
-$statusBadge = static fn(string $s): string => match ($s) {
-    'new'          => 'badge-warn',
-    'won'          => 'badge-ok',
-    'lost', 'spam' => 'badge-danger',
-    default        => 'badge-muted',
-};
-
-$pipeline = [];
-foreach (['new', 'contacted', 'qualified', 'won', 'lost', 'spam'] as $s) {
-    $pipeline[] = [
-        'label' => ucfirst($s),
-        'value' => $pipelineRaw[$s] ?? 0,
-        'badge' => '<span class="badge ' . $statusBadge($s) . '">' . e(ucfirst($s)) . '</span>',
-        'href'  => '/admin/leads.php?status=' . rawurlencode($s),
-    ];
+// Active Projects
+$activeProjects = [];
+if (db_available()) {
+    try {
+        $activeProjects = all('SELECT p.id, p.name, p.code, p.health_status, p.pillar, p.target_date, c.company_name AS client_name FROM projects p LEFT JOIN clients c ON c.id = p.client_id ORDER BY p.id DESC LIMIT 5');
+    } catch (\Throwable $e) {}
 }
 
-// ---------------------------------------------------------------------------
-// Needs attention — the operational queue
-//
-// Two ways a lead falls through the cracks: it arrives, nobody changes its
-// status, and it quietly ages past the point where a reply is still credible;
-// or it has a status but no owner, so everyone assumes someone else has it.
-//
-// The unassigned arm is restricted to statuses that are still open. A won or
-// lost lead has no owner because it does not need one, and letting those fill
-// the queue is how an actionable list becomes a list nobody reads.
-// ---------------------------------------------------------------------------
-
-$staleWhere = '(l.status = ? AND l.created_at < ' . sql_now_minus_secs() . ')'
-            . " OR (l.assigned_to IS NULL AND l.status IN ('new', 'contacted', 'qualified'))";
-
-$staleParams = ['new', DASH_STALE_SECS];
-
-$staleTotal = (int)scalar("SELECT count(*) FROM leads l WHERE {$staleWhere}", $staleParams);
-
-$stale = all("
-    SELECT l.id, l.company_name, l.contact_number, l.status, l.created_at, l.assigned_to
-      FROM leads l
-     WHERE {$staleWhere}
-     ORDER BY l.created_at ASC, l.id ASC
-     LIMIT 8
-", $staleParams);
-
-// ---------------------------------------------------------------------------
-// Which page converts
-// ---------------------------------------------------------------------------
-
-$sources = [];
-foreach (all("
-    SELECT source_page, count(*) AS n
-      FROM leads
-     WHERE source_page <> ''
-     GROUP BY source_page
-     ORDER BY count(*) DESC, source_page ASC
-     LIMIT 6
-") as $row) {
-    $sources[] = [
-        'label' => str_cut((string)$row['source_page'], 42),
-        'value' => (int)$row['n'],
-    ];
+// Recent Activity Feed
+$activity = [];
+if (db_available()) {
+    try {
+        $activity = all('SELECT a.action, a.entity_type, a.entity_id, a.created_at, u.name AS user_name FROM audit_log a LEFT JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC, a.id DESC LIMIT 6');
+    } catch (\Throwable $e) {}
 }
-
-// ---------------------------------------------------------------------------
-// Content readiness
-//
-// "Ready" means the row would not embarrass anyone if a visitor read it: a case
-// study whose metric is evidenced rather than invented, a testimonial that is
-// both real AND has recorded permission to publish. Consent is part of the bar,
-// not a separate nicety — an attributed quote published without it is the kind
-// of problem that arrives as an email from the client.
-// ---------------------------------------------------------------------------
-
-$csTotal = (int)scalar('SELECT count(*) FROM case_studies');
-$csReady = (int)scalar('SELECT count(*) FROM case_studies WHERE NOT is_placeholder');
-
-$tsTotal = (int)scalar('SELECT count(*) FROM testimonials');
-$tsReady = (int)scalar('SELECT count(*) FROM testimonials WHERE NOT is_placeholder AND consent_given');
-
-$proofTotal = $csTotal + $tsTotal;
-$proofReady = $csReady + $tsReady;
-$proofTodo  = $proofTotal - $proofReady;
-
-// ---------------------------------------------------------------------------
-// Activity feed
-// ---------------------------------------------------------------------------
-
-$activity = all('
-    SELECT a.action, a.entity_type, a.entity_id, a.created_at, u.name AS user_name
-      FROM audit_log a
-      LEFT JOIN users u ON u.id = a.user_id
-     ORDER BY a.created_at DESC, a.id DESC
-     LIMIT 10
-');
-
-// ---------------------------------------------------------------------------
-// Failed sign-ins
-//
-// login_attempts has been recording every attempt since migration 003 and has
-// had no interface at all — the one table in the schema whose entire purpose is
-// to be looked at when something is wrong. A burst of failures against a real
-// address is the earliest signal available that someone is working on the door.
-//
-// `NOT successful` rather than `successful = false`: TINYINT(1) on MySQL and a
-// real boolean on PostgreSQL both negate correctly, without binding a boolean
-// literal that the two drivers marshal differently.
-// ---------------------------------------------------------------------------
-
-$failed24 = (int)scalar(
-    'SELECT count(*) FROM login_attempts
-      WHERE NOT successful AND created_at > ' . sql_now_minus_days(1)
-);
-
-$failedTargets = all('
-    SELECT identifier, ip, count(*) AS n, max(created_at) AS last_at
-      FROM login_attempts
-     WHERE NOT successful AND created_at > ' . sql_now_minus_days(7) . '
-     GROUP BY identifier, ip
-     ORDER BY count(*) DESC, max(created_at) DESC
-     LIMIT 6
-');
 
 admin_head([
-    'title'   => 'Dashboard',
-    'heading' => 'Dashboard',
-    'intro'   => 'Enquiry flow, the queue that needs a person, and what has changed.',
-    'active'  => '/admin/',
+    'title'       => 'Dashboard',
+    'heading'     => 'Dashboard',
+    'breadcrumbs' => [
+        ['name' => 'Admin', 'url' => site_path('/admin/')],
+        ['name' => 'Overview', 'url' => '']
+    ],
+    'active'      => '/admin/',
 ]);
 ?>
 
-<?php
-$teamOsProjectsCount = (int)scalar('SELECT count(*) FROM projects');
-$teamOsTasksCount    = (int)scalar("SELECT count(*) FROM tasks WHERE status NOT IN ('completed', 'approved')");
-$teamOsDealValue     = (float)scalar("SELECT coalesce(sum(proposal_value), 0) FROM crm_deals WHERE deal_stage NOT IN ('won', 'lost')");
-?>
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-header-title">
+        <h1>Good <?= date('H') < 12 ? 'morning' : (date('H') < 17 ? 'afternoon' : 'evening') ?>, <?= e(current_user()['name'] ?? 'Admin') ?></h1>
+        <p>Here's what is happening across the RAFly Operating System.</p>
+    </div>
+
+    <div class="page-header-actions">
+        <!-- Date Range Filter -->
+        <div class="btn-group" role="group" aria-label="Date Range">
+            <a href="?range=1" class="btn btn-sm <?= $rangeDays === 1 ? 'btn-primary' : 'btn-secondary' ?>">Today</a>
+            <a href="?range=7" class="btn btn-sm <?= $rangeDays === 7 ? 'btn-primary' : 'btn-secondary' ?>">7 Days</a>
+            <a href="?range=30" class="btn btn-sm <?= $rangeDays === 30 ? 'btn-primary' : 'btn-secondary' ?>">30 Days</a>
+            <a href="?range=90" class="btn btn-sm <?= $rangeDays === 90 ? 'btn-primary' : 'btn-secondary' ?>">90 Days</a>
+        </div>
+    </div>
+</div>
+
+<!-- STAT CARDS (6 CARDS) -->
 <div class="stat-grid">
-    <div class="stat<?= $staleTotal > 0 ? ' attn' : '' ?>">
-        <div class="n"><?= number_format($staleTotal) ?></div>
-        <div class="k">Needs attention</div>
-        <div class="sub">Stale or unassigned</div>
-    </div>
-
-    <div class="stat">
-        <div class="n"><?= number_format($teamOsProjectsCount) ?></div>
-        <div class="k">Active Projects</div>
-        <div class="sub"><a href="<?= e(site_path('/admin/projects.php')) ?>">Open Project 360 &rarr;</a></div>
-    </div>
-
-    <div class="stat">
-        <div class="n"><?= number_format($teamOsTasksCount) ?></div>
-        <div class="k">Open Tasks</div>
-        <div class="sub"><a href="<?= e(site_path('/admin/tasks.php')) ?>">Open Task Board &rarr;</a></div>
-    </div>
-
-    <div class="stat">
-        <div class="n">₹<?= number_format($teamOsDealValue, 0) ?></div>
-        <div class="k">Pipeline Value</div>
-        <div class="sub"><a href="<?= e(site_path('/admin/leads.php')) ?>">Active Deals &rarr;</a></div>
-    </div>
-</div>
-
-<div class="card card-attn">
-    <h2>Needs attention</h2>
-    <p class="hint">
-        Enquiries still marked new after 48 hours, plus anything open that nobody
-        owns. Oldest first — this is the list to work from.
-    </p>
-
-<?php if (!$stale): ?>
-    <p class="empty-state">
-        <?= icon('circle-check') ?>
-        <strong>Nothing is waiting.</strong>
-        Every open enquiry has an owner and none has gone stale.
-    </p>
-<?php else: ?>
-    <div class="table-wrap">
-        <table class="data">
-            <thead>
-                <tr>
-                    <th>Waiting</th>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Status</th>
-                    <th>Why</th>
-                </tr>
-            </thead>
-            <tbody>
-<?php foreach ($stale as $l):
-          $age       = human_ago((string)$l['created_at']);
-          $unowned   = $l['assigned_to'] === null;
-          $isStale   = $l['status'] === 'new'
-                       && strtotime((string)$l['created_at']) < time() - DASH_STALE_SECS; ?>
-                <tr>
-                    <td><?= e($age) ?></td>
-                    <td><a href="<?= e(site_path('/admin/leads.php?id=' . (int)$l['id'])) ?>"><?= e($l['company_name']) ?></a></td>
-                    <td><?= e($l['contact_number']) ?></td>
-                    <td><span class="badge <?= $statusBadge((string)$l['status']) ?>"><?= e($l['status']) ?></span></td>
-                    <td class="reason">
-<?php if ($isStale && $unowned): ?>
-                        Unanswered and unassigned
-<?php elseif ($isStale): ?>
-                        No reply in 48h
-<?php else: ?>
-                        No owner
-<?php endif; ?>
-                    </td>
-                </tr>
-<?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-<?php if ($staleTotal > count($stale)): ?>
-    <p class="hint after-table">
-        Showing the 8 oldest of <?= number_format($staleTotal) ?>.
-        <a href="<?= e(site_path('/admin/leads.php?status=new')) ?>">See all new enquiries</a>
-    </p>
-<?php endif; ?>
-<?php endif; ?>
-</div>
-
-<div class="grid-2 grid-wide-first">
-    <div class="card">
-        <h2>Enquiries, last <?= DASH_DAYS ?> days</h2>
-        <p class="hint">One point per day. The peak day is labelled.</p>
-        <?= chart_area($series, 'No enquiries in the last ' . DASH_DAYS . ' days.') ?>
-    </div>
-
-    <div class="card">
-        <h2>Pipeline</h2>
-        <p class="hint">Every enquiry by stage. Click a stage to filter the list.</p>
-        <?= chart_bars($pipeline, 'No enquiries yet.') ?>
-    </div>
-</div>
-
-<div class="grid-2">
-    <div class="card">
-        <h2>Where enquiries come from</h2>
-        <p class="hint">The page the form was submitted from — which page is doing the converting.</p>
-        <?= chart_bars($sources, 'No enquiry has recorded a source page yet.') ?>
-    </div>
-
-    <div class="card">
-        <h2>Content readiness</h2>
-        <p class="hint">
-            Case studies with an evidenced metric, and testimonials that are both real
-            and have recorded consent. Anything short of that still shows an orange
-            PLACEHOLDER badge to visitors.
-        </p>
-        <?= chart_meter($proofReady, $proofTotal, 'ready', 'need work') ?>
-
-<?php if ($proofTodo > 0): ?>
-        <ul class="todo-list">
-<?php if ($csTotal - $csReady > 0): ?>
-            <li>
-                <strong><?= $csTotal - $csReady ?></strong> case
-                stud<?= ($csTotal - $csReady) === 1 ? 'y' : 'ies' ?> with an invented metric —
-                <a href="<?= e(site_path('/admin/case-studies.php')) ?>">replace with evidenced results</a>
-            </li>
-<?php endif; ?>
-<?php if ($tsTotal - $tsReady > 0): ?>
-            <li>
-                <strong><?= $tsTotal - $tsReady ?></strong>
-                testimonial<?= ($tsTotal - $tsReady) === 1 ? '' : 's' ?> unattributed or without consent —
-                <a href="<?= e(site_path('/admin/testimonials.php')) ?>">add real names and permission</a>
-            </li>
-<?php endif; ?>
-        </ul>
-<?php endif; ?>
-    </div>
-</div>
-
-<div class="grid-2">
-    <div class="card">
-        <h2>Recent activity</h2>
-        <p class="hint">The last ten changes made through this admin.</p>
-
-<?php if (!$activity): ?>
-        <p class="chart-empty">Nothing recorded yet.</p>
-<?php else: ?>
-        <ul class="feed">
-<?php foreach ($activity as $a): ?>
-            <li>
-                <span class="feed-when"><?= e(human_ago((string)$a['created_at'])) ?></span>
-                <span class="feed-what">
-                    <strong><?= $a['user_name'] !== null ? e($a['user_name']) : 'A deleted user' ?></strong>
-                    <span class="badge badge-muted"><?= e($a['action']) ?></span>
-<?php if ($a['entity_type'] !== '' && $a['entity_id'] !== ''): ?>
-                    <span class="feed-entity"><?= e($a['entity_type'] . ' #' . $a['entity_id']) ?></span>
-<?php endif; ?>
+    <!-- 1. Total Leads -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">Total Leads</span>
+            <div class="stat-icon-wrapper">
+                <?= icon('mail-open') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($leadsTotal) ?></span>
+            <?php if ($leadsDeltaPct !== null): ?>
+                <span class="stat-trend <?= $leadsDeltaPct >= 0 ? 'trend-up' : 'trend-down' ?>">
+                    <?= $leadsDeltaPct >= 0 ? '↑' : '↓' ?> <?= abs($leadsDeltaPct) ?>%
                 </span>
-            </li>
-<?php endforeach; ?>
-        </ul>
-<?php if (can('audit.view')): ?>
-        <p class="hint after-table"><a href="<?= e(site_path('/admin/audit.php')) ?>">Open the full audit log</a></p>
-<?php endif; ?>
-<?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="stat-subtext">vs previous <?= $rangeDays ?> days</div>
     </div>
 
-    <div class="card<?= $failed24 > 0 ? ' card-attn' : '' ?>">
-        <h2>Failed sign-ins</h2>
-        <p class="hint">
-            Rejected attempts on this admin. Throttling is automatic — this is here so
-            a sustained attempt against a real address is visible rather than only logged.
-        </p>
+    <!-- 2. New Leads -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">New Unhandled</span>
+            <div class="stat-icon-wrapper" style="background:var(--warn-soft); color:var(--warn)">
+                <?= icon('clock') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($leadsNew) ?></span>
+            <span class="badge badge-warn">Action Needed</span>
+        </div>
+        <div class="stat-subtext">Requires team follow-up</div>
+    </div>
 
-        <p class="figure-line">
-            <strong class="<?= $failed24 > 0 ? 'is-warn' : '' ?>"><?= number_format($failed24) ?></strong>
-            in the last 24 hours
-        </p>
+    <!-- 3. Active Projects -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">Active Projects</span>
+            <div class="stat-icon-wrapper" style="background:var(--primary-soft); color:var(--primary)">
+                <?= icon('rocket') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($activeProjectsCount) ?></span>
+            <a href="<?= e(admin_path('/admin/projects.php')) ?>" class="badge badge-blue">View All →</a>
+        </div>
+        <div class="stat-subtext">In-flight client deliverables</div>
+    </div>
 
-<?php if (!$failedTargets): ?>
-        <p class="empty-state">
-            <?= icon('shield') ?>
-            <strong>Nothing to report.</strong>
-            No failed sign-in in the last seven days.
-        </p>
-<?php else: ?>
-        <div class="table-wrap">
-            <table class="data">
+    <!-- 4. Active Clients -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">Active Clients</span>
+            <div class="stat-icon-wrapper" style="background:var(--purple-soft); color:var(--purple)">
+                <?= icon('building') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($activeClientsCount) ?></span>
+            <a href="<?= e(admin_path('/admin/clients.php')) ?>" class="badge badge-purple">360 View →</a>
+        </div>
+        <div class="stat-subtext">Retainer & active accounts</div>
+    </div>
+
+    <!-- 5. Pending Tasks -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">Pending Tasks</span>
+            <div class="stat-icon-wrapper" style="background:var(--ok-soft); color:var(--ok)">
+                <?= icon('check-square') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($pendingTasksCount) ?></span>
+            <a href="<?= e(admin_path('/admin/tasks.php')) ?>" class="badge badge-ok">Board →</a>
+        </div>
+        <div class="stat-subtext">Open work tickets</div>
+    </div>
+
+    <!-- 6. Enquiries -->
+    <div class="stat-card">
+        <div class="stat-header">
+            <span class="stat-title">Website Enquiries</span>
+            <div class="stat-icon-wrapper" style="background:var(--surface-subtle); color:var(--text-muted)">
+                <?= icon('message-square') ?>
+            </div>
+        </div>
+        <div class="stat-body">
+            <span class="stat-value"><?= number_format($totalEnquiries) ?></span>
+            <span class="badge badge-muted">Form Submissions</span>
+        </div>
+        <div class="stat-subtext">Inbound conversion points</div>
+    </div>
+</div>
+
+<!-- LEAD PIPELINE VISUALIZATION -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Lead Conversion Pipeline</h3>
+        <a href="<?= e(admin_path('/admin/leads.php')) ?>" class="btn btn-sm btn-outline">Manage CRM Leads →</a>
+    </div>
+    <div class="card-body">
+        <div class="pipeline-container">
+            <?php 
+            $stages = [
+                'new'       => ['label' => 'New', 'color' => 'var(--warn)'],
+                'contacted' => ['label' => 'Contacted', 'color' => 'var(--primary)'],
+                'qualified' => ['label' => 'Qualified', 'color' => 'var(--purple)'],
+                'proposal'  => ['label' => 'Proposal', 'color' => 'var(--secondary-blue)'],
+                'won'       => ['label' => 'Won', 'color' => 'var(--ok)'],
+                'lost'      => ['label' => 'Lost', 'color' => 'var(--danger)'],
+            ];
+            foreach ($stages as $stageKey => $meta):
+                $count = $pipelineCounts[$stageKey] ?? 0;
+                $pct = round(($count / $pipelineTotal) * 100);
+            ?>
+                <a href="<?= e(admin_path('/admin/leads.php?status=' . $stageKey)) ?>" class="pipeline-step">
+                    <div class="pipeline-step-header">
+                        <span><?= e($meta['label']) ?></span>
+                        <span class="badge badge-muted"><?= $pct ?>%</span>
+                    </div>
+                    <div class="pipeline-step-count" style="color: <?= $meta['color'] ?>"><?= number_format($count) ?></div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+
+<!-- TWO-COLUMN GRID: RECENT LEADS & ACTIVE PROJECTS -->
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap:24px; margin-bottom:24px;">
+    
+    <!-- RECENT LEADS TABLE -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Inbound Leads</h3>
+            <a href="<?= e(admin_path('/admin/leads.php')) ?>" class="btn btn-sm btn-secondary">View All Leads</a>
+        </div>
+        <div class="table-responsive">
+            <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>Address tried</th>
-                        <th>From</th>
-                        <th class="num">Attempts</th>
-                        <th>Last</th>
+                        <th>Company / Name</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-<?php foreach ($failedTargets as $f): ?>
-                    <tr>
-                        <td><?= e(str_cut((string)$f['identifier'], 34)) ?></td>
-                        <td><?= e((string)$f['ip'] !== '' ? (string)$f['ip'] : 'unknown') ?></td>
-                        <td class="num"><?= (int)$f['n'] ?></td>
-                        <td><?= e(human_ago((string)$f['last_at'])) ?></td>
-                    </tr>
-<?php endforeach; ?>
+                    <?php if (empty($recentLeads)): ?>
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:32px; color:var(--text-muted)">
+                                No leads submitted yet. Inbound form submissions will appear here.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($recentLeads as $l): ?>
+                            <tr>
+                                <td>
+                                    <strong><a href="<?= e(admin_path('/admin/leads.php?id=' . $l['id'])) ?>"><?= e($l['company_name'] ?: 'Enquiry #' . $l['id']) ?></a></strong>
+                                    <div style="font-size:11.5px; color:var(--text-muted)"><?= e($l['contact_number']) ?></div>
+                                </td>
+                                <td><span class="badge badge-muted"><?= e($l['service_slug'] ?: 'General') ?></span></td>
+                                <td>
+                                    <?php 
+                                    $st = strtolower($l['status']);
+                                    $badgeClass = match($st) {
+                                        'new' => 'badge-warn',
+                                        'won' => 'badge-ok',
+                                        'lost', 'spam' => 'badge-danger',
+                                        default => 'badge-blue',
+                                    };
+                                    ?>
+                                    <span class="badge <?= $badgeClass ?>"><?= e(ucfirst($st)) ?></span>
+                                </td>
+                                <td style="font-size:12px; color:var(--text-muted)"><?= e(human_ago((string)$l['created_at'])) ?></td>
+                                <td>
+                                    <a href="<?= e(admin_path('/admin/leads.php?id=' . $l['id'])) ?>" class="btn btn-sm btn-outline">View</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        <p class="hint after-table">Grouped by address and origin, last seven days.</p>
-<?php endif; ?>
+    </div>
+
+    <!-- ACTIVE PROJECTS -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Active Projects</h3>
+            <a href="<?= e(admin_path('/admin/projects.php')) ?>" class="btn btn-sm btn-secondary">Project Console</a>
+        </div>
+        <div class="card-body" style="padding: 12px 24px;">
+            <?php if (empty($activeProjects)): ?>
+                <div class="empty-state" style="border:none; padding:32px 0;">
+                    <?= icon('rocket', 'empty-icon') ?>
+                    <div class="empty-title">No active projects yet</div>
+                    <div class="empty-desc">Create your first client project to track scope, progress, and team deadlines.</div>
+                    <a href="<?= e(admin_path('/admin/projects.php?action=new')) ?>" class="btn btn-primary btn-sm">+ Create Project</a>
+                </div>
+            <?php else: ?>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <?php foreach ($activeProjects as $p): ?>
+                        <div style="padding:14px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface)">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong><a href="<?= e(admin_path('/admin/projects.php?id=' . $p['id'])) ?>"><?= e($p['name']) ?></a></strong>
+                                <span class="badge badge-blue"><?= e(ucfirst($p['health_status'] ?: 'Active')) ?></span>
+                            </div>
+                            <div style="font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between;">
+                                <span>Client: <?= e($p['client_name'] ?: 'Internal') ?></span>
+                                <span>Target: <?= e($p['target_date'] ?: 'TBD') ?></span>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- TWO-COLUMN GRID: RECENT ACTIVITY & QUICK ACTIONS -->
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap:24px;">
+    
+    <!-- RECENT ACTIVITY TIMELINE -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Activity Log</h3>
+            <a href="<?= e(admin_path('/admin/audit.php')) ?>" class="btn btn-sm btn-secondary">Full Audit Log</a>
+        </div>
+        <div class="card-body">
+            <?php if (empty($activity)): ?>
+                <p style="color:var(--text-muted); text-align:center; padding:20px 0;">No activity events recorded yet.</p>
+            <?php else: ?>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <?php foreach ($activity as $a): ?>
+                        <div style="display:flex; align-items:flex-start; gap:12px; font-size:13px;">
+                            <div style="width:8px; height:8px; border-radius:50%; background:var(--primary); margin-top:6px; flex-shrink:0;"></div>
+                            <div style="flex:1;">
+                                <strong><?= e($a['user_name'] ?: 'System') ?></strong>
+                                <span style="color:var(--text-muted); margin:0 4px;"><?= e($a['action']) ?></span>
+                                <?php if ($a['entity_type']): ?>
+                                    <span class="badge badge-muted"><?= e($a['entity_type']) ?> #<?= e($a['entity_id']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <span style="font-size:11.5px; color:var(--text-muted); white-space:nowrap;"><?= e(human_ago((string)$a['created_at'])) ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Quick Operational Actions</h3>
+        </div>
+        <div class="card-body">
+            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
+                <a href="<?= e(admin_path('/admin/leads.php?action=new')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('mail-open', 'nav-icon') ?>
+                    <span>Create Lead</span>
+                </a>
+                <a href="<?= e(admin_path('/admin/clients.php?action=new')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('building', 'nav-icon') ?>
+                    <span>Create Client</span>
+                </a>
+                <a href="<?= e(admin_path('/admin/projects.php?action=new')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('rocket', 'nav-icon') ?>
+                    <span>Create Project</span>
+                </a>
+                <a href="<?= e(admin_path('/admin/tasks.php?action=new')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('check-square', 'nav-icon') ?>
+                    <span>Create Task</span>
+                </a>
+                <a href="<?= e(admin_path('/admin/services.php')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('layers', 'nav-icon') ?>
+                    <span>Manage Services</span>
+                </a>
+                <a href="<?= e(admin_path('/admin/posts.php')) ?>" class="btn btn-secondary" style="justify-content:flex-start; padding:14px;">
+                    <?= icon('file-pen', 'nav-icon') ?>
+                    <span>Manage Content</span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
