@@ -54,7 +54,7 @@ if (APP_DEBUG) {
 
 /** Release Build Versioning for Cache Busting */
 if (!defined('BUILD_ID')) {
-    define('BUILD_ID', 'v2.5-' . filemtime(__FILE__));
+    define('BUILD_ID', 'v2.5.2-' . filemtime(__FILE__));
 }
 
 /** True when the request is served over HTTPS (respects a reverse proxy). */

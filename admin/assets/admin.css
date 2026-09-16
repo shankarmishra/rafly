@@ -97,6 +97,124 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.02em;
 }
 
+/* ==========================================================================
+   LOGIN SCREEN & FORM COMPONENTS
+   ========================================================================== */
+
+body.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #050F33 0%, #0A194F 50%, #050F33 100%);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+body.login::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(10, 99, 255, 0.18) 0%, transparent 70%);
+    top: -150px;
+    right: -150px;
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+.login-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: var(--radius-lg, 16px);
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 20px 50px rgba(5, 15, 51, 0.25), 0 4px 12px rgba(5, 15, 51, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.login-card img {
+    height: 36px;
+    width: auto;
+    display: block;
+    margin-bottom: 24px;
+}
+
+.login-card h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #050F33;
+    margin-bottom: 6px;
+}
+
+.login-card p.sub {
+    font-size: 14px;
+    color: #64748B;
+    margin-bottom: 24px;
+}
+
+.login-error {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-left: 4px solid #DC2626;
+    color: #991B1B;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm, 8px);
+    font-size: 13.5px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Generic Field Wrappers */
+.field {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #050F33;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"],
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #050F33;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: var(--radius, 10px);
+    transition: all 180ms ease;
+    outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: #0A63FF;
+    box-shadow: 0 0 0 3px rgba(10, 99, 255, 0.15);
+}
+
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 /* Shell Layout */
 .shell {
     display: flex;
@@ -1241,4 +1359,107 @@ h1, h2, h3, h4, h5, h6 {
     .page-header {
         flex-direction: column;
     }
+}
+
+/* --- Button Groups ---------------------------------------------------- */
+.btn-group {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius);
+    background: var(--surface-subtle);
+    padding: 3px;
+    border: 1px solid var(--border);
+}
+.btn-group .btn {
+    border-radius: var(--radius-sm);
+    border: none;
+    box-shadow: none;
+}
+.btn-group .btn:not(.btn-primary) {
+    background: transparent;
+    color: var(--text-muted);
+}
+.btn-group .btn:not(.btn-primary):hover {
+    color: var(--text);
+    background: var(--surface);
+}
+
+/* --- Charts (admin/lib/chart.php) ------------------------------------- */
+.chart {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.chart-empty {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 24px;
+}
+.bar-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.bar-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+}
+.bar-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bar-name {
+    font-weight: 500;
+    color: var(--text);
+}
+.bar-track {
+    width: 100%;
+}
+.bar-value {
+    text-align: right;
+    font-weight: 600;
+    font-family: 'Space Grotesk', monospace;
+    color: var(--deep);
+}
+.meter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.meter-figure {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--deep);
+    line-height: 1;
+}
+.meter-figure span {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+.meter-body {
+    flex: 1;
+}
+.meter-key {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    margin-top: 6px;
+}
+.key {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+.key-ok {
+    color: var(--ok);
+}
+.key-warn {
+    color: var(--warn);
 }
