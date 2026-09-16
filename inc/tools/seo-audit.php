@@ -418,6 +418,112 @@ if ($res['status'] === 200) {
 }
 
 echo "\n";
+
+// -----------------------------------------------------------------------------
+// 9. UNIVERSAL GROUND-TRUTH TAXONOMY MATRIX & 50+ QUERY RESOLVER AUDIT
+// -----------------------------------------------------------------------------
+echo "--- 9. Universal Ground-Truth Taxonomy Matrix & 50+ Query Resolver Audit ---\n";
+
+require_once __DIR__ . '/../repo/taxonomy.php';
+
+$coverageReport = taxonomy_search_coverage_report();
+
+if ($coverageReport['total_services'] === 7) {
+    log_pass("Taxonomy Engine: All 7 primary service taxonomy matrices populated successfully.");
+} else {
+    log_fail("Taxonomy Engine: Expected 7 primary services in taxonomy matrix, found " . $coverageReport['total_services']);
+}
+
+if ($coverageReport['verified_entities_count'] >= 50) {
+    log_pass("Ground-Truth Verification: " . $coverageReport['verified_entities_count'] . " verified entities active across all 7 services (" . $coverageReport['candidate_entities_count'] . " candidate, " . $coverageReport['unsupported_entities_count'] . " unsupported).");
+} else {
+    log_fail("Ground-Truth Verification: Insufficient verified entities (" . $coverageReport['verified_entities_count'] . ")");
+}
+
+// 50 Representative Ground-Truth Queries across ALL 7 Services
+$testQueries = [
+    // 1-10 Web Development
+    'react web development company'          => '/services/web-development',
+    'laravel backend engineering studio'     => '/services/backend-development',
+    'php web application development'        => '/services/web-development',
+    'frontend web development agency'        => '/services/frontend-development',
+    'backend microservices architecture'     => '/services/backend-development',
+    'decoupled API development services'     => '/services/api-development',
+    'custom web app developer'               => '/services/custom-web-apps',
+    'core web vitals speed optimization'     => '/services/web-development',
+    'postgresql database query tuning'       => '/services/web-development',
+    'typescript web application studio'      => '/services/web-development',
+
+    // 11-20 Web Security
+    'api security audit company'             => '/services/api-security',
+    'web application security audit'         => '/services/security-audit',
+    'surface vulnerability assessment service' => '/services/vulnerability-assessment',
+    'owasp top 10 security hardening'        => '/services/web-security',
+    'emergency malware cleanup service'      => '/landing/security-emergency',
+    'free website security audit'            => '/landing/website-audit',
+    'http security headers csp hsts config'  => '/services/web-security',
+    'xss and sql injection defense'          => '/services/web-security',
+    'argon2id password auth security'        => '/services/web-security',
+    'encrypted backup disaster recovery'     => '/services/web-security',
+
+    // 21-30 App Development
+    'react native mobile app development'    => '/services/react-native-development',
+    'flutter mobile app development agency'  => '/services/flutter-development',
+    'ios swift mobile app development'       => '/services/ios-app-development',
+    'android kotlin app development company' => '/services/android-app-development',
+    'cross platform mobile app agency'       => '/services/cross-platform-app-dev',
+    'firebase mobile cloud backend sync'     => '/services/app-development',
+    'push notification engine fcm apns'      => '/services/app-development',
+    'biometric faceid touchid mobile auth'   => '/services/app-development',
+    'app store google play publishing'       => '/services/app-development',
+    'mobile app security vault ssl pinning'  => '/services/app-development',
+
+    // 31-40 Performance Marketing
+    'google ads campaign management agency'  => '/services/google-ads-management',
+    'meta ads paid social media agency'      => '/services/meta-ads-agency',
+    'conversion rate optimization agency'    => '/services/conversion-rate-optimization',
+    'facebook ads agency for lead gen'       => '/services/meta-ads-agency',
+    'google analytics 4 ga4 event tracking'  => '/services/performance-marketing',
+    'google tag manager gtm server side'     => '/services/performance-marketing',
+    'b2b paid search ad strategy'            => '/services/performance-marketing',
+    'utm campaign lead attribution'          => '/services/performance-marketing',
+    'negative search query pruning'          => '/services/performance-marketing',
+    'cro landing page conversion alignment'  => '/services/conversion-rate-optimization',
+
+    // 41-46 Content Creation
+    'short form video editing service'       => '/services/short-form-video',
+    'instagram reels production agency'      => '/services/short-form-video',
+    'social media creative and copy packets' => '/services/social-media-creative',
+    'website copywriting and messaging'      => '/services/content-creation',
+    'brand voice messaging framework'        => '/services/content-creation',
+    'search aware editorial architecture'    => '/services/content-creation',
+
+    // 47-50 E-Commerce & Lead Automation
+    'shopify ecommerce store development'    => '/services/shopify-development',
+    'woocommerce store development agency'   => '/services/woocommerce-development',
+    'custom ecommerce storefront app'        => '/services/custom-ecommerce-apps',
+    'stripe paypal payment gateway setup'    => '/services/ecommerce',
+    'whatsapp lead automation workflows'     => '/landing/whatsapp-automation',
+    'crm pipeline lead routing webhook'      => '/services/crm-lead-routing',
+    'email workflow automation service'      => '/services/email-workflow-automation',
+    '60 second lead response engine'         => '/services/lead-automation',
+];
+
+$queryMatches = 0;
+foreach ($testQueries as $query => $expectedUrl) {
+    $resolution = taxonomy_resolve_canonical($query);
+    if ($resolution['target_url'] === $expectedUrl && $resolution['is_indexable']) {
+        $queryMatches++;
+    } else {
+        log_fail("Query Resolver Failure: '$query' resolved to '{$resolution['target_url']}' (expected '$expectedUrl')");
+    }
+}
+
+if ($queryMatches === count($testQueries)) {
+    log_pass("Query Resolver Engine: All " . count($testQueries) . " ground-truth search queries resolved cleanly to target canonical URLs.");
+}
+
+echo "\n";
 echo "=========================================================\n";
 echo " SUMMARY: $passed Passed | $failed Failed\n";
 echo "=========================================================\n";

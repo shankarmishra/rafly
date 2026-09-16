@@ -1,284 +1,171 @@
 <?php
 /**
- * RAFLY UNIVERSAL TAXONOMY MATRIX — Complete Art-Directed Capabilities & Entities across All 7 Services.
+ * RAFLY GROUND-TRUTH TAXONOMY MATRIX — Categorized Entities across All 7 Primary Services.
  *
- * This file serves as the underlying semantic & capability database for:
- * 01 Web Development
- * 02 Web Security
- * 03 App Development
- * 04 Performance Marketing
- * 05 Content Creation
- * 06 E-Commerce
- * 07 Lead Automation
+ * Statuses:
+ * - 'verified': Codebase/service backed capability. Used in public SEO, sitemaps, and schema.
+ * - 'candidate': Plausible/requested, but unverified in code. Internal tracking only; excluded from public commercial pages.
+ * - 'unsupported': Bounded out of scope by RAFLY. Strictly excluded from SEO.
  */
 
 return [
     'web-development' => [
         'title' => 'Web Development',
         'slug'  => 'web-development',
-        'platforms'    => ['Web Browsers', 'Linux Edge', 'Cloudflare CDN', 'AWS', 'Serverless'],
-        'frameworks'   => ['React', 'Next.js', 'Node.js', 'Express', 'PHP 8.3', 'Laravel', 'Python', 'Django'],
-        'languages'    => ['PHP', 'JavaScript (ESNext)', 'TypeScript', 'Python', 'SQL', 'HTML5', 'CSS3 Tokens'],
-        'capabilities' => [
-            'Decoupled Full-Stack Engineering',
-            'Typed REST & GraphQL APIs',
-            'Core Web Vitals Optimization',
-            'Server-Side Rendering & Hydration',
-            'PostgreSQL & MySQL Schema Tuning',
-            'Redis Key-Value Caching',
-            'Argon2id Auth Guards',
-            'Full IP & Repository Transfer'
-        ],
-        'use_cases'    => [
-            'Bespoke Web Applications',
-            'SaaS Client Portals & Dashboards',
-            'High-Speed Conversion Landing Pages',
-            'Decoupled Enterprise Web Systems'
-        ],
-        'industries'   => [
-            'Technology & SaaS Platforms',
-            'B2B Professional Services',
-            'Finance & Commercial Real Estate',
-            'Healthcare & Specialized Clinics'
-        ],
-        'sub_services' => [
-            'frontend-development',
-            'backend-development',
-            'api-development',
-            'custom-web-apps'
-        ],
-        'entities'     => [
-            'react', 'nextjs', 'nodejs', 'express', 'php', 'laravel', 'python', 'django',
-            'javascript', 'typescript', 'mongodb', 'mysql', 'postgresql', 'rest-api', 'graphql',
-            'decoupled-architecture', 'frontend', 'backend', 'fullstack'
+        'sub_services' => ['frontend-development', 'backend-development', 'api-development', 'custom-web-apps'],
+        'entities' => [
+            'php'                    => ['status' => 'verified',   'label' => 'PHP 8.3'],
+            'laravel'                => ['status' => 'verified',   'label' => 'Laravel Framework'],
+            'javascript'             => ['status' => 'verified',   'label' => 'JavaScript (ESNext)'],
+            'typescript'             => ['status' => 'verified',   'label' => 'TypeScript'],
+            'postgresql'             => ['status' => 'verified',   'label' => 'PostgreSQL'],
+            'mysql'                  => ['status' => 'verified',   'label' => 'MySQL'],
+            'redis'                  => ['status' => 'verified',   'label' => 'Redis Key-Value Caching'],
+            'cloudflare'             => ['status' => 'verified',   'label' => 'Cloudflare Edge CDN'],
+            'rest-api'               => ['status' => 'verified',   'label' => 'REST APIs'],
+            'decoupled-architecture' => ['status' => 'verified',   'label' => 'Decoupled Architecture'],
+            'core-web-vitals'        => ['status' => 'verified',   'label' => 'Core Web Vitals Optimization'],
+            'html5-css3'             => ['status' => 'verified',   'label' => 'HTML5 / CSS3 Tokens'],
+            'react'                  => ['status' => 'candidate',  'label' => 'React Frontend Framework'],
+            'nextjs'                 => ['status' => 'candidate',  'label' => 'Next.js Framework'],
+            'nodejs'                 => ['status' => 'candidate',  'label' => 'Node.js Runtime'],
+            'express'                => ['status' => 'candidate',  'label' => 'Express.js Framework'],
+            'python'                 => ['status' => 'candidate',  'label' => 'Python Backend'],
+            'django'                 => ['status' => 'candidate',  'label' => 'Django Framework'],
+            'mongodb'                => ['status' => 'candidate',  'label' => 'MongoDB Database'],
+            'graphql'                => ['status' => 'candidate',  'label' => 'GraphQL Endpoints'],
+            'aws'                    => ['status' => 'candidate',  'label' => 'AWS Cloud Infrastructure'],
+            'serverless'             => ['status' => 'candidate',  'label' => 'Serverless Architecture'],
+            'cobol-mainframe'        => ['status' => 'unsupported','label' => 'Legacy COBOL Mainframes'],
         ]
     ],
 
     'web-security' => [
         'title' => 'Web Security',
         'slug'  => 'web-security',
-        'platforms'    => ['Cloudflare Edge WAF', 'Linux Web Servers', 'TLS 1.3 Gateways'],
-        'frameworks'   => ['OWASP Top 10 Defense Model', 'Argon2id Password Hashing', 'CSP Directive Builder'],
-        'languages'    => ['PHP Security Guards', 'SQL Parameterization', 'HSTS HTTP Header Policy'],
-        'capabilities' => [
-            'Surface Vulnerability Audits',
-            'Form & API Input Sanitization',
-            'HTTP Security Headers (CSP/HSTS/X-Frame)',
-            'Session & Auth Hardening',
-            'XSS & SQL Injection Mitigation',
-            'Anti-CSRF Token Protection',
-            'Disaster Recovery & Encrypted Backups',
-            'Emergency Malware Cleanup & Site Recovery'
-        ],
-        'use_cases'    => [
-            'Web Application Perimeter Hardening',
-            'API & Data Endpoint Protection',
-            'Emergency Active Incident Recovery',
-            'Vendor Security Audit Preparation'
-        ],
-        'industries'   => [
-            'Financial Technology & Banking',
-            'Healthcare & Medical Patient Portals',
-            'E-Commerce & High-Volume Retailers',
-            'Enterprise B2B Vendors'
-        ],
-        'sub_services' => [
-            'api-security',
-            'security-audit',
-            'vulnerability-assessment'
-        ],
-        'entities'     => [
-            'web-security', 'api-security', 'security-audit', 'vulnerability-assessment',
-            'penetration-testing', 'owasp', 'xss-protection', 'sqli-defense', 'csrf-guard',
-            'security-headers', 'malware-cleanup', 'cloud-security', 'ssl-tls'
+        'sub_services' => ['api-security', 'security-audit', 'vulnerability-assessment'],
+        'entities' => [
+            'ssl-tls'                => ['status' => 'verified',   'label' => 'TLS 1.3 Encryption'],
+            'security-headers'       => ['status' => 'verified',   'label' => 'HTTP Security Headers (CSP/HSTS)'],
+            'argon2id'               => ['status' => 'verified',   'label' => 'Argon2id Password Hashing'],
+            'input-sanitization'     => ['status' => 'verified',   'label' => 'Form & API Input Sanitization'],
+            'xss-protection'         => ['status' => 'verified',   'label' => 'Cross-Site Scripting (XSS) Defense'],
+            'sqli-defense'           => ['status' => 'verified',   'label' => 'SQL Injection Mitigation'],
+            'csrf-guard'             => ['status' => 'verified',   'label' => 'Anti-CSRF Token Guards'],
+            'encrypted-backups'      => ['status' => 'verified',   'label' => 'Encrypted Backup Recovery'],
+            'malware-cleanup'        => ['status' => 'verified',   'label' => 'Emergency Malware Cleanup'],
+            'surface-audit'          => ['status' => 'verified',   'label' => 'Surface Vulnerability Assessment'],
+            'cloudflare-waf'         => ['status' => 'candidate',  'label' => 'Cloudflare WAF Rules'],
+            'cloud-security'         => ['status' => 'candidate',  'label' => 'Cloud Infrastructure Hardening'],
+            'crest-pen-testing'      => ['status' => 'unsupported','label' => 'Formal CREST Penetration Testing'],
+            'iso27001-audit'         => ['status' => 'unsupported','label' => 'Formal ISO 27001 Certification'],
+            'ddos-mitigation'        => ['status' => 'unsupported','label' => 'Origin DDoS Mitigation'],
         ]
     ],
 
     'app-development' => [
         'title' => 'App Development',
         'slug'  => 'app-development',
-        'platforms'    => ['iOS (Apple App Store)', 'Android (Google Play Store)', 'Cross-Platform'],
-        'frameworks'   => ['React Native', 'Flutter', 'Expo', 'Native Bridge Modules'],
-        'languages'    => ['Swift', 'SwiftUI', 'Kotlin', 'Jetpack Compose', 'Dart', 'TypeScript'],
-        'capabilities' => [
-            '60 FPS Mobile UI/UX Design',
-            'Biometric Auth (FaceID / TouchID)',
-            'FCM & APNs Push Notification Engine',
-            'Real-Time Cloud Data Synchronization',
-            'Offline SQLite & Realm Caching',
-            'Mobile Security Vault & SSL Pinning',
-            'App Store & Google Play Publishing & Support'
-        ],
-        'use_cases'    => [
-            'SaaS Product Mobile Extension',
-            'On-Demand Booking & Dispatch Apps',
-            'D2C E-Commerce Mobile Storefront',
-            'Enterprise Internal Field Apps'
-        ],
-        'industries'   => [
-            'Fintech & Commerce Apps',
-            'Healthcare & Wellness Platforms',
-            'Education & EdTech Solutions',
-            'Logistics & On-Demand Delivery'
-        ],
-        'sub_services' => [
-            'android-app-development',
-            'ios-app-development',
-            'react-native-development',
-            'flutter-development',
-            'cross-platform-app-dev'
-        ],
-        'entities'     => [
-            'android-app-development', 'ios-app-development', 'react-native-development',
-            'flutter-development', 'cross-platform-app-dev', 'kotlin', 'swift', 'swiftui',
-            'jetpack-compose', 'firebase', 'mobile-ui-ux', 'push-notifications'
+        'sub_services' => ['android-app-development', 'ios-app-development', 'react-native-development', 'flutter-development', 'cross-platform-app-dev'],
+        'entities' => [
+            'react-native'           => ['status' => 'verified',   'label' => 'React Native Framework'],
+            'flutter'                => ['status' => 'verified',   'label' => 'Flutter & Dart Engine'],
+            'swift'                  => ['status' => 'verified',   'label' => 'Native iOS (Swift)'],
+            'kotlin'                 => ['status' => 'verified',   'label' => 'Native Android (Kotlin)'],
+            'firebase'               => ['status' => 'verified',   'label' => 'Firebase Cloud Backend'],
+            'push-notifications'     => ['status' => 'verified',   'label' => 'FCM & APNs Push Notifications'],
+            'biometrics'             => ['status' => 'verified',   'label' => 'Biometric Auth (FaceID/TouchID)'],
+            'app-store-publishing'   => ['status' => 'verified',   'label' => 'App Store & Google Play Submission'],
+            'mobile-vault'           => ['status' => 'verified',   'label' => 'Mobile Security Vault & SSL Pinning'],
+            'expo'                   => ['status' => 'candidate',  'label' => 'Expo Toolchain'],
+            'swiftui'                => ['status' => 'candidate',  'label' => 'SwiftUI UI Framework'],
+            'jetpack-compose'        => ['status' => 'candidate',  'label' => 'Jetpack Compose UI'],
+            'realm-sqlite'           => ['status' => 'candidate',  'label' => 'Realm & SQLite Mobile Cache'],
+            'unreal-engine-3d'       => ['status' => 'unsupported','label' => '3D Gaming Engine Development'],
+            'invasive-tracking-sdk'  => ['status' => 'unsupported','label' => 'Invasive Data Tracking SDKs'],
         ]
     ],
 
     'performance-marketing' => [
         'title' => 'Performance Marketing',
         'slug'  => 'performance-marketing',
-        'platforms'    => ['Google Ads (Search & Display)', 'Meta Ads Manager (Facebook & Instagram)'],
-        'frameworks'   => ['Google Analytics 4 (GA4)', 'Google Tag Manager (GTM)', 'Server-Side Event Tagging'],
-        'languages'    => ['UTM Parameter Tracking', 'Commercial Search Intent Models'],
-        'capabilities' => [
-            'Commercial Search Intent Research',
-            'Paid Search & Social Campaign Architecture',
-            'GA4 & Server-Side Event Tracking',
-            'Landing Page Conversion Rate Alignment',
-            'Negative Search Query Pruning',
-            'Transparent Spend-to-Lead Reporting'
-        ],
-        'use_cases'    => [
-            'High-Intent B2B Lead Generation',
-            'Direct E-Commerce Customer Acquisition',
-            'Regional & Local Geo-Targeted Campaigns'
-        ],
-        'industries'   => [
-            'Professional Services & Legal',
-            'Real Estate & Property Development',
-            'E-Commerce & D2C Brands',
-            'Regional Enterprise Services'
-        ],
-        'sub_services' => [
-            'google-ads-management',
-            'meta-ads-agency',
-            'conversion-rate-optimization'
-        ],
-        'entities'     => [
-            'google-ads', 'meta-ads', 'ppc', 'search-ads', 'display-ads', 'social-ads',
-            'lead-generation', 'conversion-optimization', 'remarketing', 'ga4', 'gtm',
-            'landing-page-optimization', 'attribution'
+        'sub_services' => ['google-ads-management', 'meta-ads-agency', 'conversion-rate-optimization'],
+        'entities' => [
+            'google-ads'             => ['status' => 'verified',   'label' => 'Google Search & Display Ads'],
+            'meta-ads'               => ['status' => 'verified',   'label' => 'Meta Ads Manager (Facebook & Instagram)'],
+            'ga4'                    => ['status' => 'verified',   'label' => 'Google Analytics 4 (GA4)'],
+            'gtm'                    => ['status' => 'verified',   'label' => 'Google Tag Manager (GTM)'],
+            'utm-attribution'        => ['status' => 'verified',   'label' => 'UTM Campaign Attribution'],
+            'negative-query-pruning' => ['status' => 'verified',   'label' => 'Negative Search Query Pruning'],
+            'server-side-tagging'    => ['status' => 'verified',   'label' => 'Server-Side Tagging'],
+            'search-console'         => ['status' => 'verified',   'label' => 'Google Search Console Query Mining'],
+            'linkedin-ads'           => ['status' => 'candidate',  'label' => 'LinkedIn B2B Advertising'],
+            'tiktok-ads'             => ['status' => 'candidate',  'label' => 'TikTok Ads Manager'],
+            'guaranteed-1-ranking'   => ['status' => 'unsupported','label' => 'Guaranteed #1 Search Rankings'],
+            'tv-broadcast-buying'    => ['status' => 'unsupported','label' => 'National TV Broadcast Buying'],
+            'influencer-talent-mgmt' => ['status' => 'unsupported','label' => 'Influencer Talent Management'],
         ]
     ],
 
     'content-creation' => [
         'title' => 'Content Creation',
         'slug'  => 'content-creation',
-        'platforms'    => ['YouTube Shorts', 'Instagram Reels', 'Social Media Channels', 'Web CMS'],
-        'frameworks'   => ['Brand Messaging Framework', 'Search-Aware Editorial Hierarchy', 'Scannable Mobile Formatting'],
-        'languages'    => ['Semantic HTML5 Copy', 'Structured H1-H6 Heading Specs'],
-        'capabilities' => [
-            'Website & Service Page Copywriting',
-            'Short-Form Video & Reels Scriptwriting',
-            'Motion Graphics & Visual Asset Direction',
-            'Brand Voice & Messaging Frameworks',
-            'Search-Aware Editorial Architecture',
-            'Structured Case Study Writing'
-        ],
-        'use_cases'    => [
-            'Technical B2B Value Positioning',
-            'Website Redesign Tone Unification',
-            'Founder & Executive Value Articulation'
-        ],
-        'industries'   => [
-            'SaaS & B2B Software',
-            'Consulting & Professional Practices',
-            'E-Commerce & D2C Brands',
-            'Executive Thought Leadership'
-        ],
-        'sub_services' => [
-            'short-form-video',
-            'reels-production',
-            'social-media-creative'
-        ],
-        'entities'     => [
-            'short-form-video', 'reels-production', 'youtube-shorts', 'video-editing',
-            'motion-graphics', 'social-media-content', 'ugc', 'copywriting',
-            'content-strategy', 'brand-voice', 'editorial'
+        'sub_services' => ['short-form-video', 'reels-production', 'social-media-creative'],
+        'entities' => [
+            'website-copywriting'    => ['status' => 'verified',   'label' => 'Website & Service Page Copywriting'],
+            'editorial-architecture' => ['status' => 'verified',   'label' => 'Search-Aware Editorial Architecture'],
+            'brand-voice-guide'      => ['status' => 'verified',   'label' => 'Brand Voice & Messaging Frameworks'],
+            'scannable-formatting'   => ['status' => 'verified',   'label' => 'Scannable Mobile Text Formatting'],
+            'ad-copy-packets'        => ['status' => 'verified',   'label' => 'Ad & Social Copy Packets'],
+            'reels-scriptwriting'    => ['status' => 'verified',   'label' => 'Short-Form Video & Reels Scripting'],
+            'semantic-html-copy'     => ['status' => 'verified',   'label' => 'Semantic HTML5 Content Assets'],
+            'ai-assisted-copy'       => ['status' => 'candidate',  'label' => 'AI-Assisted Content Drafting'],
+            'motion-graphics-assets' => ['status' => 'candidate',  'label' => 'Motion Graphics & Visual Assets'],
+            'on-location-film-crew'  => ['status' => 'unsupported','label' => 'On-Location Film Crew Video Shoots'],
+            'api-developer-docs'     => ['status' => 'unsupported','label' => 'Technical API Developer Documentation'],
+            'multilingual-translation'=>['status' => 'unsupported','label' => 'Multi-Lingual Language Translation'],
         ]
     ],
 
     'ecommerce' => [
         'title' => 'E-Commerce',
         'slug'  => 'ecommerce',
-        'platforms'    => ['Shopify & Shopify Plus', 'WooCommerce', 'Custom PHP/Node Storefronts'],
-        'frameworks'   => ['Storefront Catalog Taxonomy', 'Stripe & PayPal Webhooks', 'GA4 E-Commerce Schema'],
-        'languages'    => ['Product SKU Attributes', 'Order Dispatch SOPs'],
-        'capabilities' => [
-            'Product Catalog & Taxonomy Optimization',
-            'Mobile Checkout Friction Reduction',
-            'Payment Gateway Webhook Verification',
-            'GA4 E-Commerce Event Tracking',
-            'Operational SOP Documentation',
-            'Sales & Payout Reconciliation'
-        ],
-        'use_cases'    => [
-            'Product Catalog Clean-Up & Taxonomy',
-            'Checkout & Cart Drop-off Reduction',
-            'Multi-Channel Inventory & Sales Sync'
-        ],
-        'industries'   => [
-            'D2C Retail & Fashion',
-            'Consumer Electronics & Hardware',
-            'Health, Beauty & Supplements',
-            'B2B Wholesale Commerce'
-        ],
-        'sub_services' => [
-            'shopify-development',
-            'woocommerce-development',
-            'custom-ecommerce-apps'
-        ],
-        'entities'     => [
-            'shopify', 'woocommerce', 'custom-ecommerce', 'product-catalog',
-            'checkout-optimization', 'payment-gateways', 'inventory-management',
-            'ecommerce-seo', 'store-development', 'payout-reconciliation'
+        'sub_services' => ['shopify-development', 'woocommerce-development', 'custom-ecommerce-apps'],
+        'entities' => [
+            'shopify'                => ['status' => 'verified',   'label' => 'Shopify Store Development'],
+            'woocommerce'            => ['status' => 'verified',   'label' => 'WooCommerce Development'],
+            'custom-storefront'      => ['status' => 'verified',   'label' => 'Custom PHP/Node Storefronts'],
+            'stripe'                 => ['status' => 'verified',   'label' => 'Stripe Gateway Integration'],
+            'paypal'                 => ['status' => 'verified',   'label' => 'PayPal Webhooks & Processing'],
+            'razorpay'               => ['status' => 'verified',   'label' => 'Razorpay Payment Setup'],
+            'catalog-taxonomy'       => ['status' => 'verified',   'label' => 'Product Catalog & Attribute Taxonomy'],
+            'checkout-optimization'  => ['status' => 'verified',   'label' => 'Mobile Checkout Friction Reduction'],
+            'ga4-ecommerce-events'   => ['status' => 'verified',   'label' => 'GA4 E-Commerce Event Tracking'],
+            'shopify-plus'           => ['status' => 'candidate',  'label' => 'Shopify Plus Enterprise'],
+            'bigcommerce'            => ['status' => 'candidate',  'label' => 'BigCommerce Storefronts'],
+            'physical-warehousing'   => ['status' => 'unsupported','label' => 'Physical Warehousing & 3PL Logistics'],
+            'tax-cpa-filing'         => ['status' => 'unsupported','label' => 'Tax Filing & Formal CPA Accounting'],
+            'call-center-staffing'   => ['status' => 'unsupported','label' => 'Daily Call Center Customer Support'],
         ]
     ],
 
     'lead-automation' => [
         'title' => 'Lead Automation',
         'slug'  => 'lead-automation',
-        'platforms'    => ['WhatsApp Business API', 'Team OS CRM', 'Email Webhooks', 'Calendar Booking API'],
-        'frameworks'   => ['60-Second Response Engine', 'Multi-Step Form Logic', 'Anti-Spam Challenge Engine'],
-        'languages'    => ['Webhook JSON Specifications', 'Rate-Limit Rules'],
-        'capabilities' => [
-            '60-Second WhatsApp Auto-Acknowledgement',
-            'Interactive Budget & Scope Filtering',
-            'Webhook-Driven CRM Pipeline Sync',
-            'Discovery Call Scheduler Routing',
-            'Anti-Spam & Honeypot Rate Guards'
-        ],
-        'use_cases'    => [
-            'Instant Inbound Lead Triage & Response',
-            'Consultative Sales Pre-Qualification',
-            'Automated CRM Deal Assignment'
-        ],
-        'industries'   => [
-            'Medical Clinics & Health Services',
-            'Legal & Financial Advisors',
-            'B2B Enterprise Technology Sales',
-            'Real Estate & High-Ticket Consultancies'
-        ],
-        'sub_services' => [
-            'crm-lead-routing',
-            'whatsapp-lead-automation',
-            'email-workflow-automation'
-        ],
-        'entities'     => [
-            'lead-capture', 'crm-sync', 'lead-routing', 'whatsapp-automation',
-            'email-automation', 'followup-automation', 'webhooks',
-            'lead-qualification', 'workflow-automation', '60-second-response'
+        'sub_services' => ['crm-lead-routing', 'whatsapp-lead-automation', 'email-workflow-automation'],
+        'entities' => [
+            'whatsapp-api'           => ['status' => 'verified',   'label' => 'WhatsApp Business API Integration'],
+            'team-os-crm'            => ['status' => 'verified',   'label' => 'Team OS CRM Pipeline Sync'],
+            '60-second-response'     => ['status' => 'verified',   'label' => '60-Second Lead Response Engine'],
+            'qualification-form'     => ['status' => 'verified',   'label' => 'Interactive Budget & Scope Filtering'],
+            'discovery-scheduler'    => ['status' => 'verified',   'label' => 'Discovery Call Scheduler Routing'],
+            'anti-spam-honeypot'     => ['status' => 'verified',   'label' => 'Anti-Spam Honeypot & Rate Guards'],
+            'webhook-sync'           => ['status' => 'verified',   'label' => 'Webhook Payload Pipeline Sync'],
+            'hubspot-webhook'        => ['status' => 'candidate',  'label' => 'HubSpot CRM Webhooks'],
+            'salesforce-sync'        => ['status' => 'candidate',  'label' => 'Salesforce Integration'],
+            'automated-binding-quote'=> ['status' => 'unsupported','label' => 'Automated Binding Financial Quotes'],
+            'cold-unsolicited-spam'  => ['status' => 'unsupported','label' => 'Cold Email / SMS Spamming'],
+            'outbound-telemarketing' => ['status' => 'unsupported','label' => 'Outbound Call Center Telemarketing'],
         ]
     ]
 ];
