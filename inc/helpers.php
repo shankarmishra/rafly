@@ -289,13 +289,46 @@ function admin_path(string $path = '/'): string
  */
 function admin_asset(string $path): string
 {
-    $path = ltrim($path, '/');
-    if (is_admin_subdomain()) {
-        if (strpos($path, 'admin/') === 0) {
-            $path = substr($path, 6);
+    static $cache = [];
+
+    $rawPath = ltrim($path, '/');
+    if (isset($cache[$rawPath])) {
+        return $cache[$rawPath];
+    }
+
+    // 1. Locate physical disk file for filemtime versioning
+    $diskPath = $rawPath;
+    $projectRoot = dirname(__DIR__);
+
+    if (!is_file($projectRoot . '/' . $diskPath)) {
+        if (strpos($diskPath, 'admin/') !== 0 && is_file($projectRoot . '/admin/' . $diskPath)) {
+            $diskPath = 'admin/' . $diskPath;
         }
     }
-    return asset($path);
+
+    $fullFile = $projectRoot . '/' . $diskPath;
+    $ver = is_file($fullFile) ? filemtime($fullFile) : null;
+    if (!$ver && defined('BUILD_ID')) {
+        $ver = BUILD_ID;
+    }
+
+    // 2. Build public web URI
+    $webPath = $rawPath;
+    if (is_admin_subdomain()) {
+        if (strpos($webPath, 'admin/') === 0) {
+            $webPath = substr($webPath, 6);
+        }
+    } else {
+        if (strpos($webPath, 'admin/') !== 0 && !str_starts_with($webPath, 'assets/') && !str_starts_with($webPath, 'vendor/')) {
+            $webPath = 'admin/' . $webPath;
+        }
+    }
+
+    $base = site_base_path();
+    $prefix = $base !== '' ? $base : '';
+    $url = ($prefix === '' ? '/' : $prefix . '/') . ltrim($webPath, '/');
+
+    return $cache[$rawPath] = $url . ($ver ? '?v=' . $ver : '');
 }
 
 /** Returns the active class when $itemId is the current page. */
