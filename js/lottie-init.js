@@ -56,12 +56,24 @@
             el.innerHTML = '';
             el.appendChild(renderBox);
 
-            // Fetch animation JSON & render native SVG
-            fetch(src)
-                .then(function(res) {
-                    if (!res.ok) throw new Error('HTTP ' + res.status);
-                    return res.json();
-                })
+            // Fetch animation JSON with fallback path resolution & render native SVG
+            const tryFetch = function(p) {
+                const normPath = p.startsWith('/') ? p : '/' + p;
+                const relPath = p.startsWith('/') ? p.slice(1) : p;
+                return fetch(normPath)
+                    .then(function(res) {
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        return res.json();
+                    })
+                    .catch(function() {
+                        return fetch(relPath).then(function(res) {
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            return res.json();
+                        });
+                    });
+            };
+
+            tryFetch(src)
                 .then(function(animationData) {
                     const anim = window.lottie.loadAnimation({
                         container: renderBox,

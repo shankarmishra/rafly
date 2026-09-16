@@ -550,6 +550,19 @@ require __DIR__ . '/partials/social-rail.php';
         <canvas class="sig-canvas sig-canvas--full-bg" id="field" width="1440" height="900" aria-hidden="true"></canvas>
         <canvas class="sig-canvas sig-canvas--full-bg" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
 
+        <?php /* Hero Lottie Vector Background Animation Layer */ ?>
+        <div class="hero-lottie-bg-layer" aria-hidden="true">
+            <lottie-player
+                src="/assets/lottie/system-arch.json"
+                background="transparent"
+                speed="0.75"
+                style="width: 100%; height: 100%; max-width: 920px; max-height: 600px; margin: 0 auto;"
+                autoplay
+                loop
+                aria-hidden="true">
+            </lottie-player>
+        </div>
+
         <?php /* ── MAIN CONTAINER ── */ ?>
         <div class="container sig-container">
             <div class="sig-content sig-content--centered">
