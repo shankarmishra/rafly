@@ -1,8 +1,6 @@
-﻿-- ---------------------------------------------------------------------------
--- 009 services table (MySQL)
--- ---------------------------------------------------------------------------
+-- 009 services table (MySQL / MariaDB)
 
-CREATE TABLE services (
+CREATE TABLE IF NOT EXISTS services (
     id            bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
     slug          varchar(200) NOT NULL UNIQUE,
     title         varchar(200) NOT NULL,
@@ -15,7 +13,4 @@ CREATE TABLE services (
     is_published  tinyint(1)   NOT NULL DEFAULT 1,
     created_at    datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE INDEX services_sort      ON services (sort_order, id);
-CREATE INDEX services_published ON services (is_published, sort_order);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

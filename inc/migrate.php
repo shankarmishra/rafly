@@ -203,6 +203,10 @@ foreach ($pending as [$name, $path, $sum]) {
         // server has already closed raises its own error, hiding the real one.
         try {
             foreach (split_sql_statements($sql) as $statement) {
+                $statement = trim($statement);
+                if ($statement === '') {
+                    continue;
+                }
                 $pdo->exec($statement);
             }
             q('INSERT INTO schema_migrations (filename, checksum) VALUES (?, ?)', [$name, $sum]);
