@@ -2,12 +2,14 @@
 /**
  * SEED DATA — Complete Art-Directed Service Visual Systems & Structured Data.
  *
- * Drives all 5 service detail pages:
+ * Drives the 7 primary service detail pages:
  * 01 Web Development
  * 02 Web Security
- * 03 Marketing & Advertisement
+ * 03 Performance Marketing
  * 04 Content Creation
- * 05 E-Commerce Support
+ * 05 E-Commerce
+ * 06 Lead Automation
+ * 07 App Development
  */
 
 return [
@@ -223,7 +225,7 @@ return [
     ],
 
     'marketing-advertisement' => [
-        'title' => 'Marketing & Advertisement',
+        'title' => 'Performance Marketing',
         'icon'  => 'trending-up',
         'key'   => 'marketing',
         'wide'  => false,
@@ -419,7 +421,7 @@ return [
     ],
 
     'ecommerce-support' => [
-        'title' => 'E-Commerce Support',
+        'title' => 'E-Commerce',
         'icon'  => 'shopping-cart',
         'key'   => 'ecom',
         'wide'  => false,
