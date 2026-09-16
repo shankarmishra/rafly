@@ -450,7 +450,7 @@ foreach (services_all() as $svc) {
 
 $page = [
     'id'        => 'home',
-    'title'     => 'Rafly | Digital Growth — Build Fast, Grow Faster, Scale Smarter',
+    'title'     => 'RAFLY — Web Development, Security & Digital Growth Partner',
     'desc'      => 'One team for web development, security, marketing, content and e-commerce. One scope, one price, one person accountable — instead of five vendors who have never spoken.',
     'bodyClass' => 'page-home',
     'styles'    => ['home', 'home-scenes'],

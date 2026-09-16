@@ -137,8 +137,25 @@ function admin_safe_next(?string $next, string $fallback = '/admin/'): string
         }
     }
 
-    if ($next === '/admin' || str_starts_with($next, '/admin/')) {
-        return admin_path($next);
+    $allowedRoutes = [
+        '/', '/index.php', '/2fa.php', '/2fa-setup.php', '/approvals.php',
+        '/audit.php', '/bundles.php', '/case-studies.php', '/categories.php',
+        '/channels.php', '/clients.php', '/creative.php', '/documents.php',
+        '/leads.php', '/login.php', '/logout.php', '/media.php', '/posts.php',
+        '/projects.php', '/search.php', '/settings.php', '/tasks.php',
+        '/team.php', '/testimonials.php', '/users.php',
+    ];
+
+    $normalized = $next;
+    if (!is_admin_subdomain() && str_starts_with($normalized, '/admin/')) {
+        $normalized = substr($normalized, 6);
+    }
+    if ($normalized === '' || !str_starts_with($normalized, '/')) {
+        $normalized = '/' . $normalized;
+    }
+
+    if (in_array($normalized, $allowedRoutes, true)) {
+        return admin_path($normalized);
     }
 
     return admin_path($fallback);

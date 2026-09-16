@@ -29,29 +29,37 @@ $slug = trim((string)($_GET['post'] ?? ''));
 $post = null;
 
 if ($slug !== '' && db_available()) {
-    $post = one(
-        "SELECT p.id, p.slug, p.title, p.tag, p.excerpt, p.meta_desc, p.body,
-                p.published_at, p.updated_at, p.read_minutes,
-                m.filename AS cover, m.alt AS cover_alt,
-                t.id AS author_id, t.name AS author_name, t.role AS author_role,
-                am.filename AS author_photo
-           FROM posts p
-           LEFT JOIN media        m  ON m.id  = p.cover_media_id
-           LEFT JOIN team_members t  ON t.id  = p.author_team_id
-           LEFT JOIN media        am ON am.id = t.photo_media_id
-          WHERE p.slug = ?
-            AND p.status = 'published'
-            AND p.published_at IS NOT NULL
-            AND p.published_at <= now()",
-        [$slug]
-    );
-} elseif ($slug !== '' && seed_preview_enabled()) {
-    // Design preview with no database (inc/repo/seed.php).
-    foreach (seed_preview_posts() as $sp) {
-        if ($sp['slug'] === $slug) { $post = $sp; break; }
+    try {
+        $post = one(
+            "SELECT p.id, p.slug, p.title, p.tag, p.excerpt, p.meta_desc, p.body,
+                    p.published_at, p.updated_at, p.read_minutes,
+                    m.filename AS cover, m.alt AS cover_alt,
+                    t.id AS author_id, t.name AS author_name, t.role AS author_role,
+                    am.filename AS author_photo
+               FROM posts p
+               LEFT JOIN media        m  ON m.id  = p.cover_media_id
+               LEFT JOIN team_members t  ON t.id  = p.author_team_id
+               LEFT JOIN media        am ON am.id = t.photo_media_id
+              WHERE p.slug = ?
+                AND p.status = 'published'
+                AND p.published_at IS NOT NULL
+                AND p.published_at <= now()",
+            [$slug]
+        );
+    } catch (Throwable $e) {
+        error_log('blog-post: DB query failed: ' . $e->getMessage());
+        $post = null;
     }
 }
-$seeded = $post !== null && !db_available();
+if ($post === null && $slug !== '') {
+    foreach (seed_preview_posts() as $sp) {
+        if ($sp['slug'] === $slug) {
+            $post = $sp;
+            break;
+        }
+    }
+}
+$seeded = $post !== null && (!db_available() || empty($post['id']));
 
 if ($post === null) {
     // Reuse the real 404 page rather than printing a bespoke "not found" here,

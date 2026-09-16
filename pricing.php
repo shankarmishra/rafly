@@ -8,7 +8,7 @@ $crumbs = [
 
 $page = [
     'id'        => 'pricing',
-    'title'     => '7-Dimension Complexity Framework & Pricing | RAFly',
+    'title'     => 'Bundled Packages & Transparent Pricing | RAFLY',
     'desc'      => 'Transparent 7-dimension complexity evaluation model for web engineering, security audits, and performance marketing systems.',
     'bodyClass' => 'page-pricing',
     'styles'    => ['home', 'home-scenes', 'pricing'],

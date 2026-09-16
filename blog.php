@@ -9,20 +9,26 @@ $crumbs = [
 // Fetch published posts
 $posts = [];
 if (db_available()) {
-    $posts = all(
-        "SELECT p.id, p.slug, p.title, p.tag, p.excerpt, p.meta_desc,
-                p.published_at, p.updated_at, p.read_minutes,
-                m.filename AS cover, m.alt AS cover_alt,
-                c.name AS category_name, c.slug AS category_slug
-           FROM posts p
-           LEFT JOIN media m ON m.id = p.cover_media_id
-           LEFT JOIN categories c ON c.id = (SELECT category_id FROM post_categories WHERE post_id = p.id LIMIT 1)
-          WHERE p.status = 'published'
-            AND p.published_at IS NOT NULL
-            AND p.published_at <= now()
-       ORDER BY p.published_at DESC"
-    );
-} elseif (seed_preview_enabled()) {
+    try {
+        $posts = all(
+            "SELECT p.id, p.slug, p.title, p.tag, p.excerpt, p.meta_desc,
+                    p.published_at, p.updated_at, p.read_minutes,
+                    m.filename AS cover, m.alt AS cover_alt,
+                    c.name AS category_name, c.slug AS category_slug
+               FROM posts p
+               LEFT JOIN media m ON m.id = p.cover_media_id
+               LEFT JOIN categories c ON c.id = (SELECT category_id FROM post_categories WHERE post_id = p.id LIMIT 1)
+              WHERE p.status = 'published'
+                AND p.published_at IS NOT NULL
+                AND p.published_at <= now()
+           ORDER BY p.published_at DESC"
+        );
+    } catch (Throwable $e) {
+        error_log('blog: DB query failed: ' . $e->getMessage());
+        $posts = [];
+    }
+}
+if (empty($posts)) {
     $posts = seed_preview_posts();
 }
 
@@ -32,14 +38,14 @@ $schemaItems = array_map(function($p) {
 
 $page = [
     'id'        => 'blog',
-    'title'     => 'Editorial Intelligence Archive | RAFly Digital Growth Partner',
+    'title'     => 'Technical Insights & Engineering Articles | RAFLY',
     'desc'      => 'Technical insights, web application engineering, cyber security hardening protocols, and performance marketing strategies.',
     'bodyClass' => 'page-blog',
     'styles'    => ['home', 'home-scenes', 'blog'],
     'module'    => 'home',
     'schema'    => [
         schema_breadcrumbs($crumbs),
-        schema_collection_list('RAFly Technical Insights Archive', '/blog', $schemaItems)
+        schema_collection_list('RAFLY Technical Insights Archive', '/blog', $schemaItems)
     ],
 ];
 

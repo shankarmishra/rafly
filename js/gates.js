@@ -74,7 +74,7 @@ export const webgl2 = () => {
  * still pointless without a pointer to react to.
  */
 export const allowCanvas = () =>
-    !reducedMotion() && !cheapConnection() && wideEnough() && finePointer();
+    !reducedMotion() && !cheapConnection() && wideEnough();
 
 /** Tier B — a raw WebGL2 shader. No library, one full-screen quad. */
 export const allowShader = () =>

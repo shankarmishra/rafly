@@ -135,7 +135,7 @@ $gtmId   = !$page['noindex']
     <?php if ($pixelId !== ''): ?><link rel="dns-prefetch" href="//connect.facebook.net"><?php endif; ?>
     <?php if ($ga4Id !== '' || $gtmId !== ''): ?><link rel="dns-prefetch" href="//www.googletagmanager.com"><?php endif; ?>
 <?php endif; ?>
-    <title><?= e($page['title']) ?></title>
+    <title><?= e(format_page_title($page['title'])) ?></title>
     <meta name="description" content="<?= e($page['desc']) ?>">
     <link rel="canonical" href="<?= e($canonical) ?>">
 <?php if ($page['noindex']): ?>
@@ -146,7 +146,7 @@ $gtmId   = !$page['noindex']
 
     <meta property="og:type" content="<?= e($page['ogType']) ?>">
     <meta property="og:site_name" content="<?= e(SITE_NAME) ?>">
-    <meta property="og:title" content="<?= e($page['title']) ?>">
+    <meta property="og:title" content="<?= e(format_page_title($page['title'])) ?>">
     <meta property="og:description" content="<?= e($page['desc']) ?>">
     <meta property="og:url" content="<?= e($canonical) ?>">
     <meta property="og:locale" content="en_IN">
@@ -239,8 +239,6 @@ if ($twitterHandle !== ''):
         <?= file_get_contents(dirname(__DIR__) . "/css/pages/{$s}.css") ?>
     </style>
 <?php endforeach; ?>
-    <!-- Official Lottie Web Player Engine -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 
 <?php

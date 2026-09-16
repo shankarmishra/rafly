@@ -9,6 +9,19 @@ function e(?string $value): string
     return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/** Central title metadata composition function. */
+function format_page_title(string $rawTitle): string
+{
+    $title = trim($rawTitle);
+    if ($title === '') {
+        return SITE_NAME . ' — Web Development, Security & Digital Growth Partner';
+    }
+    if (preg_match('/\|\s*' . preg_quote(SITE_NAME, '/') . '$/i', $title)) {
+        return $title;
+    }
+    return $title . ' | ' . SITE_NAME;
+}
+
 /**
  * Visible breadcrumb trail, built from the exact same {name,url} shape
  * schema_breadcrumbs() (inc/schema.php) takes. Pages that emit breadcrumb

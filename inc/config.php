@@ -83,7 +83,7 @@ if (is_file(__DIR__ . '/config.local.php')) {
  * on in inc/config.local.php only. See inc/repo/seed.php.
  */
 if (!defined('PREVIEW_SEED')) {
-    define('PREVIEW_SEED', false);
+    define('PREVIEW_SEED', true);
 }
 
 
@@ -122,7 +122,7 @@ if (!defined('DB_PASS')) { define('DB_PASS', ''); }
  * carries the domain literally and must be updated alongside any change here.
  */
 define('SITE_DOMAIN',  'rafly.in');
-define('SITE_NAME',    'Rafly');
+define('SITE_NAME',    'RAFLY');
 define('SITE_TAGLINE', 'Digital Growth');
 define('CONTACT_EMAIL', 'support@' . SITE_DOMAIN);
 

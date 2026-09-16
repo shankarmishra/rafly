@@ -8,7 +8,7 @@ $crumbs = [
 
 $page = [
     'id'        => 'about',
-    'title'     => 'About Studio | RAFly Digital Growth Partner',
+    'title'     => 'About Us — Web Development & Security Agency | RAFLY',
     'desc'      => 'RAFly is an engineering and growth studio building web applications, hardening cyber perimeters, and scaling performance marketing.',
     'bodyClass' => 'page-about',
     'styles'    => ['home', 'home-scenes', 'about'],

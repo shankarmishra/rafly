@@ -8,7 +8,7 @@ $crumbs = [
 
 $page = [
     'id'        => 'work',
-    'title'     => 'Verified Technical Case Studies | RAFly Digital Growth Partner',
+    'title'     => 'Case Studies & Technical Proof | RAFLY',
     'desc'      => 'Technical case studies demonstrating sub-50ms LCP engineering, zero-trust security hardening, and high-conversion web architectures.',
     'bodyClass' => 'page-work',
     'styles'    => ['home', 'home-scenes', 'work'],

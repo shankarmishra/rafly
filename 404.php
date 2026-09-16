@@ -13,8 +13,8 @@ http_response_code(404);
 
 $page = [
     'id'        => '',
-    'title'     => 'Page not found | ' . SITE_NAME,
-    'desc'      => 'That page does not exist. Browse our services or get in touch with the Rafly team.',
+    'title'     => 'Page Not Found | ' . SITE_NAME,
+    'desc'      => 'That page does not exist. Browse our services or get in touch with the RAFLY team.',
     'styles'    => ['home', 'home-scenes'],
     'module'    => 'home',
     'noindex'   => true,

@@ -230,6 +230,8 @@ RedirectMatch 404 /admin/lib/
     AddType font/woff2         .woff2
     AddType image/webp         .webp
     AddType image/avif         .avif
+    AddType application/json   .json
+    AddType application/x-lottie .lottie
 </IfModule>
 
 # ---------------------------------------------------------------------------
