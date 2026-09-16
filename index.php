@@ -546,8 +546,9 @@ require __DIR__ . '/partials/social-rail.php';
         <div class="sig-corner-glow sig-corner-glow--bl" aria-hidden="true"></div>
         <div class="sig-corner-glow sig-corner-glow--br" aria-hidden="true"></div>
 
-        <?php /* Kinetic Matrix Spring-Mass Simulation Canvas (Full Hero Background Edge-to-Edge) */ ?>
-        <canvas class="sig-canvas sig-canvas--full-bg" id="field" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
+        <?php /* Kinetic Matrix Spring-Mass Simulation Canvas & Hero Reactor Canvas */ ?>
+        <canvas class="sig-canvas sig-canvas--full-bg" id="field" width="1440" height="900" aria-hidden="true"></canvas>
+        <canvas class="sig-canvas sig-canvas--full-bg" data-signal-canvas width="1440" height="900" aria-hidden="true"></canvas>
 
         <?php /* ── MAIN CONTAINER ── */ ?>
         <div class="container sig-container">

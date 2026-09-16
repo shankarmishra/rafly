@@ -147,10 +147,15 @@ export function initServiceStudio(host) {
                 return;
             }
 
-            const tryFetch = (p) => fetch(p).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+            const tryFetch = (p) => {
+                const normPath = p.startsWith('/') ? p : '/' + p;
+                const relPath = p.startsWith('/') ? p.slice(1) : p;
+                return fetch(normPath)
+                    .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                    .catch(() => fetch(relPath).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }));
+            };
 
             tryFetch(path)
-                .catch(() => tryFetch(path.startsWith('/') ? path.slice(1) : '/' + path))
                 .then((data) => {
                     if (stageLottie.dataset.service !== serviceKey) return; // Discard if key changed
                     currentAnim = window.lottie.loadAnimation({
