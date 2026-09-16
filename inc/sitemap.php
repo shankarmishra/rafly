@@ -45,14 +45,19 @@ function sitemap_urls(): array
      * lastmod falls back to the file's own mtime, so it stays honest without
      * anyone remembering to update it — EXCEPT for the three pages below whose
      * real content lives in the database, where the template's mtime is
-     * meaningless: editing a price in the admin doesn't touch pricing.php on
-     * disk, so it never used to move that URL's lastmod at all.
      */
-    $pricingMod     = db_available() ? scalar("SELECT max(updated_at) FROM bundles") : null;
-    $caseStudiesMod = db_available() ? scalar("SELECT max(updated_at) FROM case_studies WHERE is_published") : null;
-    $blogMod        = db_available() ? scalar(
-        "SELECT max(updated_at) FROM posts WHERE status = 'published' AND published_at IS NOT NULL AND published_at <= now()"
-    ) : null;
+    $pricingMod     = null;
+    $caseStudiesMod = null;
+    $blogMod        = null;
+    if (db_available()) {
+        try {
+            $pricingMod     = scalar("SELECT max(updated_at) FROM bundles");
+            $caseStudiesMod = scalar("SELECT max(updated_at) FROM case_studies WHERE is_published");
+            $blogMod        = scalar("SELECT max(updated_at) FROM posts WHERE status = 'published' AND published_at IS NOT NULL AND published_at <= now()");
+        } catch (Throwable $e) {
+            error_log('sitemap: DB mod query failed: ' . $e->getMessage());
+        }
+    }
 
     $entries = [
         // 'loc' is the clean-URL path; 'file' stays the underlying .php for
@@ -116,17 +121,23 @@ function sitemap_urls(): array
      */
     $posts = [];
     if (db_available()) {
-        $posts = all(
-            "SELECT p.slug, p.title, p.published_at, p.updated_at, m.filename AS cover, m.alt AS cover_alt
-               FROM posts p
-               LEFT JOIN media m ON m.id = p.cover_media_id
-              WHERE p.status = 'published'
-                AND p.published_at IS NOT NULL
-                AND p.published_at <= now()
-           ORDER BY p.published_at DESC"
-        );
-    } elseif (seed_preview_enabled()) {
-        $posts = seed_preview_posts();      // design preview only, see inc/repo/seed.php
+        try {
+            $posts = all(
+                "SELECT p.slug, p.title, p.published_at, p.updated_at, m.filename AS cover, m.alt AS cover_alt
+                   FROM posts p
+                   LEFT JOIN media m ON m.id = p.cover_media_id
+                  WHERE p.status = 'published'
+                    AND p.published_at IS NOT NULL
+                    AND p.published_at <= now()
+               ORDER BY p.published_at DESC"
+            );
+        } catch (Throwable $e) {
+            error_log('sitemap: DB posts query failed: ' . $e->getMessage());
+            $posts = [];
+        }
+    }
+    if (empty($posts)) {
+        $posts = seed_preview_posts();
     }
     foreach ($posts as $p) {
         $entries[] = [
