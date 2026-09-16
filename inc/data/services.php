@@ -26,6 +26,12 @@ return [
             'Zero-Bloat Frontend Stacks',
             'Full IP & Repository Transfer'
         ],
+        'sub_topics' => [
+            'frontend-development' => 'Frontend Web Development',
+            'backend-development'  => 'Backend Web Engineering',
+            'api-development'      => 'API & Micro-Services Architecture',
+            'custom-web-apps'      => 'Custom Web Application Development'
+        ],
         'diagnostics' => [
             ['code' => 'ERR_LEGACY_STACK',  'title' => 'Unmaintained Legacy Codebase', 'desc' => 'Your site was built years ago on brittle plugins or outdated frameworks nobody wants to touch.'],
             ['code' => 'ERR_FRICTION_LOOP', 'title' => 'High Editorial Friction',     'desc' => 'Simple copy edits or new landing pages turn into week-long developer back-and-forth cycles.'],
@@ -118,6 +124,11 @@ return [
             'HTTP Security Headers (CSP/HSTS)',
             'Session & Auth Hardening',
             'Encrypted Backup Resilience'
+        ],
+        'sub_topics' => [
+            'api-security'             => 'API Security & Gateway Hardening',
+            'security-audit'           => 'Web Application Security Audit',
+            'vulnerability-assessment' => 'Surface Vulnerability Assessment'
         ],
         'landing_links' => [
             [
@@ -226,6 +237,11 @@ return [
             'GA4 & Server-Side Event Tracking',
             'Transparent Spend-to-Lead Reporting'
         ],
+        'sub_topics' => [
+            'google-ads-management'      => 'Google Ads Campaign Management',
+            'meta-ads-agency'            => 'Meta Ads & Paid Social Strategy',
+            'conversion-rate-optimization' => 'Conversion Rate Optimization (CRO)'
+        ],
         'diagnostics' => [
             ['code' => 'ERR_BLIND_SPEND',   'title' => 'Unattributed Ad Spend',      'desc' => 'Money leaves your ad accounts monthly without clear visibility into which channel drives actual leads.'],
             ['code' => 'ERR_BOUNCE_DROPOFF', 'title' => 'Landing Page Disconnect',    'desc' => 'Ad messaging promises one thing while the destination page delivers generic copy, losing clicks.'],
@@ -318,6 +334,11 @@ return [
             'Social & Campaign Copy Packets',
             'Brand Voice & Messaging Frameworks',
             'Scannable Mobile Formatting'
+        ],
+        'sub_topics' => [
+            'short-form-video'      => 'Short-Form Video & Reels Scripting',
+            'reels-production'      => 'Reels & Social Creative Production',
+            'social-media-creative' => 'Social Media Creative & Copy Packets'
         ],
         'diagnostics' => [
             ['code' => 'ERR_JARGIN_OVERLOAD', 'title' => 'Dense Agency Jargon',       'desc' => 'Your homepage takes three paragraphs of generic jargon to state what the business actually does.'],
@@ -412,6 +433,11 @@ return [
             'Payment Gateway Webhook Verification',
             'Sales & Payout Reconciliation'
         ],
+        'sub_topics' => [
+            'shopify-development'     => 'Shopify Store Development',
+            'woocommerce-development' => 'WooCommerce Development & Optimization',
+            'custom-ecommerce-apps'   => 'Custom E-Commerce Storefront Apps'
+        ],
         'diagnostics' => [
             ['code' => 'ERR_CATALOG_MESS',  'title' => 'Unstructured Product Catalog', 'desc' => 'The catalog has grown large and fragmented, making search and navigation confusing for buyers.'],
             ['code' => 'ERR_CHECKOUT_DROP', 'title' => 'Checkout Friction Drop-off',  'desc' => 'Checkout drop-off rates are high because of unnecessary form fields or mobile layout bugs.'],
@@ -504,6 +530,11 @@ return [
             'Webhook-Driven CRM Pipeline Synchronization',
             'Zero Artificial Financial Quote Generation',
             'Sales Notification & Discovery Link Routing'
+        ],
+        'sub_topics' => [
+            'crm-lead-routing'          => 'CRM Pipeline Lead Routing',
+            'whatsapp-lead-automation'  => 'WhatsApp Lead Automation Workflows',
+            'email-workflow-automation' => 'Email & Inbound Workflow Automation'
         ],
         'landing_links' => [
             [

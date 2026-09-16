@@ -82,10 +82,26 @@ function sitemap_urls(): array
         ['loc' => 'contact',  'file' => 'contact.php',  'freq' => 'monthly', 'pri' => '0.8'],
         ['loc' => 'privacy',  'file' => 'privacy.php',  'freq' => 'yearly',  'pri' => '0.3'],
         ['loc' => 'locations', 'file' => 'locations.php', 'freq' => 'monthly', 'pri' => '0.7'],
+        ['loc' => 'resources', 'file' => 'resources.php', 'freq' => 'monthly', 'pri' => '0.8'],
         ['loc' => 'landing/security-emergency',  'file' => 'landing/security-emergency.php',  'freq' => 'monthly', 'pri' => '0.7'],
         ['loc' => 'landing/website-audit',       'file' => 'landing/website-audit.php',       'freq' => 'monthly', 'pri' => '0.7'],
         ['loc' => 'landing/whatsapp-automation', 'file' => 'landing/whatsapp-automation.php', 'freq' => 'monthly', 'pri' => '0.7'],
     ];
+
+    // Resources technical guides passing quality score threshold
+    if (function_exists('resources_all')) {
+        foreach (resources_all() as $resSlug => $res) {
+            if (resource_is_indexable($resSlug)) {
+                $entries[] = [
+                    'loc'    => 'resources/' . $resSlug,
+                    'file'   => 'resource.php',
+                    'freq'   => 'monthly',
+                    'pri'    => '0.8',
+                    'images' => [],
+                ];
+            }
+        }
+    }
 
     // Dynamic location and service-location URLs passing Quality Engine threshold
     if (function_exists('locations_sitemap_urls')) {

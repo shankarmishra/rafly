@@ -132,6 +132,16 @@ $bareServiceToCanonical = [
     'lead-automation'                  => 'services/lead-automation',
     'services/marketing-advertisement' => 'services/performance-marketing',
     'services/ecommerce-support'      => 'services/ecommerce',
+    'services/android-app-development'  => 'services/app-development',
+    'services/ios-app-development'      => 'services/app-development',
+    'services/react-native-development' => 'services/app-development',
+    'services/flutter-development'      => 'services/app-development',
+    'services/cross-platform-app-dev'   => 'services/app-development',
+    'android-app-development'           => 'services/app-development',
+    'ios-app-development'               => 'services/app-development',
+    'react-native-development'          => 'services/app-development',
+    'flutter-development'               => 'services/app-development',
+    'cross-platform-app-dev'            => 'services/app-development',
 ];
 if (isset($bareServiceToCanonical[$path]) && $redirect('/' . $bareServiceToCanonical[$path])) {
     return true;
@@ -241,18 +251,38 @@ if (preg_match('#^blog/([a-z0-9-]+)$#', $path, $m)) {
 // Canonical service routes -> service.php
 $serviceAliases = [
     'services/web-development'          => 'web-development',
-    'services/app-development'          => 'app-development',
-    'services/android-app-development'  => 'app-development',
-    'services/ios-app-development'      => 'app-development',
-    'services/react-native-development' => 'app-development',
-    'services/flutter-development'      => 'app-development',
-    'services/cross-platform-app-dev'   => 'app-development',
+    'services/frontend-development'       => 'frontend-development',
+    'services/backend-development'        => 'backend-development',
+    'services/api-development'            => 'api-development',
+    'services/custom-web-apps'            => 'custom-web-apps',
     'services/web-security'             => 'web-security',
-    'services/performance-marketing'    => 'marketing-advertisement',
+    'services/api-security'               => 'api-security',
+    'services/security-audit'             => 'security-audit',
+    'services/vulnerability-assessment'   => 'vulnerability-assessment',
+    'services/app-development'          => 'app-development',
+    'services/android-app-development'  => 'android-app-development',
+    'services/ios-app-development'      => 'ios-app-development',
+    'services/react-native-development' => 'react-native-development',
+    'services/flutter-development'      => 'flutter-development',
+    'services/cross-platform-app-dev'   => 'cross-platform-app-dev',
+    'services/performance-marketing'    => 'performance-marketing',
+    'services/google-ads-management'      => 'google-ads-management',
+    'services/meta-ads-agency'            => 'meta-ads-agency',
+    'services/conversion-rate-optimization' => 'conversion-rate-optimization',
     'services/content-creation'         => 'content-creation',
-    'services/ecommerce'                => 'ecommerce-support',
+    'services/short-form-video'           => 'short-form-video',
+    'services/reels-production'           => 'reels-production',
+    'services/social-media-creative'      => 'social-media-creative',
+    'services/ecommerce'                => 'ecommerce',
+    'services/shopify-development'        => 'shopify-development',
+    'services/woocommerce-development'    => 'woocommerce-development',
+    'services/custom-ecommerce-apps'      => 'custom-ecommerce-apps',
     'services/lead-automation'          => 'lead-automation',
+    'services/crm-lead-routing'           => 'crm-lead-routing',
+    'services/whatsapp-lead-automation'   => 'whatsapp-lead-automation',
+    'services/email-workflow-automation'  => 'email-workflow-automation',
     'services/ecommerce-support'        => 'ecommerce-support',
+    'services/marketing-advertisement'  => 'marketing-advertisement',
 ];
 if (isset($serviceAliases[$path])) {
     return $dispatch('service.php', ['service' => $serviceAliases[$path]]);
@@ -271,6 +301,14 @@ if (preg_match('#^locations/([a-z0-9-]+)$#', $path, $m)) {
         return $dispatch('locations/' . $m[1] . '.php');
     }
     return $dispatch('location.php', ['slug' => $m[1]]);
+}
+
+if ($path === 'resources') {
+    return $dispatch('resources.php');
+}
+
+if (preg_match('#^resources/([a-z0-9-]+)$#', $path, $m)) {
+    return $dispatch('resource.php', ['slug' => $m[1]]);
 }
 
 // -----------------------------------------------------------------------

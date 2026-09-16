@@ -103,6 +103,8 @@ Options -Indexes
     RewriteRule ^ecommerce-support/?$ /services/ecommerce [R=301,L]
     RewriteRule ^ecommerce/?$ /services/ecommerce [R=301,L]
     RewriteRule ^lead-automation/?$ /services/lead-automation [R=301,L]
+    RewriteRule ^(android-app-development|ios-app-development|react-native-development|flutter-development|cross-platform-app-dev)/?$ /services/app-development [R=301,L]
+    RewriteRule ^services/(android-app-development|ios-app-development|react-native-development|flutter-development|cross-platform-app-dev)/?$ /services/app-development [R=301,L]
 
     # service.php and blog-post.php take a query string rather than a bare
     # filename, so their old URLs need the query matched too, not just the
@@ -175,6 +177,8 @@ Options -Indexes
     RewriteCond %{DOCUMENT_ROOT}/locations/$1.php !-f
     RewriteRule ^locations/([a-z0-9-]+)/?$ location.php?slug=$1 [L,QSA]
     RewriteRule ^services/([a-z0-9-]+)/([a-z0-9-]+)/?$ service-location.php?service=$1&location=$2 [L,QSA]
+    RewriteRule ^resources/?$ resources.php [L]
+    RewriteRule ^resources/([a-z0-9-]+)/?$ resource.php?slug=$1 [L,QSA]
 
     # Serve the generated sitemap at the conventional path.
     RewriteRule ^sitemap\.xml$ sitemap.php [L]

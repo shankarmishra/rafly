@@ -122,22 +122,76 @@ function service_find(string $slug): ?array
     $aliasMap = [
         'ecommerce'                  => 'ecommerce-support',
         'performance-marketing'      => 'marketing-advertisement',
-        'android-app-development'  => 'app-development',
-        'ios-app-development'      => 'app-development',
-        'react-native-development' => 'app-development',
-        'flutter-development'      => 'app-development',
-        'cross-platform-app-dev'   => 'app-development',
+
+        // Web Development Sub-Services
+        'frontend-development'       => 'web-development',
+        'backend-development'        => 'web-development',
+        'api-development'            => 'web-development',
+        'custom-web-apps'            => 'web-development',
+
+        // Web Security Sub-Services
+        'api-security'               => 'web-security',
+        'security-audit'             => 'web-security',
+        'vulnerability-assessment'   => 'web-security',
+
+        // App Development Sub-Services
+        'android-app-development'    => 'app-development',
+        'ios-app-development'        => 'app-development',
+        'react-native-development'   => 'app-development',
+        'flutter-development'        => 'app-development',
+        'cross-platform-app-dev'     => 'app-development',
+
+        // Performance Marketing Sub-Services
+        'google-ads-management'      => 'marketing-advertisement',
+        'meta-ads-agency'            => 'marketing-advertisement',
+        'conversion-rate-optimization' => 'marketing-advertisement',
+
+        // Content Creation Sub-Services
+        'short-form-video'           => 'content-creation',
+        'reels-production'           => 'content-creation',
+        'social-media-creative'      => 'content-creation',
+
+        // E-Commerce Sub-Services
+        'shopify-development'        => 'ecommerce-support',
+        'woocommerce-development'    => 'ecommerce-support',
+        'custom-ecommerce-apps'      => 'ecommerce-support',
+
+        // Lead Automation Sub-Services
+        'crm-lead-routing'           => 'lead-automation',
+        'whatsapp-lead-automation'   => 'lead-automation',
+        'email-workflow-automation'  => 'lead-automation',
     ];
+
     if (isset($aliasMap[$slug], $all[$aliasMap[$slug]])) {
         $svc = $all[$aliasMap[$slug]];
         // Customize sub-topic titles if requested directly
         $subTopicTitles = [
-            'android-app-development'  => 'Android App Development',
-            'ios-app-development'      => 'iOS App Development',
-            'react-native-development' => 'React Native App Development',
-            'flutter-development'      => 'Flutter App Development',
-            'cross-platform-app-dev'   => 'Cross-Platform App Development',
+            'frontend-development'       => 'Frontend Web Development',
+            'backend-development'        => 'Backend Web Engineering',
+            'api-development'            => 'API & Micro-Services Architecture',
+            'custom-web-apps'            => 'Custom Web Application Development',
+            'api-security'               => 'API Security & Gateway Hardening',
+            'security-audit'             => 'Web Application Security Audit',
+            'vulnerability-assessment'   => 'Surface Vulnerability Assessment',
+            'android-app-development'    => 'Android App Development',
+            'ios-app-development'        => 'iOS App Development',
+            'react-native-development'   => 'React Native App Development',
+            'flutter-development'        => 'Flutter App Development',
+            'cross-platform-app-dev'     => 'Cross-Platform App Development',
+            'google-ads-management'      => 'Google Ads Campaign Management',
+            'meta-ads-agency'            => 'Meta Ads & Paid Social Strategy',
+            'conversion-rate-optimization' => 'Conversion Rate Optimization (CRO)',
+            'short-form-video'           => 'Short-Form Video & Reels Scripting',
+            'reels-production'           => 'Reels & Social Creative Production',
+            'social-media-creative'      => 'Social Media Creative & Copy Packets',
+            'shopify-development'        => 'Shopify Store Development',
+            'woocommerce-development'    => 'WooCommerce Development & Optimization',
+            'custom-ecommerce-apps'      => 'Custom E-Commerce Storefront Apps',
+            'crm-lead-routing'           => 'CRM Pipeline Lead Routing',
+            'whatsapp-lead-automation'   => 'WhatsApp Lead Automation Workflows',
+            'email-workflow-automation'  => 'Email & Inbound Workflow Automation',
         ];
+
         if (isset($subTopicTitles[$slug])) {
             $svc['title'] = $subTopicTitles[$slug];
             $svc['sub_topic_slug'] = $slug;

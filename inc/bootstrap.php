@@ -50,6 +50,8 @@ require_once __DIR__ . '/repo/metrics.php';
 require_once __DIR__ . '/repo/seed.php';
 require_once __DIR__ . '/repo/links.php';
 require_once __DIR__ . '/repo/locations.php';
+require_once __DIR__ . '/repo/resources.php';
+require_once __DIR__ . '/repo/search-intent.php';
 
 
 // ---------------------------------------------------------------------------

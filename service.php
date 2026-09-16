@@ -301,7 +301,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
 
 <?php elseif ($key === 'app'): ?>
     <!-- =========================================================================
-         APP DEVELOPMENT — MOBILE APPLICATION ENGINE (EXACTLY 8 SECTIONS)
+         APP DEVELOPMENT — MOBILE APPLICATION ENGINE (EXACTLY 11 SECTIONS)
          ========================================================================= -->
     <!-- 01 HERO / SYSTEM INTRODUCTION -->
     <section class="section hero sig-hero svc-hero-section blueprint-canvas" style="min-height: 88vh; padding-block: 4rem; position: relative; overflow: hidden; display: flex; align-items: center;">
@@ -318,7 +318,7 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                 </p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <a class="btn btn-primary btn-lg" href="#intake">Start App Build <?= icon('arrow-up-right') ?></a>
-                    <a class="btn btn-outline-primary btn-lg" href="#subtopics">Explore Frameworks <?= icon('arrow-down') ?></a>
+                    <a class="btn btn-outline-primary btn-lg" href="#platforms">Explore Platforms <?= icon('arrow-down') ?></a>
                 </div>
             </div>
 
@@ -334,19 +334,19 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
                     <div class="svc-eco-grid-bg"></div>
                     <div style="padding: 2rem; display: grid; gap: 1rem;">
                         <div class="machined-card" style="margin: 0; background: #ffffff;">
-                            <span class="telemetry-pill-mono" style="color: #0a63ff; font-weight: 700;">REACT NATIVE &amp; FLUTTER</span>
-                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">Cross-Platform Mobile Apps</h4>
-                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">Unified codebases for Apple App Store &amp; Google Play Store with 60 FPS UI rendering.</p>
+                            <span class="telemetry-pill-mono" style="color: #0a63ff; font-weight: 700;">CROSS-PLATFORM &amp; NATIVE</span>
+                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">iOS &amp; Android Applications</h4>
+                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">React Native, Flutter, Swift, and Kotlin mobile codebases built for sub-100ms API response and zero frame drops.</p>
                         </div>
                         <div class="machined-card" style="margin: 0; background: #ffffff;">
-                            <span class="telemetry-pill-mono" style="color: #10b981; font-weight: 700;">NATIVE MODULES</span>
-                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">Swift &amp; Kotlin Device Integration</h4>
-                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">Biometrics, FCM/APNs push notifications, camera hardware, and encrypted local storage.</p>
+                            <span class="telemetry-pill-mono" style="color: #10b981; font-weight: 700;">CLOUD &amp; BACKEND SYNC</span>
+                            <h4 style="font-size: 1.15rem; font-weight: 800; color: #050f33; margin-block: 0.3rem;">Firebase, Python &amp; Node APIs</h4>
+                            <p style="font-size: 0.88rem; color: #475569; margin: 0;">Real-time database sync, FCM/APNs push notifications, biometrics, and payment gateways.</p>
                         </div>
                     </div>
                 </div>
                 <div class="svc-eco-footer">
-                    <div class="svc-eco-footer-text"><?= icon('smartphone') ?> React Native • Flutter • Swift • Kotlin • Firebase</div>
+                    <div class="svc-eco-footer-text"><?= icon('smartphone') ?> React Native • Flutter • Swift • Kotlin • Firebase • Node.js • Python</div>
                     <div class="svc-eco-footer-badge" style="background:rgba(10,99,255,0.08); color:#0a63ff; border:1px solid rgba(10,99,255,0.2);">
                         ● App Store Ready
                     </div>
@@ -355,35 +355,127 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
         </div>
     </section>
 
-    <!-- 02 SUB-TOPICS & FRAMEWORKS -->
-    <section class="section band-soft" id="subtopics">
+    <!-- 02 WHAT WE BUILD -->
+    <section class="section band-soft">
         <div class="container">
             <div class="sec-head sec-head-center">
-                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">MOBILE SUB-TOPICS</span>
-                <h2>MOBILE APP DEVELOPMENT CAPABILITIES</h2>
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">PRODUCT TYPES</span>
+                <h2>WHAT WE BUILD</h2>
             </div>
             <div class="grid grid-3" style="gap: 1.5rem;">
                 <div class="machined-card">
-                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 01</span>
-                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Android App Development</h3>
-                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Kotlin native app engineering and Google Play Store deployment optimized for multi-device performance.</p>
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TYPE 01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">SaaS &amp; Business Apps</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Mobile extensions for web SaaS platforms, client account portals, and real-time operational telemetry dashboards.</p>
                 </div>
                 <div class="machined-card">
-                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 02</span>
-                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">iOS App Development</h3>
-                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Swift iOS mobile apps meeting Apple Human Interface Guidelines and TestFlight distribution.</p>
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TYPE 02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">E-Commerce &amp; D2C Apps</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Mobile shopping applications with Apple Pay / Google Pay checkout, push notification retention, and inventory sync.</p>
                 </div>
                 <div class="machined-card">
-                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TOPIC 03</span>
-                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">React Native &amp; Flutter</h3>
-                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Cross-platform frameworks delivering near-native performance across iOS and Android platforms.</p>
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">TYPE 03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.5rem;">On-Demand &amp; Booking Engines</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">Real-time appointment scheduling, geolocation tracking, dynamic slot booking, and automated SMS/WhatsApp alerts.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 03 DIAGNOSTICS & SOLUTIONS -->
+    <!-- 03 MOBILE PLATFORMS -->
+    <section class="section" id="platforms">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">MOBILE PLATFORMS</span>
+                <h2>TARGET MOBILE PLATFORMS</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">PLATFORM 01</span>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Android App Development</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin-bottom:1rem;">Native Kotlin &amp; Jetpack Compose mobile applications engineered for Google Play Store compliance and device diversity.</p>
+                    <a class="link-arrow" href="/resources/android-app-development" style="font-weight:700; color:#0a63ff;">Android Architecture Guide <?= icon('arrow-right') ?></a>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">PLATFORM 02</span>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.5rem;">iOS App Development</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin-bottom:1rem;">Native Swift &amp; SwiftUI applications designed following Apple Human Interface Guidelines and TestFlight distribution.</p>
+                    <a class="link-arrow" href="/resources/ios-app-development" style="font-weight:700; color:#0a63ff;">iOS Architecture Guide <?= icon('arrow-right') ?></a>
+                </div>
+                <div class="machined-card">
+                    <span class="telemetry-pill-mono" style="color:#0a63ff; font-weight:700;">PLATFORM 03</span>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#050f33; margin-block:0.5rem;">Cross-Platform Builds</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin-bottom:1rem;">Unified React Native &amp; Flutter codebases delivering 95%+ shared code logic across Apple iOS and Android.</p>
+                    <a class="link-arrow" href="/resources/react-native-vs-flutter" style="font-weight:700; color:#0a63ff;">React Native vs Flutter Analysis <?= icon('arrow-right') ?></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 TECHNOLOGY STACK -->
+    <section class="section band-soft">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">ENGINEERING STACK</span>
+                <h2>MOBILE TECHNOLOGY &amp; BACKEND STACK</h2>
+            </div>
+            <div class="grid grid-4" style="gap: 1.25rem;">
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">FRAMEWORK</strong>
+                    <h4 style="font-size:1.1rem; font-weight:800; color:#050f33; margin-block:0.3rem;">React Native</h4>
+                    <p style="font-size:0.85rem; color:#475569; margin-bottom:0.75rem;">Meta’s cross-platform framework using TypeScript &amp; Hermes engine.</p>
+                    <a class="link-arrow" href="/resources/react-native-app-development" style="font-size:0.82rem; font-weight:700;">Read Tech Spec &rarr;</a>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">FRAMEWORK</strong>
+                    <h4 style="font-size:1.1rem; font-weight:800; color:#050f33; margin-block:0.3rem;">Flutter &amp; Dart</h4>
+                    <p style="font-size:0.85rem; color:#475569; margin-bottom:0.75rem;">Google’s Impeller GPU graphics engine and Dart AOT compiler.</p>
+                    <a class="link-arrow" href="/resources/flutter-app-development" style="font-size:0.82rem; font-weight:700;">Read Tech Spec &rarr;</a>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">BACKEND</strong>
+                    <h4 style="font-size:1.1rem; font-weight:800; color:#050f33; margin-block:0.3rem;">Python &amp; FastAPI</h4>
+                    <p style="font-size:0.85rem; color:#475569; margin-bottom:0.75rem;">Async Python REST backends with PostgreSQL &amp; Redis caching.</p>
+                    <a class="link-arrow" href="/resources/python-mobile-app-backend" style="font-size:0.82rem; font-weight:700;">Read Tech Spec &rarr;</a>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">CLOUD &amp; AUTH</strong>
+                    <h4 style="font-size:1.1rem; font-weight:800; color:#050f33; margin-block:0.3rem;">Firebase &amp; Node</h4>
+                    <p style="font-size:0.85rem; color:#475569; margin:0;">Real-time Firestore database, FCM push alerts, and Argon2id JWT tokens.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 APP CAPABILITIES -->
     <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">APP CAPABILITIES</span>
+                <h2>INTEGRATED MOBILE CAPABILITIES</h2>
+            </div>
+            <div class="grid grid-3" style="gap: 1.5rem;">
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">FEATURE 01</strong>
+                    <h3 style="font-size:1.15rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Authentication &amp; Biometrics</h3>
+                    <p style="font-size:0.88rem; color:#475569; line-height:1.55; margin:0;">FaceID / TouchID biometric login, Apple Sign-In, Google Auth, and hardware Keychain security vaults.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">FEATURE 02</strong>
+                    <h3 style="font-size:1.15rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Mobile Payments &amp; In-App Checkout</h3>
+                    <p style="font-size:0.88rem; color:#475569; line-height:1.55; margin:0;">Stripe SDK integration, Apple Pay, Google Pay, Razorpay, and subscription billing state management.</p>
+                </div>
+                <div class="machined-card">
+                    <strong style="color:#0a63ff; font-family:var(--font-mono); font-size:0.8rem;">FEATURE 03</strong>
+                    <h3 style="font-size:1.15rem; font-weight:800; color:#050f33; margin-block:0.4rem;">Push Notifications &amp; Alerts</h3>
+                    <p style="font-size:0.88rem; color:#475569; line-height:1.55; margin:0;">Firebase Cloud Messaging (FCM) and Apple APNs real-time transactional alerts and re-engagement messaging.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 DIAGNOSTICS & PERFORMANCE -->
+    <section class="section band-soft">
         <div class="container">
             <div class="sec-head sec-head-center">
                 <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">DIAGNOSTIC CONTROLS</span>
@@ -401,8 +493,8 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
         </div>
     </section>
 
-    <!-- 04 PROCESS & STAGES -->
-    <section class="section band-soft">
+    <!-- 07 DEVELOPMENT PROCESS & TIMELINE -->
+    <section class="section">
         <div class="container">
             <div class="sec-head sec-head-center">
                 <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">DEVELOPMENT TIMELINE</span>
@@ -420,8 +512,57 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
         </div>
     </section>
 
-    <!-- 05 FAQS -->
-    <section class="section" style="padding-block: 5rem;">
+    <!-- 08 ARCHITECTURE & ENGINEERING -->
+    <section class="section band-soft">
+        <div class="container" style="max-width: 960px;">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">SYSTEM ARCHITECTURE</span>
+                <h2>CLEAN ARCHITECTURE &amp; OFFLINE-FIRST ENGINE</h2>
+            </div>
+            <div class="machined-card" style="background:#ffffff; border-color:rgba(10,99,255,0.2);">
+                <p style="font-size:1.02rem; color:#334155; line-height:1.75; margin-bottom:1.25rem;">
+                    RAFly mobile applications implement Clean Architecture layer isolation (UI Presentation &rarr; Use Cases &rarr; Repository Data Vault). Network interactions use non-blocking async requests, backed by local encrypted SQLite database caching to guarantee instant app response even when offline.
+                </p>
+                <a class="link-arrow" href="/resources/mobile-app-architecture" style="font-weight:700; color:#0a63ff;">Read Full Mobile Architecture Blueprint <?= icon('arrow-right') ?></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 09 SELECTED PROOF & SCENARIOS -->
+    <section class="section">
+        <div class="container">
+            <div class="sec-head sec-head-center">
+                <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">VERIFIED PROOF</span>
+                <h2>SELECTED MOBILE BUILD SCENARIOS</h2>
+            </div>
+            <div class="grid grid-3" style="gap:1.5rem;">
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #01</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">SaaS Mobile Portal</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        React Native customer portal for a SaaS business, integrating real-time metric updates, biometric sign-in, and push notifications.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #02</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">On-Demand Booking App</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Flutter booking engine with live map tracking, Stripe payments, and offline job status sync for service technicians.
+                    </p>
+                </div>
+                <div class="machined-card">
+                    <span class="machined-badge machined-badge-blue" style="margin-bottom:0.5rem;">SCENARIO #03</span>
+                    <h3 style="font-size:1.2rem; font-weight:800; color:#050f33; margin-block:0.4rem;">D2C Storefront App</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0;">
+                        Cross-platform e-commerce app connected to Shopify REST APIs, achieving sub-1.2s page load times and 60 FPS scrolling.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 FAQS -->
+    <section class="section band-soft" style="padding-block: 5rem;">
         <div class="container" style="max-width: 860px;">
             <div class="sec-head sec-head-center" style="margin-bottom: 3rem;">
                 <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">FREQUENTLY ASKED QUESTIONS</span>
@@ -436,8 +577,8 @@ $key = $data['key']; // 'web', 'security', 'marketing', 'content', 'ecom', 'auto
         </div>
     </section>
 
-    <!-- 06 APP INTAKE CONSOLE -->
-    <section class="section band-soft" id="intake">
+    <!-- 11 APP INTAKE CONSOLE -->
+    <section class="section" id="intake">
         <div class="container">
             <div class="sec-head sec-head-center">
                 <span class="machined-badge machined-badge-blue" style="margin-bottom: 0.5rem;">APP INTAKE CONSOLE</span>
