@@ -28,21 +28,16 @@ import { allowCanvas, allowShader, finePointer, wideEnough, whenIdle, token, rgb
 
 /* ------------------------------------------------------- the background */
 
-if (allowCanvas()) {
-    const canvas = document.getElementById('field');
-    if (canvas) {
-        whenIdle(() => {
-            import('./field.js')
-                .then((m) => m.initField(canvas))
-                .catch(() => { /* the CSS dot texture underneath is the fallback */ });
-        });
-    }
+const canvas = document.getElementById('field');
+if (canvas) {
+    import('./field.js')
+        .then((m) => m.initField(canvas))
+        .catch(() => {});
 }
 
 /* ------------------------------------------------------------- the hero */
 
 const hero = document.querySelector('[data-hero]');
-
 if (hero) {
     import('./hero-growth-field.js')
         .then((m) => m.initHeroGrowthField(hero))

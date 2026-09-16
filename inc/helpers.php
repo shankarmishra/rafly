@@ -308,8 +308,8 @@ function admin_asset(string $path): string
 
     $fullFile = $projectRoot . '/' . $diskPath;
     $ver = is_file($fullFile) ? filemtime($fullFile) : null;
-    if (!$ver && defined('BUILD_ID')) {
-        $ver = BUILD_ID;
+    if (defined('BUILD_ID')) {
+        $ver = BUILD_ID . ($ver ? '-' . $ver : '');
     }
 
     // 2. Build public web URI
