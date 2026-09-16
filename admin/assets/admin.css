@@ -81,6 +81,29 @@ body > svg:first-of-type {
     display: none !important;
 }
 
+/* Universal SVG Icon Engine (Lucide UI Icons) */
+.icon,
+svg.icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Icon Sizing & Style Modifiers */
+.icon-xs { width: 12px !important; height: 12px !important; stroke-width: 2; }
+.sm-icon, .icon-sm { width: 14px !important; height: 14px !important; stroke-width: 2; }
+.icon-md { width: 18px !important; height: 18px !important; stroke-width: 2; }
+.icon-lg { width: 22px !important; height: 22px !important; stroke-width: 2; }
+.icon-xl { width: 28px !important; height: 28px !important; stroke-width: 1.75; }
+.icon-fill { fill: currentColor !important; stroke: none !important; }
+
 a {
     color: var(--primary);
     text-decoration: none;
@@ -218,8 +241,11 @@ body.login::before {
 /* Shell Layout */
 .shell {
     display: flex;
+    width: 100%;
+    max-width: 100vw;
     min-height: 100vh;
     background: var(--canvas);
+    overflow-x: hidden;
 }
 
 /* SIDEBAR */
@@ -234,6 +260,7 @@ body.login::before {
     top: 0;
     height: 100vh;
     z-index: 40;
+    overflow: hidden;
     transition: width var(--transition-normal);
 }
 
@@ -244,6 +271,7 @@ body.login::before {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
 }
 
 .brand-logo-link {
@@ -344,9 +372,15 @@ body.login::before {
 
 /* Sidebar Foot */
 .sidebar-foot {
+    margin-top: auto;
+    flex-shrink: 0;
     padding: 16px;
     border-top: 1px solid var(--border);
     background: var(--surface);
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    width: 100%;
 }
 
 .user-profile-card {
@@ -366,11 +400,13 @@ body.login::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 .user-info {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
 }
 .user-name {
     font-size: 13px;
@@ -417,12 +453,16 @@ body.login::before {
     align-items: center;
     justify-content: space-between;
     font-size: 12px;
+    gap: 8px;
 }
 .foot-link {
     color: var(--text-muted);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: color var(--transition-fast);
 }
 .foot-link:hover {
     color: var(--primary);
@@ -437,6 +477,8 @@ body.login::before {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* TOP HEADER */
@@ -450,7 +492,7 @@ body.login::before {
     padding: 0 28px;
     position: sticky;
     top: 0;
-    z-index: 30;
+    z-index: 100;
 }
 
 .header-left {
@@ -544,27 +586,46 @@ body.login::before {
 
 .dropdown-wrapper {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.quick-add-btn {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    border-radius: var(--radius);
 }
 
 .dropdown-menu {
     position: absolute;
     top: calc(100% + 6px);
+    right: 0;
+    left: auto;
+    min-width: 200px;
+    max-width: 280px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow-md);
-    min-width: 190px;
     padding: 6px;
-    z-index: 100;
+    z-index: 1000;
     display: none;
 }
-.dropdown-wrapper:hover .dropdown-menu,
-.dropdown-wrapper:focus-within .dropdown-menu,
+
 .dropdown-menu.show {
     display: block;
+    animation: fadeInDown 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dropdown-menu-right {
     right: 0;
+    left: auto;
 }
 .dropdown-item {
     display: flex;
@@ -1015,21 +1076,23 @@ body.login::before {
 
 /* LEAD PIPELINE BAR */
 .pipeline-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 12px;
-    margin-bottom: 24px;
-    overflow-x: auto;
-    padding-bottom: 6px;
+    margin-bottom: 0;
+    width: 100%;
 }
 .pipeline-step {
-    flex: 1;
-    min-width: 140px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 14px;
     transition: all var(--transition-fast);
     cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .pipeline-step:hover, .pipeline-step.is-active {
     border-color: var(--primary);
