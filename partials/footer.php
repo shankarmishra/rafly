@@ -13,7 +13,7 @@ $footHours = setting('contact.hours', '');
                     <img src="<?= e(asset('assets/logo.png')) ?>" alt="<?= e(SITE_NAME) ?>" width="110" height="34">
                 </a>
                 <p class="footer-statement">Digital growth, delivered as a system.</p>
-                <p class="footer-blurb">One partner, one bundled package — web development, content creation, digital marketing, web security, and e-commerce support, all working together instead of stitched together from five different vendors.</p>
+                <p class="footer-blurb">One partner, one bundled package — web development, app development, web security, performance marketing, content creation, e-commerce, and lead automation, all working together as a single unified digital growth system.</p>
                 <div class="footer-social">
                     <?php foreach (SOCIAL_LINKS as $s): ?>
                         <a href="<?= e($s['href']) ?>" data-social="<?= e(strtolower($s['label'])) ?>" target="_blank" rel="noopener" aria-label="<?= e($s['label']) ?>">

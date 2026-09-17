@@ -122,7 +122,7 @@ require __DIR__ . '/../partials/social-rail.php';
             <div class="sec-head-split">
                 <div>
                     <p class="eyebrow">What we do here</p>
-                    <h2>Five services, <span class="soft">one team</span></h2>
+                    <h2>Seven services, <span class="soft">one team</span></h2>
                 </div>
                 <p class="lead">Every one of these is delivered from <?= e(BUSINESS_GEO_LOCALITY) ?>, available on its own or bundled.</p>
             </div>

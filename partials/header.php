@@ -33,7 +33,7 @@ $navServices = services_all();
                         </a>
                     <?php endforeach; ?>
                     <div class="nav-drop-foot">
-                        <span class="nav-drop-desc">All six capabilities in one bundled package.</span>
+                        <span class="nav-drop-desc">All seven capabilities in one bundled package.</span>
                         <a class="link-arrow" href="/pricing">See packages &amp; pricing <?= icon('arrow-right') ?></a>
                     </div>
                 </div>
