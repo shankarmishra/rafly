@@ -44,6 +44,31 @@ $page = ($page ?? []) + [
     'ogType'    => 'website',
 ];
 
+// Dynamic Database SEO Overrides from Admin Panel (admin/seo.php)
+$requestPathKey = trim(strtok($_SERVER['REQUEST_URI'] ?? '/', '?'), '/');
+$pageKeyRaw     = !empty($page['id']) ? (string)$page['id'] : ($requestPathKey !== '' ? $requestPathKey : 'homepage');
+$pageKeyClean   = str_replace(['/', '-'], ['_', '_'], $pageKeyRaw);
+
+$dbTitle = setting('seo_title_' . $pageKeyClean, null) ?? setting('seo_title_' . $pageKeyRaw, null);
+if ($dbTitle !== null && trim($dbTitle) !== '') {
+    $page['title'] = trim($dbTitle);
+}
+
+$dbDesc = setting('seo_desc_' . $pageKeyClean, null) ?? setting('seo_desc_' . $pageKeyRaw, null);
+if ($dbDesc !== null && trim($dbDesc) !== '') {
+    $page['desc'] = trim($dbDesc);
+}
+
+$dbCanonical = setting('seo_canonical_' . $pageKeyClean, null) ?? setting('seo_canonical_' . $pageKeyRaw, null);
+if ($dbCanonical !== null && trim($dbCanonical) !== '') {
+    $page['canonical'] = trim($dbCanonical);
+}
+
+$dbOgImage = setting('seo_og_image_' . $pageKeyClean, null) ?? setting('seo_og_image_' . $pageKeyRaw, null);
+if ($dbOgImage !== null && trim($dbOgImage) !== '') {
+    $page['ogImage'] = trim($dbOgImage);
+}
+
 /**
  * Core stylesheet stack, in cascade order. 00-tokens must always be first.
  *
