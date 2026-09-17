@@ -21,6 +21,20 @@ require_once __DIR__ . '/../../inc/auth.php';
 send_security_headers('admin');
 header('X-Admin-Access: true');
 
+// Strict Admin Domain Isolation: redirect main-domain requests to admin.rafly.in
+if (!is_admin_subdomain() && isset($_SERVER['HTTP_HOST'])) {
+    $host = strtolower((string)$_SERVER['HTTP_HOST']);
+    if ($host === 'rafly.in' || $host === 'www.rafly.in') {
+        $uri = (string)($_SERVER['REQUEST_URI'] ?? '/admin/');
+        $adminPath = preg_replace('#^/admin/#i', '/', $uri);
+        if ($adminPath === '' || !str_starts_with($adminPath, '/')) {
+            $adminPath = '/' . $adminPath;
+        }
+        header('Location: https://admin.rafly.in' . $adminPath, true, 301);
+        exit;
+    }
+}
+
 /**
  * Shared page state, mirroring the $page contract on the public site.
  * @var array{title:string,active:string,heading:string,intro:string}
