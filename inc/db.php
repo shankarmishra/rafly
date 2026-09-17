@@ -324,11 +324,15 @@ function scalar(string $sql, array $params = []): mixed
  * settings-driven value degrades to its hardcoded fallback instead of taking
  * down the page.
  */
-function setting(string $key, ?string $default = null): ?string
+function setting(string $key, ?string $default = null, bool $reload = false): ?string
 {
+    if (isset($GLOBALS['__PREVIEW_SETTINGS'][$key])) {
+        return (string)$GLOBALS['__PREVIEW_SETTINGS'][$key];
+    }
+
     static $cache = null;
 
-    if ($cache === null) {
+    if ($cache === null || $reload) {
         $cache = [];
         if (db_available()) {
             try {
@@ -344,6 +348,10 @@ function setting(string $key, ?string $default = null): ?string
         }
     }
 
+    if ($key === '') {
+        return null;
+    }
+
     if (!array_key_exists($key, $cache) && function_exists('seed_preview_setting')) {
         // Design preview only: inc/repo/seed.php answers when there is no DB
         // and PREVIEW_SEED is on; otherwise this is null and the default wins.
@@ -354,6 +362,12 @@ function setting(string $key, ?string $default = null): ?string
     }
 
     return $cache[$key] ?? $default;
+}
+
+/** Clear the in-memory setting cache so fresh database values are read immediately. */
+function clear_setting_cache(): void
+{
+    setting('', null, true);
 }
 
 /**

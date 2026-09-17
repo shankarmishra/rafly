@@ -8,6 +8,7 @@
 
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../helpers.php';
+require_once __DIR__ . '/../auth.php';
 
 /**
  * Master Page Taxonomy Registry
@@ -134,6 +135,13 @@ function seo_save_page(string $pageKey, array $data): bool {
                 }
             }
         });
+        if (function_exists('clear_setting_cache')) {
+            clear_setting_cache();
+        }
+    } else {
+        foreach ($fields as $k => $v) {
+            $GLOBALS['__PREVIEW_SETTINGS'][$k] = $v;
+        }
     }
 
     return true;
