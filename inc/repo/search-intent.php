@@ -1,350 +1,131 @@
 <?php
 /**
- * RAFly Search-Intent Taxonomy & Canonical Query Mapping Engine.
+ * RAFly Agency OS — Search Intent & Ground-Truth Entity Classification Engine.
  *
- * Provides structured Behind-The-Scenes Search Intent Taxonomy and Query-to-Page Map.
- * Used for internal linking, query classification, canonical audit, and zero-doorway verification.
+ * Maps search queries to canonical URLs, classifies intent (Commercial, Local, Technical, Informational),
+ * and maintains verified capability entity taxonomies.
  */
 
-/**
- * Returns the search intent taxonomy structure.
- *
- * @return array<string, array<string, string>>
- */
-function search_intent_taxonomy(): array
-{
+/** Verified technology and service capability entity matrix. */
+function search_intent_entity_matrix(): array {
     return [
-        'platforms' => [
-            'android'        => 'Android OS (Kotlin / Java)',
-            'ios'            => 'Apple iOS (Swift / SwiftUI)',
-            'cross-platform' => 'Cross-Platform Mobile',
-            'mobile'         => 'Mobile Application Core',
+        'web-development' => [
+            'frontend' => [
+                ['name' => 'React', 'status' => 'VERIFIED'],
+                ['name' => 'Next.js', 'status' => 'VERIFIED'],
+                ['name' => 'JavaScript', 'status' => 'VERIFIED'],
+                ['name' => 'TypeScript', 'status' => 'VERIFIED'],
+            ],
+            'backend' => [
+                ['name' => 'PHP', 'status' => 'VERIFIED'],
+                ['name' => 'Node.js', 'status' => 'VERIFIED'],
+                ['name' => 'Python', 'status' => 'VERIFIED'],
+                ['name' => 'Laravel', 'status' => 'CANDIDATE'],
+                ['name' => 'Django', 'status' => 'CANDIDATE'],
+            ],
+            'databases' => [
+                ['name' => 'MySQL', 'status' => 'VERIFIED'],
+                ['name' => 'PostgreSQL', 'status' => 'VERIFIED'],
+            ],
         ],
-        'frameworks' => [
-            'react-native'    => 'React Native (Meta)',
-            'flutter'         => 'Flutter & Dart (Google)',
-            'kotlin'          => 'Kotlin Native (Jetpack Compose)',
-            'swift'           => 'Swift Native (SwiftUI / UIKit)',
+        'app-development' => [
+            'mobile_frameworks' => [
+                ['name' => 'React Native', 'status' => 'VERIFIED'],
+                ['name' => 'Flutter', 'status' => 'VERIFIED'],
+                ['name' => 'Android (Kotlin)', 'status' => 'VERIFIED'],
+                ['name' => 'iOS (Swift)', 'status' => 'VERIFIED'],
+            ],
         ],
-        'backends' => [
-            'python'         => 'Python (FastAPI / Django)',
-            'nodejs'         => 'Node.js (Express / NestJS)',
-            'firebase'       => 'Firebase & Firestore Real-Time',
-            'rest-api'       => 'Typed REST / GraphQL APIs',
-            'databases'      => 'PostgreSQL, MySQL, SQLite, Realm',
-            'authentication' => 'Argon2id, JWT, OAuth2, Biometrics',
-            'payments'       => 'Stripe, Apple Pay, Google Pay, Razorpay',
-            'notifications'  => 'FCM & Apple APNs Push Router',
+        'web-security' => [
+            'standards' => [
+                ['name' => 'OWASP Top 10', 'status' => 'VERIFIED'],
+                ['name' => 'CSP Hardening', 'status' => 'VERIFIED'],
+                ['name' => 'WAF Protection', 'status' => 'VERIFIED'],
+                ['name' => 'Argon2id Hashing', 'status' => 'VERIFIED'],
+            ],
         ],
-        'app_types' => [
-            'business'   => 'Enterprise & Business Apps',
-            'ecommerce'  => 'Mobile E-Commerce Storefronts',
-            'fintech'    => 'Fintech & Payment Applications',
-            'healthcare' => 'Healthcare & Telemedicine Apps',
-            'education'  => 'EdTech & Learning Platforms',
-            'booking'    => 'On-Demand & Booking Engines',
-            'saas'       => 'SaaS Mobile Client Portals',
-            'ai_apps'    => 'AI-Powered Mobile Assistants',
+        'ecommerce' => [
+            'platforms' => [
+                ['name' => 'Shopify', 'status' => 'VERIFIED'],
+                ['name' => 'WooCommerce', 'status' => 'VERIFIED'],
+                ['name' => 'Custom PHP Engine', 'status' => 'VERIFIED'],
+            ],
+        ],
+        'lead-automation' => [
+            'channels' => [
+                ['name' => 'WhatsApp API', 'status' => 'VERIFIED'],
+                ['name' => 'CRM Lead Routing', 'status' => 'VERIFIED'],
+                ['name' => 'Zapier / Webhooks', 'status' => 'VERIFIED'],
+            ],
+        ],
+        'performance-marketing' => [
+            'platforms' => [
+                ['name' => 'Google Ads', 'status' => 'VERIFIED'],
+                ['name' => 'Meta Ads', 'status' => 'VERIFIED'],
+                ['name' => 'GA4 & GTM', 'status' => 'VERIFIED'],
+            ],
+        ],
+        'content-creation' => [
+            'pillars' => [
+                ['name' => 'Technical Copywriting', 'status' => 'VERIFIED'],
+                ['name' => 'Video Production', 'status' => 'VERIFIED'],
+                ['name' => 'Brand Storytelling', 'status' => 'VERIFIED'],
+            ],
         ],
     ];
 }
 
-/**
- * Returns the canonical query-intent database mapping 30 representative queries
- * to their intent, canonical page, page type, entities, location, quality score, and indexability.
- *
- * @return array<int, array<string, mixed>>
- */
-function search_intent_map(): array
-{
-    return [
-        [
-            'query'            => 'app development company',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'App Development',
-            'secondary_entities' => ['Mobile App Engine', 'iOS', 'Android', 'React Native'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 96,
-        ],
-        [
-            'query'            => 'mobile app development company',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'App Development',
-            'secondary_entities' => ['Cross-Platform', 'Flutter', 'Swift'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 96,
-        ],
-        [
-            'query'            => 'android app development company',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'Android App Development',
-            'secondary_entities' => ['Kotlin', 'Google Play Store', 'Jetpack Compose'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 95,
-        ],
-        [
-            'query'            => 'react native development company',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'React Native App Development',
-            'secondary_entities' => ['Cross-Platform', 'JavaScript', 'Expo'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 95,
-        ],
-        [
-            'query'            => 'flutter app development agency',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'Flutter App Development',
-            'secondary_entities' => ['Dart', 'Skia Impeller', 'iOS & Android'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 95,
-        ],
-        [
-            'query'            => 'ios app developer agency',
-            'intent'           => 'commercial',
-            'canonical_page'   => '/services/app-development',
-            'page_type'        => 'service-hub',
-            'primary_entity'   => 'iOS App Development',
-            'secondary_entities' => ['Swift', 'SwiftUI', 'Apple App Store'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 95,
-        ],
-        [
-            'query'            => 'react native vs flutter',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/react-native-vs-flutter',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'React Native vs Flutter',
-            'secondary_entities' => ['Architecture Comparison', 'Performance Benchmarks'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 92,
-        ],
-        [
-            'query'            => 'react native app development guide',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/react-native-app-development',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'React Native Architecture',
-            'secondary_entities' => ['Hermes Engine', 'Bridge & Fabric', 'Native Modules'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 94,
-        ],
-        [
-            'query'            => 'flutter app development guide',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/flutter-app-development',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'Flutter Architecture',
-            'secondary_entities' => ['Dart Compiler', 'Impeller Engine', 'Platform Channels'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 94,
-        ],
-        [
-            'query'            => 'android app development architecture',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/android-app-development',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'Android Architecture',
-            'secondary_entities' => ['Kotlin Coroutines', 'Jetpack Compose', 'Room DB'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 93,
-        ],
-        [
-            'query'            => 'ios app development swift guide',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/ios-app-development',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'iOS Architecture',
-            'secondary_entities' => ['SwiftUI', 'Combine Framework', 'CoreData'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 93,
-        ],
-        [
-            'query'            => 'mobile app architecture best practices',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/mobile-app-architecture',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'Mobile App Architecture',
-            'secondary_entities' => ['Clean Architecture', 'Offline Sync', 'SSL Pinning'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 95,
-        ],
-        [
-            'query'            => 'python backend for mobile app',
-            'intent'           => 'informational',
-            'canonical_page'   => '/resources/python-mobile-app-backend',
-            'page_type'        => 'resource',
-            'primary_entity'   => 'Python Mobile Backend',
-            'secondary_entities' => ['FastAPI', 'PostgreSQL', 'JWT Authentication'],
-            'location'         => null,
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 91,
-        ],
-        [
-            'query'            => 'app development company in Greater Noida',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/greater-noida',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Greater Noida HQ',
-            'secondary_entities' => ['Tech Zone IV', 'Greater Noida West', 'Delhi NCR'],
-            'location'         => 'greater-noida',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 92,
-        ],
-        [
-            'query'            => 'app development company in Noida',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/noida',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Noida Hub',
-            'secondary_entities' => ['Sector 62', 'Noida Expressway', 'IT Corridor'],
-            'location'         => 'noida',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 88,
-        ],
-        [
-            'query'            => 'mobile app developers in Delhi',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/delhi',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Delhi',
-            'secondary_entities' => ['Connaught Place', 'South Delhi', 'Okhla'],
-            'location'         => 'delhi',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 86,
-        ],
-        [
-            'query'            => 'app development company in Gurgaon',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/gurgaon',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Gurgaon',
-            'secondary_entities' => ['Cyber City', 'DLF Phase 3', 'Golf Course Road'],
-            'location'         => 'gurgaon',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 86,
-        ],
-        [
-            'query'            => 'app development company in Mumbai',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/mumbai',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Mumbai',
-            'secondary_entities' => ['BKC', 'Andheri East', 'Financial Hub'],
-            'location'         => 'mumbai',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 84,
-        ],
-        [
-            'query'            => 'app development company in Dubai',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/dubai',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development Dubai',
-            'secondary_entities' => ['Business Bay', 'DIFC', 'UAE Enterprise'],
-            'location'         => 'dubai',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 84,
-        ],
-        [
-            'query'            => 'app development company in London',
-            'intent'           => 'local-commercial',
-            'canonical_page'   => '/services/app-development/london',
-            'page_type'        => 'service-location',
-            'primary_entity'   => 'App Development London',
-            'secondary_entities' => ['Tech City', 'Canary Wharf', 'UK Hub'],
-            'location'         => 'london',
-            'status'           => 'active',
-            'indexability'     => 'index',
-            'quality_score'    => 84,
-        ],
-    ];
-}
+/** Resolves a search query to its target canonical page and intent. */
+function search_intent_resolve(string $query): array {
+    $q = strtolower(trim($query));
+    $norm = preg_replace('/[^a-z0-9\s]/', '', $q);
 
-/**
- * Classifies a search query into its canonical target page and intent type.
- *
- * @param string $query
- * @return array<string, mixed>
- */
-function classify_query_intent(string $query): array
-{
-    $normalized = strtolower(trim($query));
-    foreach (search_intent_map() as $item) {
-        if (strtolower($item['query']) === $normalized) {
-            return $item;
+    // Intent Mapping Rules
+    if (str_contains($norm, 'noida') || str_contains($norm, 'delhi') || str_contains($norm, 'mumbai') || str_contains($norm, 'dubai') || str_contains($norm, 'gurgaon')) {
+        $intent = 'Local Commercial';
+    } elseif (str_contains($norm, 'company') || str_contains($norm, 'agency') || str_contains($norm, 'best') || str_contains($norm, 'hire')) {
+        $intent = 'Commercial High-Intent';
+    } elseif (str_contains($norm, 'vs') || str_contains($norm, 'guide') || str_contains($norm, 'architecture') || str_contains($norm, 'tutorial')) {
+        $intent = 'Technical Informational';
+    } else {
+        $intent = 'General Navigational';
+    }
+
+    // Match Service / Resource Canonical
+    if (str_contains($norm, 'security') || str_contains($norm, 'audit') || str_contains($norm, 'owasp')) {
+        $target = '/services/web-security';
+    } elseif (str_contains($norm, 'app') || str_contains($norm, 'react native') || str_contains($norm, 'flutter') || str_contains($norm, 'android') || str_contains($norm, 'ios')) {
+        if (str_contains($norm, 'vs') || str_contains($norm, 'architecture')) {
+            $target = str_contains($norm, 'flutter') ? '/resources/flutter-app-development' : '/resources/react-native-app-development';
+        } else {
+            $target = '/services/app-development';
         }
+    } elseif (str_contains($norm, 'shopify') || str_contains($norm, 'ecommerce') || str_contains($norm, 'woocommerce')) {
+        $target = '/services/ecommerce';
+    } elseif (str_contains($norm, 'whatsapp') || str_contains($norm, 'automation') || str_contains($norm, 'crm')) {
+        $target = '/services/lead-automation';
+    } elseif (str_contains($norm, 'ads') || str_contains($norm, 'marketing') || str_contains($norm, 'google ads')) {
+        $target = '/services/performance-marketing';
+    } elseif (str_contains($norm, 'content') || str_contains($norm, 'video') || str_contains($norm, 'copywriting')) {
+        $target = '/services/content-creation';
+    } else {
+        $target = '/services/web-development';
     }
 
-    // Dynamic heuristic classification
-    if (str_contains($normalized, 'vs') || str_starts_with($normalized, 'what is') || str_starts_with($normalized, 'how ')) {
-        return [
-            'query'          => $query,
-            'intent'         => 'informational',
-            'canonical_page' => '/resources',
-            'page_type'      => 'resource',
-            'indexability'   => 'index',
-            'quality_score'  => 80,
-        ];
-    }
-
-    if (str_contains($normalized, 'company') || str_contains($normalized, 'developer') || str_contains($normalized, 'agency')) {
-        return [
-            'query'          => $query,
-            'intent'         => 'commercial',
-            'canonical_page' => '/services/app-development',
-            'page_type'      => 'service-hub',
-            'indexability'   => 'index',
-            'quality_score'  => 90,
-        ];
+    // City Specific Override
+    if (str_contains($norm, 'web development') && str_contains($norm, 'delhi')) {
+        $target = '/services/web-development/delhi';
+    } elseif (str_contains($norm, 'security') && str_contains($norm, 'noida')) {
+        $target = '/services/web-security/noida';
+    } elseif (str_contains($norm, 'ecommerce') && str_contains($norm, 'mumbai')) {
+        $target = '/services/ecommerce/mumbai';
     }
 
     return [
         'query'          => $query,
-        'intent'         => 'commercial',
-        'canonical_page' => '/services/app-development',
-        'page_type'      => 'service-hub',
-        'indexability'   => 'index',
-        'quality_score'  => 85,
+        'normalized'     => $norm,
+        'intent'         => $intent,
+        'canonical_path' => $target,
+        'canonical_url'  => 'https://rafly.in' . $target,
     ];
 }
